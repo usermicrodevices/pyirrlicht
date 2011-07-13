@@ -1,0 +1,5 @@
+for build:
+1) run def_irrlicht_c.bat
+2) run irr_tcc.bat
+
+then test run irr_tcc.exe in parent directory.

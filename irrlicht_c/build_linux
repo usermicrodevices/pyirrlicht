@@ -1,0 +1,10 @@
+#! /bin/sh
+
+#gcc -w -shared -fPIC -D_IRR_STATIC_LIB_ -I/usr/local/include/irrlicht -L/usr/local/lib/irrlicht -lIrrlicht -lstdc++ irrlicht_c.cpp -o irrlicht_c.so > build.log 2>&1
+
+gcc -w -shared -fPIC -D_IRR_STATIC_LIB_ -I/usr/local/include/irrlicht -L/usr/local/lib/irrlicht -lIrrlicht irrlicht_c.cpp -o irrlicht_c.so > build.log 2>&1
+
+#ldd irrlicht_c.so > ldd.txt 2>&1
+
+#nm -u irrlicht_c.so > exports.txt 2>&1
+

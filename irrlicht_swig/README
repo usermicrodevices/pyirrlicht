@@ -1,0 +1,39 @@
+irrlicht_swig - is a SWIG python wraper for the Irrlicht Engine SDK version 1.7.1 (http://irrlicht.sourceforge.net). See 'HelloWorld.py' for an example of a Python script accessing and controlling Irrlicht. 
+This project is such as "pyrr", but compatible with last Irrlicht engine and more compatible with C++ style.
+
+The Irrlicht Engine is intended to be an easy-to-use 3d engine.
+If you have any questions or suggestions, just send a email to the author of the engine, Nikolaus Gebhardt (niko (at) irrlicht3d.org).
+
+If you have any questions or suggestions concerning pyirrlicht, send a email to the lead Developer, Max Kolosov (maxkolosov (at) inbox.ru).	
+
+SVN is:
+http://svn.emforge.net/svnroot/pyirrlicht/
+
+
+Thanks to:
+Python,
+Irrlicht,
+SWIG.
+
+ 
+The main tester and English translator is Bill Showkowy (a.k.a. Dr.Bill)
+Very many thanks for Dr.Bill
+
+Also thanks for testing Sir.Hans from Irrlicht forum,
+thanks "jpalard" from Irrlicht forum for found bugs with linux version.
+
+Ready windows pyd files for different Python versions download from http://vosolok2008.narod.ru.
+
+If you need compile with original Irrlicht library, comment lines 137-140 (irrUString.h) and uncomment 142-143.
+
+Also change next Irrlicht include files:
+
+line 88 in IGUIEditBox.h
+		virtual void setPasswordBox(bool passwordBox, wchar_t passwordChar = L'*') = 0;
+swig require patch for this method as next
+		virtual void setPasswordBox(bool passwordBox, wchar_t passwordChar = '*') = 0;
+
+line 21 in IQ3Shader.h
+	static core::stringc irrEmptyStringc("");
+change to
+	static core::stringc irrEmptyStringc = "";

@@ -1,0 +1,65 @@
+' Example : Main Loop
+
+#include "irrlicht.inc"
+#include "ChooseDevice.inc"
+
+Dim driverType As Integer = ChooseDriver("Irrlicht Example : Main Loop")
+
+If driverType <> %EDT_DIRECT3D8 And driverType <> %EDT_NULL Then
+
+	Dim window_size As DWORD = dimension2du_ctor2(320, 240)
+	Dim scolor As DWORD = SColor_ctor2(255, 100, 101, 140)
+
+	Dim device As DWORD = IrrlichtDevice_createDevice(driverType, window_size, 16, false, false, false, $NUL)
+
+	If device Then
+		IrrlichtDevice_setResizable(device, true)
+
+		Dim video_driver As DWORD = IrrlichtDevice_getVideoDriver(device)
+		Dim scene_manager As DWORD = IrrlichtDevice_getSceneManager(device)
+		Dim gui_environment As DWORD = IrrlichtDevice_getGUIEnvironment(device)
+
+		Dim i_animated_mesh As DWORD = ISceneManager_getMesh(scene_manager, "media/ninja.b3d")
+
+		If i_animated_mesh Then
+			Dim position As DWORD = vector3df_ctor2(0.0, 0.0, -7.0)
+			Dim rotation As DWORD = vector3df_ctor2(0.0, 0.0, 0.0)
+			Dim scale As DWORD = vector3df_ctor2(1.0, 1.0, 1.0)
+			Dim node As DWORD = ISceneManager_addAnimatedMeshSceneNode(scene_manager, i_animated_mesh, $NUL, -1, position, rotation, scale, false)
+			Dim texture As DWORD
+			If node Then
+				ISceneNode_setMaterialFlag(node, %EMF_LIGHTING, false)
+				IAnimatedMeshSceneNode_setMD2Animation1(node, %EMAT_STAND)
+				texture = IVideoDriver_getTexture1(video_driver, "media/nskinbl.jpg")
+				ISceneNode_setMaterialTexture(node, 0, texture)
+			End If
+			position = vector3df_ctor2(0.0, 0.0, 7.0)
+			rotation = vector3df_ctor2(0.0, 180.0, 0.0)
+			scale = vector3df_ctor2(1.0, 1.0, 1.0)
+			node = ISceneManager_addAnimatedMeshSceneNode(scene_manager, i_animated_mesh, $NUL, -1, position, rotation, scale, false)
+			If node Then
+				ISceneNode_setMaterialFlag(node, %EMF_LIGHTING, false)
+				IAnimatedMeshSceneNode_setMD2Animation1(node, %EMAT_STAND)
+				texture = IVideoDriver_getTexture1(video_driver, "media/nskinrd.jpg")
+				ISceneNode_setMaterialTexture(node, 0, texture)
+				Dim position_camera As DWORD = vector3df_ctor2(15.0, 5.0, 0.0)
+				Dim lookat As DWORD = vector3df_ctor2(0.0, 5.0, 0.0)
+				Dim camera As DWORD = ISceneManager_addCameraSceneNode(scene_manager, node, position_camera, lookat, -1)
+			End If
+		End If
+
+		'~ Dim rect As DWORD = recti_ctor1()
+		'~ Dim video_data As DWORD = SExposedVideoData_ctor1()
+
+		Dim main_loop As DWORD = MainLoop_Constructor(device, video_driver, scene_manager, , , , scolor)
+		'~ Dim main_loop As DWORD = MainLoop_ctor(device, video_driver, scene_manager, gui_environment, true, true, scolor, video_data, rect, 0, false)
+		'~ Dim main_loop As DWORD = MainLoop_ctor(device, video_driver, scene_manager, gui_environment, true, true, scolor, $NUL, $NUL, 0, false)
+
+		MainLoop_start(main_loop)
+
+		'~ MainLoop_stop(main_loop)
+
+		'~ IrrlichtDevice_closeDevice(device)
+	End If
+End If
+

@@ -1,0 +1,875 @@
+EAAM_OFF = 0
+EAAM_SIMPLE = 1
+EAAM_QUALITY = 3
+EAAM_LINE_SMOOTH = 4
+EAAM_POINT_SMOOTH = 8
+EAAM_FULL_BASIC = 15
+EAAM_ALPHA_TO_COVERAGE = 16
+
+EAC_OFF = 0
+EAC_BOX = 1
+EAC_FRUSTUM_BOX = 2
+EAC_FRUSTUM_SPHERE = 4
+
+EAMT_UNKNOWN = 0
+EAMT_MD2 = 1
+EAMT_MD3 = 2
+EAMT_OBJ = 3
+EAMT_BSP = 4
+EAMT_3DS = 5
+EAMT_MY3D = 6
+EAMT_LMTS = 7
+EAMT_CSM = 8
+EAMT_OCT = 9
+EAMT_SKINNED = 10
+
+EARWF_FOR_FILE = 00000001h
+EARWF_FOR_EDITOR = 00000002h
+EARWF_USE_RELATIVE_PATHS = 00000004h
+
+EAS_NONE = 0
+EAS_VERTEX_COLOR = 1
+EAS_TEXTURE = 2
+
+EBF_ZERO = 0
+EBF_ONE = 1
+EBF_DST_COLOR = 2
+EBF_ONE_MINUS_DST_COLOR = 3
+EBF_SRC_COLOR = 4
+EBF_ONE_MINUS_SRC_COLOR = 5
+EBF_SRC_ALPHA = 6
+EBF_ONE_MINUS_SRC_ALPHA = 7
+EBF_DST_ALPHA = 8
+EBF_ONE_MINUS_DST_ALPHA = 9
+EBF_SRC_ALPHA_SATURATE = 10
+
+EBT_NONE = 0
+EBT_VERTEX = 1
+EBT_INDEX = 2
+EBT_VERTEX_AND_INDEX = 3
+
+ECF_A1R5G5B5 = 0
+ECF_R5G6B5 = 1
+ECF_R8G8B8 = 2
+ECF_A8R8G8B8 = 3
+ECF_R16F = 4
+ECF_G16R16F = 5
+ECF_A16B16G16R16F = 6
+ECF_R32F = 7
+ECF_G32R32F = 8
+ECF_A32B32G32R32F = 9
+ECF_UNKNOWN = 10
+
+ECFN_NEVER = 0
+ECFN_LESSEQUAL = 1
+ECFN_EQUAL = 2
+ECFN_LESS = 3
+ECFN_NOTEQUAL = 4
+ECFN_GREATEREQUAL = 5
+ECFN_GREATER = 6
+ECFN_ALWAYS = 7
+
+ECM_NONE = 0
+ECM_DIFFUSE = 1
+ECM_AMBIENT = 2
+ECM_EMISSIVE = 3
+ECM_SPECULAR = 4
+ECM_DIFFUSE_AND_AMBIENT = 5
+
+ECP_NONE = 0
+ECP_ALPHA = 1
+ECP_RED = 2
+ECP_GREEN = 4
+ECP_BLUE = 8
+ECP_RGB = 14
+ECP_ALL = 15
+
+EDS_OFF = 0
+EDS_BBOX = 1
+EDS_NORMALS = 2
+EDS_SKELETON = 4
+EDS_MESH_WIRE_OVERLAY = 8
+EDS_HALF_TRANSPARENCY = 16
+EDS_BBOX_BUFFERS = 32
+EDS_BBOX_ALL = EDS_BBOX + EDS_BBOX_BUFFERS
+EDS_FULL = 0xffffffff
+
+EDT_NULL = 0
+EDT_SOFTWARE = 1
+EDT_BURNINGSVIDEO = 2
+EDT_DIRECT3D8 = 3
+EDT_DIRECT3D9 = 4
+EDT_OPENGL = 5
+
+EET_GUI_EVENT = 0
+EET_MOUSE_INPUT_EVENT = 1
+EET_KEY_INPUT_EVENT = 2
+EET_JOYSTICK_INPUT_EVENT = 3
+EET_LOG_TEXT_EVENT = 4
+EET_USER_EVENT = 5
+
+EGBS_BUTTON_UP = 0
+EGBS_BUTTON_DOWN = 1
+EGBS_BUTTON_MOUSE_OVER = 2
+EGBS_BUTTON_MOUSE_OFF = 3
+EGBS_BUTTON_FOCUSED = 4
+EGBS_BUTTON_NOT_FOCUSED = 5
+EGBS_COUNT = 6
+
+EGDC_3D_DARK_SHADOW = 0
+EGDC_3D_SHADOW = 1
+EGDC_3D_FACE = 2
+EGDC_3D_HIGH_LIGHT = 3
+EGDC_3D_LIGHT = 4
+EGDC_ACTIVE_BORDER = 5
+EGDC_ACTIVE_CAPTION = 6
+EGDC_APP_WORKSPACE = 7
+EGDC_BUTTON_TEXT = 8
+EGDC_GRAY_TEXT = 9
+EGDC_HIGH_LIGHT = 10
+EGDC_HIGH_LIGHT_TEXT = 11
+EGDC_INACTIVE_BORDER = 12
+EGDC_INACTIVE_CAPTION = 13
+EGDC_TOOLTIP = 14
+EGDC_TOOLTIP_BACKGROUND = 15
+EGDC_SCROLLBAR = 16
+EGDC_WINDOW = 17
+EGDC_WINDOW_SYMBOL = 18
+EGDC_ICON = 19
+EGDC_ICON_HIGH_LIGHT = 20
+EGDC_COUNT = 21
+
+EGDF_DEFAULT = 0
+EGDF_BUTTON = 1
+EGDF_WINDOW = 2
+EGDF_MENU = 3
+EGDF_TOOLTIP = 4
+EGDF_COUNT = 5
+
+EGDI_WINDOW_MAXIMIZE = 0
+EGDI_WINDOW_RESTORE = 1
+EGDI_WINDOW_CLOSE = 2
+EGDI_WINDOW_MINIMIZE = 3
+EGDI_WINDOW_RESIZE = 4
+EGDI_CURSOR_UP = 5
+EGDI_CURSOR_DOWN = 6
+EGDI_CURSOR_LEFT = 7
+EGDI_CURSOR_RIGHT = 8
+EGDI_MENU_MORE = 9
+EGDI_CHECK_BOX_CHECKED = 10
+EGDI_DROP_DOWN = 11
+EGDI_SMALL_CURSOR_UP = 12
+EGDI_SMALL_CURSOR_DOWN = 13
+EGDI_RADIO_BUTTON_CHECKED = 14
+EGDI_MORE_LEFT = 15
+EGDI_MORE_RIGHT = 16
+EGDI_MORE_UP = 17
+EGDI_MORE_DOWN = 18
+EGDI_EXPAND = 19
+EGDI_COLLAPSE = 20
+EGDI_FILE = 21
+EGDI_DIRECTORY = 22
+EGDI_COUNT = 23
+
+EGDS_SCROLLBAR_SIZE = 0
+EGDS_MENU_HEIGHT = 1
+EGDS_WINDOW_BUTTON_WIDTH = 2
+EGDS_CHECK_BOX_WIDTH = 3
+EGDS_MESSAGE_BOX_WIDTH = 4
+EGDS_MESSAGE_BOX_HEIGHT = 5
+EGDS_BUTTON_WIDTH = 6
+EGDS_BUTTON_HEIGHT = 7
+EGDS_TEXT_DISTANCE_X = 8
+EGDS_TEXT_DISTANCE_Y = 9
+EGDS_TITLEBARTEXT_DISTANCE_X = 10
+EGDS_TITLEBARTEXT_DISTANCE_Y = 11
+EGDS_MESSAGE_BOX_GAP_SPACE = 12
+EGDS_MESSAGE_BOX_MIN_TEXT_WIDTH = 13
+EGDS_MESSAGE_BOX_MAX_TEST_WIDTH = 14
+EGDS_MESSAGE_BOX_MIN_TEXT_HEIGHT = 15
+EGDS_MESSAGE_BOX_MAX_TEXT_HEIGHT = 16
+EGDS_COUNT = 17
+
+EGDT_MSG_BOX_OK = 0
+EGDT_MSG_BOX_CANCEL = 1
+EGDT_MSG_BOX_YES = 2
+EGDT_MSG_BOX_NO = 3
+EGDT_WINDOW_CLOSE = 4
+EGDT_WINDOW_MAXIMIZE = 5
+EGDT_WINDOW_MINIMIZE = 6
+EGDT_WINDOW_RESTORE = 7
+EGDT_COUNT = 8
+
+EGST_WINDOWS_CLASSIC = 0
+EGST_WINDOWS_METALLIC = 1
+EGST_BURNING_SKIN = 2
+EGST_UNKNOWN = 3
+EGST_COUNT = 4
+
+EGUIET_FORCE_32_BIT = 7fffffffh
+
+EGUIA_UPPERLEFT = 0
+EGUIA_LOWERRIGHT = 1
+EGUIA_CENTER = 2
+EGUIA_SCALE = 3
+
+EGUIET_BUTTON = 0
+EGUIET_CHECK_BOX = 1
+EGUIET_COMBO_BOX = 2
+EGUIET_CONTEXT_MENU = 3
+EGUIET_MENU = 4
+EGUIET_EDIT_BOX = 5
+EGUIET_FILE_OPEN_DIALOG = 6
+EGUIET_COLOR_SELECT_DIALOG = 7
+EGUIET_IN_OUT_FADER = 8
+EGUIET_IMAGE = 9
+EGUIET_LIST_BOX = 10
+EGUIET_MESH_VIEWER = 11
+EGUIET_MESSAGE_BOX = 12
+EGUIET_MODAL_SCREEN = 13
+EGUIET_SCROLL_BAR = 14
+EGUIET_SPIN_BOX = 15
+EGUIET_STATIC_TEXT = 16
+EGUIET_TAB = 17
+EGUIET_TAB_CONTROL = 18
+EGUIET_TABLE = 19
+EGUIET_TOOL_BAR = 20
+EGUIET_TREE_VIEW = 21
+EGUIET_WINDOW = 22
+EGUIET_ELEMENT = 23
+EGUIET_COUNT = 24
+EGUIET_FORCE_32_BIT = 7fffffffh
+
+EFT_FOG_EXP = 0
+EFT_FOG_LINEAR = 1
+EFT_FOG_EXP2 = 2
+
+EGET_ELEMENT_FOCUS_LOST = 0
+EGET_ELEMENT_FOCUSED = 1
+EGET_ELEMENT_HOVERED = 2
+EGET_ELEMENT_LEFT = 3
+EGET_ELEMENT_CLOSED = 4
+EGET_BUTTON_CLICKED = 5
+EGET_SCROLL_BAR_CHANGED = 6
+EGET_CHECKBOX_CHANGED = 7
+EGET_LISTBOX_CHANGED = 8
+EGET_LISTBOX_SELECTED_AGAIN = 9
+EGET_FILE_SELECTED = 10
+EGET_DIRECTORY_SELECTED = 11
+EGET_FILE_CHOOSE_DIALOG_CANCELLED = 12
+EGET_MESSAGEBOX_YES = 13
+EGET_MESSAGEBOX_NO = 14
+EGET_MESSAGEBOX_OK = 15
+EGET_MESSAGEBOX_CANCEL = 16
+EGET_EDITBOX_ENTER = 17
+EGET_EDITBOX_CHANGED = 18
+EGET_EDITBOX_MARKING_CHANGED = 19
+EGET_TAB_CHANGED = 20
+EGET_MENU_ITEM_SELECTED = 21
+EGET_COMBO_BOX_CHANGED = 22
+EGET_SPINBOX_CHANGED = 23
+EGET_TABLE_CHANGED = 24
+EGET_TABLE_HEADER_CHANGED = 25
+EGET_TABLE_SELECTED_AGAIN = 26
+EGET_TREEVIEW_NODE_DESELECT = 27
+EGET_TREEVIEW_NODE_SELECT = 28
+EGET_TREEVIEW_NODE_EXPAND = 29
+EGET_TREEVIEW_NODE_COLLAPS = 30
+EGET_COUNT = 31
+
+EGFT_BITMAP = 0
+EGFT_VECTOR = 1
+EGFT_OS = 2
+EGFT_CUSTOM = 3
+
+EHM_NEVER = 0
+EHM_STATIC = 1
+EHM_DYNAMIC = 2
+EHM_STREAM = 3
+
+EIDT_WIN32 = 0
+EIDT_WINCE = 1
+EIDT_X11 = 2
+EIDT_OSX = 3
+EIDT_SDL = 4
+EIDT_CONSOLE = 5
+EIDT_BEST = 6
+
+EIT_16BIT = 0
+EIT_32BIT = 1
+
+EJUOR_NONE = 0
+EJUOR_READ = 1
+EJUOR_CONTROL = 2
+EJUOR_COUNT = 3
+
+EKA_MOVE_FORWARD = 0
+EKA_MOVE_BACKWARD = 1
+EKA_STRAFE_LEFT = 2
+EKA_STRAFE_RIGHT = 3
+EKA_JUMP_UP = 4
+EKA_CROUCH = 5
+EKA_COUNT = 6
+EKA_FORCE_32BIT = 7fffffffh
+
+ELL_INFORMATION = 0
+ELL_WARNING = 1
+ELL_ERROR = 2
+ELL_NONE = 3
+
+ELR_DEVICE = 1
+ELR_TEXTURES = 2
+ELR_RTTS = 4
+ELR_HW_BUFFERS = 8
+
+EM4CONST_NOTHING = 0
+EM4CONST_COPY = 1
+EM4CONST_IDENTITY = 2
+EM4CONST_TRANSPOSED = 3
+EM4CONST_INVERSE = 4
+EM4CONST_INVERSE_TRANSPOSED = 5
+
+EMAT_STAND = 0
+EMAT_RUN = 1
+EMAT_ATTACK = 2
+EMAT_PAIN_A = 3
+EMAT_PAIN_B = 4
+EMAT_PAIN_C = 5
+EMAT_JUMP = 6
+EMAT_FLIP = 7
+EMAT_SALUTE = 8
+EMAT_FALLBACK = 9
+EMAT_WAVE = 10
+EMAT_POINT = 11
+EMAT_CROUCH_STAND = 12
+EMAT_CROUCH_WALK = 13
+EMAT_CROUCH_ATTACK = 14
+EMAT_CROUCH_PAIN = 15
+EMAT_CROUCH_DEATH = 16
+EMAT_DEATH_FALLBACK = 17
+EMAT_DEATH_FALLFORWARD = 18
+EMAT_DEATH_FALLBACKSLOW = 19
+EMAT_BOOM = 20
+EMAT_COUNT = 21
+
+EMBF_OK = 1h
+EMBF_CANCEL = 2h
+EMBF_YES = 4h
+EMBF_NO = 8h
+EMBF_FORCE_32BIT = 7fffffffh
+
+EMBSM_LEFT    = 01h
+EMBSM_RIGHT   = 02h
+EMBSM_MIDDLE  = 04h
+EMBSM_EXTRA1  = 08h
+EMBSM_EXTRA2  = 10h
+EMBSM_FORCE_32_BIT = 7fffffffh
+
+EMF_WIREFRAME = 1h
+EMF_POINTCLOUD = 2h
+EMF_GOURAUD_SHADING = 4h
+EMF_LIGHTING = 8h
+EMF_ZBUFFER = 10h
+EMF_ZWRITE_ENABLE = 20h
+EMF_BACK_FACE_CULLING = 40h
+EMF_FRONT_FACE_CULLING = 80h
+EMF_BILINEAR_FILTER = 100h
+EMF_TRILINEAR_FILTER = 200h
+EMF_ANISOTROPIC_FILTER = 400h
+EMF_FOG_ENABLE = 800h
+EMF_NORMALIZE_NORMALS = 1000h
+EMF_TEXTURE_WRAP = 2000h
+EMF_ANTI_ALIASING = 4000h
+EMF_COLOR_MASK = 8000h
+EMF_COLOR_MATERIAL = 10000h
+
+EMFN_MODULATE_1X = 1
+EMFN_MODULATE_2X = 2
+EMFN_MODULATE_4X = 4
+
+EMIE_LMOUSE_PRESSED_DOWN = 0
+EMIE_RMOUSE_PRESSED_DOWN = 1
+EMIE_MMOUSE_PRESSED_DOWN = 2
+EMIE_LMOUSE_LEFT_UP = 3
+EMIE_RMOUSE_LEFT_UP = 4
+EMIE_MMOUSE_LEFT_UP = 5
+EMIE_MOUSE_MOVED = 6
+EMIE_MOUSE_WHEEL = 7
+EMIE_MOUSE_DOUBLE_CLICK = 8
+EMIE_MOUSE_TRIPLE_CLICK = 9
+EMIE_COUNT = 10
+
+EMT_SOLID = 0
+EMT_SOLID_2_LAYER = 1
+EMT_LIGHTMAP = 2
+EMT_LIGHTMAP_ADD = 3
+EMT_LIGHTMAP_M2 = 4
+EMT_LIGHTMAP_M4 = 5
+EMT_LIGHTMAP_LIGHTING = 6
+EMT_LIGHTMAP_LIGHTING_M2 = 7
+EMT_LIGHTMAP_LIGHTING_M4 = 8
+EMT_DETAIL_MAP = 9
+EMT_SPHERE_MAP = 10
+EMT_REFLECTION_2_LAYER = 11
+EMT_TRANSPARENT_ADD_COLOR = 12
+EMT_TRANSPARENT_ALPHA_CHANNEL = 13
+EMT_TRANSPARENT_ALPHA_CHANNEL_REF = 14
+EMT_TRANSPARENT_VERTEX_ALPHA = 15
+EMT_TRANSPARENT_REFLECTION_2_LAYER = 16
+EMT_NORMAL_MAP_SOLID = 17
+EMT_NORMAL_MAP_TRANSPARENT_ADD_COLOR = 18
+EMT_NORMAL_MAP_TRANSPARENT_VERTEX_ALPHA = 19
+EMT_PARALLAX_MAP_SOLID = 20
+EMT_PARALLAX_MAP_TRANSPARENT_ADD_COLOR = 21
+EMT_PARALLAX_MAP_TRANSPARENT_VERTEX_ALPHA = 22
+EMT_ONETEXTURE_BLEND = 23
+EMT_FORCE_32BIT = 7fffffffh
+
+EPT_POINTS = 0
+EPT_LINE_STRIP = 1
+EPT_LINE_LOOP = 2
+EPT_LINES = 3
+EPT_TRIANGLE_STRIP = 4
+EPT_TRIANGLE_FAN = 5
+EPT_TRIANGLES = 6
+EPT_QUAD_STRIP = 7
+EPT_QUADS = 8
+EPT_POLYGON = 9
+EPT_POINT_SPRITES = 10
+
+ERT_FRAME_BUFFER=0
+ERT_STEREO_LEFT_BUFFER=0
+ERT_RENDER_TEXTURE=1
+ERT_STEREO_RIGHT_BUFFER=2
+ERT_STEREO_BOTH_BUFFERS=3
+ERT_AUX_BUFFER0=4
+ERT_AUX_BUFFER1=5
+ERT_AUX_BUFFER2=6
+ERT_AUX_BUFFER3=7
+ERT_AUX_BUFFER4=8
+
+ESNRP_NONE =0
+ESNRP_CAMERA =1
+ESNRP_LIGHT =2
+ESNRP_SKY_BOX =4
+ESNRP_AUTOMATIC =24
+ESNRP_SOLID =8
+ESNRP_TRANSPARENT =16
+ESNRP_TRANSPARENT_EFFECT =32
+ESNRP_SHADOW =64
+
+
+ETC_REPEAT = 0
+ETC_CLAMP = 1
+ETC_CLAMP_TO_EDGE = 2
+ETC_CLAMP_TO_BORDER = 3
+ETC_MIRROR = 4
+
+ETCF_ALWAYS_16_BIT = 00000001h
+ETCF_ALWAYS_32_BIT = 00000002h
+ETCF_OPTIMIZED_FOR_QUALITY = 00000004h
+ETCF_OPTIMIZED_FOR_SPEED = 00000008h
+ETCF_CREATE_MIP_MAPS = 00000010h
+ETCF_NO_ALPHA_CHANNEL = 00000020h
+ETCF_ALLOW_NON_POWER_2 = 00000040h
+ETCF_FORCE_32_BIT_DO_NOT_USE = 7fffffffh
+
+ETPS_9 = 9
+ETPS_17 = 17
+ETPS_33 = 33
+ETPS_65 = 65
+ETPS_129 = 129
+
+ETS_VIEW = 0
+ETS_WORLD = 1
+ETS_PROJECTION = 2
+ETS_TEXTURE_0 = 3
+ETS_TEXTURE_1 = 4
+ETS_TEXTURE_2 = 5
+ETS_TEXTURE_3 = 6
+ETS_TEXTURE_4 = 7
+ETS_TEXTURE_5 = 8
+ETS_TEXTURE_6 = 9
+ETS_TEXTURE_7 = 10
+ETS_COUNT = 11
+
+ETS_COUNT_FRUSTUM = 2
+
+EVDF_RENDER_TO_TARGET = 0
+EVDF_HARDWARE_TL = 1
+EVDF_MULTITEXTURE = 2
+EVDF_BILINEAR_FILTER = 3
+EVDF_MIP_MAP = 4
+EVDF_MIP_MAP_AUTO_UPDATE = 5
+EVDF_STENCIL_BUFFER = 6
+EVDF_VERTEX_SHADER_1_1 = 7
+EVDF_VERTEX_SHADER_2_0 = 8
+EVDF_VERTEX_SHADER_3_0 = 9
+EVDF_PIXEL_SHADER_1_1 = 10
+EVDF_PIXEL_SHADER_1_2 = 11
+EVDF_PIXEL_SHADER_1_3 = 12
+EVDF_PIXEL_SHADER_1_4 = 13
+EVDF_PIXEL_SHADER_2_0 = 14
+EVDF_PIXEL_SHADER_3_0 = 15
+EVDF_ARB_VERTEX_PROGRAM_1 = 16
+EVDF_ARB_FRAGMENT_PROGRAM_1 = 17
+EVDF_ARB_GLSL = 18
+EVDF_HLSL = 19
+EVDF_TEXTURE_NSQUARE = 20
+EVDF_TEXTURE_NPOT = 21
+EVDF_FRAMEBUFFER_OBJECT = 22
+EVDF_VERTEX_BUFFER_OBJECT = 23
+EVDF_ALPHA_TO_COVERAGE = 24
+EVDF_COLOR_MASK = 25
+EVDF_COUNT = 26
+
+EVT_STANDARD = 0
+EVT_2TCOORDS = 1
+EVT_TANGENTS = 2
+
+FILESYSTEM_NATIVE = 0
+FILESYSTEM_VIRTUAL = 1
+
+ISREL3D_FRONT = 0
+ISREL3D_BACK = 1
+ISREL3D_PLANAR = 2
+ISREL3D_SPANNING = 3
+ISREL3D_CLIPPED = 4
+
+KEY_LBUTTON          = 0x01; Left mouse button
+KEY_RBUTTON          = 0x02; Right mouse button
+KEY_CANCEL           = 0x03; Control-break processing
+KEY_MBUTTON          = 0x04; Middle mouse button (three-button mouse)
+KEY_XBUTTON1         = 0x05; Windows 2000/XP: X1 mouse button
+KEY_XBUTTON2         = 0x06; Windows 2000/XP: X2 mouse button
+KEY_BACK             = 0x08; BACKSPACE key
+KEY_TAB              = 0x09; TAB key
+KEY_CLEAR            = 0x0C; CLEAR key
+KEY_RETURN           = 0x0D; ENTER key
+KEY_SHIFT            = 0x10; SHIFT key
+KEY_CONTROL          = 0x11; CTRL key
+KEY_MENU             = 0x12; ALT key
+KEY_PAUSE            = 0x13; PAUSE key
+KEY_CAPITAL          = 0x14; CAPS LOCK key
+KEY_KANA             = 0x15; IME Kana mode
+KEY_HANGUEL          = 0x15; IME Hanguel mode (maintained for compatibility use KEY_HANGUL)
+KEY_HANGUL           = 0x15; IME Hangul mode
+KEY_JUNJA            = 0x17; IME Junja mode
+KEY_FINAL            = 0x18; IME final mode
+KEY_HANJA            = 0x19; IME Hanja mode
+KEY_KANJI            = 0x19; IME Kanji mode
+KEY_ESCAPE           = 0x1B; ESC key
+KEY_CONVERT          = 0x1C; IME convert
+KEY_NONCONVERT       = 0x1D; IME nonconvert
+KEY_ACCEPT           = 0x1E; IME accept
+KEY_MODECHANGE       = 0x1F; IME mode change request
+KEY_SPACE            = 0x20; SPACEBAR
+KEY_PRIOR            = 0x21; PAGE UP key
+KEY_NEXT             = 0x22; PAGE DOWN key
+KEY_END              = 0x23; END key
+KEY_HOME             = 0x24; HOME key
+KEY_LEFT             = 0x25; LEFT ARROW key
+KEY_UP               = 0x26; UP ARROW key
+KEY_RIGHT            = 0x27; RIGHT ARROW key
+KEY_DOWN             = 0x28; DOWN ARROW key
+KEY_SELECT           = 0x29; SELECT key
+KEY_PRINT            = 0x2A; PRINT key
+KEY_EXECUT           = 0x2B; EXECUTE key
+KEY_SNAPSHOT         = 0x2C; PRINT SCREEN key
+KEY_INSERT           = 0x2D; INS key
+KEY_DELETE           = 0x2E; DEL key
+KEY_HELP             = 0x2F; HELP key
+KEY_KEY_0            = 0x30; 0 key
+KEY_KEY_1            = 0x31; 1 key
+KEY_KEY_2            = 0x32; 2 key
+KEY_KEY_3            = 0x33; 3 key
+KEY_KEY_4            = 0x34; 4 key
+KEY_KEY_5            = 0x35; 5 key
+KEY_KEY_6            = 0x36; 6 key
+KEY_KEY_7            = 0x37; 7 key
+KEY_KEY_8            = 0x38; 8 key
+KEY_KEY_9            = 0x39; 9 key
+KEY_KEY_A            = 0x41; A key
+KEY_KEY_B            = 0x42; B key
+KEY_KEY_C            = 0x43; C key
+KEY_KEY_D            = 0x44; D key
+KEY_KEY_E            = 0x45; E key
+KEY_KEY_F            = 0x46; F key
+KEY_KEY_G            = 0x47; G key
+KEY_KEY_H            = 0x48; H key
+KEY_KEY_I            = 0x49; I key
+KEY_KEY_J            = 0x4A; J key
+KEY_KEY_K            = 0x4B; K key
+KEY_KEY_L            = 0x4C; L key
+KEY_KEY_M            = 0x4D; M key
+KEY_KEY_N            = 0x4E; N key
+KEY_KEY_O            = 0x4F; O key
+KEY_KEY_P            = 0x50; P key
+KEY_KEY_Q            = 0x51; Q key
+KEY_KEY_R            = 0x52; R key
+KEY_KEY_S            = 0x53; S key
+KEY_KEY_T            = 0x54; T key
+KEY_KEY_U            = 0x55; U key
+KEY_KEY_V            = 0x56; V key
+KEY_KEY_W            = 0x57; W key
+KEY_KEY_X            = 0x58; X key
+KEY_KEY_Y            = 0x59; Y key
+KEY_KEY_Z            = 0x5A; Z key
+KEY_LWIN             = 0x5B; Left Windows key (Microsoft Natural keyboard)
+KEY_RWIN             = 0x5C; Right Windows key (Natural keyboard)
+KEY_APPS             = 0x5D; Applications key (Natural keyboard)
+KEY_SLEEP            = 0x5F; Computer Sleep key
+KEY_NUMPAD0          = 0x60; Numeric keypad 0 key
+KEY_NUMPAD1          = 0x61; Numeric keypad 1 key
+KEY_NUMPAD2          = 0x62; Numeric keypad 2 key
+KEY_NUMPAD3          = 0x63; Numeric keypad 3 key
+KEY_NUMPAD4          = 0x64; Numeric keypad 4 key
+KEY_NUMPAD5          = 0x65; Numeric keypad 5 key
+KEY_NUMPAD6          = 0x66; Numeric keypad 6 key
+KEY_NUMPAD7          = 0x67; Numeric keypad 7 key
+KEY_NUMPAD8          = 0x68; Numeric keypad 8 key
+KEY_NUMPAD9          = 0x69; Numeric keypad 9 key
+KEY_MULTIPLY         = 0x6A; Multiply key
+KEY_ADD              = 0x6B; Add key
+KEY_SEPARATOR        = 0x6C; Separator key
+KEY_SUBTRACT         = 0x6D; Subtract key
+KEY_DECIMAL          = 0x6E; Decimal key
+KEY_DIVIDE           = 0x6F; Divide key
+KEY_F1               = 0x70; F1 key
+KEY_F2               = 0x71; F2 key
+KEY_F3               = 0x72; F3 key
+KEY_F4               = 0x73; F4 key
+KEY_F5               = 0x74; F5 key
+KEY_F6               = 0x75; F6 key
+KEY_F7               = 0x76; F7 key
+KEY_F8               = 0x77; F8 key
+KEY_F9               = 0x78; F9 key
+KEY_F10              = 0x79; F10 key
+KEY_F11              = 0x7A; F11 key
+KEY_F12              = 0x7B; F12 key
+KEY_F13              = 0x7C; F13 key
+KEY_F14              = 0x7D; F14 key
+KEY_F15              = 0x7E; F15 key
+KEY_F16              = 0x7F; F16 key
+KEY_F17              = 0x80; F17 key
+KEY_F18              = 0x81; F18 key
+KEY_F19              = 0x82; F19 key
+KEY_F20              = 0x83; F20 key
+KEY_F21              = 0x84; F21 key
+KEY_F22              = 0x85; F22 key
+KEY_F23              = 0x86; F23 key
+KEY_F24              = 0x87; F24 key
+KEY_NUMLOCK          = 0x90; NUM LOCK key
+KEY_SCROLL           = 0x91; SCROLL LOCK key
+KEY_LSHIFT           = 0xA0; Left SHIFT key
+KEY_RSHIFT           = 0xA1; Right SHIFT key
+KEY_LCONTROL         = 0xA2; Left CONTROL key
+KEY_RCONTROL         = 0xA3; Right CONTROL key
+KEY_LMENU            = 0xA4; Left MENU key
+KEY_RMENU            = 0xA5; Right MENU key
+KEY_PLUS             = 0xBB; Plus Key   (+)
+KEY_COMMA            = 0xBC; Comma Key  (,)
+KEY_MINUS            = 0xBD; Minus Key  (-)
+KEY_PERIOD           = 0xBE; Period Key (.)
+KEY_ATTN             = 0xF6; Attn key
+KEY_CRSEL            = 0xF7; CrSel key
+KEY_EXSEL            = 0xF8; ExSel key
+KEY_EREOF            = 0xF9; Erase EOF key
+KEY_PLAY             = 0xFA; Play key
+KEY_ZOOM             = 0xFB; Zoom key
+KEY_PA1              = 0xFD; PA1 key
+KEY_OEM_CLEAR        = 0xFE; Clear key
+KEY_KEY_CODES_COUNT  = 0xFF; this is not a key, but the amount of keycodes there are.
+
+POV_HAT_PRESENT = 0
+POV_HAT_ABSENT = 1
+POV_HAT_UNKNOWN = 2
+
+VF_FAR_PLANE = 0
+VF_NEAR_PLANE = 1
+VF_LEFT_PLANE = 2
+VF_RIGHT_PLANE = 3
+VF_BOTTOM_PLANE = 4
+VF_TOP_PLANE = 5
+VF_PLANE_COUNT = 6
+
+ROUNDING_ERROR_S32 = 0
+ROUNDING_ERROR_f32 = 0.000001
+ROUNDING_ERROR_f64 = 0.00000001
+
+NUMBER_OF_BUTTONS = 32
+AXIS_X = 0
+AXIS_Y = 1
+AXIS_Z = 2
+AXIS_R = 3
+AXIS_U = 4
+AXIS_V = 5
+NUMBER_OF_AXES = 6
+
+struct SKeyMap
+	Action dd ?
+	KeyCode dd ?
+ends
+
+struct SAttributeReadWriteOptions
+	Flags dd ?
+	Filename db ?
+ends
+
+struct SGUIEvent
+	Caller dd ?
+	Element dd ?
+	EventType dw ?
+ends
+
+struct SMouseInput
+	X dw ?
+	Y dw ?
+	Wheel dp ?
+	Shift db ?
+	Control db ?
+	ButtonStates dw ?
+	isLeftPressed dd ?
+	isRightPressed dd ?
+	isMiddlePressed dd ?
+	Event dw ?
+ends
+
+struct SKeyInput
+	Char du ?
+	Key dw ?
+	PressedDown db ?
+	Shift db ?
+	Control db ?
+ends
+
+struct SJoystickEvent
+	ButtonStates dw ?
+	Axis dw NUMBER_OF_AXES dup ?
+	POV dw ?
+	Joystick dw ?
+	IsButtonPressed dd ?
+ends
+
+struct SLogEvent
+	Text db ?
+	Level dw ?
+ends
+
+struct SUserEvent
+	UserData1 dw ?
+	UserData2 dw ?
+ends
+
+struct SEvent
+
+	EventType dw ?
+
+	union
+		GUIEvent SGUIEvent
+		MouseInput SMouseInput
+		KeyInput SKeyInput
+		JoystickEvent SJoystickEvent
+		LogEvent SLogEvent
+		UserEvent SUserEvent
+	ends
+
+ends
+
+; ===========================
+; struc SExposedVideoData
+; {
+  ; virtual
+    ; .D3D8 dd ?
+    ; virtual at .D3D8
+      ; .pD3D8 dd ?
+      ; .pD3DDev8 dd ?
+      ; .pHWnd8 dd ?
+    ; end virtual
+    ; .D3D9 dd ?
+    ; virtual at .D3D9
+      ; .pD3D9 dd ?
+      ; .pD3DDev9 dd ?
+      ; .pHWnd9 dd ?
+    ; end virtual
+    ; .OpenGLWin32 dd ?
+    ; virtual at .OpenGLWin32
+      ; .HDc dd ?
+      ; .HRc dd ?
+      ; .HWnd dd ?
+    ; end virtual
+    ; .OpenGLLinux dd ?
+    ; virtual at .OpenGLLinux
+      ; .X11Display dd ?
+      ; .X11Context dd ?
+      ; .X11Window dd ?
+    ; end virtual
+  ; end virtual
+; }
+;===========================
+struct IDirect3D8
+  field dw ?
+ends
+struct IDirect3DDevice8
+  field dw ?
+ends
+struct IDirect3D9
+  field dw ?
+ends
+struct IDirect3DDevice9
+  field dw ?
+ends
+
+struct d3d8
+  D3D8 IDirect3D8
+  D3DDev8 IDirect3DDevice8
+  HWnd dd ?
+ends
+struct d3d9
+  D3D9 IDirect3D9
+  D3DDev9 IDirect3DDevice9
+  HWnd dd ?
+ends
+struct openglwin32
+  HDc dd ?
+  HRc dd ?
+  HWnd dd ?
+ends
+struct opengllinux
+  X11Display dd ?
+  X11Context dd ?
+  X11Window dd ?
+ends
+struct SExposedVideoData
+  union
+		D3D8 d3d8
+		D3D9 d3d9
+		OpenGLWin32 openglwin32
+		OpenGLLinux opengllinux
+  ends
+ends
+;===========================
+
+struct SLight
+	AmbientColor dd ?
+	DiffuseColor dd ?
+	SpecularColor dd ?
+	Attenuation dd ?
+	OuterCone dp ?
+	InnerCone dp ?
+	Falloff dp ?
+	Position dd ?
+	Direction dd ?
+	Radius dp ?
+	Type dw ?
+	CastShadows db ?
+ends
+
+struct IRenderTarget
+	RenderTexture dd ?
+	TargetType dw ?
+	ColorMask dw ?
+	BlendFuncSrc dw ?
+	BlendFuncDst dw ?
+	BlendEnable db ?
+ends

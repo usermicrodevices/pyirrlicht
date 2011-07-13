@@ -1,0 +1,39 @@
+Metadata-Version: 1.0
+Name: pyirrlicht
+Version: 0.9.9
+Summary: ctypes python module for Irrlicht Engine SDK.
+Home-page: http://vosolok2008.narod.ru
+Author: Maxim Kolosov
+Author-email: vosolok2008@ya.ru
+License: BSD
+Download-URL: http://vosolok2008.narod.ru/pyirrlicht.zip
+Description: The Irrlicht Engine is intended to be an easy-to-use 3d engine for games and graphics or any visual desktop applications. This project also have few additional nested projects: FreeBASIC object oriented library, SWIG wraper, FASM (flat assembler), TinyCC and thinBasic usage examples. Partial SVG support via AGG library.
+Keywords: game,2d,3d,opengl,directx,irrlicht,play,media,visual,gui,interface,ctypes,swig,svg
+Platform: ALL
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Console
+Classifier: Environment :: MacOS X
+Classifier: Environment :: Win32 (MS Windows)
+Classifier: Environment :: X11 Applications
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Education
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: Intended Audience :: Financial and Insurance Industry
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: Science/Research 
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Assembly
+Classifier: Programming Language :: Basic
+Classifier: Programming Language :: C
+Classifier: Programming Language :: C++
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Visual Basic
+Classifier: Topic :: Games/Entertainment
+Classifier: Topic :: Multimedia
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Utilities
+Requires: Python
+Requires: ctypes
+Requires: SWIG

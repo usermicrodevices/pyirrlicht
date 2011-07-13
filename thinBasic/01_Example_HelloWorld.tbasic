@@ -1,0 +1,81 @@
+' Example 01: Hello World - The GUI
+
+'~ Uses "Console"
+
+#include "irrlicht.inc"
+#include "ChooseDevice.inc"
+
+Dim driverType As DWORD
+Dim sTitle As String = "Irrlicht Example 01: Hello World"
+
+driverType = ChooseDriver(sTitle)
+
+if driverType <> %EDT_DIRECT3D8 and driverType <> %EDT_NULL then
+	Dim window_size As DWORD
+	Dim scolor As DWORD
+	Dim device As DWORD
+	Dim video_driver As DWORD
+	Dim scene_manager As DWORD
+	Dim gui_environment As DWORD
+	Dim i_animated_mesh As DWORD
+	Dim position As DWORD
+	Dim rotation As DWORD
+	Dim scale As DWORD
+	Dim node As DWORD
+	Dim texture As DWORD
+	Dim position_camera As DWORD
+	Dim lookat As DWORD
+	Dim camera As DWORD
+
+	Dim video_data As DWORD = SExposedVideoData_ctor1()
+	window_size = dimension2du_ctor2(320, 240)
+	scolor = SColor_ctor2(255, 100, 101, 140)
+
+	device = IrrlichtDevice_createDevice(driverType, window_size, 16, false, false, false, $NUL)
+
+	if device then
+		IrrlichtDevice_setResizable(device, true)
+
+		video_driver = IrrlichtDevice_getVideoDriver(device)
+		scene_manager = IrrlichtDevice_getSceneManager(device)
+		gui_environment = IrrlichtDevice_getGUIEnvironment(device)
+
+		'~ IrrlichtDevice_setWindowCaption(device, UCODE$(sTitle & "-" & IVideoDriver_getName(video_driver)))
+		IrrlichtDevice_setWindowCaption(device, UCODE$(sTitle))
+
+		i_animated_mesh = ISceneManager_getMesh(scene_manager, "media/sydney.md2")
+
+		if i_animated_mesh then
+			position = vector3df_ctor2(0.0, 0.0, 0.0)
+			rotation = vector3df_ctor2(0.0, 0.0, 0.0)
+			scale = vector3df_ctor2(1.0, 1.0, 1.0)
+			node = ISceneManager_addAnimatedMeshSceneNode(scene_manager, i_animated_mesh, $NUL, -1, position, rotation, scale, false)
+			if node then
+				ISceneNode_setMaterialFlag(node, %EMF_LIGHTING, false)
+				IAnimatedMeshSceneNode_setMD2Animation1(node, %EMAT_STAND)
+				texture = IVideoDriver_getTexture1(video_driver, "media/sydney.bmp")
+				ISceneNode_setMaterialTexture(node, 0, texture)
+				position_camera = vector3df_ctor2(0.0, 30.0, -40.0)
+				lookat = vector3df_ctor2(0.0, 5.0, 0.0)
+				camera = ISceneManager_addCameraSceneNode(scene_manager, node, position_camera, lookat, -1)
+			end if
+		end if
+
+		'~ PRINT IrrlichtDevice_getVersion(device)
+		while IrrlichtDevice_run(device)
+			if IrrlichtDevice_isWindowActive(device) then
+				'~ If IVideoDriver_beginSceneDefault(video_driver, true, true, scolor) Then
+				If IVideoDriver_beginScene(video_driver, true, true, scolor, video_data, $NUL) Then
+					ISceneManager_drawAll(scene_manager)
+					IGUIEnvironment_drawAll(gui_environment)
+					IVideoDriver_endScene(video_driver)
+				End If
+				IrrlichtDevice_sleep(device, 1, false)
+			else
+				IrrlichtDevice_yield(device)
+			end if
+		wend
+		IrrlichtDevice_closeDevice(device)
+	end if
+end if
+

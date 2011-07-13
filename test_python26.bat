@@ -1,0 +1,1 @@
+@tests.bat C:\Python26\python.exe
