@@ -7,6 +7,7 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Release|Win32 = Release|Win32
+		Description = C port Irrlicht SDK
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Debug|Win32.ActiveCfg = Debug|Win32

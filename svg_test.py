@@ -7,8 +7,26 @@ driverType = EDT_SOFTWARE
 #~ driverType = EDT_DIRECT3D9
 #~ driverType = EDT_OPENGL
 
+use_parameters = True
+
+device = None
 windowSize = dimension2du(640, 580)
-device = createDevice(driverType, windowSize, 16, False, False, False, 0)
+
+if use_parameters:
+	p = SIrrlichtCreationParameters()
+	#~ p.DeviceType = 0
+	p.DriverType = driverType
+	p.WindowSize = windowSize
+	p.Bits = 16
+	#~ p.ZBufferBits = False
+	#~ p.Fullscreen = False
+	#~ p.Stencilbuffer = False
+	#~ p.Vsync = False
+	p.AntiAlias = True
+	device = createDeviceEx(p)
+else:
+	device = createDevice(driverType, windowSize, 16, False, False, False, 0)
+
 if device:
 	device.setWindowCaption('Irrlicht Engine - SVG Demo')
 	device.setResizable(True)

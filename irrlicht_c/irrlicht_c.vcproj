@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="irrlicht_c"
 	ProjectGUID="{5EB71AFC-913B-4E9F-84FF-70A48184DB15}"
+	RootNamespace="irrlicht_c"
 	TargetFrameworkVersion="0"
 	>
 	<Platforms>
@@ -48,7 +49,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\include;&quot;..\..\freetype-2.3.12\include&quot;;&quot;..\..\agg-2.5\include&quot;;&quot;..\..\expat-2.0.1\lib&quot;"
+				AdditionalIncludeDirectories="..\irrlicht-1.8.0.alpha\include;&quot;..\freetype-2.3.12\include&quot;;&quot;..\agg-2.5\include&quot;;&quot;..\expat-2.0.1\lib&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;XML_STATIC"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -67,7 +68,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
 				Culture="1033"
-				AdditionalIncludeDirectories="..//include"
+				AdditionalIncludeDirectories="..//irrlicht-1.8.0.alpha//include"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -77,9 +78,10 @@
 				AdditionalOptions=" /LTCG"
 				AdditionalDependencies="irrlicht.lib freetype2312MT.lib libexpatMT.lib"
 				OutputFile=".\Release/irrlicht_c.dll"
+				Version="1.0"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;..\lib\Win32-visualStudio&quot;;&quot;..\lib\Win64-visualStudio&quot;;&quot;..\..\freetype-2.3.12\objs\win32\vc2008&quot;;&quot;..\..\expat-2.0.1\win32\bin\Release&quot;"
+				AdditionalLibraryDirectories="&quot;..\irrlicht-1.8.0.alpha\lib\Win32-visualStudio&quot;;&quot;..\irrlicht-1.8.0.alpha\lib\Win64-visualStudio&quot;;&quot;..\freetype-2.3.12\objs\win32\vc2008&quot;;&quot;..\expat-2.0.1\win32\bin\Release&quot;"
 				ProgramDatabaseFile=".\Release/irrlicht_c.pdb"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -91,6 +93,8 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				VerboseOutput="false"
+				AssemblyIdentity="1.0"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -143,7 +147,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\include;..\..\freetype-2.3.12\include"
+				AdditionalIncludeDirectories="..\irrlicht-1.8.0.alpha\include;&quot;..\freetype-2.3.12\include&quot;;&quot;..\agg-2.5\include&quot;;&quot;..\expat-2.0.1\lib&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;XML_STATIC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -165,7 +169,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_DEBUG"
 				Culture="1033"
-				AdditionalIncludeDirectories="..//include"
+				AdditionalIncludeDirectories="..//irrlicht-1.8.0.alpha//include"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -176,7 +180,7 @@
 				OutputFile=".\Debug/irrlicht_c.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;..\lib\Win32-visualStudio&quot;;&quot;..\lib\Win64-visualStudio&quot;;&quot;..\..\freetype-2.3.12\objs\win32\vc2008&quot;;&quot;..\..\expat-2.0.1\win32\bin\Debug&quot;"
+				AdditionalLibraryDirectories="&quot;..\irrlicht-1.8.0.alpha\lib\Win32-visualStudio&quot;;&quot;..\irrlicht-1.8.0.alpha\lib\Win64-visualStudio&quot;;&quot;..\freetype-2.3.12\objs\win32\vc2008&quot;;&quot;..\expat-2.0.1\win32\bin\Debug&quot;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/irrlicht_c.pdb"
 				RandomizedBaseAddress="1"
@@ -217,31 +221,31 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\..\agg-2.5\src\agg_curves.cpp"
+				RelativePath="..\agg-2.5\src\agg_curves.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\agg-2.5\examples\svg_viewer\agg_svg_parser.cpp"
+				RelativePath="..\agg-2.5\examples\svg_viewer\agg_svg_parser.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\agg-2.5\examples\svg_viewer\agg_svg_path_renderer.cpp"
+				RelativePath="..\agg-2.5\examples\svg_viewer\agg_svg_path_renderer.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\agg-2.5\examples\svg_viewer\agg_svg_path_tokenizer.cpp"
+				RelativePath="..\agg-2.5\examples\svg_viewer\agg_svg_path_tokenizer.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\agg-2.5\src\agg_trans_affine.cpp"
+				RelativePath="..\agg-2.5\src\agg_trans_affine.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\agg-2.5\src\agg_vcgen_contour.cpp"
+				RelativePath="..\agg-2.5\src\agg_vcgen_contour.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\agg-2.5\src\agg_vcgen_stroke.cpp"
+				RelativePath="..\agg-2.5\src\agg_vcgen_stroke.cpp"
 				>
 			</File>
 			<File

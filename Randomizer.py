@@ -348,7 +348,8 @@ class game:
 			i_mesh_scene_node.setPosition(pos)
 		if rotation:
 			i_mesh_scene_node.setRotation(rotation)
-		selector = self.scene_manager.createTriangleSelector(i_mesh_scene_node.getMesh(), i_mesh_scene_node)
+		selector = self.scene_manager.createTriangleSelector(i_mesh, i_mesh_scene_node)
+		#~ selector = self.scene_manager.createTriangleSelector(i_mesh_scene_node.getMesh(), i_mesh_scene_node)
 		i_mesh_scene_node.setTriangleSelector(selector)
 		#~ i_mesh.drop()
 		return selector
@@ -471,11 +472,10 @@ class game:
 				logo_file_name = 'media//burninglogo.png'
 			elif self.device_type in (EDT_DIRECT3D8, EDT_DIRECT3D9):
 				logo_file_name = 'media//directxlogo.png'
+			material.MaterialType = EMT_TRANSPARENT_ALPHA_CHANNEL
 			if os.path.isfile(logo_file_name) and self.texture_from_file:
-				material.MaterialType = EMT_TRANSPARENT_ALPHA_CHANNEL
 				material.setTexture(0, self.driver.getTexture(logo_file_name))
 			else:
-				material.MaterialType = EMT_TRANSPARENT_ALPHA_CHANNEL
 				texture = self.texture_generator_01(ECF_A8R8G8B8, dimension2du(4, 4), 'top', 196)
 				material.setTexture(0, texture)
 			i_mesh_bottom = i_geometry_creator.createPlaneMesh(tileSize, tileCount, material, textureRepeatCount)
@@ -485,8 +485,10 @@ class game:
 			#~ i_mesh_scene_node_bottom = self.scene_manager.addOctreeSceneNode(i_mesh_bottom, i_mesh_scene_node_top)
 			i_mesh_scene_node_bottom.setPosition(vector3df(0,height,0))
 			i_mesh_scene_node_bottom.setRotation(vector3df(180,0,0))
-			selector_top = self.scene_manager.createOctreeTriangleSelector(i_mesh_scene_node_top.getMesh(), i_mesh_scene_node_top)
-			selector_bottom = self.scene_manager.createOctreeTriangleSelector(i_mesh_scene_node_bottom.getMesh(), i_mesh_scene_node_bottom)
+			selector_top = self.scene_manager.createOctreeTriangleSelector(i_mesh_top)
+			selector_bottom = self.scene_manager.createOctreeTriangleSelector(i_mesh_bottom)
+			#~ selector_top = self.scene_manager.createOctreeTriangleSelector(i_mesh_scene_node_top.getMesh(), i_mesh_scene_node_top)
+			#~ selector_bottom = self.scene_manager.createOctreeTriangleSelector(i_mesh_scene_node_bottom.getMesh(), i_mesh_scene_node_bottom)
 			i_mesh_scene_node_top.setTriangleSelector(selector_top)
 			i_mesh_scene_node_bottom.setTriangleSelector(selector_bottom)
 
@@ -561,7 +563,7 @@ class game:
 					material.MaterialType = EMT_TRANSPARENT_ALPHA_CHANNEL
 					texture = self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'magic', 196)
 					self.magic_i_scene_node.setMaterialTexture(0, texture)
-			selector_magic = self.scene_manager.createTriangleSelector(self.magic_i_scene_node.getMesh(), self.magic_i_scene_node)
+			selector_magic = self.scene_manager.createTriangleSelector(self.magic_i_scene_node.getMesh())#, self.magic_i_scene_node)
 			self.magic_i_scene_node.setTriangleSelector(selector_magic)
 			self.magic_i_scene_node.setName('magic_scene_node')
 			#~ material.MaterialType = EMT_SOLID
@@ -571,12 +573,15 @@ class game:
 			self.text_scene_node1 = self.scene_manager.addBillboardTextSceneNode(self.guienv.getBuiltInFont(), 'MAGIC RANDOMIZER', self.magic_i_scene_node, dimension2df(400.0, 100.0), vector3df(0,70,0), colorTop = SColor(255,255,0,0), colorBottom = SColor(255,0,0,255))
 
 			# ADD SIX SPHERES
-			self.ext_scene_node1 = self.scene_manager.addSphereSceneNode(10.0, parent = self.magic_i_scene_node, position = vector3df(-30,0,0))
-			self.ext_scene_node2 = self.scene_manager.addSphereSceneNode(10.0, parent = self.magic_i_scene_node, position = vector3df(30,0,0))
-			self.ext_scene_node3 = self.scene_manager.addSphereSceneNode(10.0, parent = self.magic_i_scene_node, position = vector3df(0,0,-30))
-			self.ext_scene_node4 = self.scene_manager.addSphereSceneNode(10.0, parent = self.magic_i_scene_node, position = vector3df(0,0,30))
-			self.ext_scene_node5 = self.scene_manager.addSphereSceneNode(10.0, parent = self.magic_i_scene_node, position = vector3df(0,-30,0))
-			self.ext_scene_node6 = self.scene_manager.addSphereSceneNode(10.0, parent = self.magic_i_scene_node, position = vector3df(0,30,0))
+			p = 30
+			if self.texture_from_file:
+				p = 40
+			self.ext_scene_node1 = self.scene_manager.addSphereSceneNode(10.0, parent = self.magic_i_scene_node, position = vector3df(-p,0,0))
+			self.ext_scene_node2 = self.scene_manager.addSphereSceneNode(10.0, parent = self.magic_i_scene_node, position = vector3df(p,0,0))
+			self.ext_scene_node3 = self.scene_manager.addSphereSceneNode(10.0, parent = self.magic_i_scene_node, position = vector3df(0,0,-p))
+			self.ext_scene_node4 = self.scene_manager.addSphereSceneNode(10.0, parent = self.magic_i_scene_node, position = vector3df(0,0,p))
+			self.ext_scene_node5 = self.scene_manager.addSphereSceneNode(10.0, parent = self.magic_i_scene_node, position = vector3df(0,-p,0))
+			self.ext_scene_node6 = self.scene_manager.addSphereSceneNode(10.0, parent = self.magic_i_scene_node, position = vector3df(0,p,0))
 
 			# ADD CUBE VOLUME
 			self.cube = self.scene_manager.addCubeSceneNode(180.0, self.magic_i_scene_node, position = vector3df(0,40,0))
@@ -598,6 +603,8 @@ class game:
 					material.SpecularColor = SColor(128, 255, 0, 0)
 					#~ self.cube.setMaterialTexture(0, texture)
 			self.cube.setVisible(False)
+			#~ selector_cube = self.scene_manager.createTriangleSelector(self.cube.getMesh())
+			#~ self.cube.setTriangleSelector(selector_cube)
 
 			keyMap = SKeyMap(10)
 			keyMap.set(0, EKA_MOVE_FORWARD, KEY_UP)
@@ -625,6 +632,7 @@ class game:
 			i_meta_triangle_selector.addTriangleSelector(selector_left)
 			i_meta_triangle_selector.addTriangleSelector(selector_right)
 			i_meta_triangle_selector.addTriangleSelector(selector_magic)
+			#~ i_meta_triangle_selector.addTriangleSelector(selector_cube)
 
 			anim = self.scene_manager.createCollisionResponseAnimator(i_meta_triangle_selector, self.camera[1])
 			self.camera[1].addAnimator(anim)

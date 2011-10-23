@@ -201,9 +201,14 @@ class app:
 		self.config = config(file_name = self.config_file_name)
 		self.time_delay = self.config.get_int('time_delay', 2)
 		self.menu_options = None
-		self.device_type = self.config.get_int('device_type', EDT_OPENGL)
+		self.driver_type = self.config.get_int('driver_type', driverType)
 		self.window_size = dimension2du(self.config.get_int('window_width', 640), self.config.get_int('window_height', 480))
-		self.device = createDevice(self.device_type, self.window_size)
+		#~ self.device = createDevice(self.driver_type, self.window_size)
+		p = SIrrlichtCreationParameters()
+		p.DriverType = self.driver_type
+		p.WindowSize = self.window_size
+		p.AntiAlias = True
+		self.device = createDeviceEx(p)
 		self.menu_device_types = {}
 		self.help_dialog = None
 		self.scale = 1.0
@@ -221,10 +226,10 @@ class app:
 		self.guienv.addMessageBox(_('Warning'), _('For finish this operation you need restart game!'))
 
 	def set_device_type(self, new_device_type = 0):
-		self.device_type = new_device_type
+		self.driver_type = new_device_type
 		for dev_type, menu_index in self.menu_device_types.items():
-			self.menu_device_type.setItemChecked(menu_index, (self.device_type == dev_type))
-		self.config.set('device_type', self.device_type)
+			self.menu_device_type.setItemChecked(menu_index, (self.driver_type == dev_type))
+		self.config.set('driver_type', self.driver_type)
 		self.config.save()
 		self.show_warning()
 
@@ -306,10 +311,10 @@ class app:
 			self.menu_options.addItem(_('Start/stop log'), GUI_ID_LOG)
 			self.menu_options.addItem(_('Choose graphics driver'), GUI_ID_DRIVER, True, True)
 			self.menu_device_type = self.menu_options.getSubMenu(1)
-			self.menu_device_types[EDT_SOFTWARE] = self.menu_device_type.addItem(_('Software'), GUI_ID_EDT_SOFTWARE, checked = (self.device_type == EDT_SOFTWARE))
-			self.menu_device_types[EDT_OPENGL] = self.menu_device_type.addItem(_('OpenGL'), GUI_ID_EDT_OPENGL, checked = (self.device_type == EDT_OPENGL))
-			self.menu_device_types[EDT_DIRECT3D9] = self.menu_device_type.addItem(_('DirectX 9'), GUI_ID_EDT_DIRECT3D9, checked = (self.device_type == EDT_DIRECT3D9))
-			self.menu_device_types[EDT_BURNINGSVIDEO] = self.menu_device_type.addItem(_('Burningsvideo'), GUI_ID_EDT_BURNINGSVIDEO, checked = (self.device_type == EDT_BURNINGSVIDEO))
+			self.menu_device_types[EDT_SOFTWARE] = self.menu_device_type.addItem(_('Software'), GUI_ID_EDT_SOFTWARE, checked = (self.driver_type == EDT_SOFTWARE))
+			self.menu_device_types[EDT_OPENGL] = self.menu_device_type.addItem(_('OpenGL'), GUI_ID_EDT_OPENGL, checked = (self.driver_type == EDT_OPENGL))
+			self.menu_device_types[EDT_DIRECT3D9] = self.menu_device_type.addItem(_('DirectX 9'), GUI_ID_EDT_DIRECT3D9, checked = (self.driver_type == EDT_DIRECT3D9))
+			self.menu_device_types[EDT_BURNINGSVIDEO] = self.menu_device_type.addItem(_('Burningsvideo'), GUI_ID_EDT_BURNINGSVIDEO, checked = (self.driver_type == EDT_BURNINGSVIDEO))
 
 			submenu = self.menu.getSubMenu(3)
 			submenu.addItem(_('About'), GUI_ID_ABOUT)

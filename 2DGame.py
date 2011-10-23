@@ -11,10 +11,10 @@ except:
 
 #~ driverType = EDT_NULL
 #~ driverType = EDT_SOFTWARE
-#~ driverType = EDT_BURNINGSVIDEO
+driverType = EDT_BURNINGSVIDEO
 #~ driverType = EDT_DIRECT3D8
 #~ driverType = EDT_DIRECT3D9
-driverType = EDT_OPENGL
+#~ driverType = EDT_OPENGL
 
 GUI_ID_QUIT = 0x10000
 GUI_ID_ABOUT = 0x10001
@@ -307,13 +307,13 @@ if device:
 	ps = scene_manager.addParticleSystemSceneNode(False)
 	em = ps.createBoxEmitter(aabbox3df(-100,-100,-100,100,0,100), vector3df(-0.01, 0.0, 0.0), 50, 100, SColor(0,255,255,255), SColor(0,255,255,255), 100, 1000)
 	ps.setEmitter(em)
-	em.drop()
+	#~ em.drop()
 	paf = ps.createGravityAffector(vector3df(-0.05,-0.03, 0.0), 2000)
 	ps.addAffector(paf)
-	try:
-		paf.drop()
-	except:
-		print('=== driverType = %d, cause error with IParticleGravityAffector drop operation' % driverType)
+	#~ try:
+		#~ paf.drop()
+	#~ except:
+		#~ print('=== driverType = %d, cause error with IParticleGravityAffector drop operation' % driverType)
 	ps.setMaterialFlag(EMF_LIGHTING, False)
 	ps.setMaterialTexture(0, driver.getTexture('2dgame/snowflake.png'))
 	ps.setMaterialType(EMT_TRANSPARENT_VERTEX_ALPHA)

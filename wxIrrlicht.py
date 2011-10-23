@@ -62,7 +62,7 @@ class irrlicht_canvas(wx.ScrolledWindow):
 			#~ print ('OpenGLWin32', self.video_data.OpenGLWin32.HWnd)
 			#~ print ('D3D9', self.video_data.D3D9.HWnd)
 			#~ print ('GetHandle', self.driver.GetHandle())
-			print (SetParent(self.driver.GetHandle(), self.GetHandle()))
+			print ('SetParent', SetParent(self.driver.GetHandle(), self.GetHandle()))
 			#~ print (SetParent(self.driver.GetHandle(), self.GetParent().GetHandle()))
 			#~ print (ctypes.FormatError())
 			#~ print (SetActiveWindow(self.driver.GetHandle()))

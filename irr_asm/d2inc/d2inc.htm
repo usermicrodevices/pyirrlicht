@@ -1,0 +1,97 @@
+<HTML>
+  <HEAD>
+   <TITLE>D2Inc - описание программы</TITLE>
+   <STYLE type="text/css">
+      BODY {background: #F1F0E7; font: 12px Arial Verdana}
+      PRE {font: 10pt "Courier New", Arial,""}
+      TD {font: 8pt Verdana, Arial;}
+      P {text-indent: 3em}
+      A {color: #000000; text-decoration: underline;}
+      A.nav {color: #000000; text-decoration: none;}
+      A:hover {background: #DADADA; text-DECORATION: underline overline}
+      H1 {font-size:18pt}
+      H2 {font-size:16px}
+      H3 {font-size:8pt}
+   </STYLE>
+  </HEAD>
+
+ <BODY>
+  <TABLE align=center border=0 cellpadding=5 cellspacing=0 width=450>
+   <TD>
+
+<H2 align=center>D2Inc - ver 0.7</H2>
+
+<p align=right>
+<b>Гантовой Олечке посвящается...</b>
+
+<p align=justify>
+D2Inc(A/U) - конвертор DLL библиотек в INC файлы для ассемблера FASM.
+(D2IncA - создает файл ANSI функций; D2IncU - создает файл UNICODE функций).
+
+<PRE>  <b>Синтаксис запуска:</b>
+   d2incA.exe srcname.dll
+   (srcname.dll - имя DLL библиотеки)
+
+  <b>Пример:</b>
+   d2incA.exe c:\winnt\system32\kernel32.dll</PRE>
+
+<hr>
+
+<h2 align=center>ВАЖНО!</h2>
+<p align=justify>
+Некоторые системные DLL (kernel32.dll, user32.dll и др.), для поддержки
+Win 3.x программ, содержат в себе 16bit'ные функции. Это приводит к тому,
+что для двух функций создаются прототипы с одинаковым именем.
+
+<p align=justify>
+<br>
+Пример обработки KERNEL32.DLL<br>
+Файл kernel32.inc будет содержать следующее:<br>
+
+<PRE>; Created by using d2incA
+
+import kernel32,\
+       AddAtom,'AddAtomA',\
+       ...
+       ...
+       <b>lstrcat</b>,'lstrcat',\
+       lstrcat,'lstrcatA',\
+       <b>lstrcmp</b>,'lstrcmp',\
+       lstrcmp,'lstrcmpA',\
+       <b>lstrcmpi</b>,'lstrcmpi',\
+       lstrcmpi,'lstrcmpiA',\
+       <b>lstrcpy</b>,'lstrcpy',\
+       lstrcpy,'lstrcpyA',\
+       <b>lstrcpyn</b>,'lstrcpyn',\
+       lstrcpyn,'lstrcpynA',\
+       <b>lstrlen</b>,'lstrlen',\
+       lstrlen,'lstrlenA'</PRE>
+
+<p align=justify>
+Такие файлы нужно будет править в ручную, т.е. удалить
+прототипы 16bit'ных функций (они выделены жирным).
+
+<hr>
+<p align=justify>
+Утилиты D2IncA и D2IncU распространяются "КАК ЕСТЬ". Ни при каких
+обстоятельствах автор не несет абсолютно никакой ответственности
+за ущерб, возникающий от использования или невозможности использования
+данных утилит (D2IncA и D2IncU).
+
+<p align=justify>
+P.S.: Тестирование производилось на библиотеках входящих в поставку Win98, Win2k, WinXP
+и библиотеках собственного написания.
+<br><br>
+
+<H3 align=center>
+(c) 2004-05, Дмитрий Н. Колесников
+&lt;<a href="mailto:ksoft@mail.ru">ksoft@mail.ru</a>&gt;</H3>
+
+<H3 align=center>
+*Original: ...Звоните, пишите, деньги будут - высылайте...</H3>
+
+    </TD>
+  </TABLE>
+
+ </BODY>
+</HTML>

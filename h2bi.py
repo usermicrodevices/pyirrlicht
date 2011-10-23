@@ -1,4 +1,4 @@
-# Copyright(c) Max Kolosov 2010 maxkolosov@inbox.ru
+# Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
 # http://vosolok2008.narod.ru
 # BSD license
 
@@ -7,7 +7,7 @@ import os, sys
 
 prolog_extern_string = '''\' This file was automatic generated with "h2bi" script
 
-Type EVENT_METHOD As Function(ByVal _event_ As Any Ptr) As UByte
+Type EVENT_METHOD As Function Cdecl (ByVal _event_ As Any Ptr) As UByte
 
 #inclib "../%s"
 
@@ -314,7 +314,7 @@ def convert_functions(read_file, write_file):
 								default_value = list_func_arg[1].strip()
 							arg_type_name = list_func_arg[0].strip()
 							if arg_type_name:
-								arg_type, arg_name = arg_type_name.replace(' to', ' _to_').replace(' On', ' _On_').replace(' end', ' _end_').replace(' type', ' _type_').replace(' name', ' _name_').replace(' len', ' _len_').replace(' append', ' _append_').replace(' pointer', ' _pointer_').replace(' line', ' _line_').replace(' color', ' _color_').replace(' width', ' _width_').replace(' loop', ' _loop_').replace(' point', ' _point_').replace(' draw', ' _draw_').replace(' size', ' _size_').replace(' data', ' _data_').replace(' constructor', ' _constructor_').replace(' isVisible', ' _isVisible_').replace(' isPushButton', ' _isPushButton_').replace(' clearZBuffer', ' _clearZBuffer_').rsplit(' ', 1)
+								arg_type, arg_name = arg_type_name.replace(' to', ' _to_').replace(' On', ' _On_').replace(' end', ' _end_').replace(' type', ' _type_').replace(' name', ' _name_').replace(' len', ' _len_').replace(' append', ' _append_').replace(' pointer', ' _pointer_').replace(' line', ' _line_').replace(' color', ' _color_').replace(' width', ' _width_').replace(' loop', ' _loop_').replace(' point', ' _point_').replace(' draw', ' _draw_').replace(' size', ' _size_').replace(' data', ' _data_').replace(' constructor', ' _constructor_').replace(' isVisible', ' _isVisible_').replace(' isPushButton', ' _isPushButton_').replace(' clearZBuffer', ' _clearZBuffer_').replace(' mod', ' _mod_').rsplit(' ', 1)
 								arg_name = arg_name.replace('*', '').replace('&', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '')
 								only_args_names += arg_name + ', '
 								full_args_string += 'ByVal ' + arg_name + ' ' + replace_type(arg_type, func_name) + ', '

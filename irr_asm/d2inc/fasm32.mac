@@ -1,0 +1,60 @@
+
+hdlg		   equ ebp+08h
+hwnd		   equ ebp+08h
+umsg		   equ ebp+0Ch
+wparam		   equ ebp+10h
+lparam		   equ ebp+14h
+
+MAX_PATH	   equ 260
+
+macro @enter
+     { push ebp
+       mov ebp,esp }
+
+macro @leave
+     { mov esp,ebp
+       pop ebp }
+
+macro m2m op1,op2
+     { push op2
+       pop op1 }
+
+macro @push [arg]
+     { forward
+	push arg }
+
+macro @pop [arg]
+     { reverse
+	pop arg }
+
+macro @bpush [arg]
+     { reverse
+	push arg }
+
+macro @bpop [arg]
+     { forward
+	pop arg }
+
+macro @call proc,[arg]			 ; stdcall procedure
+     { common
+     if ~ arg eq
+       reverse
+	push arg
+       common
+     end if
+	call proc }
+
+macro szStr [_name,_string]
+     { common
+       local ..label
+     if ~ _name eq | ~ _string eq
+	jmp lab
+       forward
+	_name db _string,0
+       common
+	..label:
+     end if }
+
+macro @asm [_line]
+     { forward
+	_line }

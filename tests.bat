@@ -34,4 +34,12 @@
 
 @%1 svg_viewer.py
 
+@%1 wireframe_test.py
+
+@%1 wireframe_cube.py
+
+@%1 2d_maze.py
+
+@%1 3d_maze.py
+
 @PAUSE

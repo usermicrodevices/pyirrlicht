@@ -1,9 +1,9 @@
-# Copyright(c) Max Kolosov 2010 maxkolosov@inbox.ru
+# Copyright(c) Max Kolosov 2010 - 2011 maxkolosov@inbox.ru
 # http://vosolok2008.narod.ru
 # BSD license
 
-__version__ = pyirrlicht_version = '0.9.9'
-__versionTime__ = '2011-07-12'
+__version__ = pyirrlicht_version = '1.0.1'
+__versionTime__ = '2011-10-23'
 __author__ = 'Max Kolosov <maxkolosov@inbox.ru>'
 __doc__ = '''
 pyirrlicht.py - is ctypes python module for
@@ -151,6 +151,7 @@ EAT_USER_POINTER = 23
 EAT_COUNT = 24
 EAT_UNKNOWN = 25
 
+E_BLEND_FACTOR = 0
 EBF_ZERO = 0
 EBF_ONE = 1
 EBF_DST_COLOR = 2
@@ -586,6 +587,7 @@ EMF_ANTI_ALIASING = 0x4000
 EMF_COLOR_MASK = 0x8000
 EMF_COLOR_MATERIAL = 0x10000
 
+E_MODULATE_FUNC = 0
 EMFN_MODULATE_1X = 1
 EMFN_MODULATE_2X = 2
 EMFN_MODULATE_4X = 4
@@ -3385,8 +3387,8 @@ IAnimatedMeshSceneNode_addShadowVolumeSceneNode = func_type(ctypes.c_void_p, cty
 IAnimatedMeshSceneNode_getJointNode1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p)(('IAnimatedMeshSceneNode_getJointNode1', c_module))
 IAnimatedMeshSceneNode_getJointNode2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IAnimatedMeshSceneNode_getJointNode2', c_module))
 IAnimatedMeshSceneNode_getJointCount = func_type(ctypes.c_uint, ctypes.c_void_p)(('IAnimatedMeshSceneNode_getJointCount', c_module))
-IAnimatedMeshSceneNode_getMS3DJointNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p)(('IAnimatedMeshSceneNode_getMS3DJointNode', c_module))
-IAnimatedMeshSceneNode_getXJointNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p)(('IAnimatedMeshSceneNode_getXJointNode', c_module))
+# IAnimatedMeshSceneNode_getMS3DJointNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p)(('IAnimatedMeshSceneNode_getMS3DJointNode', c_module))
+# IAnimatedMeshSceneNode_getXJointNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p)(('IAnimatedMeshSceneNode_getXJointNode', c_module))
 IAnimatedMeshSceneNode_setMD2Animation1 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IAnimatedMeshSceneNode_setMD2Animation1', c_module))
 IAnimatedMeshSceneNode_setMD2Animation2 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_char_p)(('IAnimatedMeshSceneNode_setMD2Animation2', c_module))
 IAnimatedMeshSceneNode_getFrameNr = func_type(ctypes.c_float, ctypes.c_void_p)(('IAnimatedMeshSceneNode_getFrameNr', c_module))
@@ -4289,8 +4291,8 @@ IRenderTarget_get_BlendFuncSrc = func_type(ctypes.c_int, ctypes.c_void_p)(('IRen
 IRenderTarget_set_BlendFuncSrc = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IRenderTarget_set_BlendFuncSrc', c_module))
 IRenderTarget_get_BlendFuncDst = func_type(ctypes.c_int, ctypes.c_void_p)(('IRenderTarget_get_BlendFuncDst', c_module))
 IRenderTarget_set_BlendFuncDst = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IRenderTarget_set_BlendFuncDst', c_module))
-IRenderTarget_get_BlendEnable = func_type(ctypes.c_byte, ctypes.c_void_p)(('IRenderTarget_get_BlendEnable', c_module))
-IRenderTarget_set_BlendEnable = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IRenderTarget_set_BlendEnable', c_module))
+IRenderTarget_get_BlendOp = func_type(ctypes.c_int, ctypes.c_void_p)(('IRenderTarget_get_BlendOp', c_module))
+IRenderTarget_set_BlendOp = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IRenderTarget_set_BlendOp', c_module))
 
 # functions for class IrrlichtDevice
 IrrlichtDevice_createDevice = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_uint32, ctypes.c_byte, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p)(('IrrlichtDevice_createDevice', c_module))#, ((1, 'deviceType', EDT_SOFTWARE), (1, 'windowSize', dimension2du_dimension2du(640, 480)), (1, 'bits', 16), (1, 'fullscreen', False), (1, 'stencilbuffer', False), (1, 'vsync', False), (1, 'receiver', 0)))
@@ -8121,11 +8123,11 @@ class IRenderTarget(object):
 	def set_BlendFuncDst(self, value):
 		IRenderTarget_set_BlendFuncDst(self.c_pointer, value)
 	BlendFuncDst = property(get_BlendFuncDst, set_BlendFuncDst) 
-	def get_BlendEnable(self):
-		return IRenderTarget_get_BlendEnable(self.c_pointer)
-	def set_BlendEnable(self, value):
-		IRenderTarget_set_BlendEnable(self.c_pointer, value)
-	BlendEnable = property(get_BlendEnable, set_BlendEnable) 
+	def get_BlendOp(self):
+		return IRenderTarget_get_BlendOp(self.c_pointer)
+	def set_BlendOp(self, value):
+		IRenderTarget_set_BlendOp(self.c_pointer, value)
+	BlendOp = property(get_BlendOp, set_BlendOp) 
 
 class ISceneUserDataSerializer:
 	def __init__(self, *args, **kwargs):
@@ -12308,11 +12310,11 @@ class IVideoDriver(IReferenceCounted):
 	def draw2DRectangleOutline(self, pos, color=SColor(255,255,255,255)):
 		IVideoDriver_draw2DRectangleOutline(self.c_pointer, pos.c_pointer, color.c_pointer)
 	def draw2DLine(self, start, end, color=SColor(255,255,255,255)):
-		IVideoDriver_draw2DLine(self.c_pointer, start, end, color.c_pointer)
+		IVideoDriver_draw2DLine(self.c_pointer, start.c_pointer, end.c_pointer, color.c_pointer)
 	def drawPixel(self, x, y, color):
 		IVideoDriver_drawPixel(self.c_pointer, x, y, color)
 	def draw2DPolygon(self, center, radius, color=SColor(100,255,255,255), vertexCount=10):
-		IVideoDriver_draw2DPolygon(self.c_pointer, center, radius, color.c_pointer, vertexCount)
+		IVideoDriver_draw2DPolygon(self.c_pointer, center.c_pointer, radius, color.c_pointer, vertexCount)
 	def drawStencilShadowVolume(self, triangles, count, zfail=True):
 		IVideoDriver_drawStencilShadowVolume(self.c_pointer, triangles, count, zfail)
 	def drawStencilShadow(self, clearStencilBuffer=False, leftUpEdge = SColor(255,0,0,0), rightUpEdge = SColor(255,0,0,0), leftDownEdge = SColor(255,0,0,0), rightDownEdge = SColor(255,0,0,0)):
@@ -12422,9 +12424,9 @@ class IVideoDriver(IReferenceCounted):
 	def clearZBuffer(self):
 		IVideoDriver_clearZBuffer(self.c_pointer)
 	def createScreenShot(self):
-		return IVideoDriver_createScreenShot(self.c_pointer)
+		return IImage(IVideoDriver_createScreenShot(self.c_pointer))
 	def findTexture(self, filename):
-		return IVideoDriver_findTexture(self.c_pointer, filename)
+		return ITexture(IVideoDriver_findTexture(self.c_pointer, filename))
 	def setClipPlane(self, index, plane, enable=False):
 		return IVideoDriver_setClipPlane(self.c_pointer, index, plane.c_pointer, enable)
 	def enableClipPlane(self, index, enable):
@@ -12584,8 +12586,6 @@ class ISceneManager(IReferenceCounted):
 		if not isinstance(keyMapArray, SKeyMap):
 			keyMapArray = SKeyMap()
 		return ICameraSceneNode(ISceneManager_addCameraSceneNodeFPS(self.c_pointer, parent.c_pointer, rotateSpeed, moveSpeed, id, keyMapArray.c_pointer, keyMapSize, noVerticalMovement, jumpSpeed, invertMouse))
-	def addCameraSceneNodeFPS2(self):
-		return ICameraSceneNode(ISceneManager_addCameraSceneNodeFPS2(self.c_pointer))
 	def addLightSceneNode(self, parent = ISceneNode(0), position = vector3df(0,0,0), color = SColorf(1.0, 1.0, 1.0), radius = 100.0, id = -1):
 		if parent in (None, 0):
 			parent = ISceneNode(0)
@@ -12609,7 +12609,7 @@ class ISceneManager(IReferenceCounted):
 			parent = ISceneNode(0)
 		return ITerrainSceneNode(ISceneManager_addTerrainSceneNode(self.c_pointer, heightMapFileName, parent.c_pointer, id, position.c_pointer, rotation.c_pointer, scale.c_pointer, vertexColor.c_pointer, maxLOD, patchSize, smoothFactor, addAlsoIfHeightmapEmpty))
 	def addTerrainSceneNode2(self, heightMapFile, parent = ISceneNode(0), id = -1, position = vector3df(0.0,0.0,0.0), rotation = vector3df(0.0,0.0,0.0), scale = vector3df(1.0,1.0,1.0), vertexColor = SColor(255,255,255,255), maxLOD = 5, patchSize = ETPS_17, smoothFactor = 0, addAlsoIfHeightmapEmpty = False):
-		return ISceneManager_addTerrainSceneNode2(self.c_pointer, heightMapFile.c_pointer, parent.c_pointer, id, position.c_pointer, rotation.c_pointer, scale.c_pointer, vertexColor.c_pointer, maxLOD, patchSize, smoothFactor, addAlsoIfHeightmapEmpty)
+		return ITerrainSceneNode(ISceneManager_addTerrainSceneNode2(self.c_pointer, heightMapFile.c_pointer, parent.c_pointer, id, position.c_pointer, rotation.c_pointer, scale.c_pointer, vertexColor.c_pointer, maxLOD, patchSize, smoothFactor, addAlsoIfHeightmapEmpty))
 	def addQuake3SceneNode(self, meshBuffer, shader, parent = ISceneNode(0), id = -1):
 		return IMeshSceneNode(ISceneManager_addQuake3SceneNode(self.c_pointer, meshBuffer.c_pointer, shader.c_pointer, parent.c_pointer, id))
 	def addEmptySceneNode(self, parent = ISceneNode(0), id = -1):
@@ -12668,25 +12668,32 @@ class ISceneManager(IReferenceCounted):
 	def createDeleteAnimator(self, timeMs):
 		return ISceneNodeAnimator(ISceneManager_createDeleteAnimator(self.c_pointer, timeMs))
 	def createCollisionResponseAnimator(self, world, sceneNode, ellipsoidRadius = vector3df(30,60,30), gravityPerSecond = vector3df(0,-10.0,0), ellipsoidTranslation = vector3df(0,0,0), slidingValue = 0.0005):
+		'world as ITriangleSelector, sceneNode as ISceneNode, ellipsoidRadius as vector3df, gravityPerSecond as vector3df, ellipsoidTranslation as vector3df, slidingValue as float'
 		return ISceneNodeAnimatorCollisionResponse(ISceneManager_createCollisionResponseAnimator(self.c_pointer, world.c_pointer, sceneNode.c_pointer, ellipsoidRadius.c_pointer, gravityPerSecond.c_pointer, ellipsoidTranslation.c_pointer, slidingValue))
 	def createFollowSplineAnimator(self, startTime, points, speed = 1.0, tightness = 0.5):
 		return ISceneNodeAnimator(ISceneManager_createFollowSplineAnimator(self.c_pointer, startTime, points, speed, tightness))
 	def createTriangleSelector(self, *args):
 		if isinstance(args[0], IMesh):
 			return self.createTriangleSelector1(*args)
-		else:
+		elif isinstance(args[0], IAnimatedMeshSceneNode):
 			return self.createTriangleSelector2(*args)
+		else:
+			print('ERROR createTriangleSelector : argument 0 must be IMesh or IAnimatedMeshSceneNode. Found %s' % repr(args[0]))
+			return None
 	def createTriangleSelector1(self, mesh, node = None):
 		if hasattr(node, 'c_pointer'):
 			node = node.c_pointer
 		return ITriangleSelector(ISceneManager_createTriangleSelector1(self.c_pointer, mesh.c_pointer, node))
 	def createTriangleSelector2(self, node):
+		'node as IAnimatedMeshSceneNode'
 		return ITriangleSelector(ISceneManager_createTriangleSelector2(self.c_pointer, node.c_pointer))
 	def createTriangleSelectorFromBoundingBox(self, node):
 		return ITriangleSelector(ISceneManager_createTriangleSelectorFromBoundingBox(self.c_pointer, node.c_pointer))
-	def createOctTreeTriangleSelector(self, mesh, node, minimalPolysPerNode=32):
+	def createOctTreeTriangleSelector(self, mesh, node, minimalPolysPerNode = 32):
+		'mesh as IMesh, node as ISceneNode'
 		return ITriangleSelector(ISceneManager_createOctTreeTriangleSelector(self.c_pointer, mesh.c_pointer, node.c_pointer, minimalPolysPerNode))
-	def createOctreeTriangleSelector(self, mesh, node = ISceneNode(0), minimalPolysPerNode=32):
+	def createOctreeTriangleSelector(self, mesh, node = ISceneNode(0), minimalPolysPerNode = 32):
+		'mesh as IMesh, node as ISceneNode'
 		if node in (None, 0):
 			node = ISceneNode(0)
 		return ITriangleSelector(ISceneManager_createOctreeTriangleSelector(self.c_pointer, mesh.c_pointer, node.c_pointer, minimalPolysPerNode))
@@ -12816,10 +12823,10 @@ class IAnimatedMeshSceneNode(ISceneNode):
 			return self.getJointNode1(arg)
 	def getJointCount(self):
 		return IAnimatedMeshSceneNode_getJointCount(self.c_pointer)
-	def getMS3DJointNode(self, jointName):
-		return ISceneNode(IAnimatedMeshSceneNode_getMS3DJointNode(self.c_pointer, jointName))
-	def getXJointNode(self, jointName):
-		return ISceneNode(IAnimatedMeshSceneNode_getXJointNode(self.c_pointer, jointName))
+	# def getMS3DJointNode(self, jointName):
+		# return ISceneNode(IAnimatedMeshSceneNode_getMS3DJointNode(self.c_pointer, jointName))
+	# def getXJointNode(self, jointName):
+		# return ISceneNode(IAnimatedMeshSceneNode_getXJointNode(self.c_pointer, jointName))
 	def setMD2Animation1(self, emd2_anim_type):
 		return IAnimatedMeshSceneNode_setMD2Animation1(self.c_pointer, emd2_anim_type)
 	def setMD2Animation2(self, animationName):
