@@ -10,6 +10,10 @@
 
 #define _COMPILE_WITH_AGG_
 
+#define _COMPILE_WITH_IRR_SVG_AGG_
+
+//#define _COMPILE_WITH_IRR_SVG_CAIRO_
+
 #ifdef _MSC_VER
 #define DEBUG_EVENTS
 #define IRRLICHT_C_API __declspec(dllexport)
@@ -163,15 +167,75 @@ using namespace quake3;
 #include "lib_agg.h"
 #endif
 
+inline core::array<double> string_split_d(const wchar_t* str, u32 size = 8, const wchar_t* delimiter = L",")
+{
+	core::array<double> container(size);
+	wchar_t* next_token = 0;
+	wchar_t* token = wcstok_s(const_cast<wchar_t*>(str), delimiter, &next_token);
+	int i = 0;
+	while (token != NULL)
+	{
+		container[i] = _wtof(token);
+		token = wcstok_s(NULL, delimiter, &next_token);
+		i++;
+	}
+	return container;
+}
+
+class gradient
+{
+	stringw _id_;
+	stringw _xlink_href_;
+	//core::array<double> offsets;
+	//core::array<double> stop_opacity;
+	//core::array<agg::rgba8> stop_color;
+	//core::array<stop> stops;
+public:
+	gradient(const wchar_t* id, const wchar_t* xlink_href)
+	{
+		_id_ = stringw(id);
+		_xlink_href_ = stringw(xlink_href);
+	}
+	const wchar_t* id(){return _id_.c_str();}
+	const wchar_t* xlink_href(){return _xlink_href_.c_str();}
+};
+
+#ifdef _COMPILE_WITH_IRR_SVG_AGG_
+#include "irr_svg_agg.h"
+#endif
+
+#ifdef _COMPILE_WITH_IRR_SVG_CAIRO_
+#include "irr_svg_cairo.h"
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+IRRLICHT_C_API unsigned char _IRRLICHT_VERSION_MAJOR = IRRLICHT_VERSION_MAJOR;
+IRRLICHT_C_API unsigned char _IRRLICHT_VERSION_MINOR = IRRLICHT_VERSION_MINOR;
+IRRLICHT_C_API unsigned char _IRRLICHT_VERSION_REVISION = IRRLICHT_VERSION_REVISION;
+IRRLICHT_C_API unsigned char _IRRLICHT_VERSION = IRRLICHT_VERSION_MAJOR*100 + IRRLICHT_VERSION_MINOR*10 + IRRLICHT_VERSION_REVISION;
+
 #ifdef _COMPILE_WITH_AGG_
+IRRLICHT_C_API bool BUILD_WITH_AGG = true;
 IRRLICHT_C_API void IVideoDriver_addAggSvgImageLoader(IVideoDriver* pointer)
 {pointer->addExternalImageLoader(new agg_svg_loader(pointer));}
 #else
+IRRLICHT_C_API bool BUILD_WITH_AGG = false;
 IRRLICHT_C_API void IVideoDriver_addAggSvgImageLoader(IVideoDriver* pointer){}
+#endif
+
+#ifdef _COMPILE_WITH_IRR_SVG_AGG_
+IRRLICHT_C_API bool BUILD_WITH_IRR_SVG_AGG = true;
+#else
+IRRLICHT_C_API bool BUILD_WITH_IRR_SVG_AGG = false;
+#endif
+
+#ifdef _COMPILE_WITH_IRR_SVG_CAIRO_
+IRRLICHT_C_API bool BUILD_WITH_IRR_SVG_CAIRO = true;
+#else
+IRRLICHT_C_API bool BUILD_WITH_IRR_SVG_CAIRO = false;
 #endif
 
 #if defined(_IRR_WCHAR_FILESYSTEM)

@@ -14,7 +14,7 @@
 //#include "agg_pixfmt_rgb.h"
 #include "agg_pixfmt_rgba.h"
 
-#include "agg_svg_parser.h"
+#include "..\..\agg-2.5\examples\svg_viewer\agg_svg_parser.h"
 
 using namespace agg;
 using namespace svg;
@@ -27,10 +27,6 @@ using namespace svg;
 //#include "..\..\agg-2.5\examples\svg_viewer\agg_svg_path_renderer.cpp"
 //#include "..\..\agg-2.5\examples\svg_viewer\agg_svg_path_tokenizer.cpp"
 
-//typedef agg::pixfmt_bgra32 agg_pixel_type;
-typedef row_accessor<irr::u32> rendering_buffer_u32;
-typedef pixfmt_alpha_blend_rgba<blender_bgra32, rendering_buffer_u32, pixel32_type> agg_pixel_type;
-//typedef pixfmt_alpha_blend_rgba<blender_argb32, rendering_buffer_u32, pixel32_type> agg_pixel_type;
 
 class svg_viewer
 {
@@ -58,10 +54,10 @@ public:
 		m_max_y *= scale_value;
 		const dimension2d<u32>& image_size = dimension2d<u32>((irr::u32)m_max_x, (irr::u32)m_max_y);
 		IImage* image = driver->createImage(color_format, image_size);
-		rendering_buffer_u32 rbuf((irr::u32*)image->lock(), image_size.Width, image_size.Height, image_size.Width*stride_value);
-		agg_pixel_type pixf(rbuf);
-		agg::renderer_base<agg_pixel_type> renb(pixf);
-		agg::renderer_scanline_aa_solid<agg::renderer_base<agg_pixel_type>> ren(renb);
+		agg::rendering_buffer rbuf((unsigned char*)image->lock(), image_size.Width, image_size.Height, image_size.Width*stride_value);
+		pixfmt_alpha_blend_rgba<blender_rgba32, rendering_buffer, pixel32_type> pixf(rbuf);
+		agg::renderer_base< pixfmt_alpha_blend_rgba<blender_rgba32, rendering_buffer, pixel32_type> > renb(pixf);
+		agg::renderer_scanline_aa_solid< agg::renderer_base< pixfmt_alpha_blend_rgba<blender_rgba32, rendering_buffer, pixel32_type> > > ren(renb);
 		renb.clear(agg::rgba8(255, 255, 255, alpha_value));
 		agg::rasterizer_scanline_aa<> ras;
 		agg::scanline_p8 sl;
@@ -104,7 +100,7 @@ IRRLICHT_C_API void svg_viewer_set_video_driver(svg_viewer* pointer, IVideoDrive
 IRRLICHT_C_API void svg_viewer_scale(svg_viewer* pointer, double scale_value = 1.0){pointer->scale(scale_value);}
 IRRLICHT_C_API ITexture* svg_viewer_get_texture(svg_viewer* pointer){return pointer->get_texture();}
 
-IRRLICHT_C_API ITexture* tool_texture_from_svg(IVideoDriver* driver, char* file_name = "tiger.svg", video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, char* texture_name = "texture_01", u32 alpha_value = 0)
+IRRLICHT_C_API ITexture* tool_texture_from_svg(IVideoDriver* driver, const char* file_name = "tiger.svg", video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, char* texture_name = "texture_01", u32 alpha_value = 0)
 {
 	double scale_value = 1.0;
 	double rotate_value = 180.0;
@@ -126,7 +122,7 @@ IRRLICHT_C_API ITexture* tool_texture_from_svg(IVideoDriver* driver, char* file_
 	IImage* image = driver->createImage(color_format, image_size);
 
 	agg::rendering_buffer rbuf;
-	rbuf.attach((unsigned char*)image->lock(), image_size.Width, image_size.Height, -(int)(image_size.Width*4));
+	rbuf.attach((unsigned char*)image->lock(), image_size.Width, image_size.Height, (int)(image_size.Width*4));
 
 	// Pixel format and basic primitives renderer
 	agg::pixfmt_bgra32 pixf(rbuf);
@@ -148,9 +144,7 @@ IRRLICHT_C_API ITexture* tool_texture_from_svg(IVideoDriver* driver, char* file_
 
 	// Rendering
 	agg::render_scanlines(ras, sl, ren);
-
 	m_path.expand(expand_value);
-	//start_timer();
 	m_path.render(ras, sl, ren, mtx, renb.clip_box(), 1.0);
 
 	image->unlock();
@@ -212,7 +206,15 @@ IRRLICHT_C_API agg::svg::path_renderer* agg_svg_path(fschar_t* file_name = "tige
 	return m_path;
 }
 
-IRRLICHT_C_API IImage* agg_svg_IImage(agg::svg::path_renderer* m_path, IVideoDriver* driver, double scale_value = 1.0, double rotate_value = 0.0, double expand_value = 0.0, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, u32 alpha_value = 0, int stride_value = 1)
+IRRLICHT_C_API agg::svg::path_renderer* agg_svg_path_from_string(const char* buf)
+{
+	agg::svg::path_renderer* m_path = new path_renderer();
+	agg::svg::parser p(*m_path);
+	p.parse_string(buf);
+	return m_path;
+}
+
+IRRLICHT_C_API IImage* agg_svg_IImage(agg::svg::path_renderer* m_path, IVideoDriver* driver, double scale_value = 1.0, double rotate_value = 0.0, double expand_value = 0.0, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, u32 alpha_value = 0, int stride_value = 4)
 {
 	double m_min_x = 0.0;
 	double m_min_y = 0.0;
@@ -227,13 +229,16 @@ IRRLICHT_C_API IImage* agg_svg_IImage(agg::svg::path_renderer* m_path, IVideoDri
 	const dimension2d<u32>& image_size = dimension2d<u32>((irr::u32)m_max_x, (irr::u32)m_max_y);
 	IImage* image = driver->createImage(color_format, image_size);
 
-	typedef row_accessor<irr::u32> rendering_buffer_u32;
-	rendering_buffer_u32 rbuf((irr::u32*)image->lock(), image_size.Width, image_size.Height, image_size.Width*stride_value);
-	//row_accessor<agg::int8u> rbuf((agg::int8u*)image->lock(), image_size.Width, image_size.Height, image_size.Width*stride_value);
+	//row_accessor<irr::u32> rbuf((irr::u32*)image->lock(), image_size.Width, image_size.Height, image_size.Width*stride_value);
+	row_accessor<agg::int8u> rbuf((agg::int8u*)image->lock(), image_size.Width, image_size.Height, image_size.Width*stride_value);
 
-	agg_pixel_type pixf(rbuf);
-	agg::renderer_base<agg_pixel_type> renb(pixf);
-	agg::renderer_scanline_aa_solid<agg::renderer_base<agg_pixel_type>> ren(renb);
+	//pixfmt_alpha_blend_rgba<blender_bgra32, row_accessor<irr::u32>, pixel32_type> pixf(rbuf);
+	//agg::renderer_base< pixfmt_alpha_blend_rgba<blender_bgra32, row_accessor<irr::u32>, pixel32_type> > renb(pixf);
+	//agg::renderer_scanline_aa_solid<agg::renderer_base< pixfmt_alpha_blend_rgba< blender_bgra32, row_accessor<irr::u32>, pixel32_type > > > ren(renb);
+	pixfmt_alpha_blend_rgba<blender_bgra32, row_accessor<agg::int8u>, pixel32_type> pixf(rbuf);
+	agg::renderer_base< pixfmt_alpha_blend_rgba<blender_bgra32, row_accessor<agg::int8u>, pixel32_type> > renb(pixf);
+	agg::renderer_scanline_aa_solid<agg::renderer_base< pixfmt_alpha_blend_rgba< blender_bgra32, row_accessor<agg::int8u>, pixel32_type > > > ren(renb);
+
 	renb.clear(agg::rgba8(255, 255, 255, alpha_value));
 
 	// Rasterizer & scanline
@@ -253,7 +258,7 @@ IRRLICHT_C_API IImage* agg_svg_IImage(agg::svg::path_renderer* m_path, IVideoDri
 	return image;
 }
 
-IRRLICHT_C_API ITexture* agg_svg_ITexture(agg::svg::path_renderer* m_path, IVideoDriver* driver, fschar_t* texture_name = "", double scale_value = 1.0, double rotate_value = 0.0, double expand_value = 0.0, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, u32 alpha_value = 0, int stride_value = 1)
+IRRLICHT_C_API ITexture* agg_svg_ITexture(agg::svg::path_renderer* m_path, IVideoDriver* driver, fschar_t* texture_name = "", double scale_value = 1.0, double rotate_value = 0.0, double expand_value = 0.0, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, u32 alpha_value = 0, int stride_value = 4)
 {
 	double m_min_x = 0.0;
 	double m_min_y = 0.0;
@@ -265,11 +270,17 @@ IRRLICHT_C_API ITexture* agg_svg_ITexture(agg::svg::path_renderer* m_path, IVide
 	m_max_y *= scale_value;
 	const dimension2d<u32>& image_size = dimension2d<u32>((irr::u32)m_max_x, (irr::u32)m_max_y);
 	IImage* image = driver->createImage(color_format, image_size);
-	rendering_buffer_u32 rbuf((irr::u32*)image->lock(), image_size.Width, image_size.Height, image_size.Width*stride_value);
-	//row_accessor<agg::int8u> rbuf((irr::u32*)image->lock(), image_size.Width, image_size.Height, image_size.Width*stride_value);
-	agg_pixel_type pixf(rbuf);
-	agg::renderer_base<agg_pixel_type> renb(pixf);
-	agg::renderer_scanline_aa_solid<agg::renderer_base<agg_pixel_type>> ren(renb);
+
+	//row_accessor<irr::u32> rbuf((irr::u32*)image->lock(), image_size.Width, image_size.Height, image_size.Width*stride_value);
+	row_accessor<agg::int8u> rbuf((agg::int8u*)image->lock(), image_size.Width, image_size.Height, image_size.Width*stride_value);
+
+	//pixfmt_alpha_blend_rgba<blender_bgra32, row_accessor<irr::u32>, pixel32_type> pixf(rbuf);
+	//agg::renderer_base< pixfmt_alpha_blend_rgba< blender_bgra32, row_accessor<irr::u32>, pixel32_type > > renb(pixf);
+	//agg::renderer_scanline_aa_solid<agg::renderer_base< pixfmt_alpha_blend_rgba< blender_bgra32, row_accessor<irr::u32>, pixel32_type > > > ren(renb);
+	pixfmt_alpha_blend_rgba<blender_bgra32, row_accessor<agg::int8u>, pixel32_type> pixf(rbuf);
+	agg::renderer_base< pixfmt_alpha_blend_rgba< blender_bgra32, row_accessor<agg::int8u>, pixel32_type > > renb(pixf);
+	agg::renderer_scanline_aa_solid<agg::renderer_base< pixfmt_alpha_blend_rgba< blender_bgra32, row_accessor<agg::int8u>, pixel32_type > > > ren(renb);
+
 	renb.clear(agg::rgba8(255, 255, 255, alpha_value));
 	agg::rasterizer_scanline_aa<> ras;
 	agg::scanline_p8 sl;
@@ -324,11 +335,10 @@ public:
 		m_path.bounding_rect(&m_min_x, &m_min_y, &m_max_x, &m_max_y);
 		const dimension2d<u32>& image_size = dimension2d<u32>((irr::u32)m_max_x, (irr::u32)m_max_y);
 		IImage* image = video_driver->createImage(ECF_A8R8G8B8, image_size);
-		typedef row_accessor<irr::u32> rendering_buffer_u32;
-		rendering_buffer_u32 rbuf((irr::u32*)image->lock(), image_size.Width, image_size.Height, image_size.Width);
-		agg_pixel_type pixf(rbuf);
-		agg::renderer_base<agg_pixel_type> renb(pixf);
-		agg::renderer_scanline_aa_solid<agg::renderer_base<agg_pixel_type>> ren(renb);
+		row_accessor<agg::int8u> rbuf((agg::int8u*)image->lock(), image_size.Width, image_size.Height, image_size.Width * 4);
+		pixfmt_alpha_blend_rgba<blender_bgra32, row_accessor<agg::int8u>, pixel32_type> pixf(rbuf);
+		agg::renderer_base<pixfmt_alpha_blend_rgba<blender_bgra32, row_accessor<agg::int8u>, pixel32_type> > renb(pixf);
+		agg::renderer_scanline_aa_solid<agg::renderer_base<pixfmt_alpha_blend_rgba<blender_bgra32, row_accessor<agg::int8u>, pixel32_type> > > ren(renb);
 		renb.clear(agg::rgba8(255, 255, 255, 0));
 		agg::rasterizer_scanline_aa<> ras;
 		agg::scanline_p8 sl;

@@ -2,8 +2,8 @@
 # http://vosolok2008.narod.ru
 # BSD license
 
-__version__ = pyirrlicht_version = '1.0.1'
-__versionTime__ = '2011-10-23'
+__version__ = pyirrlicht_version = '1.0.2'
+__versionTime__ = '2011-12-20'
 __author__ = 'Max Kolosov <maxkolosov@inbox.ru>'
 __doc__ = '''
 pyirrlicht.py - is ctypes python module for
@@ -49,11 +49,17 @@ else:
 c_module = ctypes.CDLL('irrlicht_c')
 func_type = ctypes.CFUNCTYPE
 #~ if platform.system().lower() == 'windows':
+#~ if platform in ('windows', 'win32'):
 	#~ c_module = ctypes.WinDLL('irrlicht_c')
 	#~ func_type = ctypes.WINFUNCTYPE
 #~ else:
 	#~ c_module = ctypes.CDLL('irrlicht_c')
 	#~ func_type = ctypes.CFUNCTYPE
+
+IRRLICHT_VERSION_MAJOR = ctypes.c_ubyte.in_dll(c_module, '_IRRLICHT_VERSION_MAJOR').value
+IRRLICHT_VERSION_MINOR = ctypes.c_ubyte.in_dll(c_module, '_IRRLICHT_VERSION_MINOR').value
+IRRLICHT_VERSION_REVISION = ctypes.c_ubyte.in_dll(c_module, '_IRRLICHT_VERSION_REVISION').value
+IRRLICHT_VERSION = ctypes.c_ubyte.in_dll(c_module, '_IRRLICHT_VERSION').value
 
 eAllocStrategy = 0
 ALLOC_STRATEGY_SAFE = 0
@@ -1294,20 +1300,48 @@ tool_getAsFloat = func_type(ctypes.c_float, ctypes.c_char_p, ctypes.c_void_p)(('
 tool_getTextures = func_type(None, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('tool_getTextures', c_module))
 
 # agg functions
-tool_texture_from_svg = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_int, ctypes.c_char_p, ctypes.c_uint)(('tool_texture_from_svg', c_module))
-tool_texture_from_test_vectors = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_uint)(('tool_texture_from_test_vectors', c_module))
-agg_svg_path = func_type(ctypes.c_void_p, fschar_t)(('agg_svg_path', c_module))
-agg_svg_IImage = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_uint, ctypes.c_int)(('agg_svg_IImage', c_module))
-agg_svg_ITexture = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_uint, ctypes.c_int)(('agg_svg_ITexture', c_module))
+BUILD_WITH_AGG = ctypes.c_int.in_dll(c_module, 'BUILD_WITH_AGG').value
+if BUILD_WITH_AGG:
+	tool_texture_from_svg = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_int, ctypes.c_char_p, ctypes.c_uint)(('tool_texture_from_svg', c_module))
+	tool_texture_from_test_vectors = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_uint)(('tool_texture_from_test_vectors', c_module))
+	agg_svg_path = func_type(ctypes.c_void_p, fschar_t)(('agg_svg_path', c_module))
+	agg_svg_path_from_string = func_type(ctypes.c_void_p, ctypes.c_char_p)(('agg_svg_path_from_string', c_module))
+	agg_svg_IImage = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_uint, ctypes.c_int)(('agg_svg_IImage', c_module))
+	agg_svg_ITexture = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_uint, ctypes.c_int)(('agg_svg_ITexture', c_module))
 
-#=== agg_svg_loader
-agg_svg_loader_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('agg_svg_loader_ctor', c_module))
+	#=== agg_svg_loader
+	agg_svg_loader_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('agg_svg_loader_ctor', c_module))
 
-# svg_viewer helper example
-svg_viewer_ctor = func_type(ctypes.c_void_p)(('svg_viewer_ctor', c_module))
-svg_viewer_set_video_driver = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('svg_viewer_set_video_driver', c_module))
-svg_viewer_scale = func_type(None, ctypes.c_void_p, ctypes.c_double)(('svg_viewer_scale', c_module))
-svg_viewer_get_texture = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_viewer_get_texture', c_module))
+	# svg_viewer helper example
+	svg_viewer_ctor = func_type(ctypes.c_void_p)(('svg_viewer_ctor', c_module))
+	svg_viewer_set_video_driver = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('svg_viewer_set_video_driver', c_module))
+	svg_viewer_scale = func_type(None, ctypes.c_void_p, ctypes.c_double)(('svg_viewer_scale', c_module))
+	svg_viewer_get_texture = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_viewer_get_texture', c_module))
+
+# svg_agg_image
+BUILD_WITH_IRR_SVG_AGG = ctypes.c_int.in_dll(c_module, 'BUILD_WITH_IRR_SVG_AGG').value
+if BUILD_WITH_IRR_SVG_AGG:
+	svg_agg_image_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_byte, ctypes.c_uint, ctypes.c_int, ctypes.c_int)(('svg_agg_image_ctor1', c_module))
+	svg_agg_image_scale = func_type(None, ctypes.c_void_p, ctypes.c_double)(('svg_agg_image_scale', c_module))
+	svg_agg_image_render = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_render', c_module))
+	svg_agg_image_get_texture = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_get_texture', c_module))
+	#~ svg_agg_image_drop = func_type(ctypes.c_byte, ctypes.c_void_p)(('svg_agg_image_drop', c_module))
+
+# svg_cairo_image
+BUILD_WITH_IRR_SVG_CAIRO = ctypes.c_int.in_dll(c_module, 'BUILD_WITH_IRR_SVG_CAIRO').value
+if BUILD_WITH_IRR_SVG_CAIRO:
+	CAIRO_ANTIALIAS_DEFAULT = 0
+	CAIRO_ANTIALIAS_NONE = 1
+	CAIRO_ANTIALIAS_GRAY = 2
+	CAIRO_ANTIALIAS_SUBPIXEL = 3
+
+	cairo_version = func_type(ctypes.c_int)(('tool_cairo_version', c_module))
+	cairo_version_string = func_type(ctypes.c_char_p)(('tool_cairo_version_string', c_module))
+
+	svg_cairo_image_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_byte, ctypes.c_double, ctypes.c_int, ctypes.c_int, ctypes.c_double, ctypes.c_double)(('svg_cairo_image_ctor1', c_module))
+	svg_cairo_image_scale = func_type(None, ctypes.c_void_p, ctypes.c_double, ctypes.c_double)(('svg_cairo_image_scale', c_module))
+	svg_cairo_image_get_image = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_cairo_image_get_image', c_module))
+	svg_cairo_image_get_texture = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_cairo_image_get_texture', c_module))
 
 # MainLoop main loop helper example
 MainLoop_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_byte)(('MainLoop_ctor', c_module))
@@ -3655,7 +3689,10 @@ IVideoDriver_draw2DRectangleOutline = func_type(None, ctypes.c_void_p, ctypes.c_
 IVideoDriver_draw2DLine = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_draw2DLine', c_module))
 IVideoDriver_drawPixel = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p)(('IVideoDriver_drawPixel', c_module))
 IVideoDriver_draw2DPolygon = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p, ctypes.c_int)(('IVideoDriver_draw2DPolygon', c_module))
-IVideoDriver_drawStencilShadowVolume = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('IVideoDriver_drawStencilShadowVolume', c_module))
+if IRRLICHT_VERSION < 180:
+	IVideoDriver_drawStencilShadowVolume = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('IVideoDriver_drawStencilShadowVolume', c_module))
+else:
+	IVideoDriver_drawStencilShadowVolume = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_uint)(('IVideoDriver_drawStencilShadowVolume', c_module))
 IVideoDriver_drawStencilShadow = func_type(None, ctypes.c_void_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_drawStencilShadow', c_module))
 IVideoDriver_drawMeshBuffer = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_drawMeshBuffer', c_module))
 IVideoDriver_setFog = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_byte, ctypes.c_byte)(('IVideoDriver_setFog', c_module))
@@ -3737,7 +3774,7 @@ ISceneManager_addOctTreeSceneNode2 = func_type(ctypes.c_void_p, ctypes.c_void_p,
 ISceneManager_addOctreeSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('ISceneManager_addOctreeSceneNode', c_module))
 ISceneManager_addOctreeSceneNode2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('ISceneManager_addOctreeSceneNode2', c_module))
 ISceneManager_addCameraSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_addCameraSceneNode', c_module))
-ISceneManager_addCameraSceneNodeMaya = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_int)(('ISceneManager_addCameraSceneNodeMaya', c_module))
+ISceneManager_addCameraSceneNodeMaya = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_int, ctypes.c_float, ctypes.c_byte)(('ISceneManager_addCameraSceneNodeMaya', c_module))
 ISceneManager_addCameraSceneNodeFPS = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte, ctypes.c_float, ctypes.c_byte)(('ISceneManager_addCameraSceneNodeFPS', c_module))
 ISceneManager_addLightSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_int)(('ISceneManager_addLightSceneNode', c_module))
 ISceneManager_addBillboardSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addBillboardSceneNode', c_module))
@@ -7360,7 +7397,7 @@ class SColor(object):
 	def __str__(self):
 		return self.__repr__()
 
-class SColorf:
+class SColorf(object):
 	def __init__(self, *args, **kwargs):
 		self.c_pointer = None
 		self.delete_c_pointer = True
@@ -7388,6 +7425,10 @@ class SColorf:
 		return bool(self.c_pointer)
 	def __bool__(self):
 		return bool(self.c_pointer)
+	def __repr__(self):
+		return '%s(%f, %f, %f, %f)' % (self.__class__.__name__, self.a, self.r, self.g, self.b)
+	def __str__(self):
+		return self.__repr__()
 	def toSColor(self):
 		return SColor(SColorf_toSColor(self.c_pointer))
 	def set1(self, rr, gg, bb):
@@ -7421,6 +7462,10 @@ class SColorf:
 		SColorf_setGreen(self.c_pointer, value)
 	def setBlue(self, value):
 		SColorf_setBlue(self.c_pointer, value)
+	a = property(getAlpha, setAlpha) 
+	r = property(getRed, setRed) 
+	g = property(getGreen, setGreen) 
+	b = property(getBlue, setBlue) 
 
 class SColorHSL(object):
 	def __init__(self, *args, **kwargs):
@@ -7443,6 +7488,10 @@ class SColorHSL(object):
 		return bool(self.c_pointer)
 	def __bool__(self):
 		return bool(self.c_pointer)
+	def __repr__(self):
+		return '%s(Hue = %f, Saturation = %f, Luminance = %f)' % (self.__class__.__name__, self.Hue, self.Saturation, self.Luminance)
+	def __str__(self):
+		return self.__repr__()
 	def fromRGB(self, color):
 		SColorHSL_fromRGB(self.c_pointer, color.c_pointer)
 	def toRGB(self, color):
@@ -7480,6 +7529,10 @@ class matrix4:
 			self.c_pointer = matrix4_ctor1(kwargs.pop('constructor', EM4CONST_IDENTITY))
 		else:
 			self.c_pointer = matrix4_ctor1(EM4CONST_IDENTITY)
+	def __repr__(self):
+		return '%s(%f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f)' % (self.__class__.__name__, self[0], self[1], self[2], self[3], self[4], self[5], self[6], self[7], self[8], self[9], self[10], self[11], self[12], self[13], self[14], self[15])
+	def __str__(self):
+		return self.__repr__()
 	def __del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
@@ -12129,8 +12182,7 @@ class IVideoDriver(IReferenceCounted):
 		self.c_pointer = args[0]
 		#~ OnResizeFunc = func_type(None, ctypes.c_void_p)
 		#~ self.callback = OnResizeFunc(self.OnResize)
-		self.IrrlichtDevice_version = kwargs.pop('IrrlichtDevice_version', '1.7.1')
-		if self.IrrlichtDevice_version < '1.7.0':
+		if IRRLICHT_VERSION < 170:
 			def beginScene(backBuffer = True, zBuffer = True, color = SColor(255,0,0,0), windowId = 0, sourceRect = recti(0)):
 				return IVideoDriver_beginScene_old(self.c_pointer, backBuffer, zBuffer, color.c_pointer, windowId, sourceRect.c_pointer)
 			self.beginScene = beginScene
@@ -12315,8 +12367,12 @@ class IVideoDriver(IReferenceCounted):
 		IVideoDriver_drawPixel(self.c_pointer, x, y, color)
 	def draw2DPolygon(self, center, radius, color=SColor(100,255,255,255), vertexCount=10):
 		IVideoDriver_draw2DPolygon(self.c_pointer, center.c_pointer, radius, color.c_pointer, vertexCount)
-	def drawStencilShadowVolume(self, triangles, count, zfail=True):
-		IVideoDriver_drawStencilShadowVolume(self.c_pointer, triangles, count, zfail)
+	if IRRLICHT_VERSION < 180:
+		def drawStencilShadowVolume(self, triangles, count, zfail = True):
+			IVideoDriver_drawStencilShadowVolume(self.c_pointer, triangles, count, zfail)
+	else:
+		def drawStencilShadowVolume(self, triangles, zfail = True, debugDataVisible = 0):
+			IVideoDriver_drawStencilShadowVolume(self.c_pointer, triangles.c_pointer, zfail, debugDataVisible)
 	def drawStencilShadow(self, clearStencilBuffer=False, leftUpEdge = SColor(255,0,0,0), rightUpEdge = SColor(255,0,0,0), leftDownEdge = SColor(255,0,0,0), rightDownEdge = SColor(255,0,0,0)):
 		IVideoDriver_drawStencilShadow(self.c_pointer, clearStencilBuffer, leftUpEdge.c_pointer, rightUpEdge.c_pointer, leftDownEdge.c_pointer, rightDownEdge.c_pointer)
 	def drawMeshBuffer(self, mb):
@@ -12500,6 +12556,159 @@ class IVolumeLightSceneNode(ISceneNode):
 	def getTailColor(self):
 		return SColor(IVolumeLightSceneNode_getTailColor(self.c_pointer))
 
+class ICursorControl(IReferenceCounted):
+	def __init__(self, *args, **kwargs):
+		self.c_pointer = args[0]
+	def setVisible(self, visible = True):
+		ICursorControl_setVisible(self.c_pointer, visible)
+	def isVisible(self):
+		return ICursorControl_isVisible(self.c_pointer)
+	def setPosition(self, *args):
+		if len(args) == 1:
+			if isinstance(args[0], position2df):
+				ICursorControl_setPositionF(self.c_pointer, args[0].c_pointer)
+			elif isinstance(args[0], position2di):
+				ICursorControl_setPositionI(self.c_pointer, args[0].c_pointer)
+		elif len(args) > 1:
+			if isinstance(args[0], float) and isinstance(args[1], float):
+				ICursorControl_setPositionF2(self.c_pointer, args[0], args[1])
+			elif isinstance(args[0], (int, long)) and isinstance(args[1], (int, long)):
+				ICursorControl_setPositionI2(self.c_pointer, args[0], args[1])
+	def setPositionF(self, *args):
+		if len(args) == 0:
+			ICursorControl_setPositionF2(self.c_pointer, 0.0, 0.0)
+		elif len(args) == 1:
+			if isinstance(args[0], float):
+				ICursorControl_setPositionF2(self.c_pointer, args[0], 0.0)
+			else:
+				ICursorControl_setPositionF(self.c_pointer, args[0].c_pointer)
+		elif len(args) == 2:
+			ICursorControl_setPositionF2(self.c_pointer, *args)
+	def setPositionF1(self, pos):
+		ICursorControl_setPositionF(self.c_pointer, pos.c_pointer)
+	def setPositionF2(self, x = 0.0, y = 0.0):
+		ICursorControl_setPositionF2(self.c_pointer, x, y)
+	def setPositionI(self, *args):
+		if len(args) == 0:
+			ICursorControl_setPositionI2(self.c_pointer, 0, 0)
+		elif len(args) == 1:
+			if isinstance(args[0], int):
+				ICursorControl_setPositionI2(self.c_pointer, args[0], 0)
+			else:
+				ICursorControl_setPositionI(self.c_pointer, args[0].c_pointer)
+		elif len(args) == 2:
+			ICursorControl_setPositionI2(self.c_pointer, *args)
+	def setPositionI1(self, pos):
+		ICursorControl_setPositionI(self.c_pointer, pos.c_pointer)
+	def setPositionI2(self, x = 0, y = 0):
+		ICursorControl_setPositionI2(self.c_pointer, x, y)
+	def getPosition(self):
+		return position2di(c_pointer = ICursorControl_getPosition(self.c_pointer))
+	def getRelativePosition(self):
+		return position2df(c_pointer = ICursorControl_getRelativePosition(self.c_pointer))
+	def setReferenceRect(self, rect = recti(0)):
+		ICursorControl_setReferenceRect(self.c_pointer, rect.c_pointer)
+
+class IFileSystem(IReferenceCounted):
+	def __init__(self, *args, **kwargs):
+		self.c_pointer = args[0]
+	def createAndOpenFile(self, filename):
+		return IReadFile(IFileSystem_createAndOpenFile(self.c_pointer, fs_conv(filename)))
+	def createMemoryReadFile(self, memory, len, fileName, deleteMemoryWhenDropped = False):
+		if hasattr(memory, 'c_pointer'):
+			memory = memory.c_pointer
+		return IReadFile(IFileSystem_createMemoryReadFile(self.c_pointer, memory, len, fs_conv(fileName), deleteMemoryWhenDropped))
+		#~ return IReadFile(IFileSystem_createMemoryReadFile(self.c_pointer, memory, len, fileName, deleteMemoryWhenDropped))
+	def createLimitReadFile(self, fileName, alreadyOpenedFile, pos, areaSize):
+		return IReadFile(IFileSystem_createLimitReadFile(self.c_pointer, fileName, alreadyOpenedFile, pos, areaSize))
+	def createMemoryWriteFile(self, memory, len, fileName, deleteMemoryWhenDropped=False):
+		return IWriteFile(IFileSystem_createMemoryWriteFile(self.c_pointer, memory, len, fs_conv(fileName), deleteMemoryWhenDropped))
+	def createAndWriteFile(self, filename, append=False):
+		return IWriteFile(IFileSystem_createAndWriteFile(self.c_pointer, fs_conv(filename), append))
+	def addFileArchive(self, filename, ignoreCase=True, ignorePaths=True, archiveType=EFAT_UNKNOWN):
+		return IFileSystem_addFileArchive(self.c_pointer, fs_conv(filename), ignoreCase, ignorePaths, archiveType)
+	def addArchiveLoader(self, loader):
+		IFileSystem_addArchiveLoader(self.c_pointer, loader)
+	def getFileArchiveCount(self):
+		return IFileSystem_getFileArchiveCount(self.c_pointer)
+	def removeFileArchive1(self, index):
+		return IFileSystem_removeFileArchive1(self.c_pointer, index)
+	def removeFileArchive2(self, filename):
+		return IFileSystem_removeFileArchive2(self.c_pointer, fs_conv(filename))
+	def removeFileArchive(self, arg):
+		if isinstance(arg, int):
+			return self.removeFileArchive1(arg)
+		else:
+			return self.removeFileArchive2(arg)
+	def moveFileArchive(self, sourceIndex, relative):
+		return IFileSystem_moveFileArchive(self.c_pointer, sourceIndex, relative)
+	def getFileArchive(self, index):
+		return IFileArchive(IFileSystem_getFileArchive(self.c_pointer, index))
+	def addZipFileArchive(self, filename, ignoreCase=True, ignorePaths=True):
+		return IFileSystem_addZipFileArchive(self.c_pointer, as_ansi(filename), ignoreCase, ignorePaths)
+	def addFolderFileArchive(self, filename, ignoreCase=True, ignorePaths=True):
+		return IFileSystem_addFolderFileArchive(self.c_pointer, as_ansi(filename), ignoreCase, ignorePaths)
+	def addPakFileArchive(self, filename, ignoreCase=True, ignorePaths=True):
+		return IFileSystem_addPakFileArchive(self.c_pointer, as_ansi(filename), ignoreCase, ignorePaths)
+	def getWorkingDirectory(self):
+		return IFileSystem_getWorkingDirectory(self.c_pointer)
+	def changeWorkingDirectoryTo(self, newDirectory):
+		return IFileSystem_changeWorkingDirectoryTo(self.c_pointer, fs_conv(newDirectory))
+	def getAbsolutePath(self, filename):
+		return IFileSystem_getAbsolutePath(self.c_pointer, fs_conv(filename))
+	def getFileDir(self, filename):
+		return IFileSystem_getFileDir(self.c_pointer, fs_conv(filename))
+	def getFileBasename(self, filename, keepExtension=True):
+		return IFileSystem_getFileBasename(self.c_pointer, fs_conv(filename), keepExtension)
+	def flattenFilename(self, directory, root='/'):
+		return IFileSystem_flattenFilename(self.c_pointer, fs_conv(directory), root)
+	def createFileList(self):
+		return IFileList(IFileSystem_createFileList(self.c_pointer))
+	def createEmptyFileList(self, path, ignoreCase, ignorePaths):
+		return IFileList(IFileSystem_createEmptyFileList(self.c_pointer, fs_conv(path), ignoreCase, ignorePaths))
+	def setFileListSystem(self, listType):
+		return IFileSystem_setFileListSystem(self.c_pointer, listType)
+	def existFile(self, filename):
+		return IFileSystem_existFile(self.c_pointer, fs_conv(filename))
+	def createXMLReader1(self, filename):
+		return IXMLReader(IFileSystem_createXMLReader1(self.c_pointer, fs_conv(filename)))
+	def createXMLReader2(self, file):
+		return IXMLReader(IFileSystem_createXMLReader2(self.c_pointer, file.c_pointer))
+	def createXMLReader(self, name_or_file):
+		if isinstance(name_or_file, (type_str, type_unicode)):
+			return self.createXMLReader1(name_or_file)
+		elif isinstance(name_or_file, IReadFile):
+			return self.createXMLReader2(name_or_file)
+		else:
+			print('ERROR in IFileSystem::createXMLReader, unsupported type argument', name_or_file)
+			return None
+	def createXMLReaderUTF8name(self, filename):
+		return IXMLReaderUTF8(IFileSystem_createXMLReaderUTF8(self.c_pointer, fs_conv(filename)))
+	def createXMLReaderUTF8stream(self, file):
+		return IXMLReaderUTF8(IFileSystem_createXMLReaderUTF8stream(self.c_pointer, file.c_pointer))
+	def createXMLReaderUTF8(self, name_or_file):
+		if isinstance(name_or_file, type_str):
+			return self.createXMLReaderUTF8name(name_or_file)
+		elif isinstance(name_or_file, IReadFile):
+			return self.createXMLReaderUTF8stream(name_or_file)
+		else:
+			print('ERROR in IFileSystem::createXMLReaderUTF8, unsupported argument type', name_or_file)
+			return None
+	def createXMLWriter1(self, filename):
+		return IXMLWriter(IFileSystem_createXMLWriter1(self.c_pointer, fs_conv(filename)))
+	def createXMLWriter2(self, file):
+		return IXMLWriter(IFileSystem_createXMLWriter2(self.c_pointer, file.c_pointer))
+	def createXMLWriter(self, name_or_file):
+		if isinstance(name_or_file, type_str):
+			return self.createXMLWriter1(name_or_file)
+		elif isinstance(name_or_file, IWriteFile):
+			return self.createXMLWriter2(name_or_file)
+		else:
+			print('ERROR in IFileSystem::createXMLWriter, unsupported argument type', name_or_file)
+			return None
+	def createEmptyAttributes(self, driver = IVideoDriver(0)):
+		return IAttributes(IFileSystem_createEmptyAttributes(self.c_pointer, driver.c_pointer))
+
 class ISceneManager(IReferenceCounted):
 	def __init__(self, *args, **kwargs):
 		self.c_pointer = args[0]
@@ -12576,10 +12785,10 @@ class ISceneManager(IReferenceCounted):
 		if parent in (None, 0):
 			parent = ISceneNode(0)
 		return ICameraSceneNode(ISceneManager_addCameraSceneNode(self.c_pointer, parent.c_pointer, position.c_pointer, lookat.c_pointer, id))
-	def addCameraSceneNodeMaya(self, parent = ISceneNode(0), rotateSpeed = -1500.0, zoomSpeed = 200.0, translationSpeed = 1500.0, id = -1):
+	def addCameraSceneNodeMaya(self, parent = ISceneNode(0), rotateSpeed = -1500.0, zoomSpeed = 200.0, translationSpeed = 1500.0, id = -1, distance = 70.0, makeActive = True):
 		if parent in (None, 0):
 			parent = ISceneNode(0)
-		return ICameraSceneNode(ISceneManager_addCameraSceneNodeMaya(self.c_pointer, parent.c_pointer, rotateSpeed, zoomSpeed, translationSpeed, id))
+		return ICameraSceneNode(ISceneManager_addCameraSceneNodeMaya(self.c_pointer, parent.c_pointer, rotateSpeed, zoomSpeed, translationSpeed, id, distance, makeActive))
 	def addCameraSceneNodeFPS(self, parent = ISceneNode(0), rotateSpeed = 100.0, moveSpeed = 0.5, id = -1, keyMapArray = SKeyMap(), keyMapSize = 0, noVerticalMovement = False, jumpSpeed = 0.0, invertMouse = False):
 		if parent in (None, 0):
 			parent = ISceneNode(0)
@@ -13186,159 +13395,6 @@ class IXMLWriter(IReferenceCounted):
 		IXMLWriter_writeText(self.c_pointer, text)
 	def writeLineBreak(self):
 		IXMLWriter_writeLineBreak(self.c_pointer)
-
-class IFileSystem(IReferenceCounted):
-	def __init__(self, *args, **kwargs):
-		self.c_pointer = args[0]
-	def createAndOpenFile(self, filename):
-		return IReadFile(IFileSystem_createAndOpenFile(self.c_pointer, fs_conv(filename)))
-	def createMemoryReadFile(self, memory, len, fileName, deleteMemoryWhenDropped = False):
-		if hasattr(memory, 'c_pointer'):
-			memory = memory.c_pointer
-		return IReadFile(IFileSystem_createMemoryReadFile(self.c_pointer, memory, len, fs_conv(fileName), deleteMemoryWhenDropped))
-		#~ return IReadFile(IFileSystem_createMemoryReadFile(self.c_pointer, memory, len, fileName, deleteMemoryWhenDropped))
-	def createLimitReadFile(self, fileName, alreadyOpenedFile, pos, areaSize):
-		return IReadFile(IFileSystem_createLimitReadFile(self.c_pointer, fileName, alreadyOpenedFile, pos, areaSize))
-	def createMemoryWriteFile(self, memory, len, fileName, deleteMemoryWhenDropped=False):
-		return IWriteFile(IFileSystem_createMemoryWriteFile(self.c_pointer, memory, len, fs_conv(fileName), deleteMemoryWhenDropped))
-	def createAndWriteFile(self, filename, append=False):
-		return IWriteFile(IFileSystem_createAndWriteFile(self.c_pointer, fs_conv(filename), append))
-	def addFileArchive(self, filename, ignoreCase=True, ignorePaths=True, archiveType=EFAT_UNKNOWN):
-		return IFileSystem_addFileArchive(self.c_pointer, fs_conv(filename), ignoreCase, ignorePaths, archiveType)
-	def addArchiveLoader(self, loader):
-		IFileSystem_addArchiveLoader(self.c_pointer, loader)
-	def getFileArchiveCount(self):
-		return IFileSystem_getFileArchiveCount(self.c_pointer)
-	def removeFileArchive1(self, index):
-		return IFileSystem_removeFileArchive1(self.c_pointer, index)
-	def removeFileArchive2(self, filename):
-		return IFileSystem_removeFileArchive2(self.c_pointer, fs_conv(filename))
-	def removeFileArchive(self, arg):
-		if isinstance(arg, int):
-			return self.removeFileArchive1(arg)
-		else:
-			return self.removeFileArchive2(arg)
-	def moveFileArchive(self, sourceIndex, relative):
-		return IFileSystem_moveFileArchive(self.c_pointer, sourceIndex, relative)
-	def getFileArchive(self, index):
-		return IFileArchive(IFileSystem_getFileArchive(self.c_pointer, index))
-	def addZipFileArchive(self, filename, ignoreCase=True, ignorePaths=True):
-		return IFileSystem_addZipFileArchive(self.c_pointer, as_ansi(filename), ignoreCase, ignorePaths)
-	def addFolderFileArchive(self, filename, ignoreCase=True, ignorePaths=True):
-		return IFileSystem_addFolderFileArchive(self.c_pointer, as_ansi(filename), ignoreCase, ignorePaths)
-	def addPakFileArchive(self, filename, ignoreCase=True, ignorePaths=True):
-		return IFileSystem_addPakFileArchive(self.c_pointer, as_ansi(filename), ignoreCase, ignorePaths)
-	def getWorkingDirectory(self):
-		return IFileSystem_getWorkingDirectory(self.c_pointer)
-	def changeWorkingDirectoryTo(self, newDirectory):
-		return IFileSystem_changeWorkingDirectoryTo(self.c_pointer, fs_conv(newDirectory))
-	def getAbsolutePath(self, filename):
-		return IFileSystem_getAbsolutePath(self.c_pointer, fs_conv(filename))
-	def getFileDir(self, filename):
-		return IFileSystem_getFileDir(self.c_pointer, fs_conv(filename))
-	def getFileBasename(self, filename, keepExtension=True):
-		return IFileSystem_getFileBasename(self.c_pointer, fs_conv(filename), keepExtension)
-	def flattenFilename(self, directory, root='/'):
-		return IFileSystem_flattenFilename(self.c_pointer, fs_conv(directory), root)
-	def createFileList(self):
-		return IFileList(IFileSystem_createFileList(self.c_pointer))
-	def createEmptyFileList(self, path, ignoreCase, ignorePaths):
-		return IFileList(IFileSystem_createEmptyFileList(self.c_pointer, fs_conv(path), ignoreCase, ignorePaths))
-	def setFileListSystem(self, listType):
-		return IFileSystem_setFileListSystem(self.c_pointer, listType)
-	def existFile(self, filename):
-		return IFileSystem_existFile(self.c_pointer, fs_conv(filename))
-	def createXMLReader1(self, filename):
-		return IXMLReader(IFileSystem_createXMLReader1(self.c_pointer, fs_conv(filename)))
-	def createXMLReader2(self, file):
-		return IXMLReader(IFileSystem_createXMLReader2(self.c_pointer, file.c_pointer))
-	def createXMLReader(self, name_or_file):
-		if isinstance(name_or_file, (type_str, type_unicode)):
-			return self.createXMLReader1(name_or_file)
-		elif isinstance(name_or_file, IReadFile):
-			return self.createXMLReader2(name_or_file)
-		else:
-			print('ERROR in IFileSystem::createXMLReader, unsupported type argument', name_or_file)
-			return None
-	def createXMLReaderUTF8name(self, filename):
-		return IXMLReaderUTF8(IFileSystem_createXMLReaderUTF8(self.c_pointer, fs_conv(filename)))
-	def createXMLReaderUTF8stream(self, file):
-		return IXMLReaderUTF8(IFileSystem_createXMLReaderUTF8stream(self.c_pointer, file.c_pointer))
-	def createXMLReaderUTF8(self, name_or_file):
-		if isinstance(name_or_file, type_str):
-			return self.createXMLReaderUTF8name(name_or_file)
-		elif isinstance(name_or_file, IReadFile):
-			return self.createXMLReaderUTF8stream(name_or_file)
-		else:
-			print('ERROR in IFileSystem::createXMLReaderUTF8, unsupported argument type', name_or_file)
-			return None
-	def createXMLWriter1(self, filename):
-		return IXMLWriter(IFileSystem_createXMLWriter1(self.c_pointer, fs_conv(filename)))
-	def createXMLWriter2(self, file):
-		return IXMLWriter(IFileSystem_createXMLWriter2(self.c_pointer, file.c_pointer))
-	def createXMLWriter(self, name_or_file):
-		if isinstance(name_or_file, type_str):
-			return self.createXMLWriter1(name_or_file)
-		elif isinstance(name_or_file, IWriteFile):
-			return self.createXMLWriter2(name_or_file)
-		else:
-			print('ERROR in IFileSystem::createXMLWriter, unsupported argument type', name_or_file)
-			return None
-	def createEmptyAttributes(self, driver = IVideoDriver(0)):
-		return IAttributes(IFileSystem_createEmptyAttributes(self.c_pointer, driver.c_pointer))
-
-class ICursorControl(IReferenceCounted):
-	def __init__(self, *args, **kwargs):
-		self.c_pointer = args[0]
-	def setVisible(self, visible = True):
-		ICursorControl_setVisible(self.c_pointer, visible)
-	def isVisible(self):
-		return ICursorControl_isVisible(self.c_pointer)
-	def setPosition(self, *args):
-		if len(args) == 1:
-			if isinstance(args[0], position2df):
-				ICursorControl_setPositionF(self.c_pointer, args[0].c_pointer)
-			elif isinstance(args[0], position2di):
-				ICursorControl_setPositionI(self.c_pointer, args[0].c_pointer)
-		elif len(args) > 1:
-			if isinstance(args[0], float) and isinstance(args[1], float):
-				ICursorControl_setPositionF2(self.c_pointer, args[0], args[1])
-			elif isinstance(args[0], (int, long)) and isinstance(args[1], (int, long)):
-				ICursorControl_setPositionI2(self.c_pointer, args[0], args[1])
-	def setPositionF(self, *args):
-		if len(args) == 0:
-			ICursorControl_setPositionF2(self.c_pointer, 0.0, 0.0)
-		elif len(args) == 1:
-			if isinstance(args[0], float):
-				ICursorControl_setPositionF2(self.c_pointer, args[0], 0.0)
-			else:
-				ICursorControl_setPositionF(self.c_pointer, args[0].c_pointer)
-		elif len(args) == 2:
-			ICursorControl_setPositionF2(self.c_pointer, *args)
-	def setPositionF1(self, pos):
-		ICursorControl_setPositionF(self.c_pointer, pos.c_pointer)
-	def setPositionF2(self, x = 0.0, y = 0.0):
-		ICursorControl_setPositionF2(self.c_pointer, x, y)
-	def setPositionI(self, *args):
-		if len(args) == 0:
-			ICursorControl_setPositionI2(self.c_pointer, 0, 0)
-		elif len(args) == 1:
-			if isinstance(args[0], int):
-				ICursorControl_setPositionI2(self.c_pointer, args[0], 0)
-			else:
-				ICursorControl_setPositionI(self.c_pointer, args[0].c_pointer)
-		elif len(args) == 2:
-			ICursorControl_setPositionI2(self.c_pointer, *args)
-	def setPositionI1(self, pos):
-		ICursorControl_setPositionI(self.c_pointer, pos.c_pointer)
-	def setPositionI2(self, x = 0, y = 0):
-		ICursorControl_setPositionI2(self.c_pointer, x, y)
-	def getPosition(self):
-		return position2di(c_pointer = ICursorControl_getPosition(self.c_pointer))
-	def getRelativePosition(self):
-		return position2df(c_pointer = ICursorControl_getRelativePosition(self.c_pointer))
-	def setReferenceRect(self, rect = recti(0)):
-		ICursorControl_setReferenceRect(self.c_pointer, rect.c_pointer)
 
 class ILogger(IReferenceCounted):
 	def __init__(self, *args, **kwargs):
@@ -14053,7 +14109,7 @@ class IrrlichtDevice(IReferenceCounted):
 	def sleep(self, timeMs, pauseTimer = False):
 		IrrlichtDevice_sleep(self.c_pointer, timeMs, pauseTimer)
 	def getVideoDriver(self):
-		return IVideoDriver(IrrlichtDevice_getVideoDriver(self.c_pointer), IrrlichtDevice_version = self.getVersion())
+		return IVideoDriver(IrrlichtDevice_getVideoDriver(self.c_pointer))
 	def getFileSystem(self):
 		return IFileSystem(IrrlichtDevice_getFileSystem(self.c_pointer))
 	def getGUIEnvironment(self):
@@ -14241,6 +14297,70 @@ class agg_svg_loader(IImageLoader):
 		else:
 			self.c_pointer = agg_svg_loader_ctor(args[0])
 
+class svg_agg_image(object):
+	def __init__(self, *args, **kwargs):
+		'IVideoDriver* video_driver, IFileSystem* fs, const irr::io::path& file_name = "tiger.svg", bool content_unicode = true'
+		if len(args) > 1 and hasattr(args[0], 'c_pointer'):
+			content_unicode = True
+			if len(args) > 3:
+				content_unicode = args[3]
+			alpha_value = 128
+			if len(args) > 4:
+				alpha_value = args[4]
+			image_format = ECF_A8R8G8B8
+			if len(args) > 5:
+				image_format = args[5]
+			stride = 4
+			if len(args) > 6:
+				stride = args[6]
+			self.c_pointer = svg_agg_image_ctor1(args[0].c_pointer, args[1].c_pointer, args[2], content_unicode, alpha_value, image_format, stride)
+		elif 'c_pointer' in kwargs:
+			self.c_pointer = kwargs.pop('c_pointer', None)
+		else:
+			self.c_pointer = None
+	def scale(self, value = 1.0):
+		svg_agg_image_scale(self.c_pointer, value)
+	def render(self):
+		return IImage(svg_agg_image_scale(self.c_pointer))
+	def get_texture(self):
+		return ITexture(svg_agg_image_get_texture(self.c_pointer))
+	#~ def drop(self):
+		#~ return svg_agg_image_drop(self.c_pointer)
+
+class svg_cairo_image(object):
+	def __init__(self, *args, **kwargs):
+		'IVideoDriver* video_driver, IFileSystem* fs, const irr::io::path& file_name = "tiger.svg", bool content_unicode = true'
+		if len(args) > 1 and hasattr(args[0], 'c_pointer'):
+			content_unicode = True
+			if len(args) > 3:
+				content_unicode = args[3]
+			alpha_value = 0.0
+			if len(args) > 4:
+				alpha_value = args[4]
+			image_format = ECF_A8R8G8B8
+			if len(args) > 5:
+				image_format = args[5]
+			antialias_type = CAIRO_ANTIALIAS_DEFAULT
+			if len(args) > 6:
+				antialias_type = args[6]
+			scale_x = 1.0
+			if len(args) > 7:
+				scale_x = args[7]
+			scale_y = 1.0
+			if len(args) > 8:
+				scale_y = args[8]
+			self.c_pointer = svg_cairo_image_ctor1(args[0].c_pointer, args[1].c_pointer, args[2], content_unicode, alpha_value, image_format, antialias_type, scale_x, scale_y)
+		elif 'c_pointer' in kwargs:
+			self.c_pointer = kwargs.pop('c_pointer', None)
+		else:
+			self.c_pointer = None
+	def scale(self, x = 1.0, y = 1.0):
+		svg_cairo_image_scale(self.c_pointer, x, y)
+	def get_image(self):
+		return IImage(svg_cairo_image_get_image(self.c_pointer))
+	def get_texture(self):
+		return ITexture(svg_cairo_image_get_texture(self.c_pointer))
+
 def createDevice(deviceType = EDT_SOFTWARE, windowSize = dimension2du(640,480), bits = 16, fullscreen = False, stencilbuffer = False, vsync = False, receiver = IEventReceiver(0)):
 	return IrrlichtDevice(deviceType, windowSize, bits, fullscreen, stencilbuffer, vsync, receiver)
 
@@ -14248,19 +14368,105 @@ def createDeviceEx(params):
 	return IrrlichtDevice(parameters = params.c_pointer)
 
 
-def SetIcon1(drv, icon_id = IDI_APPLICATION, big_icon = False):
-	WM_SETICON = 0x0080
-	GetModuleHandle = ctypes.WINFUNCTYPE(ctypes.c_void_p, ctypes.c_void_p)(('GetModuleHandleA', ctypes.windll.kernel32))
-	LoadIcon = ctypes.WINFUNCTYPE(ctypes.c_int, ctypes.c_void_p, ctypes.c_int)(('LoadIconA', ctypes.windll.user32))
-	SendMessage = ctypes.WINFUNCTYPE(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('SendMessageA', ctypes.windll.user32))
-	SendMessage(drv.GetHandle(), WM_SETICON, big_icon, LoadIcon(GetModuleHandle(None), icon_id))
+if platform in ('windows', 'win32'):
 
-def SetIcon2(drv, icon_id = IDI_APPLICATION):
-	GCL_HICON = -14
-	GetModuleHandle = ctypes.WINFUNCTYPE(ctypes.c_void_p, ctypes.c_void_p)(('GetModuleHandleA', ctypes.windll.kernel32))
-	LoadIcon = ctypes.WINFUNCTYPE(ctypes.c_int, ctypes.c_void_p, ctypes.c_int)(('LoadIconA', ctypes.windll.user32))
-	SetClassLong = ctypes.WINFUNCTYPE(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_long)(('SetClassLongA', ctypes.windll.user32))
-	SetClassLong(drv.GetHandle(), GCL_HICON, LoadIcon(GetModuleHandle(None), icon_id))
+	def SetIcon1(drv, icon_id = IDI_APPLICATION, big_icon = False):
+		WM_SETICON = 0x0080
+		GetModuleHandle = ctypes.WINFUNCTYPE(ctypes.c_void_p, ctypes.c_void_p)(('GetModuleHandleA', ctypes.windll.kernel32))
+		LoadIcon = ctypes.WINFUNCTYPE(ctypes.c_int, ctypes.c_void_p, ctypes.c_int)(('LoadIconA', ctypes.windll.user32))
+		SendMessage = ctypes.WINFUNCTYPE(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('SendMessageA', ctypes.windll.user32))
+		SendMessage(drv.GetHandle(), WM_SETICON, big_icon, LoadIcon(GetModuleHandle(None), icon_id))
+
+	def SetIcon2(drv, icon_id = IDI_APPLICATION):
+		GCL_HICON = -14
+		GetModuleHandle = ctypes.WINFUNCTYPE(ctypes.c_void_p, ctypes.c_void_p)(('GetModuleHandleA', ctypes.windll.kernel32))
+		LoadIcon = ctypes.WINFUNCTYPE(ctypes.c_int, ctypes.c_void_p, ctypes.c_int)(('LoadIconA', ctypes.windll.user32))
+		SetClassLong = ctypes.WINFUNCTYPE(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_long)(('SetClassLongA', ctypes.windll.user32))
+		SetClassLong(drv.GetHandle(), GCL_HICON, LoadIcon(GetModuleHandle(None), icon_id))
+
+	def IsGUIThread(bConvert = False):
+		IsGUIThread = ctypes.WINFUNCTYPE(ctypes.c_byte, ctypes.c_byte)(('IsGUIThread', ctypes.windll.user32))
+		return IsGUIThread(bConvert)
+
+	def GetWindow(hWnd, uCmd = 0):
+		GetWindow = ctypes.WINFUNCTYPE(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('GetWindow', ctypes.windll.user32))
+		return GetWindow(hWnd, uCmd)
+
+	def GetDesktopWindow():
+		GetDesktopWindow = ctypes.WINFUNCTYPE(ctypes.c_void_p)(('GetDesktopWindow', ctypes.windll.user32))
+		return GetDesktopWindow()
+
+	def GetShellWindow():
+		GetShellWindow = ctypes.WINFUNCTYPE(ctypes.c_void_p)(('GetShellWindow', ctypes.windll.user32))
+		return GetShellWindow()
+
+	def GetTopWindow(hWnd = None):
+		GetTopWindow = ctypes.WINFUNCTYPE(ctypes.c_void_p, ctypes.c_void_p)(('GetTopWindow', ctypes.windll.user32))
+		return GetTopWindow(hWnd)
+
+	def GetWindowRect(hWnd):
+		from ctypes.wintypes import RECT
+		rect = RECT()
+		GetWindowRect = ctypes.WINFUNCTYPE(None, ctypes.c_void_p, ctypes.POINTER(RECT))(('GetWindowRect', ctypes.windll.user32))
+		GetWindowRect(hWnd, ctypes.pointer(rect))
+		return rect
+
+	def GetDesktopRect():
+		return GetWindowRect(GetDesktopWindow())
+
+	def GetIrrWindowRect(drv):
+		return GetWindowRect(drv.GetHandle())
+
+	def MoveWindow(drv, x, y, nWidth, nHeight, bRepaint):
+		MoveWindow = ctypes.WINFUNCTYPE(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('MoveWindow', ctypes.windll.user32))
+		return MoveWindow(drv.GetHandle(), x, y, nWidth, nHeight, bRepaint)
+
+	def SetWindowPos(drv, hWndInsertAfter, x, y, width, height, uFlags):
+		SetWindowPos = ctypes.WINFUNCTYPE(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_uint)(('SetWindowPos', ctypes.windll.user32))
+		return SetWindowPos(drv.GetHandle(), hWndInsertAfter, x, y, width, height, uFlags)
+
+	def RealChildWindowFromPoint(hwndParent, ptParentClientCoords):
+		RealChildWindowFromPoint = ctypes.WINFUNCTYPE(ctypes.c_void_p, ctypes.POINTER(POINT))(('RealChildWindowFromPoint', ctypes.windll.user32))
+		return RealChildWindowFromPoint(hwndParent, ptParentClientCoords)
+
+	def RealChildWindowFromXY(hwndParent, x, y):
+		from ctypes.wintypes import POINT
+		point = POINT(x, y)
+		return RealChildWindowFromPoint(hwndParent, ctypes.pointer(point))
+
+else:
+	# this my functions has not realisations for non windows platform
+	# if you know as, do it and share code
+	def SetIcon1(drv, icon_id = 0, big_icon = False):
+		pass
+	def SetIcon2(drv, icon_id = 0):
+		pass
+	def IsGUIThread(bConvert = False):
+		pass
+	def GetWindow(hWnd, uCmd = 0):
+		pass
+	def GetDesktopWindow():
+		pass
+	def GetShellWindow():
+		pass
+	def GetTopWindow(hWnd = None):
+		pass
+	def GetWindowRect(hWnd):
+		pass
+	def GetDesktopRect():
+		return GetWindowRect(GetDesktopWindow())
+	def GetIrrWindowRect(drv):
+		return GetWindowRect(drv.GetHandle())
+	def MoveWindow(drv, x, y, nWidth, nHeight, bRepaint):
+		pass
+	def SetWindowPos(drv, hWndInsertAfter, x, y, width, height, uFlags):
+		pass
+	def RealChildWindowFromPoint(hwndParent, ptParentClientCoords):
+		pass
+	def RealChildWindowFromXY(hwndParent, x, y):
+		pass
+
+
 
 def is_frozen():
 	return globals()['__file__'] == '<frozen>'
@@ -14277,10 +14483,13 @@ def texture_from_test_vectors(video_driver, image_format = ECF_A8R8G8B8, image_s
 def svg_path_renderer_from_file(file_name = 'tiger.svg'):
 	return agg_svg_path(file_name)
 
-def svg_IImage(path_renderer, video_driver, scale_value = 1.0, rotate_value = 0.0, expand_value = 0.0, color_format = ECF_A8R8G8B8, alpha_value = 0, stride_value = 1):
+def svg_path_renderer_from_string(buf = ''):
+	return agg_svg_path_from_string(buf)
+
+def svg_IImage(path_renderer, video_driver, scale_value = 1.0, rotate_value = 0.0, expand_value = 0.0, color_format = ECF_A8R8G8B8, alpha_value = 0, stride_value = 4):
 	return IImage(agg_svg_IImage(path_renderer, video_driver.c_pointer, scale_value, rotate_value, expand_value, color_format, alpha_value, stride_value))
 
-def svg_ITexture(path_renderer, video_driver, texture_name = '', scale_value = 1.0, rotate_value = 0.0, expand_value = 0.0, color_format = ECF_A8R8G8B8, alpha_value = 0, stride_value = 1):
+def svg_ITexture(path_renderer, video_driver, texture_name = '', scale_value = 1.0, rotate_value = 0.0, expand_value = 0.0, color_format = ECF_A8R8G8B8, alpha_value = 0, stride_value = 4):
 	return ITexture(agg_svg_ITexture(path_renderer, video_driver.c_pointer, texture_name, scale_value, rotate_value, expand_value, color_format, alpha_value, stride_value))
 
 def _getAsVector3df(string, pos):

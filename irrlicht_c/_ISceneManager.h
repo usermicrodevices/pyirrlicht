@@ -43,8 +43,15 @@ IRRLICHT_C_API IMeshSceneNode* ISceneManager_addOctreeSceneNode2(ISceneManager* 
 {return pointer->addOctreeSceneNode(mesh, parent, id, minimalPolysPerNode, alsoAddIfMeshPointerZero);}
 IRRLICHT_C_API ICameraSceneNode* ISceneManager_addCameraSceneNode(ISceneManager* pointer, ISceneNode* parent = 0, const core::vector3df& position = core::vector3df(0,0,0), const core::vector3df& lookat = core::vector3df(0,0,100), s32 id=-1)
 {return pointer->addCameraSceneNode(parent, position, lookat, id);}
-IRRLICHT_C_API ICameraSceneNode* ISceneManager_addCameraSceneNodeMaya(ISceneManager* pointer, ISceneNode* parent = 0, f32 rotateSpeed = -1500.0f, f32 zoomSpeed = 200.0f, f32 translationSpeed = 1500.0f, s32 id=-1)
+
+#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR > 7)
+IRRLICHT_C_API ICameraSceneNode* ISceneManager_addCameraSceneNodeMaya(ISceneManager* pointer, ISceneNode* parent = 0, f32 rotateSpeed = -1500.0f, f32 zoomSpeed = 200.0f, f32 translationSpeed = 1500.0f, s32 id = -1, f32 distance = 70.f, bool makeActive = true)
+{return pointer->addCameraSceneNodeMaya(parent, rotateSpeed, zoomSpeed, translationSpeed, id, distance, makeActive);}
+#else
+IRRLICHT_C_API ICameraSceneNode* ISceneManager_addCameraSceneNodeMaya(ISceneManager* pointer, ISceneNode* parent = 0, f32 rotateSpeed = -1500.0f, f32 zoomSpeed = 200.0f, f32 translationSpeed = 1500.0f, s32 id = -1)
 {return pointer->addCameraSceneNodeMaya(parent, rotateSpeed, zoomSpeed, translationSpeed, id);}
+#endif
+
 IRRLICHT_C_API ICameraSceneNode* ISceneManager_addCameraSceneNodeFPS(ISceneManager* pointer, ISceneNode* parent = 0, f32 rotateSpeed = 100.0f, f32 moveSpeed = 0.5f, s32 id=-1, SKeyMap* keyMapArray=0, s32 keyMapSize=0, bool noVerticalMovement=false, f32 jumpSpeed = 0.f, bool invertMouse=false)
 {return pointer->addCameraSceneNodeFPS(parent, rotateSpeed, moveSpeed, id, keyMapArray, keyMapSize, noVerticalMovement, jumpSpeed, invertMouse);}
 IRRLICHT_C_API ICameraSceneNode* ISceneManager_addCameraSceneNodeFPS2(ISceneManager* pointer)

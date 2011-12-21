@@ -34,6 +34,10 @@
 
 @%1 svg_viewer.py
 
+@%1 test_svg_agg_image.py
+
+@%1 test_svg_cairo_image.py
+
 @%1 wireframe_test.py
 
 @%1 wireframe_cube.py

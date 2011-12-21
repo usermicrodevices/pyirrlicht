@@ -241,7 +241,7 @@ class app:
 			#~ self.i_texture = self.video_driver.addTexture(self.texture_name, image)
 			#~ image.drop()
 			#~ del image
-			self.i_texture = svg_ITexture(self.path_renderer, self.video_driver, self.texture_name, self.scale, rotate_value = 0.0, color_format = ECF_A8R8G8B8, stride_value = 1)
+			self.i_texture = svg_ITexture(self.path_renderer, self.video_driver, self.texture_name, self.scale, rotate_value = 0.0, color_format = ECF_A8R8G8B8, stride_value = 4)
 			if self.i_texture:
 				self.i_texture_size = self.i_texture.getOriginalSize()
 			self.texture_rect = recti(0,0,self.i_texture_size.X,self.i_texture_size.Y)

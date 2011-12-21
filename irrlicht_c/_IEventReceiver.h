@@ -6,6 +6,51 @@
 //#define FFI_CALL __cdecl
 //#define FFI_CALL __stdcall
 
+class UserEventReceiver : public IEventReceiver
+{
+public:
+	UserEventReceiver(bool(IRRCALLCONV *func)(const SEvent&) = false)
+	{
+		func_event = func;
+	}
+	virtual bool OnEvent(const SEvent& event)
+	{
+		if (func_event != NULL)
+		{
+#ifdef _MSC_VER
+#ifdef DEBUG_EVENTS
+			__try
+			{
+				return (*func_event)(event);
+			}
+			__except(filter(_exception_code(), (struct _EXCEPTION_POINTERS *)_exception_info(), "UserEventReceiver::OnEvent"))
+			{
+				return false;
+			}
+#else
+			return (*func_event)(event);
+#endif
+#else
+			return (*func_event)(event);
+#endif
+		}
+		else
+		{
+			return false;
+		}
+	}
+	virtual void set_func_event(bool(IRRCALLCONV *func)(const SEvent&))
+	{
+		func_event = func;
+	}
+	~UserEventReceiver()
+	{
+		func_event = NULL;
+	}
+private:
+	bool(IRRCALLCONV *func_event)(const SEvent&);
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -105,50 +150,6 @@ IRRLICHT_C_API wchar_t SInputMethodEvent_GetChar(const SEvent::SInputMethodEvent
 IRRLICHT_C_API EINPUT_METHOD_EVENT SInputMethodEvent_GetEvent(const SEvent::SInputMethodEvent* pointer){return pointer->Event;}
 #endif
 
-class UserEventReceiver : public IEventReceiver
-{
-public:
-	UserEventReceiver(bool(IRRCALLCONV *func)(const SEvent&) = false)
-	{
-		func_event = func;
-	}
-	virtual bool OnEvent(const SEvent& event)
-	{
-		if (func_event != NULL)
-		{
-#ifdef _MSC_VER
-#ifdef DEBUG_EVENTS
-			__try
-			{
-				return (*func_event)(event);
-			}
-			__except(filter(_exception_code(), (struct _EXCEPTION_POINTERS *)_exception_info(), "UserEventReceiver::OnEvent"))
-			{
-				return false;
-			}
-#else
-			return (*func_event)(event);
-#endif
-#else
-			return (*func_event)(event);
-#endif
-		}
-		else
-		{
-			return false;
-		}
-	}
-	virtual void set_func_event(bool(IRRCALLCONV *func)(const SEvent&))
-	{
-		func_event = func;
-	}
-	~UserEventReceiver()
-	{
-		func_event = NULL;
-	}
-private:
-	bool(IRRCALLCONV *func_event)(const SEvent&);
-};
 IRRLICHT_C_API UserEventReceiver* IEventReceiver_ctor1(IEventReceiver* pointer){return (UserEventReceiver*)pointer;}
 IRRLICHT_C_API UserEventReceiver* IEventReceiver_ctor2(bool(IRRCALLCONV *OnEventMethod)(const SEvent&)){return new UserEventReceiver(OnEventMethod);}
 //IRRLICHT_C_API void IEventReceiver_Destructor(void* pointer){delete pointer;}

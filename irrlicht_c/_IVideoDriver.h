@@ -19,10 +19,12 @@ IRRLICHT_C_API bool SOverrideMaterial_get_Enabled(SOverrideMaterial* pointer){re
 IRRLICHT_C_API void SOverrideMaterial_set_Enabled(SOverrideMaterial* pointer, bool value){pointer->Enabled = value;}
 
 //struct IRenderTarget
-IRRLICHT_C_API IRenderTarget* IRenderTarget_ctor1(ITexture* texture, E_COLOR_PLANE colorMask = ECP_ALL, E_BLEND_FACTOR blendFuncSrc = EBF_ONE, E_BLEND_FACTOR blendFuncDst = EBF_ONE_MINUS_SRC_ALPHA, bool blendEnable = false)
-{return new IRenderTarget(texture, colorMask, blendFuncSrc, blendFuncDst, blendEnable);}
-IRRLICHT_C_API IRenderTarget* IRenderTarget_ctor2(E_RENDER_TARGET target, E_COLOR_PLANE colorMask = ECP_ALL, E_BLEND_FACTOR blendFuncSrc = EBF_ONE, E_BLEND_FACTOR blendFuncDst = EBF_ONE_MINUS_SRC_ALPHA, bool blendEnable = false)
-{return new IRenderTarget(target, colorMask, blendFuncSrc, blendFuncDst, blendEnable);}
+IRRLICHT_C_API IRenderTarget* IRenderTarget_ctor1(ITexture* texture, E_COLOR_PLANE colorMask = ECP_ALL, E_BLEND_FACTOR blendFuncSrc = EBF_ONE, E_BLEND_FACTOR blendFuncDst = EBF_ONE_MINUS_SRC_ALPHA, E_BLEND_OPERATION blendOp = EBO_NONE)
+{return new IRenderTarget(texture, colorMask, blendFuncSrc, blendFuncDst, blendOp);}
+
+IRRLICHT_C_API IRenderTarget* IRenderTarget_ctor2(E_RENDER_TARGET target, E_COLOR_PLANE colorMask = ECP_ALL, E_BLEND_FACTOR blendFuncSrc = EBF_ONE, E_BLEND_FACTOR blendFuncDst = EBF_ONE_MINUS_SRC_ALPHA, E_BLEND_OPERATION blendOp = EBO_NONE)
+{return new IRenderTarget(target, colorMask, blendFuncSrc, blendFuncDst, blendOp);}
+
 IRRLICHT_C_API ITexture* IRenderTarget_get_RenderTexture(IRenderTarget* pointer){return pointer->RenderTexture;}
 IRRLICHT_C_API void IRenderTarget_set_RenderTexture(IRenderTarget* pointer, ITexture* value){pointer->RenderTexture = value;}
 IRRLICHT_C_API E_RENDER_TARGET IRenderTarget_get_TargetType(IRenderTarget* pointer){return pointer->TargetType;}
@@ -33,22 +35,22 @@ IRRLICHT_C_API E_BLEND_FACTOR IRenderTarget_get_BlendFuncSrc(IRenderTarget* poin
 IRRLICHT_C_API void IRenderTarget_set_BlendFuncSrc(IRenderTarget* pointer, E_BLEND_FACTOR value){pointer->BlendFuncSrc = value;}
 IRRLICHT_C_API E_BLEND_FACTOR IRenderTarget_get_BlendFuncDst(IRenderTarget* pointer){return pointer->BlendFuncDst;}
 IRRLICHT_C_API void IRenderTarget_set_BlendFuncDst(IRenderTarget* pointer, E_BLEND_FACTOR value){pointer->BlendFuncDst = value;}
-IRRLICHT_C_API bool IRenderTarget_get_BlendEnable(IRenderTarget* pointer){return pointer->BlendEnable;}
-IRRLICHT_C_API void IRenderTarget_set_BlendEnable(IRenderTarget* pointer, bool value){pointer->BlendEnable = value;}
+IRRLICHT_C_API E_BLEND_OPERATION IRenderTarget_get_BlendOp(IRenderTarget* pointer){return pointer->BlendOp;}
+IRRLICHT_C_API void IRenderTarget_set_BlendOp(IRenderTarget* pointer, E_BLEND_OPERATION value){pointer->BlendOp = value;}
 
 
 //class IVideoDriver
-//~ #if (IRRLICHT_VERSION_MAJOR == 1) && (IRRLICHT_VERSION_MINOR > 6)
+//#if (IRRLICHT_VERSION_MAJOR == 1) && (IRRLICHT_VERSION_MINOR > 6)
 IRRLICHT_C_API bool IVideoDriver_beginScene(IVideoDriver* pointer, bool backBuffer=true, bool zBuffer=true, const SColor& color=SColor(255,0,0,0), const SExposedVideoData& videoData=SExposedVideoData(), core::rect<s32>* sourceRect=0)
 {return pointer->beginScene(backBuffer, zBuffer, color, videoData, sourceRect);}
 IRRLICHT_C_API bool IVideoDriver_beginSceneDefault(IVideoDriver* pointer, bool backBuffer=true, bool zBuffer=true, const SColor& color=SColor(255,0,0,0))
 {return pointer->beginScene(backBuffer, zBuffer, color, SExposedVideoData(), 0);}
-//~ #else
-//~ IRRLICHT_C_API bool IVideoDriver_beginScene(IVideoDriver* pointer, bool backBuffer=true, bool zBuffer=true, const SColor& color=SColor(255,0,0,0), void* windowId=0, core::rect<s32>* sourceRect=0)
-//~ {return pointer->beginScene(backBuffer, zBuffer, color, videoData, sourceRect);}
-//~ IRRLICHT_C_API bool IVideoDriver_beginSceneDefault(IVideoDriver* pointer, bool backBuffer=true, bool zBuffer=true, const SColor& color=SColor(255,0,0,0))
-//~ {return pointer->beginScene(backBuffer, zBuffer, color, 0, 0);}
-//~ #endif
+//#else
+//IRRLICHT_C_API bool IVideoDriver_beginScene(IVideoDriver* pointer, bool backBuffer=true, bool zBuffer=true, const SColor& color=SColor(255,0,0,0), void* windowId=0, core::rect<s32>* sourceRect=0)
+//{return pointer->beginScene(backBuffer, zBuffer, color, videoData, sourceRect);}
+//IRRLICHT_C_API bool IVideoDriver_beginSceneDefault(IVideoDriver* pointer, bool backBuffer=true, bool zBuffer=true, const SColor& color=SColor(255,0,0,0))
+//{return pointer->beginScene(backBuffer, zBuffer, color, 0, 0);}
+//#endif
 
 IRRLICHT_C_API bool IVideoDriver_endScene(IVideoDriver* pointer)
 {return pointer->endScene();}
@@ -156,8 +158,15 @@ IRRLICHT_C_API void IVideoDriver_drawPixel(IVideoDriver* pointer, u32 x, u32 y, 
 {pointer->drawPixel(x, y, *color);}
 IRRLICHT_C_API void IVideoDriver_draw2DPolygon(IVideoDriver* pointer, core::position2d<s32>* center, f32 radius, const SColor& color = SColor(100,255,255,255), s32 vertexCount = 10)
 {pointer->draw2DPolygon(*center, radius, color, vertexCount);}
+
+#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR > 7)
+IRRLICHT_C_API void IVideoDriver_drawStencilShadowVolume(IVideoDriver* pointer, const core::array<core::vector3df>& triangles, bool zfail = true, u32 debugDataVisible = 0)
+{pointer->drawStencilShadowVolume(triangles, zfail, debugDataVisible);}
+#else
 IRRLICHT_C_API void IVideoDriver_drawStencilShadowVolume(IVideoDriver* pointer, const core::vector3df* triangles, s32 count, bool zfail = true)
 {pointer->drawStencilShadowVolume(triangles, count, zfail);}
+#endif
+
 IRRLICHT_C_API void IVideoDriver_drawStencilShadow(IVideoDriver* pointer, bool clearStencilBuffer = false, const SColor& leftUpEdge = SColor(255,0,0,0), const SColor& rightUpEdge = SColor(255,0,0,0), const SColor& leftDownEdge = SColor(255,0,0,0), const SColor& rightDownEdge = SColor(255,0,0,0))
 {pointer->drawStencilShadow(clearStencilBuffer, leftUpEdge, rightUpEdge, leftDownEdge, rightDownEdge);}
 IRRLICHT_C_API void IVideoDriver_drawMeshBuffer(IVideoDriver* pointer, const scene::IMeshBuffer* mb)
@@ -272,9 +281,9 @@ IRRLICHT_C_API void* IVideoDriver_GetHandle(IVideoDriver* pointer)
 {
 	switch(pointer->getDriverType())
 	{
-	case EDT_NULL: return NULL;
-	case EDT_SOFTWARE: return pointer->getExposedVideoData().OpenGLWin32.HWnd;
-	case EDT_BURNINGSVIDEO: return pointer->getExposedVideoData().OpenGLWin32.HWnd;
+	case EDT_NULL: return GetStdHandle(STD_OUTPUT_HANDLE);
+	case EDT_SOFTWARE: return FindWindow("CIrrDeviceWin32", 0);
+	case EDT_BURNINGSVIDEO: return FindWindow("CIrrDeviceWin32", 0);
 	case EDT_DIRECT3D8: return pointer->getExposedVideoData().D3D8.HWnd;
 	case EDT_DIRECT3D9: return pointer->getExposedVideoData().D3D9.HWnd;
 	case EDT_OPENGL: return pointer->getExposedVideoData().OpenGLWin32.HWnd;

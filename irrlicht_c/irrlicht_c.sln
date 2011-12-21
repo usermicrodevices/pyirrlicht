@@ -6,12 +6,24 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
+		Release_agg|Win32 = Release_agg|Win32
+		Release_stdcall|Win32 = Release_stdcall|Win32
+		Release_test|Win32 = Release_test|Win32
+		Release_with_cairo_dll|Win32 = Release_with_cairo_dll|Win32
 		Release|Win32 = Release|Win32
 		Description = C port Irrlicht SDK
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Debug|Win32.ActiveCfg = Debug|Win32
 		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Debug|Win32.Build.0 = Debug|Win32
+		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Release_agg|Win32.ActiveCfg = Release_agg|Win32
+		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Release_agg|Win32.Build.0 = Release_agg|Win32
+		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Release_stdcall|Win32.ActiveCfg = Release_stdcall|Win32
+		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Release_stdcall|Win32.Build.0 = Release_stdcall|Win32
+		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Release_test|Win32.ActiveCfg = Release_test|Win32
+		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Release_test|Win32.Build.0 = Release_test|Win32
+		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Release_with_cairo_dll|Win32.ActiveCfg = Release_with_cairo_dll|Win32
+		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Release_with_cairo_dll|Win32.Build.0 = Release_with_cairo_dll|Win32
 		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Release|Win32.ActiveCfg = Release|Win32
 		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
