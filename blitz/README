@@ -1,0 +1,15 @@
+Irrlicht wrapper for Blitz Basic.
+Main idea by Atulos,
+also hi is main helper and tester,
+many thanks him.
+Programming by Maxim Kolosov.
+
+This based on irrlicht_c library from pyirrlicht project
+http://pir.sourceforge.net
+http://code.google.com/p/pyirrlicht
+
+Blitz3D work only with stdcall calling convention,
+so irrlicht_c must be build respectively.
+
+Models and textures (like *.md2, *.bmp)
+can be get from official Irrlicht SDK.
