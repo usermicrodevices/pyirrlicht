@@ -2,9 +2,11 @@
 // http://vosolok2008.narod.ru
 // BSD license
 
+// for __stdcall Irrlicht.lib must be builded with _STDCALL_SUPPORTED flag
+
 #define _IRR_STATIC_LIB_
 
-#define _COMPILE_WITH_2DTTFONT_
+//#define _COMPILE_WITH_2DTTFONT_
 
 #define _COMPILE_WITH_GRID_SCENE_NODE_
 
@@ -13,6 +15,10 @@
 #define _COMPILE_WITH_IRR_SVG_AGG_
 
 //#define _COMPILE_WITH_IRR_SVG_CAIRO_
+
+#define _COMPILE_WITH_CHAR_CONVERSION_FUNCTIONS_//usefull for Blitz3D wrapper
+
+#define _COMPILE_WITH_STREAM_FUNCTIONS_
 
 #ifdef _MSC_VER
 #define DEBUG_EVENTS
@@ -369,6 +375,55 @@ IRRLICHT_C_API ITexture* tool_texture_generator(IVideoDriver* driver, video::ECO
 	}
 	return driver->addTexture(texture_name, image);
 }
+
+#ifdef _COMPILE_WITH_CHAR_CONVERSION_FUNCTIONS_
+
+IRRLICHT_C_API const wchar_t* tool_char_to_wchar(const char* src_buf)
+{
+	wchar_t* dst_buf = 0;
+	size_t src_size = strlen(src_buf) + 1;
+	if (src_size > 1)
+	{
+		//size_t dst_size = src_size * sizeof(wchar_t);
+		//dst_buf = new wchar_t[dst_size];
+		dst_buf = new wchar_t[src_size * sizeof(wchar_t)];
+#ifdef _MSC_VER
+		size_t NumOfCharConverted;
+		errno_t res = mbstowcs_s(&NumOfCharConverted, dst_buf, src_size, src_buf, _TRUNCATE);
+		//errno_t res = mbstowcs_s(&NumOfCharConverted, dst_buf, dst_size, src_buf, _TRUNCATE);
+#else
+		size_t res = mbstowcs(dst_buf, src_buf, MB_CUR_MAX);
+#endif
+	}
+	return dst_buf;
+}
+
+#endif
+
+#ifdef _COMPILE_WITH_STREAM_FUNCTIONS_
+
+IRRLICHT_C_API FILE* tool_get_stdin(){return stdin;}
+
+IRRLICHT_C_API FILE* tool_get_stdout(){return stdout;}
+
+IRRLICHT_C_API FILE* tool_redirect_stdout_to_file(const char* file_name, const char* mode = "w")
+{
+	if (!strlen(mode))
+		mode = "w";
+	return freopen(file_name, mode, stdout);
+}
+
+IRRLICHT_C_API int tool_close_stream(FILE* stream)
+{
+	if (stream)
+		return fclose(stream);
+	else
+		return -2;
+}
+
+IRRLICHT_C_API int tool_close_streams(){return _fcloseall();}
+
+#endif
 
 #ifdef __cplusplus
 }

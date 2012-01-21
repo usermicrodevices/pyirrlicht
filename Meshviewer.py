@@ -486,7 +486,10 @@ def main():
 	smgr.addLightSceneNode(0, vector3df(200,200,200), SColorf(1.0,1.0,1.0), 2000)
 	smgr.setAmbientLight(SColorf(0.3,0.3,0.3))
 	# add our media directory as "search path"
-	Device.getFileSystem().addFolderFileArchive("media/")
+	if IRRLICHT_VERSION < 180:
+		Device.getFileSystem().addFolderFileArchive("media/")
+	else:
+		Device.getFileSystem().addFileArchive("media/")
 
 	#~ The next step is to read the configuration file. It is stored in the xml
 	#~ format and looks a little bit like this:

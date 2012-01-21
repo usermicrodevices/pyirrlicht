@@ -15,7 +15,11 @@ IRRLICHT_C_API u32 IFileList_getID(IFileList* pointer, u32 index){return pointer
 IRRLICHT_C_API bool IFileList_isDirectory(IFileList* pointer, u32 index){return pointer->isDirectory(index);}
 IRRLICHT_C_API s32 IFileList_findFile(IFileList* pointer, const fschar_t* filename, bool isFolder=false){return pointer->findFile(filename, isFolder);}
 IRRLICHT_C_API const fschar_t* IFileList_getPath(IFileList* pointer){return pointer->getPath().c_str();}
+#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR > 7)
+IRRLICHT_C_API u32 IFileList_addItem(IFileList* pointer, const fschar_t* fullPath, u32 offset, u32 size, bool isDirectory, u32 id=0){return pointer->addItem(io::path(fullPath), offset, size, isDirectory, id);}
+#else
 IRRLICHT_C_API u32 IFileList_addItem(IFileList* pointer, const fschar_t* fullPath, u32 size, bool isDirectory, u32 id=0){return pointer->addItem(io::path(fullPath), size, isDirectory, id);}
+#endif
 IRRLICHT_C_API void IFileList_sort(IFileList* pointer){pointer->sort();}
 
 #ifdef __cplusplus

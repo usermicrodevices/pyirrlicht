@@ -28,7 +28,11 @@ GUI_ID_EDT_SOFTWARE = GUI_ID_DRIVER | EDT_SOFTWARE
 GUI_ID_EDT_BURNINGSVIDEO = GUI_ID_DRIVER | EDT_BURNINGSVIDEO
 GUI_ID_EDT_DIRECT3D9 = GUI_ID_DRIVER | EDT_DIRECT3D9
 GUI_ID_EDT_OPENGL = GUI_ID_DRIVER | EDT_OPENGL
-GUI_ID_OPEN_FILE_DIALOG_WALL_TEXTURE = GUI_ID_EDT_OPENGL + 0x00001
+GUI_ID_OPEN_FILE_DIALOG_WALL_TEXTURE = 0x1000F
+GUI_ID_MODEL_INSERT = 0x10010
+GUI_ID_MODEL_INSERT_DIALOG = 0x10011
+GUI_ID_MODEL_SET_ARCHIVE = 0x10012
+GUI_ID_MODEL_SET_ARCHIVE_DIALOG = 0x10013
 
 # simple language translator
 default_locale = getdefaultlocale()[0]
@@ -179,6 +183,12 @@ class UserIEventReceiver(IEventReceiver):
 				elif menu_id == GUI_ID_CAMERA_TOP:
 					self.framework.ceiling.setVisible(False)
 					self.framework.set_active_camera(self.framework.camera[2])
+				elif menu_id == GUI_ID_LOG:
+					if self.framework.log_file_stream:
+						tool_close_stream(self.framework.log_file_stream)
+						self.framework.log_file_stream = None
+					else:
+						self.framework.log_file_stream = tool_redirect_stdout_to_file(app_file_name + '.log', 'w')
 				elif menu_id == GUI_ID_TEXTURE_FROM_FILE:
 					self.framework.set_textures()
 				elif menu_id == GUI_ID_EDT_SOFTWARE:
@@ -189,12 +199,29 @@ class UserIEventReceiver(IEventReceiver):
 					self.framework.set_device_type(EDT_DIRECT3D9)
 				elif menu_id == GUI_ID_EDT_BURNINGSVIDEO:
 					self.framework.set_device_type(EDT_BURNINGSVIDEO)
+				elif menu_id == GUI_ID_MODEL_INSERT:
+					self.framework.guienv.addFileOpenDialog(_('Please select a model file to insert'), id = GUI_ID_MODEL_INSERT_DIALOG)
+				elif menu_id == GUI_ID_MODEL_SET_ARCHIVE:
+					self.framework.guienv.addFileOpenDialog(_('Please select models archive/directory'), id = GUI_ID_MODEL_SET_ARCHIVE_DIALOG)
 			elif gui_event_type == EGET_FILE_SELECTED and caller_id == GUI_ID_OPEN_FILE_DIALOG_WALL_TEXTURE:
 				gui_dialog = IGUIFileOpenDialog(caller)
 				wall_texture_file = type_str(gui_dialog.getFileName())
 				i_mesh_scene_node = self.framework.walls[-1]
 				i_mesh_scene_node.setMaterialTexture(0, self.framework.driver.getTexture(wall_texture_file))
 				self.is_gui_active = False
+			elif gui_event_type == EGET_FILE_SELECTED and caller_id == GUI_ID_MODEL_INSERT_DIALOG:
+				file_name = type_str(IGUIFileOpenDialog(caller).getFileName())
+				mesh = self.framework.scene_manager.getMesh(file_name)
+				#~ model = self.framework.scene_manager.addOctreeSceneNode(mesh.getMesh(0))
+				model = self.framework.scene_manager.addAnimatedMeshSceneNode(mesh)
+				model.setPosition(self.mouse_position_3d_start)
+				model.setMaterialFlag(EMF_LIGHTING, True)
+				model.setMaterialFlag(EMF_NORMALIZE_NORMALS, True)
+				model.setDebugDataVisible(EDS_BBOX | EDS_MESH_WIRE_OVERLAY)
+			elif gui_event_type == EGET_FILE_SELECTED and caller_id == GUI_ID_MODEL_SET_ARCHIVE_DIALOG:
+				file_name = type_str(IGUIFileOpenDialog(caller).getFileName())
+				if file_name.rsplit('.', 1) in ('.pk3', '.zip', '.pak', '.npk'):
+					self.framework.file_system.addFileArchive(file_name)
 			if gui_event_type in (EGET_ELEMENT_FOCUS_LOST, EGET_ELEMENT_LEFT):
 				self.is_gui_active = False
 		elif event_type == EET_MOUSE_INPUT_EVENT and not self.is_gui_active:
@@ -292,10 +319,16 @@ class framework:
 		self.scale_delta = 0.0
 		self.sleep_delay = self.config.get_int('sleep_delay', 10)
 		self.texture_from_file = self.config.get_bool('texture_from_file', False)
-		self.device_type = self.config.get_int('device_type', EDT_OPENGL)
-		self.window_size = dimension2du(self.config.get_int('window_width', 640), self.config.get_int('window_height', 480))
+		#~ self.device_type = self.config.get_int('device_type', EDT_OPENGL)
+		#~ self.window_size = dimension2du(self.config.get_int('window_width', 640), self.config.get_int('window_height', 480))
 		self.driver = None
-		self.device = createDevice(self.device_type, self.window_size)
+		#~ self.device = createDevice(self.device_type, self.window_size)
+		self.device_parameters = SIrrlichtCreationParameters()
+		self.device_parameters.DriverType = self.config.get_int('driver_type', EDT_OPENGL)
+		self.device_parameters.WindowSize = dimension2du(self.config.get_int('window_width', 640), self.config.get_int('window_height', 480))
+		self.device_parameters.AntiAlias = True
+		self.device_parameters.WithAlphaChannel = True
+		self.device = createDeviceEx(self.device_parameters)
 		self.init_framework()
 		self.i_geometry_creator = None
 		self.i_meta_triangle_selector = None
@@ -337,11 +370,15 @@ class framework:
 			#================SVG IImageLoader=============
 			self.driver.addExternalImageLoader(agg_svg_loader(self.driver))
 			#~ self.driver.addAggSvgImageLoader()
+		self.log_file_stream = None
 
 	def __del__(self):
 		if self.device:
 			self.stop()
 		self.config.close()
+		if self.log_file_stream:
+			tool_close_stream(self.log_file_stream)
+			self.log_file_stream = None
 
 	def init_framework(self):
 		#~ i_event_receiver = UserIEventReceiver()
@@ -359,11 +396,11 @@ class framework:
 	def show_warning(self):
 		self.guienv.addMessageBox(_('Warning'), _('For finish this operation you need restart application!'))
 
-	def set_device_type(self, new_device_type = 0):
-		self.device_type = new_device_type
+	def set_device_type(self, new_driver_type = 0):
+		self.device_parameters.DriverType = new_driver_type
 		for dev_type, menu_index in self.menu_device_types.items():
-			self.menu_device_type.setItemChecked(menu_index, (self.device_type == dev_type))
-		self.config.set('device_type', self.device_type)
+			self.menu_device_type.setItemChecked(menu_index, (self.device_parameters.DriverType == dev_type))
+		self.config.set('driver_type', self.device_parameters.DriverType)
 		self.show_warning()
 
 	def set_textures(self):
@@ -462,6 +499,7 @@ class framework:
 			self.menu = self.guienv.addMenu()
 			self.menu.addItem(_('File'), -1, True, True)
 			self.menu.addItem(_('View'), -1, True, True)
+			self.menu.addItem(_('Models'), -1, True, True)
 			self.menu.addItem(_('Options'), -1, True, True)
 			self.menu.addItem(_('Help'), -1, True, True)
 
@@ -477,17 +515,21 @@ class framework:
 			submenu.addItem(_('First Person'), GUI_ID_CAMERA_FPS)
 			submenu.addItem(_('Top view'), GUI_ID_CAMERA_TOP)
 
-			self.menu_options = self.menu.getSubMenu(2)
+			submenu = self.menu.getSubMenu(2)
+			submenu.addItem(_('Insert'), GUI_ID_MODEL_INSERT)
+			submenu.addItem(_('Set archive'), GUI_ID_MODEL_SET_ARCHIVE)
+
+			self.menu_options = self.menu.getSubMenu(3)
 			self.menu_options.addItem(_('Start/stop log'), GUI_ID_LOG)
 			self.menu_options.addItem(_('Choose graphics driver'), GUI_ID_DRIVER, True, True)
 			self.menu_device_type = self.menu_options.getSubMenu(1)
-			self.menu_device_types[EDT_SOFTWARE] = self.menu_device_type.addItem(_('Software'), GUI_ID_EDT_SOFTWARE, checked = (self.device_type == EDT_SOFTWARE))
-			self.menu_device_types[EDT_OPENGL] = self.menu_device_type.addItem(_('OpenGL'), GUI_ID_EDT_OPENGL, checked = (self.device_type == EDT_OPENGL))
-			self.menu_device_types[EDT_DIRECT3D9] = self.menu_device_type.addItem(_('DirectX 9'), GUI_ID_EDT_DIRECT3D9, checked = (self.device_type == EDT_DIRECT3D9))
-			self.menu_device_types[EDT_BURNINGSVIDEO] = self.menu_device_type.addItem(_('Burningsvideo'), GUI_ID_EDT_BURNINGSVIDEO, checked = (self.device_type == EDT_BURNINGSVIDEO))
+			self.menu_device_types[EDT_SOFTWARE] = self.menu_device_type.addItem(_('Software'), GUI_ID_EDT_SOFTWARE, checked = (self.device_parameters.DriverType == EDT_SOFTWARE))
+			self.menu_device_types[EDT_OPENGL] = self.menu_device_type.addItem(_('OpenGL'), GUI_ID_EDT_OPENGL, checked = (self.device_parameters.DriverType == EDT_OPENGL))
+			self.menu_device_types[EDT_DIRECT3D9] = self.menu_device_type.addItem(_('DirectX 9'), GUI_ID_EDT_DIRECT3D9, checked = (self.device_parameters.DriverType == EDT_DIRECT3D9))
+			self.menu_device_types[EDT_BURNINGSVIDEO] = self.menu_device_type.addItem(_('Burningsvideo'), GUI_ID_EDT_BURNINGSVIDEO, checked = (self.device_parameters.DriverType == EDT_BURNINGSVIDEO))
 			self.menu_texture_from_file = self.menu_options.addItem(_('Textures from files'), GUI_ID_TEXTURE_FROM_FILE, checked = self.texture_from_file)
 
-			submenu = self.menu.getSubMenu(3)
+			submenu = self.menu.getSubMenu(4)
 			submenu.addItem(_('About'), GUI_ID_ABOUT)
 
 			self.i_geometry_creator = self.scene_manager.getGeometryCreator()
@@ -501,17 +543,12 @@ class framework:
 			sky_node = self.scene_manager.addSkyDomeSceneNode(texture)
 
 			# bottom(low) and top(height) plane
-			#~ i_mesh_bottom = self.i_geometry_creator.createPlaneMesh(self.tile_size, self.tile_count, self.material, self.texture_repeat_count)
-			#~ self.floor = self.scene_manager.addOctreeSceneNode(i_mesh_bottom)
-			#~ selector_bottom = self.scene_manager.createOctreeTriangleSelector(self.floor.getMesh(), self.floor)
-			#~ self.floor.setTriangleSelector(selector_bottom)
-			#~ self.floor.setVisible(False)
 			file_name = 'media//opengllogo.png'
-			if self.device_type == EDT_SOFTWARE:
+			if self.device_parameters.DriverType == EDT_SOFTWARE:
 				file_name = 'media//irrlichtlogoalpha.tga'
-			elif self.device_type == EDT_BURNINGSVIDEO:
+			elif self.device_parameters.DriverType == EDT_BURNINGSVIDEO:
 				file_name = 'media//burninglogo.png'
-			elif self.device_type in (EDT_DIRECT3D8, EDT_DIRECT3D9):
+			elif self.device_parameters.DriverType in (EDT_DIRECT3D8, EDT_DIRECT3D9):
 				file_name = 'media//directxlogo.png'
 			self.material.Wireframe = False
 			if os.path.exists(file_name) and self.texture_from_file:
@@ -525,14 +562,22 @@ class framework:
 			self.ceiling.setTriangleSelector(selector_top)
 			self.ceiling.setVisible(False)
 
+			i_mesh_bottom = self.i_geometry_creator.createPlaneMesh(self.tile_size, self.tile_count, self.material, self.texture_repeat_count)
+			#~ self.floor = self.scene_manager.addOctreeSceneNode(i_mesh_bottom)
+			#~ selector_bottom = self.scene_manager.createOctreeTriangleSelector(self.floor.getMesh(), self.floor)
+			#~ self.floor.setTriangleSelector(selector_bottom)
+			#~ self.floor.setVisible(False)
+
 			# CGridSceneNode
 			self.grid = CGridSceneNode(self.scene_manager.getRootSceneNode(), self.scene_manager, size = int(self.tile_size.X * self.tile_count.X), axislinestate = True)
-			selector_bottom = self.scene_manager.createTriangleSelectorFromBoundingBox(self.grid)
+			#~ selector_bottom = self.scene_manager.createTriangleSelectorFromBoundingBox(self.grid)
+			selector_bottom = self.scene_manager.createOctreeTriangleSelector(i_mesh_bottom, self.grid)
+			self.grid.setTriangleSelector(selector_bottom)
 			self.grid.drop()
 			#~ self.grid.SetMaterial(self.material)
 			#~ #self.grid.SetGridColor(SColor(255,100,100,100))
 			#~ #self.grid.SetAccentlineColor(SColor(255,200,200,200))
-			#~ #self.grid.SetSpacing(64)
+			#~ self.grid.SetSpacing(64)
 
 			# left, right, front and back plane
 			file_name = 'media//wall.jpg'
@@ -585,6 +630,7 @@ class framework:
 			self.camera = (self.scene_manager.addCameraSceneNodeMaya(id = GUI_ID_CAMERA_MAYA), self.scene_manager.addCameraSceneNodeFPS(keyMapArray = keyMap, keyMapSize = keyMap.length, jumpSpeed = 5, id = GUI_ID_CAMERA_FPS), self.scene_manager.addCameraSceneNode(id = GUI_ID_CAMERA_TOP))
 			self.camera[0].setTarget(vector3df(0,1000,0))
 			self.camera[1].setPosition(vector3df(100,60,0))
+			#~ self.camera[1].setNearValue(0.1)
 			self.camera[2].setPosition(vector3df(0,1000,0))
 			self.camera[2].setTarget(vector3df(0,0,0))
 			self.camera[2].setNearValue(0.01)
@@ -651,7 +697,7 @@ class framework:
 						self.driver.draw3DLine(vector3df(x+20,y,z+20), vector3df(x-20,y,z-20), red_color_3dline)
 					self.guienv.drawAll()
 					self.driver.endScene()
-					self.device.sleep(10)
+					self.device.sleep(self.sleep_delay)
 				else:
 					self.device._yield()
 			self.device.drop()

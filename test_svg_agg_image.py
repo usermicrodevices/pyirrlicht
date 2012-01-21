@@ -1,3 +1,7 @@
+import sys
+sys.stdout.close()
+sys.stdout = open("irr_log.txt", "w")
+
 from pyirrlicht import *
 
 #~ driverType = EDT_NULL
@@ -20,8 +24,8 @@ def test():
 			print (e)
 		device.setResizable(True)
 		color = SColor(255,100,100,140)
-		#~ svg_file_name = 'tiger.svg'
-		svg_file_name = 'cartoon_tiger.svg'
+		svg_file_name = 'tiger.svg'
+		#~ svg_file_name = 'cartoon_tiger.svg'
 		#~ svg_file_name = 'bee.svg'
 		s = svg_agg_image(video_driver, device.getFileSystem(), svg_file_name, True, 255, ECF_A8R8G8B8, 4)
 		#~ s.scale(2.2)

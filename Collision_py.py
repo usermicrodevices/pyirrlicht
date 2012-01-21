@@ -17,7 +17,10 @@ if device:
 	driver = device.getVideoDriver()
 	scene_manager = device.getSceneManager()
 
-	device.getFileSystem().addZipFileArchive("media/map-20kdm2.pk3")
+	if IRRLICHT_VERSION < 180:
+		device.getFileSystem().addZipFileArchive("media/map-20kdm2.pk3")
+	else:
+		device.getFileSystem().addFileArchive("media/map-20kdm2.pk3")
 
 	q3levelmesh = scene_manager.getMesh("20kdm2.bsp")
 

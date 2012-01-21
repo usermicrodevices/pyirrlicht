@@ -13,7 +13,10 @@ if device:
 	#~ device.setWindowCaption(window_caption)
 	device.setResizable(True)
 	scene_manager = device.getSceneManager()
-	device.getFileSystem().addZipFileArchive('media//map-20kdm2.pk3')
+	if pyirrlicht.IRRLICHT_VERSION < 180:
+		device.getFileSystem().addZipFileArchive('media//map-20kdm2.pk3')
+	else:
+		device.getFileSystem().addFileArchive("media//map-20kdm2.pk3")
 	i_animated_mesh = scene_manager.getMesh('20kdm2.bsp')
 	if i_animated_mesh:
 		i_mesh = i_animated_mesh.getMesh(0)

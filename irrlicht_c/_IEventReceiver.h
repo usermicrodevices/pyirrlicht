@@ -3,6 +3,7 @@
 // BSD license
 
 // ffi calling convention
+// for __stdcall Irrlicht.lib must be builded with _STDCALL_SUPPORTED flag
 //#define FFI_CALL __cdecl
 //#define FFI_CALL __stdcall
 

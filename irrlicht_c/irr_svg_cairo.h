@@ -55,12 +55,16 @@ class svg_cairo_image
 public:
 	svg_cairo_image(IVideoDriver* video_driver, IFileSystem* fs, const irr::io::path& file_name = "tiger.svg", bool content_unicode = true, double alpha_value = 0.0, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, cairo_antialias_t antialias_type = CAIRO_ANTIALIAS_DEFAULT, double scale_x = 1.0, double scale_y = 1.0)
 	{
+		_video_driver_ = video_driver;
+		parse(fs, file_name, content_unicode, alpha_value, color_format, stride);
+	}
+	void parse(IFileSystem* fs, const irr::io::path& file_name = "tiger.svg", bool content_unicode = true, double alpha_value = 0.0, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, cairo_antialias_t antialias_type = CAIRO_ANTIALIAS_DEFAULT, double scale_x = 1.0, double scale_y = 1.0)
+	{
 		_scale_x_ = scale_x;
 		_scale_y_ = scale_y;
 		_alpha_value_ = alpha_value;
 		_file_name_ = file_name;
 		_color_format_ = color_format;
-		_video_driver_ = video_driver;
 		_use_alpha_ = use_alpha();
 		_current_pattern_ = cairo_pattern_create_rgba(0, 0, 0, _alpha_value_);
 		_cf_.r = _cf_.g = _cf_.b = _cf_.a = 0.0; _cf_.f = false;
@@ -263,7 +267,23 @@ public:
 								cairo_restore(_cr_);
 							}
 						}
-						else if (_wcsnicmp(node_name, L"polyline", 8) == 0)
+						else if (_wcsnicmp(node_name, L"circle", 6) == 0)
+						{
+							double r = (double)xml_reader->getAttributeValueAsFloat(L"r");
+							if (r)
+							{
+								double cx = (double)xml_reader->getAttributeValueAsFloat(L"cx");
+								double cy = (double)xml_reader->getAttributeValueAsFloat(L"cy");
+								cairo_save(_cr_);
+								cairo_arc(_cr_, cx, cy, r, 0., 2 * M_PI);
+								parse_style(xml_reader->getAttributeValue(L"style"));
+								parse_transform(xml_reader->getAttributeValue(L"transform"));
+								parse_attributes(xml_reader);
+								paint();
+								cairo_restore(_cr_);
+							}
+						}
+						else if (_wcsnicmp(node_name, L"polygon", 7) == 0)
 						{
 							const wchar_t* attr_value = xml_reader->getAttributeValue(L"points");
 							if (attr_value)
@@ -285,7 +305,7 @@ public:
 								list_attr.clear();
 							}
 						}
-						else if (_wcsnicmp(node_name, L"polygon", 7) == 0)
+						else if (_wcsnicmp(node_name, L"polyline", 8) == 0)
 						{
 							const wchar_t* attr_value = xml_reader->getAttributeValue(L"points");
 							if (attr_value)
@@ -409,7 +429,7 @@ public:
 			//_image_->unlock();
 		}
 		else
-			printf("!!! ERROR create svg_cairo_image from file = %s\n", _file_name_.c_str());
+			printf("svg_cairo_image: ERROR create IXMLReader from file = %s\n", _file_name_.c_str());
 	}
 	bool _close_gtag(core::array<gtag>& tags, const wchar_t* value)
 	{
@@ -896,12 +916,16 @@ public:
 					cmds[i].trim("Mm ").split(arg, L"-, ", 3, true, true);
 					if (arg.size() > 1)
 					{
-						for (u32 a = 0; a < arg.size()/2; a++)
+						if (cmd == L'm')
+							cairo_rel_move_to(_cr_, _wtof(arg[0].trim(", ").c_str()), _wtof(arg[1].trim(", ").c_str()));
+						else
+							cairo_move_to(_cr_, _wtof(arg[0].trim(", ").c_str()), _wtof(arg[1].trim(", ").c_str()));
+						for (u32 a = 1; a < arg.size()/2; a++)
 						{
 							if (cmd == L'm')
-								cairo_rel_move_to(_cr_, _wtof(arg[a*2].trim(", ").c_str()), _wtof(arg[a*2+1].trim(", ").c_str()));
+								cairo_rel_line_to(_cr_, _wtof(arg[a*2].trim(", ").c_str()), _wtof(arg[a*2+1].trim(", ").c_str()));
 							else
-								cairo_move_to(_cr_, _wtof(arg[a*2].trim(", ").c_str()), _wtof(arg[a*2+1].trim(", ").c_str()));
+								cairo_line_to(_cr_, _wtof(arg[a*2].trim(", ").c_str()), _wtof(arg[a*2+1].trim(", ").c_str()));
 						}
 					}
 					cairo_get_current_point(_cr_, &reflection_point_x, &reflection_point_y);
@@ -1244,6 +1268,8 @@ extern "C" {
 
 IRRLICHT_C_API svg_cairo_image* svg_cairo_image_ctor1(IVideoDriver* video_driver, IFileSystem* fs, const fschar_t* file_name = "tiger.svg", bool content_unicode = true, double alpha_value = 0.0, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, cairo_antialias_t antialias_type = CAIRO_ANTIALIAS_DEFAULT, double scale_x = 1.0, double scale_y = 1.0)
 {return new svg_cairo_image(video_driver, fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, antialias_type, scale_x, scale_y);}
+IRRLICHT_C_API void svg_cairo_image_parse(svg_cairo_image* pointer, IFileSystem* fs, const fschar_t* file_name = "tiger.svg", bool content_unicode = true, u32 alpha_value = 128, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, int stride = 4)
+{pointer->parse(fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, stride);}
 IRRLICHT_C_API void svg_cairo_image_scale(svg_cairo_image* pointer, double scale_x = 1.0, double scale_y = 1.0)
 {pointer->scale(scale_x, scale_y);}
 IRRLICHT_C_API IImage* svg_cairo_image_get_image(svg_cairo_image* pointer)

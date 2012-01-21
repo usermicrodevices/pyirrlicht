@@ -7,8 +7,9 @@ extern "C" {
 #endif
 
 //================= IOSOperator
-//IRRLICHT_C_API void IOSOperator_Destructor(IOSOperator* pointer){delete pointer;}
+#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR < 8)
 IRRLICHT_C_API const wchar_t* IOSOperator_getOperationSystemVersion(IOSOperator* pointer){return pointer->getOperationSystemVersion();}
+#endif
 #ifdef _IRR_IMPROVE_UNICODE
 IRRLICHT_C_API void IOSOperator_copyToClipboard(IOSOperator* pointer, const wchar_t* text){pointer->copyToClipboard(text);}
 IRRLICHT_C_API const wchar_t* IOSOperator_getTextFromClipboard(IOSOperator* pointer){return pointer->getTextFromClipboard();}

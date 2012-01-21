@@ -1,11 +1,13 @@
 from pyirrlicht import *
 
 #~ driverType = EDT_NULL
-driverType = EDT_SOFTWARE
+#~ driverType = EDT_SOFTWARE
 #~ driverType = EDT_BURNINGSVIDEO
 #~ driverType = EDT_DIRECT3D8
 #~ driverType = EDT_DIRECT3D9
-#~ driverType = EDT_OPENGL
+driverType = EDT_OPENGL
+
+iType = EIT_32BIT
 
 class CSampleSceneNode(CustomSceneNode):
 	def __init__(self, *args, **kwargs):
@@ -25,10 +27,10 @@ class CSampleSceneNode(CustomSceneNode):
 			#~ S3DVertex(vector3df(0,20,0), vector3df(0,1,1), SColor(255,255,255,0), vector2df(1, 0)),
 			#~ S3DVertex(vector3df(-10,0,-10), vector3df(0,0,1), SColor(255,0,255,0), vector2df(0, 0)))
 		self.Vertices = S3DVertex(4)
-		self.Vertices[0] = S3DVertex(vector3df(0,0,10), vector3df(1,1,0), SColor(255,0,255,255), vector2df(0, 1))
-		self.Vertices[1] = S3DVertex(vector3df(10,0,-10), vector3df(1,0,0), SColor(255,255,0,255), vector2df(1, 1))
-		self.Vertices[2] = S3DVertex(vector3df(0,20,0), vector3df(0,1,1), SColor(255,255,255,0), vector2df(1, 0))
-		self.Vertices[3] = S3DVertex(vector3df(-10,0,-10), vector3df(0,0,1), SColor(255,0,255,0), vector2df(0, 0))
+		self.Vertices[0] = S3DVertex(vector3df(0.0,0.0,10.0), vector3df(1.0,1.0,0.0), SColor(255,0,255,255), vector2df(0.0, 1.0))
+		self.Vertices[1] = S3DVertex(vector3df(10.0,0.0,-10.0), vector3df(1.0,0.0,0.0), SColor(255,255,0,255), vector2df(1.0, 1.0))
+		self.Vertices[2] = S3DVertex(vector3df(0.0,20.0,0.0), vector3df(0.0,1.0,1.0), SColor(255,255,255,0), vector2df(1.0, 0.0))
+		self.Vertices[3] = S3DVertex(vector3df(-10.0,0.0,-10.0), vector3df(0.0,0.0,1.0), SColor(255,0,255,0), vector2df(0.0, 0.0))
 
 		self.Box = aabbox3df()
 		self.Box.reset(self.Vertices[0].Pos)
@@ -53,7 +55,7 @@ class CSampleSceneNode(CustomSceneNode):
 		driver = self.getSceneManager().getVideoDriver()
 		driver.setMaterial(self.Material)
 		driver.setTransform(ETS_WORLD, self.getAbsoluteTransformation())
-		driver.drawVertexPrimitiveList(self.Vertices, 4, indices, 4, EVT_STANDARD, EPT_TRIANGLES, EIT_16BIT)
+		driver.drawVertexPrimitiveList(self.Vertices, 4, indices, 4, EVT_STANDARD, EPT_TRIANGLES, iType)
 
 	def getBoundingBox(self):
 		return self.Box.c_pointer
@@ -72,9 +74,8 @@ if device:
 	driver = device.getVideoDriver()
 	scene_manager = device.getSceneManager()
 	scene_manager.addCameraSceneNode(0, vector3df(0,-40,0), vector3df(0,0,0))
-	myNode = CSampleSceneNode(scene_manager.getRootSceneNode(), scene_manager, 666)
-	#~ myNode = CSampleSceneNode()
-	i_scene_node_animator = scene_manager.createRotationAnimator(vector3df(0.8, 0, 0.8))
+	myNode = CSampleSceneNode(scene_manager.getRootSceneNode(), scene_manager)
+	i_scene_node_animator = scene_manager.createRotationAnimator(vector3df(0.8, 0.0, 0.8))
 	if i_scene_node_animator:
 		myNode.addAnimator(i_scene_node_animator)
 		i_scene_node_animator.drop()

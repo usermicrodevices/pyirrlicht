@@ -7,9 +7,8 @@ extern "C" {
 #endif
 
 //================= IGUIFont
-//IRRLICHT_C_API void IGUIFont_draw(IGUIFont* pointer, const core::stringw* text, const core::rect<s32>* position, video::SColor* color, bool hcenter=false, bool vcenter=false, const core::rect<s32>* clip=0)
-IRRLICHT_C_API void IGUIFont_draw(IGUIFont* pointer, wchar_t* text, const core::rect<s32>* position, video::SColor* color, bool hcenter=false, bool vcenter=false, const core::rect<s32>* clip=0)
-{pointer->draw(text, *position, *color, hcenter, vcenter, clip);}
+IRRLICHT_C_API void IGUIFont_draw(IGUIFont* pointer, const wchar_t* text, const core::rect<s32>* position, video::SColor* color, bool hcenter=false, bool vcenter=false, const core::rect<s32>* clip=0)
+{pointer->draw(core::stringw(text), *position, *color, hcenter, vcenter, clip);}
 IRRLICHT_C_API core::dimension2d<u32>* IGUIFont_getDimension(IGUIFont* pointer, const wchar_t* text)
 {return &pointer->getDimension(text);}
 IRRLICHT_C_API s32 IGUIFont_getCharacterFromPos(IGUIFont* pointer, const wchar_t* text, s32 pixel_x)

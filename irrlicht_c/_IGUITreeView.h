@@ -52,11 +52,10 @@ IRRLICHT_C_API void IGUITreeViewNode_setData2(IGUITreeViewNode* pointer, IRefere
 IRRLICHT_C_API u32 IGUITreeViewNode_getChildCount(IGUITreeViewNode* pointer)		
 {return pointer->getChildCount();}
 
-IRRLICHT_C_API void IGUITreeViewNode_clearChilds(IGUITreeViewNode* pointer)
-{pointer->clearChilds();}
-
-IRRLICHT_C_API bool IGUITreeViewNode_hasChilds(IGUITreeViewNode* pointer)
-{return pointer->hasChilds();}
+#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR < 8)
+IRRLICHT_C_API void IGUITreeViewNode_clearChilds(IGUITreeViewNode* pointer){pointer->clearChilds();}
+IRRLICHT_C_API bool IGUITreeViewNode_hasChilds(IGUITreeViewNode* pointer){return pointer->hasChilds();}
+#endif
 
 IRRLICHT_C_API IGUITreeViewNode* IGUITreeViewNode_addChildBack(IGUITreeViewNode* pointer, const wchar_t* text, const wchar_t* icon = 0, s32 imageIndex=-1, s32 selectedImageIndex=-1, void* data=0, IReferenceCounted* data2=0)
 {return pointer->addChildBack(text, icon, imageIndex, selectedImageIndex, data, data2);}

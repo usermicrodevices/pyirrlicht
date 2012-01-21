@@ -1141,7 +1141,8 @@ class CQuake3EventHandler(IEventReceiver):
 		env.addStaticText('Scenegraph:', recti(dim.Width - 400, dim.Height - 400, dim.Width - 5,dim.Height - 380 ), False, False, self.gui.Window, -1, False)
 		self.gui.SceneTree = env.addTreeView(recti(dim.Width - 400, dim.Height - 380, dim.Width - 5, dim.Height - 40), self.gui.Window, -1, True, True, False)
 		self.gui.SceneTree.setToolTipText('Show the current Scenegraph')
-		self.gui.SceneTree.getRoot().clearChilds()
+		if IRRLICHT_VERSION < 180:
+			self.gui.SceneTree.getRoot().clearChilds()
 		self.addSceneTreeItem(self.Game.Device.getSceneManager().getRootSceneNode(), self.gui.SceneTree.getRoot())
 		imageList = env.createImageList(driver.getTexture('iconlist.png'), dimension2di(32, 32), True)
 		if imageList:
@@ -1949,7 +1950,7 @@ def main():
 	prgname = sys.argv[0]
 	game = GameData(deletePathFromPath(prgname, 1))
 	# dynamically load irrlicht
-	dllName = 'irrlicht.dll'
+	dllName = 'irrlicht_c.dll'
 	if len(sys.argv) > 1:
 		dllName = sys.argv[1]
 	game.createExDevice = createDeviceEx

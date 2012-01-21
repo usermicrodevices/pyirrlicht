@@ -15,8 +15,9 @@ IRRLICHT_C_API IBoneSceneNode* IBoneSceneNode_ctor(ISceneNode* parent, ISceneMan
 		node->setID(id);
 	return node;
 }
-IRRLICHT_C_API const c8* IBoneSceneNode_getBoneName(IBoneSceneNode* pointer)
-{return pointer->getBoneName();}
+#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR < 8)
+IRRLICHT_C_API const c8* IBoneSceneNode_getBoneName(IBoneSceneNode* pointer){return pointer->getBoneName();}
+#endif
 IRRLICHT_C_API u32 IBoneSceneNode_getBoneIndex(IBoneSceneNode* pointer)
 {return pointer->getBoneIndex();}
 IRRLICHT_C_API bool IBoneSceneNode_setAnimationMode(IBoneSceneNode* pointer, E_BONE_ANIMATION_MODE mode)

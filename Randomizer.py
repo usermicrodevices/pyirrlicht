@@ -156,6 +156,11 @@ class UserIEventReceiver(IEventReceiver):
 		value += 1
 	answer = ''
 	def OnEvent(self, event):
+		if self.game.help_dialog:
+			try:
+				self.game.help_dialog.getID()
+			except:
+				self.game.help_dialog = None
 		event_type = self.GetEventType(event)
 		if event_type is EET_KEY_INPUT_EVENT:
 			key_event = self.GetKeyInput(event)
@@ -165,12 +170,15 @@ class UserIEventReceiver(IEventReceiver):
 				self.answer += self.NumbersKeys[self.KeyInput_Key(key_event)]
 			elif self.KeyInput_Key(key_event) in (KEY_BACK, KEY_DELETE) and not pressed_down:
 				self.answer = ''
-			elif self.KeyInput_Key(key_event) == KEY_RETURN and not pressed_down:
+			elif self.KeyInput_Key(key_event) == KEY_RETURN and not pressed_down and not self.game.help_dialog:
 				check_answer = _('Correctly')
 				self.answer_color = SColor(255, 0, 0, 255)
 				if str(self.game.a * self.game.b) != self.answer:
 					check_answer = _('Not correctly') + '\n' + _('Correctly answer is') + ' %d' % (self.game.a * self.game.b)
 					self.answer_color = SColor(255, 255, 0, 0)
+				else:
+					self.game.create_tree()
+					self.game.results += 1
 				self.game.answer_exists = True
 				self.answer_text = self.answer + '\n' + check_answer
 				self.answer = ''
@@ -259,6 +267,11 @@ class game:
 		self.fog_density = self.config.get_float('fog_density', 0.01)
 		self.fog_pixel = self.config.get_bool('fog_pixel', False)
 		self.fog_range = self.config.get_bool('fog_range', False)
+		# random volume variable
+		self.tile_count = randint(10, 50)
+		# len tile
+		self.tile_len = 100
+		self.results = 0
 
 	def __del__(self):
 		if self.device:
@@ -341,8 +354,8 @@ class game:
 	def texture_generator_01(self, image_format = ECF_R8G8B8, image_size = dimension2du(2, 2), texture_name = 'texture_01', alpha_value = 128, red = (0, 255), green = (0, 255), blue = (0, 255)):
 		return generate_texture(self.driver, image_format, image_size, texture_name, alpha_value, red, green, blue)
 
-	def create_wall_plane_selector(self, i_geometry_creator, tileSize, tileCount, material, textureRepeatCount, pos = None, rotation = None):
-		i_mesh = i_geometry_creator.createPlaneMesh(tileSize, tileCount, material, textureRepeatCount)
+	def create_wall_plane_selector(self, tileSize, tileCount, material, textureRepeatCount, pos = None, rotation = None):
+		i_mesh = self.i_geometry_creator.createPlaneMesh(tileSize, tileCount, material, textureRepeatCount)
 		i_mesh_scene_node = self.scene_manager.addMeshSceneNode(i_mesh)
 		if pos:
 			i_mesh_scene_node.setPosition(pos)
@@ -353,6 +366,35 @@ class game:
 		i_mesh_scene_node.setTriangleSelector(selector)
 		#~ i_mesh.drop()
 		return selector
+
+	def create_tree(self):
+		x, z = randint(self.tile_count * self.tile_len / 2 * -1, self.tile_count * self.tile_len / 2), randint(self.tile_count * self.tile_len / 2 * -1, self.tile_count * self.tile_len / 2)
+		#
+		#~ cylinder_mesh = self.i_geometry_creator.createCylinderMesh(radius = 20, length = 20, tesselation = 4, color = SColor(255,255,0,0), closeTop = True, oblique = 0.0)
+		#~ cylinder_scene_node = self.scene_manager.addMeshSceneNode(cylinder_mesh)
+		#~ cylinder_scene_node.setMaterialFlag(EMF_LIGHTING, False)
+		#~ cylinder_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
+		#~ cylinder_scene_node.setPosition(vector3df(x, 0, z))
+		#~ cylinder_scene_node.drop()
+		#~ cone_mesh = self.i_geometry_creator.createConeMesh(radius = 50, length = 180, tesselation = 8, colorTop = SColor(255,0,255,0), colorBottom = SColor(255,0,255,0), oblique = 0.0)
+		#~ cone_scene_node = self.scene_manager.addMeshSceneNode(cone_mesh)
+		#~ cone_scene_node.setMaterialFlag(EMF_LIGHTING, False)
+		#~ cone_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
+		#~ cone_scene_node.setPosition(vector3df(x, 20, z))
+		#~ cone_scene_node.drop()
+		#
+		arrow_mesh = self.i_geometry_creator.createArrowMesh(tesselationCylinder = 4, tesselationCone = 8, height = 200.0, cylinderHeight = 20.0, widthCylinder = 20.0, widthCone = 70.0, colorCylinder = SColor(255,255,0,0), colorCone = SColor(255,0,255,0))
+		arrow_scene_node = self.scene_manager.addMeshSceneNode(arrow_mesh)
+		arrow_scene_node.setPosition(vector3df(x, 0, z))
+		arrow_scene_node.setMaterialFlag(EMF_LIGHTING, False)
+		arrow_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
+		arrow_scene_node.drop()
+		#
+		#~ arrow_mesh = self.scene_manager.addArrowMesh('tree', vtxColorCylinder = SColor(255, 255, 0, 0), vtxColorCone = SColor(255, 0, 255, 0), tesselationCylinder = 4, tesselationCone = 8, height = 200.0, cylinderHeight = 20.0, widthCylinder = 20.0, widthCone = 70.0)
+		#~ arrow_scene_node = self.scene_manager.addMeshSceneNode(arrow_mesh)
+		#~ arrow_scene_node.setMaterialFlag(EMF_LIGHTING, False)
+		#~ arrow_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
+		#~ arrow_scene_node.setPosition(vector3df(x, 0, z))
 
 	def setActiveCamera(self, camera):
 		if self.device and camera:
@@ -432,14 +474,10 @@ class game:
 			submenu = self.menu.getSubMenu(3)
 			submenu.addItem(_('About'), GUI_ID_ABOUT)
 
-			i_geometry_creator = self.scene_manager.getGeometryCreator()
+			self.i_geometry_creator = self.scene_manager.getGeometryCreator()
 
-			# random volume variable
-			tile_count = randint(10, 50)
 			# height volume
 			height = 200
-			# len tile
-			tile_len = 100
 			# texture from file or dynamic generator
 			texture = None
 			seed()
@@ -451,9 +489,9 @@ class game:
 			sky_node = self.scene_manager.addSkyDomeSceneNode(texture)
 
 			# top and bottom plane
-			tileSize = dimension2df(tile_len, tile_len)
-			tileCount = dimension2du(tile_count, tile_count)
-			textureRepeatCount = dimension2df(tile_count, tile_count)
+			tileSize = dimension2df(self.tile_len, self.tile_len)
+			tileCount = dimension2du(self.tile_count, self.tile_count)
+			textureRepeatCount = dimension2df(self.tile_count, self.tile_count)
 			material = SMaterial()
 			material.FogEnable = self.fog_enable
 			file_name = 'media//stones.jpg'
@@ -463,7 +501,7 @@ class game:
 			else:
 				texture = self.texture_generator(ECF_R8G8B8, dimension2du(4, 4), 'bottom', 0, (0, 0), (0, 255), (0, 100))
 				material.setTexture(0, texture)
-			i_mesh_top = i_geometry_creator.createPlaneMesh(tileSize, tileCount, material, textureRepeatCount)
+			i_mesh_top = self.i_geometry_creator.createPlaneMesh(tileSize, tileCount, material, textureRepeatCount)
 
 			logo_file_name = 'media//opengllogo.png'
 			if self.device_type == EDT_SOFTWARE:
@@ -478,7 +516,7 @@ class game:
 			else:
 				texture = self.texture_generator_01(ECF_A8R8G8B8, dimension2du(4, 4), 'top', 196)
 				material.setTexture(0, texture)
-			i_mesh_bottom = i_geometry_creator.createPlaneMesh(tileSize, tileCount, material, textureRepeatCount)
+			i_mesh_bottom = self.i_geometry_creator.createPlaneMesh(tileSize, tileCount, material, textureRepeatCount)
 			#~ scene_node_bottom = self.scene_manager.addOctreeSceneNode(i_mesh_bottom)
 			i_mesh_scene_node_top = self.scene_manager.addOctreeSceneNode(i_mesh_top)
 			i_mesh_scene_node_bottom = self.scene_manager.addOctreeSceneNode(i_mesh_bottom)
@@ -493,8 +531,8 @@ class game:
 			i_mesh_scene_node_bottom.setTriangleSelector(selector_bottom)
 
 			# left, right, front and back plane
-			tileCount = dimension2du(tile_count, int(height / tile_len))
-			textureRepeatCount = dimension2df(tile_count, height / tile_len)
+			tileCount = dimension2du(self.tile_count, int(height / self.tile_len))
+			textureRepeatCount = dimension2df(self.tile_count, height / self.tile_len)
 			file_name = 'media//wall.jpg'
 			if os.path.isfile(file_name) and self.texture_from_file:
 				material.MaterialType = EMT_LIGHTMAP
@@ -503,9 +541,8 @@ class game:
 				material.MaterialType = EMT_TRANSPARENT_ALPHA_CHANNEL
 				texture = self.texture_generator(ECF_A8R8G8B8, dimension2du(4, 4), 'front', 196, (0, 255), (0, 0), (0, 100))
 				material.setTexture(0, texture)
-			p = tile_count * tile_len / 2
+			p = self.tile_count * self.tile_len / 2
 			selector_front = self.create_wall_plane_selector(
-				i_geometry_creator, 
 				tileSize, 
 				tileCount, 
 				material, 
@@ -517,7 +554,6 @@ class game:
 				texture = self.texture_generator(ECF_A8R8G8B8, dimension2du(4, 4), 'back', 196, (0, 0), (0, 50), (0, 255))
 				material.setTexture(0, texture)
 			selector_back = self.create_wall_plane_selector(
-				i_geometry_creator, 
 				tileSize, 
 				tileCount, 
 				material, 
@@ -529,7 +565,6 @@ class game:
 				texture = self.texture_generator(ECF_A8R8G8B8, dimension2du(4, 4), 'left', 196, (0, 0), (0, 0), (100, 255))
 				material.setTexture(0, texture)
 			selector_left = self.create_wall_plane_selector(
-				i_geometry_creator, 
 				tileSize, 
 				tileCount, 
 				material, 
@@ -541,7 +576,6 @@ class game:
 				texture = self.texture_generator(ECF_A8R8G8B8, dimension2du(4, 4), 'right', 196, (0, 0), (100, 255), (0, 0))
 				material.setTexture(0, texture)
 			selector_right = self.create_wall_plane_selector(
-				i_geometry_creator, 
 				tileSize, 
 				tileCount, 
 				material, 
@@ -555,8 +589,8 @@ class game:
 			if self.magic_i_scene_node:
 				#~ file_name = 'media//wall.jpg'
 				self.magic_i_scene_node.setMaterialFlag(EMF_FOG_ENABLE, self.fog_enable)
+				self.magic_i_scene_node.setMaterialFlag(EMF_LIGHTING, False)
 				if os.path.isfile(logo_file_name) and self.texture_from_file:
-					self.magic_i_scene_node.setMaterialFlag(EMF_LIGHTING, False)
 					self.magic_i_scene_node.setMaterialTexture(0, self.driver.getTexture(logo_file_name))
 				else:
 					material = self.magic_i_scene_node.getMaterial(0)
@@ -587,8 +621,8 @@ class game:
 			self.cube = self.scene_manager.addCubeSceneNode(180.0, self.magic_i_scene_node, position = vector3df(0,40,0))
 			if self.cube:
 				#~ file_name = 'media//wall.jpg'
+				self.cube.setMaterialFlag(EMF_LIGHTING, False)
 				if os.path.isfile(logo_file_name) and self.texture_from_file:
-					self.cube.setMaterialFlag(EMF_LIGHTING, False)
 					self.cube.setMaterialTexture(0, self.driver.getTexture(logo_file_name))
 				else:
 					material = self.cube.getMaterial(0)
@@ -653,9 +687,9 @@ class game:
 			a, b = 0, 0
 
 			self.answer_exists = False
-			question_pos1 = recti(10, 50, 0, 0)
-			question_pos2 = recti(10, 80, 0, 0)
-			answer_pos = recti(10, 120, 0, 0)
+			question_pos1 = recti(10, menu_height, 0, 0)
+			question_pos2 = recti(10, menu_height + self.font_size, 0, 0)
+			answer_pos = recti(10, menu_height + self.font_size * 2, 0, 0)
 			question_color = SColor(255, 0, 255, 0)
 			answer_color = SColor(255, 255, 255, 0)
 			self.a, self.b = randint(0, 9), randint(0, 9)
@@ -677,6 +711,12 @@ class game:
 						self.help_dialog = self.guienv.addMessageBox(_('Help'), _('F2 - cursor on; ESC - exit'))
 					if self.driver.beginScene(True, True, scolor):
 						self.scene_manager.drawAll()
+						self.window_size = self.driver.getScreenSize()
+						self.font.draw('%d' % self.results, recti(self.window_size.Width - self.font_size * 2, self.window_size.Height - self.font_size, 0, 0), answer_color)
+						if not self.answer_exists:
+							self.font.draw('%d x %d =' % (self.a, self.b), question_pos1, question_color)
+							if i_event_receiver.answer:
+								self.font.draw(i_event_receiver.answer, recti(10, self.window_size.Height - self.font_size, 0, 0), answer_color)
 
 						selectedSceneNode = self.collision_manager.getSceneNodeFromCameraBB(self.camera[1])
 						if selectedSceneNode:
@@ -694,10 +734,10 @@ class game:
 									self.cube.setVisible(False)
 							else:
 								if selectedSceneNode.getType() == ESNT_SPHERE:
-									self.font.draw('%d x %d =' % (self.a, self.b), question_pos1, question_color)
+									#~ self.font.draw('%d x %d =' % (self.a, self.b), question_pos1, question_color)
 									self.font.draw(_('Please enter answer and press "Enter"'), question_pos2, question_color)
-									if i_event_receiver.answer:
-										self.font.draw(i_event_receiver.answer, recti(10, self.window_size.Height - 40, 0, 0), answer_color)
+									#~ if i_event_receiver.answer:
+										#~ self.font.draw(i_event_receiver.answer, recti(10, self.window_size.Height - 40, 0, 0), answer_color)
 
 						self.guienv.drawAll()
 						self.driver.endScene()

@@ -49,14 +49,11 @@ IRRLICHT_C_API bool IFileSystem_moveFileArchive(IFileSystem* pointer, u32 source
 IRRLICHT_C_API IFileArchive* IFileSystem_getFileArchive(IFileSystem* pointer, u32 index)
 {return pointer->getFileArchive(index);}
 
-IRRLICHT_C_API bool IFileSystem_addZipFileArchive(IFileSystem* pointer, const c8* filename, bool ignoreCase=true, bool ignorePaths=true)
-{return pointer->addZipFileArchive(filename, ignoreCase, ignorePaths);}
-
-IRRLICHT_C_API bool IFileSystem_addFolderFileArchive(IFileSystem* pointer, const c8* filename, bool ignoreCase=true, bool ignorePaths=true)
-{return pointer->addFolderFileArchive(filename, ignoreCase, ignorePaths);}
-
-IRRLICHT_C_API bool IFileSystem_addPakFileArchive(IFileSystem* pointer, const c8* filename, bool ignoreCase=true, bool ignorePaths=true)
-{return pointer->addPakFileArchive(filename, ignoreCase, ignorePaths);}
+#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR < 8)
+IRRLICHT_C_API bool IFileSystem_addZipFileArchive(IFileSystem* pointer, const c8* filename, bool ignoreCase=true, bool ignorePaths=true){return pointer->addZipFileArchive(filename, ignoreCase, ignorePaths);}
+IRRLICHT_C_API bool IFileSystem_addFolderFileArchive(IFileSystem* pointer, const c8* filename, bool ignoreCase=true, bool ignorePaths=true){return pointer->addFolderFileArchive(filename, ignoreCase, ignorePaths);}
+IRRLICHT_C_API bool IFileSystem_addPakFileArchive(IFileSystem* pointer, const c8* filename, bool ignoreCase=true, bool ignorePaths=true){return pointer->addPakFileArchive(filename, ignoreCase, ignorePaths);}
+#endif
 
 IRRLICHT_C_API const fschar_t* IFileSystem_getWorkingDirectory(IFileSystem* pointer)
 {return pointer->getWorkingDirectory().c_str();}

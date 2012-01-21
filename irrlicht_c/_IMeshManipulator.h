@@ -31,8 +31,10 @@ IRRLICHT_C_API void IMeshManipulator_scale1(IMeshManipulator* pointer, IMesh* me
 IRRLICHT_C_API void IMeshManipulator_scale2(IMeshManipulator* pointer, IMeshBuffer* buffer, const core::vector3df* factor)
 {pointer->scale(buffer, *factor);}
 
-IRRLICHT_C_API void IMeshManipulator_scaleMesh(IMeshManipulator* pointer, IMesh* mesh, const core::vector3df* factor)
-{pointer->scaleMesh(mesh, *factor);}
+#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR < 8)
+IRRLICHT_C_API void IMeshManipulator_scaleMesh(IMeshManipulator* pointer, IMesh* mesh, const core::vector3df* factor){pointer->scaleMesh(mesh, *factor);}
+IRRLICHT_C_API void IMeshManipulator_transformMesh(IMeshManipulator* pointer, IMesh* mesh, const core::matrix4* m){pointer->transformMesh(mesh, *m);}
+#endif
 
 IRRLICHT_C_API void IMeshManipulator_scaleTCoords1(IMeshManipulator* pointer, scene::IMesh* mesh, const core::vector2df* factor, u32 level = 1)
 {pointer->scaleTCoords(mesh, *factor, level);}
@@ -45,9 +47,6 @@ IRRLICHT_C_API void IMeshManipulator_transform1(IMeshManipulator* pointer, IMesh
 
 IRRLICHT_C_API void IMeshManipulator_transform2(IMeshManipulator* pointer, IMeshBuffer* buffer, const core::matrix4* m)
 {pointer->transform(buffer, *m);}
-
-IRRLICHT_C_API void IMeshManipulator_transformMesh(IMeshManipulator* pointer, IMesh* mesh, const core::matrix4* m)
-{pointer->transformMesh(mesh, *m);}
 
 IRRLICHT_C_API SMesh* IMeshManipulator_createMeshCopy(IMeshManipulator* pointer, IMesh* mesh)
 {return pointer->createMeshCopy(mesh);}

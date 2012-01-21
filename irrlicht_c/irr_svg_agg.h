@@ -25,12 +25,16 @@ class svg_agg_image
 public:
 	svg_agg_image(IVideoDriver* video_driver, IFileSystem* fs, const irr::io::path& file_name = "tiger.svg", bool content_unicode = true, u32 alpha_value = 128, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, int stride = 4)
 	{
+		_video_driver_ = video_driver;
+		parse(fs, file_name, content_unicode, alpha_value, color_format, stride);
+	}
+	void parse(IFileSystem* fs, const irr::io::path& file_name = "tiger.svg", bool content_unicode = true, u32 alpha_value = 128, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, int stride = 4)
+	{
 		_scale_ = 1.0;
 		_alpha_value_ = alpha_value;
 		_file_name_ = file_name;
 		_color_format_ = color_format;
 		_stride_ = stride;
-		_video_driver_ = video_driver;
 		IXMLReader* xml_reader;
 		if (content_unicode)
 			xml_reader = fs->createXMLReader(_file_name_);
@@ -175,24 +179,20 @@ public:
 								_path_renderer_.end_path();
 							}
 						}
-						else if (_wcsnicmp(node_name, L"polyline", 8) == 0)
+						else if (_wcsnicmp(node_name, L"circle", 6) == 0)
 						{
-							const wchar_t* attr_value = xml_reader->getAttributeValue(L"points");
-							if (attr_value)
+							double r = (double)xml_reader->getAttributeValueAsFloat(L"r");
+							if (r)
 							{
-								u32 points_count = stringw(attr_value).trim().split(list_attr, L", ", 2);
-								if (points_count > 3)
-								{
-									_path_renderer_.begin_path();
-									parse_style(xml_reader->getAttributeValue(L"style"));
-									parse_attributes(xml_reader);
-									parse_transform(xml_reader->getAttributeValue(L"transform"));
-									_path_renderer_.move_to(_wtof(list_attr[0].c_str()), _wtof(list_attr[1].c_str()));
-									for (int i = 2; i < points_count; i += 2)
-										_path_renderer_.line_to(_wtof(list_attr[i].c_str()), _wtof(list_attr[i+1].c_str()));
-									_path_renderer_.end_path();
-								}
-								list_attr.clear();
+								double cx = (double)xml_reader->getAttributeValueAsFloat(L"cx");
+								double cy = (double)xml_reader->getAttributeValueAsFloat(L"cy");
+								_path_renderer_.begin_path();
+								parse_style(xml_reader->getAttributeValue(L"style"));
+								parse_attributes(xml_reader);
+								parse_transform(xml_reader->getAttributeValue(L"transform"));
+								_path_renderer_.circle_to(cx, cy, r, 100);
+								_path_renderer_.close_subpath();
+								_path_renderer_.end_path();
 							}
 						}
 						else if (_wcsnicmp(node_name, L"polygon", 7) == 0)
@@ -211,6 +211,26 @@ public:
 									for (int i = 2; i < points_count; i += 2)
 										_path_renderer_.line_to(_wtof(list_attr[i].c_str()), _wtof(list_attr[i+1].c_str()));
 									_path_renderer_.close_subpath();
+									_path_renderer_.end_path();
+								}
+								list_attr.clear();
+							}
+						}
+						else if (_wcsnicmp(node_name, L"polyline", 8) == 0)
+						{
+							const wchar_t* attr_value = xml_reader->getAttributeValue(L"points");
+							if (attr_value)
+							{
+								u32 points_count = stringw(attr_value).trim().split(list_attr, L", ", 2);
+								if (points_count > 3)
+								{
+									_path_renderer_.begin_path();
+									parse_style(xml_reader->getAttributeValue(L"style"));
+									parse_attributes(xml_reader);
+									parse_transform(xml_reader->getAttributeValue(L"transform"));
+									_path_renderer_.move_to(_wtof(list_attr[0].c_str()), _wtof(list_attr[1].c_str()));
+									for (int i = 2; i < points_count; i += 2)
+										_path_renderer_.line_to(_wtof(list_attr[i].c_str()), _wtof(list_attr[i+1].c_str()));
 									_path_renderer_.end_path();
 								}
 								list_attr.clear();
@@ -264,7 +284,7 @@ public:
 			_path_renderer_.bounding_rect(&_min_x_, &_min_y_, &_width_, &_height_);
 		}
 		else
-			printf("!!! ERROR create svg_agg_image from file = %s\n", _file_name_.c_str());
+			printf("svg_agg_image: ERROR create IXMLReader from file = %s\n", _file_name_.c_str());
 	}
 	agg::rgba8 parse_color_name(const wchar_t* value)
 	{
@@ -491,8 +511,12 @@ public:
 			{
 				case L'M': case L'm':
 					cmds[i].trim("Mm ").split(arg, L"-, ", 3, true, true);
-					for (u32 a = 0; a < arg.size()/2; a++)
-						_path_renderer_.move_to(_wtof(arg[a*2].trim(", ").c_str()), _wtof(arg[a*2+1].trim(", ").c_str()), cmd == L'm');
+					if (arg.size() > 1)
+					{
+						_path_renderer_.move_to(_wtof(arg[0].trim(", ").c_str()), _wtof(arg[1].trim(", ").c_str()), cmd == L'm');
+						for (u32 a = 1; a < arg.size()/2; a++)
+							_path_renderer_.line_to(_wtof(arg[a*2].trim(", ").c_str()), _wtof(arg[a*2+1].trim(", ").c_str()), cmd == L'm');
+					}
 					//wprintf(L"=== cmd = %c, %d", cmd, cmd == L'm');
 					//for (u32 a = 0; a < arg.size(); a++)
 					//	printf(", %g", _wtof(arg[a].trim(", ").c_str()));
@@ -618,6 +642,7 @@ public:
 		//agg::render_scanlines(ras, sl, ren);
 		_path_renderer_.render(ras, sl, ren, _trans_affine_, renb.clip_box(), _alpha_value_/255.0);
 		//_path_renderer_.render(ras, sl, ren, _trans_affine_, renb.clip_box(), 1.0);
+
 		return create_image_from_data(w, h, data);
 	}
 	ITexture* get_texture()
@@ -663,6 +688,16 @@ public:
 		delete data;
 		return _image_;
 	}
+	dimension2d<u32>* get_size()
+	{
+		u32 w = (u32)_width_;
+		if (_width_ > (double)w)
+			w++;
+		u32 h = (u32)_height_;
+		if (_height_ > (double)h)
+			h++;
+		return new dimension2d<u32>(w, h);
+	}
 
 private:
 	int _stride_;
@@ -686,7 +721,29 @@ extern "C" {
 #endif
 
 IRRLICHT_C_API svg_agg_image* svg_agg_image_ctor1(IVideoDriver* video_driver, IFileSystem* fs, const fschar_t* file_name = "tiger.svg", bool content_unicode = true, u32 alpha_value = 128, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, int stride = 4)
-{return new svg_agg_image(video_driver, fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, stride);}
+{
+#ifdef _MSC_VER
+	try
+	{
+		return new svg_agg_image(video_driver, fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, stride);
+	}
+	catch(...)
+	{
+#if defined(_IRR_WCHAR_FILESYSTEM)
+		wprintf(L"ERROR parse file %s\n", file_name);
+#else
+		printf("ERROR parse file %s\n", file_name);
+#endif
+		throw;
+	}
+#else
+	return new svg_agg_image(video_driver, fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, stride);
+#endif
+}
+IRRLICHT_C_API void svg_agg_image_parse(svg_agg_image* pointer, IFileSystem* fs, const fschar_t* file_name = "tiger.svg", bool content_unicode = true, u32 alpha_value = 128, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, int stride = 4)
+{pointer->parse(fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, stride);}
+IRRLICHT_C_API dimension2d<u32>* svg_agg_image_get_size(svg_agg_image* pointer)
+{return pointer->get_size();}
 IRRLICHT_C_API void svg_agg_image_scale(svg_agg_image* pointer, double scale_value = 1.0)
 {pointer->scale(scale_value);}
 IRRLICHT_C_API IImage* svg_agg_image_render(svg_agg_image* pointer)

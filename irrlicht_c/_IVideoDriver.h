@@ -75,7 +75,7 @@ IRRLICHT_C_API IImageWriter* IVideoDriver_getImageWriter(IVideoDriver* pointer, 
 IRRLICHT_C_API void IVideoDriver_setMaterial(IVideoDriver* pointer, const SMaterial& material)
 {pointer->setMaterial(material);}
 IRRLICHT_C_API ITexture* IVideoDriver_getTexture1(IVideoDriver* pointer, const fschar_t* filename)
-{return pointer->getTexture(filename);}
+{return pointer->getTexture(io::path(filename));}
 IRRLICHT_C_API ITexture* IVideoDriver_getTexture2(IVideoDriver* pointer, io::IReadFile* file)
 {return pointer->getTexture(file);}
 IRRLICHT_C_API ITexture* IVideoDriver_getTextureByIndex(IVideoDriver* pointer, u32 index)

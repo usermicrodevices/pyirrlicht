@@ -8,7 +8,7 @@ extern "C" {
 
 //================= ISceneManager
 IRRLICHT_C_API IAnimatedMesh* ISceneManager_getMesh(ISceneManager* pointer, const fschar_t* filename)
-{return pointer->getMesh(filename);}
+{return pointer->getMesh(io::path(filename));}
 IRRLICHT_C_API IAnimatedMesh* ISceneManager_getMesh2(ISceneManager* pointer, io::IReadFile* file)
 {return pointer->getMesh(file);}
 IRRLICHT_C_API IMeshCache* ISceneManager_getMeshCache(ISceneManager* pointer)
@@ -33,25 +33,20 @@ IRRLICHT_C_API IMeshSceneNode* ISceneManager_addMeshSceneNode(ISceneManager* poi
 {return pointer->addMeshSceneNode(mesh, parent, id, position, rotation, scale, alsoAddIfMeshPointerZero);}
 IRRLICHT_C_API ISceneNode* ISceneManager_addWaterSurfaceSceneNode(ISceneManager* pointer, IMesh* mesh, f32 waveHeight=2.0f, f32 waveSpeed=300.0f, f32 waveLength=10.0f, ISceneNode* parent=0, s32 id=-1, const core::vector3df& position = core::vector3df(0,0,0), const core::vector3df& rotation = core::vector3df(0,0,0), const core::vector3df& scale = core::vector3df(1.0f, 1.0f, 1.0f))
 {return pointer->addWaterSurfaceSceneNode(mesh, waveHeight, waveSpeed, waveLength, parent, id, position, rotation, scale);}
-IRRLICHT_C_API IMeshSceneNode* ISceneManager_addOctTreeSceneNode(ISceneManager* pointer, IAnimatedMesh* mesh, ISceneNode* parent=0, s32 id=-1, s32 minimalPolysPerNode=512, bool alsoAddIfMeshPointerZero=false)
-{return pointer->addOctTreeSceneNode(mesh, parent, id, minimalPolysPerNode, alsoAddIfMeshPointerZero);}
-IRRLICHT_C_API IMeshSceneNode* ISceneManager_addOctTreeSceneNode2(ISceneManager* pointer, IMesh* mesh, ISceneNode* parent=0, s32 id=-1, s32 minimalPolysPerNode=256, bool alsoAddIfMeshPointerZero=false)
-{return pointer->addOctTreeSceneNode(mesh, parent, id, minimalPolysPerNode, alsoAddIfMeshPointerZero);}
-IRRLICHT_C_API IMeshSceneNode* ISceneManager_addOctreeSceneNode(ISceneManager* pointer, IAnimatedMesh* mesh, ISceneNode* parent=0, s32 id=-1, s32 minimalPolysPerNode=512, bool alsoAddIfMeshPointerZero=false)
+#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR < 8)
+IRRLICHT_C_API IMeshSceneNode* ISceneManager_addOctTreeSceneNode1(ISceneManager* pointer, IAnimatedMesh* mesh, ISceneNode* parent=0, s32 id=-1, s32 minimalPolysPerNode=512, bool alsoAddIfMeshPointerZero=false){return pointer->addOctTreeSceneNode(mesh, parent, id, minimalPolysPerNode, alsoAddIfMeshPointerZero);}
+IRRLICHT_C_API IMeshSceneNode* ISceneManager_addOctTreeSceneNode2(ISceneManager* pointer, IMesh* mesh, ISceneNode* parent=0, s32 id=-1, s32 minimalPolysPerNode=256, bool alsoAddIfMeshPointerZero=false){return pointer->addOctTreeSceneNode(mesh, parent, id, minimalPolysPerNode, alsoAddIfMeshPointerZero);}
+IRRLICHT_C_API ICameraSceneNode* ISceneManager_addCameraSceneNodeMaya(ISceneManager* pointer, ISceneNode* parent = 0, f32 rotateSpeed = -1500.0f, f32 zoomSpeed = 200.0f, f32 translationSpeed = 1500.0f, s32 id = -1){return pointer->addCameraSceneNodeMaya(parent, rotateSpeed, zoomSpeed, translationSpeed, id);}
+IRRLICHT_C_API ITriangleSelector* ISceneManager_createOctTreeTriangleSelector(ISceneManager* pointer, IMesh* mesh, ISceneNode* node, s32 minimalPolysPerNode=32){return pointer->createOctTreeTriangleSelector(mesh, node, minimalPolysPerNode);}
+#else
+IRRLICHT_C_API ICameraSceneNode* ISceneManager_addCameraSceneNodeMaya(ISceneManager* pointer, ISceneNode* parent = 0, f32 rotateSpeed = -1500.0f, f32 zoomSpeed = 200.0f, f32 translationSpeed = 1500.0f, s32 id = -1, f32 distance = 70.f, bool makeActive = true){return pointer->addCameraSceneNodeMaya(parent, rotateSpeed, zoomSpeed, translationSpeed, id, distance, makeActive);}
+#endif
+IRRLICHT_C_API IMeshSceneNode* ISceneManager_addOctreeSceneNode1(ISceneManager* pointer, IAnimatedMesh* mesh, ISceneNode* parent=0, s32 id=-1, s32 minimalPolysPerNode=512, bool alsoAddIfMeshPointerZero=false)
 {return pointer->addOctreeSceneNode(mesh, parent, id, minimalPolysPerNode, alsoAddIfMeshPointerZero);}
 IRRLICHT_C_API IMeshSceneNode* ISceneManager_addOctreeSceneNode2(ISceneManager* pointer, IMesh* mesh, ISceneNode* parent=0, s32 id=-1, s32 minimalPolysPerNode=256, bool alsoAddIfMeshPointerZero=false)
 {return pointer->addOctreeSceneNode(mesh, parent, id, minimalPolysPerNode, alsoAddIfMeshPointerZero);}
 IRRLICHT_C_API ICameraSceneNode* ISceneManager_addCameraSceneNode(ISceneManager* pointer, ISceneNode* parent = 0, const core::vector3df& position = core::vector3df(0,0,0), const core::vector3df& lookat = core::vector3df(0,0,100), s32 id=-1)
 {return pointer->addCameraSceneNode(parent, position, lookat, id);}
-
-#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR > 7)
-IRRLICHT_C_API ICameraSceneNode* ISceneManager_addCameraSceneNodeMaya(ISceneManager* pointer, ISceneNode* parent = 0, f32 rotateSpeed = -1500.0f, f32 zoomSpeed = 200.0f, f32 translationSpeed = 1500.0f, s32 id = -1, f32 distance = 70.f, bool makeActive = true)
-{return pointer->addCameraSceneNodeMaya(parent, rotateSpeed, zoomSpeed, translationSpeed, id, distance, makeActive);}
-#else
-IRRLICHT_C_API ICameraSceneNode* ISceneManager_addCameraSceneNodeMaya(ISceneManager* pointer, ISceneNode* parent = 0, f32 rotateSpeed = -1500.0f, f32 zoomSpeed = 200.0f, f32 translationSpeed = 1500.0f, s32 id = -1)
-{return pointer->addCameraSceneNodeMaya(parent, rotateSpeed, zoomSpeed, translationSpeed, id);}
-#endif
-
 IRRLICHT_C_API ICameraSceneNode* ISceneManager_addCameraSceneNodeFPS(ISceneManager* pointer, ISceneNode* parent = 0, f32 rotateSpeed = 100.0f, f32 moveSpeed = 0.5f, s32 id=-1, SKeyMap* keyMapArray=0, s32 keyMapSize=0, bool noVerticalMovement=false, f32 jumpSpeed = 0.f, bool invertMouse=false)
 {return pointer->addCameraSceneNodeFPS(parent, rotateSpeed, moveSpeed, id, keyMapArray, keyMapSize, noVerticalMovement, jumpSpeed, invertMouse);}
 IRRLICHT_C_API ICameraSceneNode* ISceneManager_addCameraSceneNodeFPS2(ISceneManager* pointer)
@@ -80,16 +75,16 @@ IRRLICHT_C_API ITextSceneNode* ISceneManager_addTextSceneNode(ISceneManager* poi
 {return pointer->addTextSceneNode(font, text, color, parent, position, id);}
 IRRLICHT_C_API IBillboardTextSceneNode* ISceneManager_addBillboardTextSceneNode(ISceneManager* pointer, gui::IGUIFont* font, const wchar_t* text, ISceneNode* parent = 0, const core::dimension2d<f32>& size = core::dimension2d<f32>(10.0f, 10.0f), const core::vector3df& position = vector3df(0,0,0), s32 id=-1, const SColor& colorTop = 0xFFFFFFFF, const SColor& colorBottom = 0xFFFFFFFF)
 {return pointer->addBillboardTextSceneNode(font, text, parent, size, position, id, colorTop, colorBottom);}
-IRRLICHT_C_API IAnimatedMesh* ISceneManager_addHillPlaneMesh(ISceneManager* pointer, const char* name, const core::dimension2d<f32>& tileSize, const core::dimension2d<u32>& tileCount, video::SMaterial* material = 0, f32 hillHeight = 0.0f, const core::dimension2d<f32>& countHills = dimension2d<f32>(0.0f, 0.0f), const core::dimension2d<f32>& textureRepeatCount = core::dimension2d<f32>(1.0f, 1.0f))
-{return pointer->addHillPlaneMesh(name, tileSize, tileCount, material, hillHeight, countHills, textureRepeatCount);}
-IRRLICHT_C_API IAnimatedMesh* ISceneManager_addTerrainMesh(ISceneManager* pointer, const char* meshname, video::IImage* texture, video::IImage* heightmap, const core::dimension2d<f32>& stretchSize = core::dimension2d<f32>(10.0f,10.0f), f32 maxHeight=200.0f, const core::dimension2d<u32>& defaultVertexBlockSize = core::dimension2d<u32>(64,64))
-{return pointer->addTerrainMesh(meshname, texture, heightmap, stretchSize, maxHeight, defaultVertexBlockSize);}
-IRRLICHT_C_API IAnimatedMesh* ISceneManager_addArrowMesh(ISceneManager* pointer, const char* name, const SColor& vtxColor0=0xFFFFFFFF, const SColor& vtxColor1=0xFFFFFFFF, u32 tesselationCylinder=4, u32 tesselationCone=8, f32 height=1.f, f32 cylinderHeight=0.6f, f32 width0=0.05f, f32 width1=0.3f)
-{return pointer->addArrowMesh(name, vtxColor0, vtxColor1, tesselationCylinder, tesselationCone, height, cylinderHeight, width0, width1);}
-IRRLICHT_C_API IAnimatedMesh* ISceneManager_addSphereMesh(ISceneManager* pointer, const char* name, f32 radius=5.f, u32 polyCountX = 16, u32 polyCountY = 16)
-{return pointer->addSphereMesh(name, radius, polyCountX, polyCountY);}
-IRRLICHT_C_API IAnimatedMesh* ISceneManager_addVolumeLightMesh(ISceneManager* pointer, const char* name, const u32 SubdivideU = 32, const u32 SubdivideV = 32, const SColor& FootColor = SColor(51, 0, 230, 180), const SColor& TailColor = SColor(0, 0, 0, 0))
-{return pointer->addVolumeLightMesh(name, SubdivideU, SubdivideV, FootColor, TailColor);}
+IRRLICHT_C_API IAnimatedMesh* ISceneManager_addHillPlaneMesh(ISceneManager* pointer, const fschar_t* name, const core::dimension2d<f32>& tileSize, const core::dimension2d<u32>& tileCount, video::SMaterial* material = 0, f32 hillHeight = 0.0f, const core::dimension2d<f32>& countHills = dimension2d<f32>(0.0f, 0.0f), const core::dimension2d<f32>& textureRepeatCount = core::dimension2d<f32>(1.0f, 1.0f))
+{return pointer->addHillPlaneMesh(io::path(name), tileSize, tileCount, material, hillHeight, countHills, textureRepeatCount);}
+IRRLICHT_C_API IAnimatedMesh* ISceneManager_addTerrainMesh(ISceneManager* pointer, const fschar_t* meshname, video::IImage* texture, video::IImage* heightmap, const core::dimension2d<f32>& stretchSize = core::dimension2d<f32>(10.0f,10.0f), f32 maxHeight=200.0f, const core::dimension2d<u32>& defaultVertexBlockSize = core::dimension2d<u32>(64,64))
+{return pointer->addTerrainMesh(io::path(meshname), texture, heightmap, stretchSize, maxHeight, defaultVertexBlockSize);}
+IRRLICHT_C_API IAnimatedMesh* ISceneManager_addArrowMesh(ISceneManager* pointer, const fschar_t* name, const SColor& vtxColorCylinder=0xFFFFFFFF, const SColor& vtxColorCone=0xFFFFFFFF, u32 tesselationCylinder=4, u32 tesselationCone=8, f32 height=1.f, f32 cylinderHeight=0.6f, f32 widthCylinder=0.05f, f32 widthCone=0.3f)
+{return pointer->addArrowMesh(io::path(name), vtxColorCylinder, vtxColorCone, tesselationCylinder, tesselationCone, height, cylinderHeight, widthCylinder, widthCone);}
+IRRLICHT_C_API IAnimatedMesh* ISceneManager_addSphereMesh(ISceneManager* pointer, const fschar_t* name, f32 radius=5.f, u32 polyCountX = 16, u32 polyCountY = 16)
+{return pointer->addSphereMesh(io::path(name), radius, polyCountX, polyCountY);}
+IRRLICHT_C_API IAnimatedMesh* ISceneManager_addVolumeLightMesh(ISceneManager* pointer, const fschar_t* name, const u32 SubdivideU = 32, const u32 SubdivideV = 32, const SColor& FootColor = SColor(51, 0, 230, 180), const SColor& TailColor = SColor(0, 0, 0, 0))
+{return pointer->addVolumeLightMesh(io::path(name), SubdivideU, SubdivideV, FootColor, TailColor);}
 IRRLICHT_C_API ISceneNode* ISceneManager_getRootSceneNode(ISceneManager* pointer)
 {return pointer->getRootSceneNode();}
 IRRLICHT_C_API ISceneNode* ISceneManager_getSceneNodeFromId(ISceneManager* pointer, s32 id, ISceneNode* start=0)
@@ -132,8 +127,6 @@ IRRLICHT_C_API ITriangleSelector* ISceneManager_createTriangleSelector2(ISceneMa
 {return pointer->createTriangleSelector(node);}
 IRRLICHT_C_API ITriangleSelector* ISceneManager_createTriangleSelectorFromBoundingBox(ISceneManager* pointer, ISceneNode* node)
 {return pointer->createTriangleSelectorFromBoundingBox(node);}
-IRRLICHT_C_API ITriangleSelector* ISceneManager_createOctTreeTriangleSelector(ISceneManager* pointer, IMesh* mesh, ISceneNode* node, s32 minimalPolysPerNode=32)
-{return pointer->createOctTreeTriangleSelector(mesh, node, minimalPolysPerNode);}
 IRRLICHT_C_API ITriangleSelector* ISceneManager_createOctreeTriangleSelector(ISceneManager* pointer, IMesh* mesh, ISceneNode* node, s32 minimalPolysPerNode=32)
 {return pointer->createOctreeTriangleSelector(mesh, node, minimalPolysPerNode);}
 IRRLICHT_C_API IMetaTriangleSelector* ISceneManager_createMetaTriangleSelector(ISceneManager* pointer)

@@ -1,9 +1,9 @@
-# Copyright(c) Max Kolosov 2010 - 2011 maxkolosov@inbox.ru
+# Copyright(c) Max Kolosov 2010 - 2012 maxkolosov@inbox.ru
 # http://vosolok2008.narod.ru
 # BSD license
 
-__version__ = pyirrlicht_version = '1.0.2'
-__versionTime__ = '2011-12-20'
+__version__ = pyirrlicht_version = '1.0.3'
+__versionTime__ = '2012-01-12'
 __author__ = 'Max Kolosov <maxkolosov@inbox.ru>'
 __doc__ = '''
 pyirrlicht.py - is ctypes python module for
@@ -1299,6 +1299,12 @@ tool_getAsFloat = func_type(ctypes.c_float, ctypes.c_char_p, ctypes.c_void_p)(('
 #~ tool_getTextures = func_type(ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('tool_getTextures', c_module))
 tool_getTextures = func_type(None, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('tool_getTextures', c_module))
 
+tool_get_stdin = func_type(ctypes.c_void_p)(('tool_get_stdin', c_module))
+tool_get_stdout = func_type(ctypes.c_void_p)(('tool_get_stdout', c_module))
+tool_redirect_stdout_to_file = func_type(ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p)(('tool_redirect_stdout_to_file', c_module))
+tool_close_stream = func_type(ctypes.c_int, ctypes.c_void_p)(('tool_close_stream', c_module))
+tool_close_streams = func_type(ctypes.c_int)(('tool_close_streams', c_module))
+
 # agg functions
 BUILD_WITH_AGG = ctypes.c_int.in_dll(c_module, 'BUILD_WITH_AGG').value
 if BUILD_WITH_AGG:
@@ -1322,6 +1328,7 @@ if BUILD_WITH_AGG:
 BUILD_WITH_IRR_SVG_AGG = ctypes.c_int.in_dll(c_module, 'BUILD_WITH_IRR_SVG_AGG').value
 if BUILD_WITH_IRR_SVG_AGG:
 	svg_agg_image_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_byte, ctypes.c_uint, ctypes.c_int, ctypes.c_int)(('svg_agg_image_ctor1', c_module))
+	svg_agg_image_get_size = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_get_size', c_module))
 	svg_agg_image_scale = func_type(None, ctypes.c_void_p, ctypes.c_double)(('svg_agg_image_scale', c_module))
 	svg_agg_image_render = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_render', c_module))
 	svg_agg_image_get_texture = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_get_texture', c_module))
@@ -1558,11 +1565,10 @@ IFileSystem_removeFileArchive1 = func_type(ctypes.c_byte, ctypes.c_void_p, ctype
 IFileSystem_removeFileArchive2 = func_type(ctypes.c_byte, ctypes.c_void_p, fschar_t)(('IFileSystem_removeFileArchive2', c_module))
 IFileSystem_moveFileArchive = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_uint, ctypes.c_int)(('IFileSystem_moveFileArchive', c_module))
 IFileSystem_getFileArchive = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IFileSystem_getFileArchive', c_module))
-
-IFileSystem_addZipFileArchive = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_byte, ctypes.c_byte)(('IFileSystem_addZipFileArchive', c_module))
-IFileSystem_addFolderFileArchive = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_byte, ctypes.c_byte)(('IFileSystem_addFolderFileArchive', c_module))
-IFileSystem_addPakFileArchive = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_byte, ctypes.c_byte)(('IFileSystem_addPakFileArchive', c_module))
-
+if IRRLICHT_VERSION < 180:
+	IFileSystem_addZipFileArchive = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_byte, ctypes.c_byte)(('IFileSystem_addZipFileArchive', c_module))
+	IFileSystem_addFolderFileArchive = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_byte, ctypes.c_byte)(('IFileSystem_addFolderFileArchive', c_module))
+	IFileSystem_addPakFileArchive = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_byte, ctypes.c_byte)(('IFileSystem_addPakFileArchive', c_module))
 IFileSystem_getWorkingDirectory = func_type(fschar_t, ctypes.c_void_p)(('IFileSystem_getWorkingDirectory', c_module))
 IFileSystem_changeWorkingDirectoryTo = func_type(ctypes.c_byte, ctypes.c_void_p, fschar_t)(('IFileSystem_changeWorkingDirectoryTo', c_module))
 IFileSystem_getAbsolutePath = func_type(fschar_t, ctypes.c_void_p, fschar_t)(('IFileSystem_getAbsolutePath', c_module))
@@ -2433,6 +2439,26 @@ IAttributes_addUserPointer = func_type(None, ctypes.c_void_p, ctypes.c_char_p, c
 IAttributes_getAttributeAsUserPointer1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p)(('IAttributes_getAttributeAsUserPointer1', c_module))
 IAttributes_getAttributeAsUserPointer2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IAttributes_getAttributeAsUserPointer2', c_module))
 
+#class IBoneSceneNode : public ISceneNode
+IBoneSceneNode_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IBoneSceneNode_ctor', c_module))
+if IRRLICHT_VERSION < 180:
+	IBoneSceneNode_getBoneName = func_type(ctypes.c_char_p, ctypes.c_void_p)(('IBoneSceneNode_getBoneName', c_module))
+IBoneSceneNode_getBoneIndex = func_type(ctypes.c_uint, ctypes.c_void_p)(('IBoneSceneNode_getBoneIndex', c_module))
+IBoneSceneNode_setAnimationMode = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IBoneSceneNode_setAnimationMode', c_module))
+IBoneSceneNode_getAnimationMode = func_type(ctypes.c_int, ctypes.c_void_p)(('IBoneSceneNode_getAnimationMode', c_module))
+IBoneSceneNode_getBoundingBox = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IBoneSceneNode_getBoundingBox', c_module))
+IBoneSceneNode_OnAnimate = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('IBoneSceneNode_OnAnimate', c_module))
+IBoneSceneNode_render = func_type(None, ctypes.c_void_p)(('IBoneSceneNode_render', c_module))
+IBoneSceneNode_setSkinningSpace = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IBoneSceneNode_setSkinningSpace', c_module))
+IBoneSceneNode_getSkinningSpace = func_type(ctypes.c_int, ctypes.c_void_p)(('IBoneSceneNode_getSkinningSpace', c_module))
+IBoneSceneNode_updateAbsolutePositionOfAllChildren = func_type(None, ctypes.c_void_p)(('IBoneSceneNode_updateAbsolutePositionOfAllChildren', c_module))
+IBoneSceneNode_set_positionHint = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IBoneSceneNode_set_positionHint', c_module))
+IBoneSceneNode_get_positionHint = func_type(ctypes.c_int, ctypes.c_void_p)(('IBoneSceneNode_get_positionHint', c_module))
+IBoneSceneNode_set_scaleHint = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IBoneSceneNode_set_scaleHint', c_module))
+IBoneSceneNode_get_scaleHint = func_type(ctypes.c_int, ctypes.c_void_p)(('IBoneSceneNode_get_scaleHint', c_module))
+IBoneSceneNode_set_rotationHint = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IBoneSceneNode_set_rotationHint', c_module))
+IBoneSceneNode_get_rotationHint = func_type(ctypes.c_int, ctypes.c_void_p)(('IBoneSceneNode_get_rotationHint', c_module))
+
 #================= IDynamicMeshBuffer
 IDynamicMeshBuffer_getVertexBuffer = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IDynamicMeshBuffer_getVertexBuffer', c_module))
 IDynamicMeshBuffer_getIndexBuffer = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IDynamicMeshBuffer_getIndexBuffer', c_module))
@@ -2496,7 +2522,10 @@ IFileList_getFileName = func_type(fschar_t, ctypes.c_void_p, ctypes.c_uint)(('IF
 IFileList_getFullFileName = func_type(fschar_t, ctypes.c_void_p, ctypes.c_uint)(('IFileList_getFullFileName', c_module))
 IFileList_findFile = func_type(ctypes.c_int, ctypes.c_void_p, fschar_t, ctypes.c_byte)(('IFileList_findFile', c_module))
 IFileList_getPath = func_type(fschar_t, ctypes.c_void_p)(('IFileList_getPath', c_module))
-IFileList_addItem = func_type(ctypes.c_uint, ctypes.c_void_p, fschar_t, ctypes.c_uint, ctypes.c_byte, ctypes.c_uint)(('IFileList_addItem', c_module))
+if IRRLICHT_VERSION < 180:
+	IFileList_addItem = func_type(ctypes.c_uint, ctypes.c_void_p, fschar_t, ctypes.c_uint, ctypes.c_byte, ctypes.c_uint)(('IFileList_addItem', c_module))
+else:
+	IFileList_addItem = func_type(ctypes.c_uint, ctypes.c_void_p, fschar_t, ctypes.c_uint, ctypes.c_uint, ctypes.c_byte, ctypes.c_uint)(('IFileList_addItem', c_module))
 
 # functions for class IImage
 IImage_lock = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IImage_lock', c_module))
@@ -2843,8 +2872,9 @@ IGUITreeViewNode_setData = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('I
 IGUITreeViewNode_getData2 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeViewNode_getData2', c_module))
 IGUITreeViewNode_setData2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeViewNode_setData2', c_module))
 IGUITreeViewNode_getChildCount = func_type(ctypes.c_uint, ctypes.c_void_p)(('IGUITreeViewNode_getChildCount', c_module))
-IGUITreeViewNode_clearChilds = func_type(None, ctypes.c_void_p)(('IGUITreeViewNode_clearChilds', c_module))
-IGUITreeViewNode_hasChilds = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUITreeViewNode_hasChilds', c_module))
+if IRRLICHT_VERSION < 180:
+	IGUITreeViewNode_clearChilds = func_type(None, ctypes.c_void_p)(('IGUITreeViewNode_clearChilds', c_module))
+	IGUITreeViewNode_hasChilds = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUITreeViewNode_hasChilds', c_module))
 IGUITreeViewNode_addChildBack = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_int, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeViewNode_addChildBack', c_module))
 IGUITreeViewNode_addChildFront = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_int, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeViewNode_addChildFront', c_module))
 IGUITreeViewNode_insertChildAfter = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_int, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeViewNode_insertChildAfter', c_module))
@@ -3075,12 +3105,13 @@ IMeshManipulator_recalculateNormals2 = func_type(None, ctypes.c_void_p, ctypes.c
 IMeshManipulator_recalculateTangents = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_byte)(('IMeshManipulator_recalculateTangents', c_module))
 IMeshManipulator_scale1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshManipulator_scale1', c_module))
 IMeshManipulator_scale2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshManipulator_scale2', c_module))
-IMeshManipulator_scaleMesh = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshManipulator_scaleMesh', c_module))
+if IRRLICHT_VERSION < 180:
+	IMeshManipulator_scaleMesh = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshManipulator_scaleMesh', c_module))
+	IMeshManipulator_transformMesh = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshManipulator_transformMesh', c_module))
 IMeshManipulator_scaleTCoords1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IMeshManipulator_scaleTCoords1', c_module))
 IMeshManipulator_scaleTCoords2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IMeshManipulator_scaleTCoords2', c_module))
 IMeshManipulator_transform1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshManipulator_transform1', c_module))
 IMeshManipulator_transform2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshManipulator_transform2', c_module))
-IMeshManipulator_transformMesh = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshManipulator_transformMesh', c_module))
 IMeshManipulator_createMeshCopy = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshManipulator_createMeshCopy', c_module))
 IMeshManipulator_makePlanarTextureMapping1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('IMeshManipulator_makePlanarTextureMapping1', c_module))
 IMeshManipulator_makePlanarTextureMapping2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('IMeshManipulator_makePlanarTextureMapping2', c_module))
@@ -3163,9 +3194,13 @@ IParticleEmitter_getType = func_type(ctypes.c_int, ctypes.c_void_p)(('IParticleE
 
 #class IParticleFadeOutAffector : public IParticleAffector
 IParticleFadeOutAffector_setTargetColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IParticleFadeOutAffector_setTargetColor', c_module))
-IParticleFadeOutAffector_setFadeOutTime = func_type(None, ctypes.c_void_p, ctypes.c_float)(('IParticleFadeOutAffector_setFadeOutTime', c_module))
+if IRRLICHT_VERSION < 180:
+	IParticleFadeOutAffector_setFadeOutTime = func_type(None, ctypes.c_void_p, ctypes.c_float)(('IParticleFadeOutAffector_setFadeOutTime', c_module))
+	IParticleFadeOutAffector_getFadeOutTime = func_type(ctypes.c_float, ctypes.c_void_p)(('IParticleFadeOutAffector_getFadeOutTime', c_module))
+else:
+	IParticleFadeOutAffector_setFadeOutTime = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('IParticleFadeOutAffector_setFadeOutTime', c_module))
+	IParticleFadeOutAffector_getFadeOutTime = func_type(ctypes.c_uint, ctypes.c_void_p)(('IParticleFadeOutAffector_getFadeOutTime', c_module))
 IParticleFadeOutAffector_getTargetColor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IParticleFadeOutAffector_getTargetColor', c_module))
-IParticleFadeOutAffector_getFadeOutTime = func_type(ctypes.c_float, ctypes.c_void_p)(('IParticleFadeOutAffector_getFadeOutTime', c_module))
 IParticleFadeOutAffector_getType = func_type(ctypes.c_int, ctypes.c_void_p)(('IParticleFadeOutAffector_getType', c_module))
 
 #class IParticleGravityAffector : public IParticleAffector
@@ -3769,12 +3804,16 @@ ISceneManager_addAnimatedMeshSceneNode = func_type(ctypes.c_void_p, ctypes.c_voi
 ISceneManager_addAnimatedMeshSceneNode2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addAnimatedMeshSceneNode2', c_module))
 ISceneManager_addMeshSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('ISceneManager_addMeshSceneNode', c_module))
 ISceneManager_addWaterSurfaceSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addWaterSurfaceSceneNode', c_module))
-ISceneManager_addOctTreeSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('ISceneManager_addOctTreeSceneNode', c_module))
-ISceneManager_addOctTreeSceneNode2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('ISceneManager_addOctTreeSceneNode2', c_module))
-ISceneManager_addOctreeSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('ISceneManager_addOctreeSceneNode', c_module))
+if IRRLICHT_VERSION < 180:
+	ISceneManager_addOctTreeSceneNode1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('ISceneManager_addOctTreeSceneNode1', c_module))
+	ISceneManager_addOctTreeSceneNode2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('ISceneManager_addOctTreeSceneNode2', c_module))
+	ISceneManager_addCameraSceneNodeMaya = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_int)(('ISceneManager_addCameraSceneNodeMaya', c_module))
+	ISceneManager_createOctTreeTriangleSelector = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_createOctTreeTriangleSelector', c_module))
+else:
+	ISceneManager_addCameraSceneNodeMaya = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_int, ctypes.c_float, ctypes.c_byte)(('ISceneManager_addCameraSceneNodeMaya', c_module))
+ISceneManager_addOctreeSceneNode1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('ISceneManager_addOctreeSceneNode1', c_module))
 ISceneManager_addOctreeSceneNode2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('ISceneManager_addOctreeSceneNode2', c_module))
 ISceneManager_addCameraSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_addCameraSceneNode', c_module))
-ISceneManager_addCameraSceneNodeMaya = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_int, ctypes.c_float, ctypes.c_byte)(('ISceneManager_addCameraSceneNodeMaya', c_module))
 ISceneManager_addCameraSceneNodeFPS = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte, ctypes.c_float, ctypes.c_byte)(('ISceneManager_addCameraSceneNodeFPS', c_module))
 ISceneManager_addLightSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_int)(('ISceneManager_addLightSceneNode', c_module))
 ISceneManager_addBillboardSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addBillboardSceneNode', c_module))
@@ -3788,11 +3827,11 @@ ISceneManager_addEmptySceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ct
 ISceneManager_addDummyTransformationSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_addDummyTransformationSceneNode', c_module))
 ISceneManager_addTextSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_addTextSceneNode', c_module))
 ISceneManager_addBillboardTextSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addBillboardTextSceneNode', c_module))
-ISceneManager_addHillPlaneMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addHillPlaneMesh', c_module))
-ISceneManager_addTerrainMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p)(('ISceneManager_addTerrainMesh', c_module))
-ISceneManager_addArrowMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('ISceneManager_addArrowMesh', c_module))
-ISceneManager_addSphereMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_float, ctypes.c_uint, ctypes.c_uint)(('ISceneManager_addSphereMesh', c_module))
-ISceneManager_addVolumeLightMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addVolumeLightMesh', c_module))
+ISceneManager_addHillPlaneMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addHillPlaneMesh', c_module))
+ISceneManager_addTerrainMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p)(('ISceneManager_addTerrainMesh', c_module))
+ISceneManager_addArrowMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('ISceneManager_addArrowMesh', c_module))
+ISceneManager_addSphereMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_float, ctypes.c_uint, ctypes.c_uint)(('ISceneManager_addSphereMesh', c_module))
+ISceneManager_addVolumeLightMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addVolumeLightMesh', c_module))
 ISceneManager_getRootSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, )(('ISceneManager_getRootSceneNode', c_module))
 ISceneManager_getSceneNodeFromId = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('ISceneManager_getSceneNodeFromId', c_module))
 ISceneManager_getSceneNodeFromName = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p)(('ISceneManager_getSceneNodeFromName', c_module))
@@ -3814,7 +3853,6 @@ ISceneManager_createFollowSplineAnimator = func_type(ctypes.c_void_p, ctypes.c_v
 ISceneManager_createTriangleSelector1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_createTriangleSelector1', c_module))
 ISceneManager_createTriangleSelector2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_createTriangleSelector2', c_module))
 ISceneManager_createTriangleSelectorFromBoundingBox = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_createTriangleSelectorFromBoundingBox', c_module))
-ISceneManager_createOctTreeTriangleSelector = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_createOctTreeTriangleSelector', c_module))
 ISceneManager_createOctreeTriangleSelector = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_createOctreeTriangleSelector', c_module))
 ISceneManager_createMetaTriangleSelector = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_createMetaTriangleSelector', c_module))
 ISceneManager_createTerrainTriangleSelector = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_createTerrainTriangleSelector', c_module))
@@ -4115,10 +4153,14 @@ IVolumeLightSceneNode_getFootColor = func_type(ctypes.c_void_p, ctypes.c_void_p)
 IVolumeLightSceneNode_getTailColor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IVolumeLightSceneNode_getTailColor', c_module))
 
 # functions for class IOSOperator
-#~ IOSOperator_Destructor = func_type(None, ctypes.c_void_p)(('IOSOperator_Destructor', c_module))
-IOSOperator_getOperationSystemVersion = func_type(ctypes.c_wchar_p, ctypes.c_void_p)(('IOSOperator_getOperationSystemVersion', c_module))
-IOSOperator_copyToClipboard = func_type(None, ctypes.c_void_p, ctypes.c_char_p)(('IOSOperator_copyToClipboard', c_module))
-IOSOperator_getTextFromClipboard = func_type(ctypes.c_char_p, ctypes.c_void_p)(('IOSOperator_getTextFromClipboard', c_module))
+if IRRLICHT_VERSION < 180:
+	IOSOperator_getOperationSystemVersion = func_type(ctypes.c_wchar_p, ctypes.c_void_p)(('IOSOperator_getOperationSystemVersion', c_module))
+if IRR_IMPROVE_UNICODE:
+	IOSOperator_copyToClipboard = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p)(('IOSOperator_copyToClipboard', c_module))
+	IOSOperator_getTextFromClipboard = func_type(ctypes.c_wchar_p, ctypes.c_void_p)(('IOSOperator_getTextFromClipboard', c_module))
+else:
+	IOSOperator_copyToClipboard = func_type(None, ctypes.c_void_p, ctypes.c_char_p)(('IOSOperator_copyToClipboard', c_module))
+	IOSOperator_getTextFromClipboard = func_type(ctypes.c_char_p, ctypes.c_void_p)(('IOSOperator_getTextFromClipboard', c_module))
 IOSOperator_getProcessorSpeedMHz = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.POINTER(ctypes.c_uint))(('IOSOperator_getProcessorSpeedMHz', c_module))
 IOSOperator_getSystemMemory = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.POINTER(ctypes.c_uint), ctypes.POINTER(ctypes.c_uint))(('IOSOperator_getSystemMemory', c_module))
 
@@ -8271,8 +8313,12 @@ class IFileList(IReferenceCounted):
 		return IFileList_findFile(self.c_pointer, filename, isFolder)
 	def getPath(self):
 		return IFileList_getPath(self.c_pointer)
-	def addItem(self, fullPath, size, isDirectory, id = 0):
-		return IFileList_addItem(self.c_pointer, fullPath, size, isDirectory, id)
+	if IRRLICHT_VERSION < 180:
+		def addItem(self, fullPath, size, isDirectory, id = 0):
+			return IFileList_addItem(self.c_pointer, fullPath, size, isDirectory, id)
+	else:
+		def addItem(self, fullPath, offset, size, isDirectory, id = 0):
+			return IFileList_addItem(self.c_pointer, fullPath, offset, size, isDirectory, id)
 	def sort(self):
 		IFileList_sort(self.c_pointer)
 
@@ -9173,8 +9219,11 @@ class IMeshManipulator(IReferenceCounted):
 			self.scale2(mesh_or_buffer, factor)
 		else:
 			self.scale1(mesh_or_buffer, factor)
-	def scaleMesh(self, mesh, factor):
-		IMeshManipulator_scaleMesh(self.c_pointer, mesh.c_pointer, factor.c_pointer)
+	if IRRLICHT_VERSION < 180:
+		def scaleMesh(self, mesh, factor):
+			IMeshManipulator_scaleMesh(self.c_pointer, mesh.c_pointer, factor.c_pointer)
+		def transformMesh(self, mesh, m):
+			IMeshManipulator_transformMesh(self.c_pointer, mesh.c_pointer, m.c_pointer)
 	def scaleTCoords1(self, mesh, factor, level = 1):
 		IMeshManipulator_scaleTCoords1(self.c_pointer, mesh.c_pointer, factor.c_pointer, level)
 	def scaleTCoords2(self, buffer, factor, level = 1):
@@ -9193,8 +9242,6 @@ class IMeshManipulator(IReferenceCounted):
 			self.transform2(mesh_or_buffer, m)
 		else:
 			self.transform1(mesh_or_buffer, m)
-	def transformMesh(self, mesh, m):
-		IMeshManipulator_transformMesh(self.c_pointer, mesh.c_pointer, m.c_pointer)
 	def createMeshCopy(self, mesh):
 		return SMesh(IMeshManipulator_createMeshCopy(self.c_pointer, mesh.c_pointer))
 	def makePlanarTextureMapping1(self, mesh, resolution = 0.001):
@@ -9838,18 +9885,18 @@ class IGUIElement(IAttributeExchangingObject, IEventReceiver):
 		return IGUIElement(IGUIElement_getParent(self.c_pointer))
 	def getRelativePosition(self):
 		return recti(IGUIElement_getRelativePosition(self.c_pointer))
-	def setRelativePosition(selfr, value):
+	def setRelativePosition(self, value):
 		if isinstance(value, recti):
-			IGUIElement_setRelativePosition1(self.c_pointer, value.c_pointer)
+			self.setRelativePosition1(value)
 		elif isinstance(value, position2di):
-			IGUIElement_setRelativePosition2(self.c_pointer, value.c_pointer)
+			self.setRelativePosition2(value)
 		else:
 			print('ERROR: not valid argument with IGUIElement.setRelativePosition method!')
-	def setRelativePosition1(selfr, r):
+	def setRelativePosition1(self, r):
 		IGUIElement_setRelativePosition1(self.c_pointer, r.c_pointer)
-	def setRelativePosition2(selfr, position):
+	def setRelativePosition2(self, position):
 		IGUIElement_setRelativePosition2(self.c_pointer, position.c_pointer)
-	def setRelativePositionProportional(selfr, r):
+	def setRelativePositionProportional(self, r):
 		IGUIElement_setRelativePositionProportional(self.c_pointer, r.c_pointer)
 	def getAbsolutePosition(self):
 		return recti(IGUIElement_getAbsolutePosition(self.c_pointer))
@@ -10297,22 +10344,22 @@ class IGUIButton(IGUIElement):
 		IGUIButton_setOverrideFont(self.c_pointer, font.c_pointer)
 	def setImage(self, *args):
 		if len(args) == 0:
-			IGUIButton_setImage1(self.c_pointer, ITexture().c_pointer)
+			self.setImage1()
 		elif len(args) == 1:
-			IGUIButton_setImage1(self.c_pointer, args[0].c_pointer)
+			self.setImage1(args[0])
 		elif len(args) > 1:
-			IGUIButton_setImage2(self.c_pointer, args[0].c_pointer, args[1].c_pointer)
+			self.setImage2(*args)
 	def setImage1(self, image = ITexture()):
 		IGUIButton_setImage1(self.c_pointer, image.c_pointer)
 	def setImage2(self, image, pos):
 		IGUIButton_setImage2(self.c_pointer, image.c_pointer, pos.c_pointer)
 	def setPressedImage(self, *args):
 		if len(args) == 0:
-			IGUIButton_setPressedImage1(self.c_pointer, ITexture().c_pointer)
+			self.setPressedImage1()
 		elif len(args) == 1:
-			IGUIButton_setPressedImage1(self.c_pointer, args[0].c_pointer)
+			self.setPressedImage1(args[0])
 		elif len(args) > 1:
-			IGUIButton_setPressedImage2(self.c_pointer, args[0].c_pointer, args[1].c_pointer)
+			self.setPressedImage2(*args)
 	def setPressedImage1(self, image = ITexture()):
 		IGUIButton_setPressedImage1(self.c_pointer, image.c_pointer)
 	def setPressedImage2(self, image, pos):
@@ -10915,10 +10962,11 @@ class IGUITreeViewNode(IReferenceCounted):
 		IGUITreeViewNode_setData2(self.c_pointer, data.c_pointer)
 	def getChildCount(self):
 		return IGUITreeViewNode_getChildCount(self.c_pointer)
-	def clearChilds(self):
-		IGUITreeViewNode_clearChilds(self.c_pointer)
-	def hasChilds(self):
-		return IGUITreeViewNode_hasChilds(self.c_pointer)
+	if IRRLICHT_VERSION < 180:
+		def clearChilds(self):
+			IGUITreeViewNode_clearChilds(self.c_pointer)
+		def hasChilds(self):
+			return IGUITreeViewNode_hasChilds(self.c_pointer)
 	def addChildBack(self, text, icon = 0, imageIndex = -1, selectedImageIndex = -1, data = 0, data2 = IReferenceCounted()):
 		return IGUITreeViewNode(IGUITreeViewNode_addChildBack(self.c_pointer, text, icon, imageIndex, selectedImageIndex, data, data2.c_pointer))
 	def addChildFront(self, text, icon = 0, imageIndex = -1, selectedImageIndex = -1, data = 0, data2 = IReferenceCounted()):
@@ -11662,14 +11710,52 @@ class ISceneNode(IAttributeExchangingObject):
 	def getSceneManager(self):
 		return ISceneManager(ISceneNode_getSceneManager(self.c_pointer))
 
+class IBoneSceneNode(ISceneNode):
+	def __init__(self, *args, **kwargs):
+		self.c_pointer = None
+		if len(args) == 1:
+			self.c_pointer = args[0]
+		elif len(args) > 1:
+			self.c_pointer = ctor(*args, **kwargs)
+	def ctor(self, parent, mgr, id = -1):
+		return IBoneSceneNode_ctor(parent.c_pointer, mgr.c_pointer, id)
+	if IRRLICHT_VERSION < 180:
+		def getBoneName(self):
+			return IBoneSceneNode_getBoneName(self.c_pointer)
+	def getBoneIndex(self):
+		return IBoneSceneNode_getBoneIndex(self.c_pointer)
+	def setAnimationMode(self, mode):
+		return IBoneSceneNode_setAnimationMode(self.c_pointer, mode)
+	def getAnimationMode(self):
+		return IBoneSceneNode_getAnimationMode(self.c_pointer)
+	def getBoundingBox(self):
+		return aabbox3df(IBoneSceneNode_getBoundingBox(self.c_pointer))
+	def OnAnimate(self, timeMs):
+		IBoneSceneNode_OnAnimate(self.c_pointer, timeMs)
+	def render(self):
+		IBoneSceneNode_render(self.c_pointer)
+	def setSkinningSpace(self, space):
+		IBoneSceneNode_setSkinningSpace(self.c_pointer, space)
+	def getSkinningSpace(self):
+		return IBoneSceneNode_getSkinningSpace(self.c_pointer)
+	def updateAbsolutePositionOfAllChildren(self):
+		IBoneSceneNode_updateAbsolutePositionOfAllChildren(self.c_pointer)
+	def set_positionHint(self, value):
+		IBoneSceneNode_set_positionHint(self.c_pointer, value)
+	def get_positionHint(self):
+		return IBoneSceneNode_get_positionHint(self.c_pointer)
+	def set_scaleHint(self, value):
+		IBoneSceneNode_set_scaleHint(self.c_pointer, value)
+	def get_scaleHint(self):
+		return IBoneSceneNode_get_scaleHint(self.c_pointer)
+	def set_rotationHint(self, value):
+		IBoneSceneNode_set_rotationHint(self.c_pointer, value)
+	def get_rotationHint(self):
+		return IBoneSceneNode_get_rotationHint(self.c_pointer)
+
 class CustomSceneNode(ISceneNode):
 	def __init__(self, *args, **kwargs):
-		self.c_pointer = self.ctor(*args)
-		#~ self.c_pointer = CustomSceneNode_ctor2()
-		#~ if len(args) == 1:
-			#~ self.c_pointer = args[0]
-		#~ elif len(args) > 1:
-			#~ self.c_pointer = self.ctor(*args)
+		self.c_pointer = self.ctor(*args, **kwargs)
 		self.callback_OnRegisterSceneNode = func_OnRegisterSceneNode(self.OnRegisterSceneNode)
 		CustomSceneNode_set_OnRegisterSceneNode(self.c_pointer, self.callback_OnRegisterSceneNode)
 		self.callback_render = func_render(self.render)
@@ -11680,7 +11766,6 @@ class CustomSceneNode(ISceneNode):
 		CustomSceneNode_set_getMaterial(self.c_pointer, self.callback_getMaterial)
 		self.callback_getMaterialCount = func_getMaterialCount(self.getMaterialCount)
 		CustomSceneNode_set_getMaterialCount(self.c_pointer, self.callback_getMaterialCount)
-		#~ print('=== CustomSceneNode.__init__')
 	def ctor(self, parent, mgr, id = -1):
 		return CustomSceneNode_ctor(parent.c_pointer, mgr.c_pointer, id)
 	def OnRegisterSceneNode(self):
@@ -11693,12 +11778,6 @@ class CustomSceneNode(ISceneNode):
 		'must be replaced with user class'
 	def getMaterialCount(self):
 		'must be replaced with user class'
-	#~ def set_BoundingBox(self, value):
-		#~ CustomSceneNode_set_BoundingBox(self.c_pointer, value.c_pointer)
-	#~ def set_Vertices(self, value):
-		#~ CustomSceneNode_set_Vertices(self.c_pointer, value.c_pointer)
-	#~ def set_Material(self, value):
-		#~ CustomSceneNode_set_Material(self.c_pointer, value.c_pointer)
 		
 
 class IParticleSystemSceneNode(ISceneNode):
@@ -12644,12 +12723,13 @@ class IFileSystem(IReferenceCounted):
 		return IFileSystem_moveFileArchive(self.c_pointer, sourceIndex, relative)
 	def getFileArchive(self, index):
 		return IFileArchive(IFileSystem_getFileArchive(self.c_pointer, index))
-	def addZipFileArchive(self, filename, ignoreCase=True, ignorePaths=True):
-		return IFileSystem_addZipFileArchive(self.c_pointer, as_ansi(filename), ignoreCase, ignorePaths)
-	def addFolderFileArchive(self, filename, ignoreCase=True, ignorePaths=True):
-		return IFileSystem_addFolderFileArchive(self.c_pointer, as_ansi(filename), ignoreCase, ignorePaths)
-	def addPakFileArchive(self, filename, ignoreCase=True, ignorePaths=True):
-		return IFileSystem_addPakFileArchive(self.c_pointer, as_ansi(filename), ignoreCase, ignorePaths)
+	if IRRLICHT_VERSION < 180:
+		def addZipFileArchive(self, filename, ignoreCase=True, ignorePaths=True):
+			return IFileSystem_addZipFileArchive(self.c_pointer, as_ansi(filename), ignoreCase, ignorePaths)
+		def addFolderFileArchive(self, filename, ignoreCase=True, ignorePaths=True):
+			return IFileSystem_addFolderFileArchive(self.c_pointer, as_ansi(filename), ignoreCase, ignorePaths)
+		def addPakFileArchive(self, filename, ignoreCase=True, ignorePaths=True):
+			return IFileSystem_addPakFileArchive(self.c_pointer, as_ansi(filename), ignoreCase, ignorePaths)
 	def getWorkingDirectory(self):
 		return IFileSystem_getWorkingDirectory(self.c_pointer)
 	def changeWorkingDirectoryTo(self, newDirectory):
@@ -12754,19 +12834,23 @@ class ISceneManager(IReferenceCounted):
 	def addWaterSurfaceSceneNode(self, mesh, waveHeight = 2.0, waveSpeed = 300.0, waveLength = 10.0, parent = ISceneNode(0), id = -1, position = vector3df(0,0,0), rotation = vector3df(0,0,0), scale = vector3df(1.0, 1.0, 1.0)):
 		return ISceneNode(ISceneManager_addWaterSurfaceSceneNode(self.c_pointer, mesh.c_pointer, waveHeight, waveSpeed, waveLength, parent.c_pointer, id, position.c_pointer, rotation.c_pointer, scale.c_pointer))
 	def addOctTreeSceneNode(self, mesh, parent = ISceneNode(0), id=-1, minimalPolysPerNode=512, alsoAddIfMeshPointerZero=False):
-		if parent in (None, 0):
-			parent = ISceneNode(0)
-		if isinstance(mesh, IAnimatedMesh):
-			return IMeshSceneNode(ISceneManager_addOctTreeSceneNode(self.c_pointer, mesh.c_pointer, parent.c_pointer, id, minimalPolysPerNode, alsoAddIfMeshPointerZero))
-		elif isinstance(mesh, IMesh):
-			return IMeshSceneNode(ISceneManager_addOctTreeSceneNode2(self.c_pointer, mesh.c_pointer, parent.c_pointer, id, minimalPolysPerNode, alsoAddIfMeshPointerZero))
+		if IRRLICHT_VERSION < 180:
+			if parent in (None, 0):
+				parent = ISceneNode(0)
+			if isinstance(mesh, IAnimatedMesh):
+				return IMeshSceneNode(ISceneManager_addOctTreeSceneNode1(self.c_pointer, mesh.c_pointer, parent.c_pointer, id, minimalPolysPerNode, alsoAddIfMeshPointerZero))
+			elif isinstance(mesh, IMesh):
+				return IMeshSceneNode(ISceneManager_addOctTreeSceneNode2(self.c_pointer, mesh.c_pointer, parent.c_pointer, id, minimalPolysPerNode, alsoAddIfMeshPointerZero))
+			else:
+				print('WARNING: mesh is not valid instance')
+				return IMeshSceneNode(0)
 		else:
-			print('WARNING: mesh is not valid instance')
-			return IMeshSceneNode(0)
+			print('WARNING: addOctTreeSceneNode deprecate, use addOctreeSceneNode instead')
+			return self.addOctreeSceneNode(mesh, parent, id, minimalPolysPerNode, alsoAddIfMeshPointerZero)
 	def addOctTreeSceneNode1(self, mesh, parent = ISceneNode(0), id=-1, minimalPolysPerNode=512, alsoAddIfMeshPointerZero=False):
 		if parent in (None, 0):
 			parent = ISceneNode(0)
-		return IMeshSceneNode(ISceneManager_addOctTreeSceneNode(self.c_pointer, mesh.c_pointer, parent.c_pointer, id, minimalPolysPerNode, alsoAddIfMeshPointerZero))
+		return IMeshSceneNode(ISceneManager_addOctTreeSceneNode1(self.c_pointer, mesh.c_pointer, parent.c_pointer, id, minimalPolysPerNode, alsoAddIfMeshPointerZero))
 	def addOctTreeSceneNode2(self, mesh, parent = ISceneNode(0), id=-1, minimalPolysPerNode=256, alsoAddIfMeshPointerZero=False):
 		if parent in (None, 0):
 			parent = ISceneNode(0)
@@ -12775,7 +12859,7 @@ class ISceneManager(IReferenceCounted):
 		if parent in (None, 0):
 			parent = ISceneNode(0)
 		if isinstance(mesh, IAnimatedMesh):
-			return IMeshSceneNode(ISceneManager_addOctreeSceneNode(self.c_pointer, mesh.c_pointer, parent.c_pointer, id, minimalPolysPerNode, alsoAddIfMeshPointerZero))
+			return IMeshSceneNode(ISceneManager_addOctreeSceneNode1(self.c_pointer, mesh.c_pointer, parent.c_pointer, id, minimalPolysPerNode, alsoAddIfMeshPointerZero))
 		elif isinstance(mesh, IMesh):
 			return IMeshSceneNode(ISceneManager_addOctreeSceneNode2(self.c_pointer, mesh.c_pointer, parent.c_pointer, id, minimalPolysPerNode, alsoAddIfMeshPointerZero))
 		else:
@@ -12788,7 +12872,10 @@ class ISceneManager(IReferenceCounted):
 	def addCameraSceneNodeMaya(self, parent = ISceneNode(0), rotateSpeed = -1500.0, zoomSpeed = 200.0, translationSpeed = 1500.0, id = -1, distance = 70.0, makeActive = True):
 		if parent in (None, 0):
 			parent = ISceneNode(0)
-		return ICameraSceneNode(ISceneManager_addCameraSceneNodeMaya(self.c_pointer, parent.c_pointer, rotateSpeed, zoomSpeed, translationSpeed, id, distance, makeActive))
+		if IRRLICHT_VERSION < 180:
+			return ICameraSceneNode(ISceneManager_addCameraSceneNodeMaya(self.c_pointer, parent.c_pointer, rotateSpeed, zoomSpeed, translationSpeed, id))
+		else:
+			return ICameraSceneNode(ISceneManager_addCameraSceneNodeMaya(self.c_pointer, parent.c_pointer, rotateSpeed, zoomSpeed, translationSpeed, id, distance, makeActive))
 	def addCameraSceneNodeFPS(self, parent = ISceneNode(0), rotateSpeed = 100.0, moveSpeed = 0.5, id = -1, keyMapArray = SKeyMap(), keyMapSize = 0, noVerticalMovement = False, jumpSpeed = 0.0, invertMouse = False):
 		if parent in (None, 0):
 			parent = ISceneNode(0)
@@ -12827,16 +12914,16 @@ class ISceneManager(IReferenceCounted):
 		return IDummyTransformationSceneNode(ISceneManager_addDummyTransformationSceneNode(self.c_pointer, parent.c_pointer, id))
 	def addTextSceneNode(self, font, text, color = SColor(100,255,255,255), parent = ISceneNode(0), position = vector3df(0,0,0), id=-1):
 		return ITextSceneNode(ISceneManager_addTextSceneNode(self.c_pointer, font.c_pointer, text, color.c_pointer, parent.c_pointer, position.c_pointer, id))
-	def addBillboardTextSceneNode(self, font, text, parent = ISceneNode(0), size = dimension2df(10.0, 10.0), position = vector3df(0,0,0), id = -1, colorTop = SColor(0xFFFF), colorBottom = SColor(0xFFFF)):
+	def addBillboardTextSceneNode(self, font, text, parent = ISceneNode(0), size = dimension2df(10.0, 10.0), position = vector3df(0,0,0), id = -1, colorTop = SColor(255, 255, 255, 255), colorBottom = SColor(255, 255, 255, 255)):
 		return IBillboardTextSceneNode(ISceneManager_addBillboardTextSceneNode(self.c_pointer, font.c_pointer, text, parent.c_pointer, size.c_pointer, position.c_pointer, id, colorTop.c_pointer, colorBottom.c_pointer))
 	def addHillPlaneMesh(self, name, tileSize = dimension2df(), tileCount = dimension2du(), material = SMaterial(0), hillHeight = 0.0, countHills = dimension2df(0.0, 0.0), textureRepeatCount = dimension2df(1.0, 1.0)):
 		return IAnimatedMesh(ISceneManager_addHillPlaneMesh(self.c_pointer, as_ansi(name), tileSize.c_pointer, tileCount.c_pointer, material.c_pointer, hillHeight, countHills.c_pointer, textureRepeatCount.c_pointer))
 	def addTerrainMesh(self, meshname, texture = IImage(0), heightmap = IImage(0), stretchSize = dimension2df(10.0,10.0), maxHeight = 200.0, defaultVertexBlockSize = dimension2du(64,64)):
 		return IAnimatedMesh(ISceneManager_addTerrainMesh(self.c_pointer, meshname, texture.c_pointer, heightmap.c_pointer, stretchSize.c_pointer, maxHeight, defaultVertexBlockSize.c_pointer))
-	def addArrowMesh(self, name, vtxColor0 = SColor(0xFFFF), vtxColor1 = SColor(0xFFFF), tesselationCylinder = 4, tesselationCone = 8, height = 1.0, cylinderHeight = 0.6, width0 = 0.05, width1 = 0.3):
+	def addArrowMesh(self, name, vtxColorCylinder = SColor(255, 255, 255, 255), vtxColorCone = SColor(255, 255, 255, 255), tesselationCylinder = 4, tesselationCone = 8, height = 1.0, cylinderHeight = 0.6, widthCylinder = 0.05, widthCone = 0.3):
 		if not isinstance(name, type_str):
 			name = as_ansi(name)
-		return IAnimatedMesh(ISceneManager_addArrowMesh(self.c_pointer, name, vtxColor0.c_pointer, vtxColor1.c_pointer, tesselationCylinder, tesselationCone, height, cylinderHeight, width0, width1))
+		return IAnimatedMesh(ISceneManager_addArrowMesh(self.c_pointer, name, vtxColorCylinder.c_pointer, vtxColorCone.c_pointer, tesselationCylinder, tesselationCone, height, cylinderHeight, widthCylinder, widthCone))
 	def addSphereMesh(self, name, radius=5.0, polyCountX = 16, polyCountY = 16):
 		return IAnimatedMesh(ISceneManager_addSphereMesh(self.c_pointer, name, radius=5.0, polyCountX = 16, polyCountY = 16))
 	def addVolumeLightMesh(self, name, SubdivideU = 32, SubdivideV = 32, FootColor = SColor(51, 0, 230, 180), TailColor = SColor(0, 0, 0, 0)):
@@ -12900,7 +12987,11 @@ class ISceneManager(IReferenceCounted):
 		return ITriangleSelector(ISceneManager_createTriangleSelectorFromBoundingBox(self.c_pointer, node.c_pointer))
 	def createOctTreeTriangleSelector(self, mesh, node, minimalPolysPerNode = 32):
 		'mesh as IMesh, node as ISceneNode'
-		return ITriangleSelector(ISceneManager_createOctTreeTriangleSelector(self.c_pointer, mesh.c_pointer, node.c_pointer, minimalPolysPerNode))
+		if IRRLICHT_VERSION < 180:
+			return ITriangleSelector(ISceneManager_createOctTreeTriangleSelector(self.c_pointer, mesh.c_pointer, node.c_pointer, minimalPolysPerNode))
+		else:
+			print('WARNING: createOctTreeTriangleSelector deprecate, use createOctreeTriangleSelector instead')
+			return self.createOctreeTriangleSelector(mesh, node, minimalPolysPerNode)
 	def createOctreeTriangleSelector(self, mesh, node = ISceneNode(0), minimalPolysPerNode = 32):
 		'mesh as IMesh, node as ISceneNode'
 		if node in (None, 0):
@@ -13440,10 +13531,9 @@ class IVideoModeList(IReferenceCounted):
 class IOSOperator(IReferenceCounted):
 	def __init__(self, *args, **kwargs):
 		self.c_pointer = args[0]
-	#~ def Destructor(self):
-		#~ IOSOperator_Destructor(self.c_pointer)
-	def getOperationSystemVersion(self):
-		return IOSOperator_getOperationSystemVersion(self.c_pointer)
+	if IRRLICHT_VERSION < 180:
+		def getOperationSystemVersion(self):
+			return IOSOperator_getOperationSystemVersion(self.c_pointer)
 	def copyToClipboard(self, text):
 		IOSOperator_copyToClipboard(self.c_pointer, text)
 	def getTextFromClipboard(self):
@@ -14318,6 +14408,8 @@ class svg_agg_image(object):
 			self.c_pointer = kwargs.pop('c_pointer', None)
 		else:
 			self.c_pointer = None
+	def get_size(self):
+		return dimension2du(pointer = svg_agg_image_get_size(self.c_pointer))
 	def scale(self, value = 1.0):
 		svg_agg_image_scale(self.c_pointer, value)
 	def render(self):
