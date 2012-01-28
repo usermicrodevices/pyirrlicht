@@ -2,8 +2,8 @@
 # http://vosolok2008.narod.ru
 # BSD license
 
-__version__ = pyirrlicht_version = '1.0.3'
-__versionTime__ = '2012-01-12'
+__version__ = pyirrlicht_version = '1.0.4'
+__versionTime__ = '2012-01-28'
 __author__ = 'Max Kolosov <maxkolosov@inbox.ru>'
 __doc__ = '''
 pyirrlicht.py - is ctypes python module for
@@ -11454,7 +11454,7 @@ class ISceneNodeAnimator(IAttributeExchangingObject, IEventReceiver):
 		self.c_pointer = args[0]
 	def animateNode(self, node, timeMs):
 		ISceneNodeAnimator_animateNode(self.c_pointer, node.c_pointer, timeMs)
-	def createClone(self, node, newManager=0):
+	def createClone(self, node, newManager = 0):
 		return ISceneNodeAnimator(ISceneNodeAnimator_createClone(self.c_pointer, node.c_pointer, newManager.c_pointer))
 	def isEventReceiverEnabled(self):
 		return ISceneNodeAnimator_isEventReceiverEnabled(self.c_pointer)
@@ -11627,16 +11627,16 @@ class ISceneNode(IAttributeExchangingObject):
 		return ISceneNode_isVisible(self.c_pointer)
 	def isTrulyVisible(self):
 		return ISceneNode_isTrulyVisible(self.c_pointer)
-	def setVisible(self, *args):
-		ISceneNode_setVisible(self.c_pointer, *args)
+	def setVisible(self, isVisible = True):
+		ISceneNode_setVisible(self.c_pointer, isVisible)
 	def getID(self):
 		return ISceneNode_getID(self.c_pointer)
-	def setID(self, *args):
-		ISceneNode_setID(self.c_pointer, *args)
-	def addChild(self, *args):
-		ISceneNode_addChild(self.c_pointer, *args)
-	def removeChild(self, *args):
-		return ISceneNode_removeChild(self.c_pointer, *args)
+	def setID(self, id_value = -1):
+		ISceneNode_setID(self.c_pointer, id_value)
+	def addChild(self, child):
+		ISceneNode_addChild(self.c_pointer, child.c_pointer)
+	def removeChild(self, child):
+		return ISceneNode_removeChild(self.c_pointer, child.c_pointer)
 	def removeAll(self):
 		ISceneNode_removeAll(self.c_pointer)
 	def remove(self):
@@ -11645,8 +11645,8 @@ class ISceneNode(IAttributeExchangingObject):
 		ISceneNode_addAnimator(self.c_pointer, node_animator.c_pointer)
 	def getAnimators(self):
 		return ISceneNodeAnimatorList(ISceneNode_getAnimators(self.c_pointer))
-	def removeAnimator(self, *args):
-		ISceneNode_removeAnimator(self.c_pointer, *args)
+	def removeAnimator(self, animator):
+		ISceneNode_removeAnimator(self.c_pointer, animator.c_pointer)
 	def removeAnimators(self):
 		ISceneNode_removeAnimators(self.c_pointer)
 	def getMaterial(self, num):
@@ -11659,8 +11659,8 @@ class ISceneNode(IAttributeExchangingObject):
 		ISceneNode_setMaterialFlag(self.c_pointer, flag, newvalue)
 	def setMaterialTexture(self, textureLayer, texture):
 		ISceneNode_setMaterialTexture(self.c_pointer, textureLayer, texture.c_pointer)
-	def setMaterialType(self, *args):
-		ISceneNode_setMaterialType(self.c_pointer, *args)
+	def setMaterialType(self, newType):
+		ISceneNode_setMaterialType(self.c_pointer, newType)
 	def getScale(self):
 		return vector3df(ISceneNode_getScale(self.c_pointer))
 	def setScale(self, scale):
@@ -11679,18 +11679,18 @@ class ISceneNode(IAttributeExchangingObject):
 		ISceneNode_setAutomaticCulling(self.c_pointer, state)
 	def getAutomaticCulling(self):
 		return ISceneNode_getAutomaticCulling(self.c_pointer)
-	def setDebugDataVisible(self, *args):
-		ISceneNode_setDebugDataVisible(self.c_pointer, *args)
+	def setDebugDataVisible(self, state):
+		ISceneNode_setDebugDataVisible(self.c_pointer, state)
 	def isDebugDataVisible(self):
 		return ISceneNode_isDebugDataVisible(self.c_pointer)
-	def setIsDebugObject(self, *args):
-		ISceneNode_setIsDebugObject(self.c_pointer, *args)
+	def setIsDebugObject(self, debugObject = True):
+		ISceneNode_setIsDebugObject(self.c_pointer, debugObject)
 	def isDebugObject(self):
 		return ISceneNode_isDebugObject(self.c_pointer)
 	def getChildren(self):
 		return ISceneNodeList(ISceneNode_getChildren(self.c_pointer))
-	def setParent(self, *args):
-		ISceneNode_setParent(self.c_pointer, *args)
+	def setParent(self, newParent):
+		ISceneNode_setParent(self.c_pointer, newParent.c_pointer)
 	def getTriangleSelector(self):
 		return ISceneNode_getTriangleSelector(self.c_pointer)
 	def setTriangleSelector(self, selector):
@@ -11698,15 +11698,19 @@ class ISceneNode(IAttributeExchangingObject):
 	def updateAbsolutePosition(self):
 		ISceneNode_updateAbsolutePosition(self.c_pointer)
 	def getParent(self):
-		return ISceneNode_getParent(self.c_pointer)
+		return ISceneNode(ISceneNode_getParent(self.c_pointer))
 	def getType(self):
 		return ISceneNode_getType(self.c_pointer)
-	def serializeAttributes(self, *args):
-		ISceneNode_serializeAttributes(self.c_pointer, *args)
-	def deserializeAttributes(self, *args):
-		ISceneNode_deserializeAttributes(self.c_pointer, *args)
-	def clone(self, *args):
-		return ISceneNode_clone(self.c_pointer, *args)
+	def serializeAttributes(self, out_IAttributes, options = 0):
+		ISceneNode_serializeAttributes(self.c_pointer, out_IAttributes.c_pointer, options)
+	def deserializeAttributes(self, in_IAttributes, options = 0):
+		ISceneNode_deserializeAttributes(self.c_pointer, in_IAttributes.c_pointer, options)
+	def clone(self, newParent = 0, newManager = 0):
+		if not isinstance(newParent, ISceneNode):
+			newParent = ISceneNode(0)
+		if not isinstance(newManager, ISceneManager):
+			newManager = ISceneManager(0)
+		return ISceneNode_clone(self.c_pointer, newParent.c_pointer, newManager.c_pointer)
 	def getSceneManager(self):
 		return ISceneManager(ISceneNode_getSceneManager(self.c_pointer))
 
