@@ -2,8 +2,8 @@
 # http://vosolok2008.narod.ru
 # BSD license
 
-__version__ = pyirrlicht_version = '1.0.4'
-__versionTime__ = '2012-01-28'
+__version__ = pyirrlicht_version = '1.0.5'
+__versionTime__ = '2012-01-31'
 __author__ = 'Max Kolosov <maxkolosov@inbox.ru>'
 __doc__ = '''
 pyirrlicht.py - is ctypes python module for
@@ -3754,8 +3754,9 @@ IVideoDriver_writeImageToFile1 = func_type(ctypes.c_byte, ctypes.c_void_p, ctype
 IVideoDriver_writeImageToFile2 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IVideoDriver_writeImageToFile2', c_module))
 IVideoDriver_createImageFromData = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte)(('IVideoDriver_createImageFromData', c_module))
 IVideoDriver_createImage1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IVideoDriver_createImage1', c_module))
-IVideoDriver_createImage2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IVideoDriver_createImage2', c_module))
-IVideoDriver_createImage3 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_createImage3', c_module))
+if IRRLICHT_VERSION < 180:
+	IVideoDriver_createImage2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IVideoDriver_createImage2', c_module))
+	IVideoDriver_createImage3 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_createImage3', c_module))
 IVideoDriver_createImage4 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_createImage4', c_module))
 IVideoDriver_OnResize = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_OnResize', c_module))
 IVideoDriver_addMaterialRenderer = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p)(('IVideoDriver_addMaterialRenderer', c_module))
@@ -7160,6 +7161,10 @@ class triangle3df(object):
 		return bool(self.c_pointer)
 	def __bool__(self):
 		return bool(self.c_pointer)
+	def __repr__(self):
+		return '%s(%s, %s, %s)' % (self.__class__.__name__, str(self.pointA), str(self.pointB), str(self.pointC))
+	def __str__(self):
+		return self.__repr__()
 	def __eq__(self, other):
 		return triangle3df_operator_eq(self.c_pointer, other.c_pointer)
 	def __ne__(self, other):
@@ -11483,21 +11488,21 @@ class ISceneNodeAnimatorCollisionResponse(ISceneNodeAnimator):
 	def setEllipsoidRadius(self, radius):
 		ISceneNodeAnimatorCollisionResponse_setEllipsoidRadius(self.c_pointer, radius.c_pointer)
 	def getEllipsoidRadius(self):
-		return vector3df(ISceneNodeAnimatorCollisionResponse_getEllipsoidRadius(self.c_pointer))
+		return vector3df(ISceneNodeAnimatorCollisionResponse_getEllipsoidRadius(self.c_pointer), True)
 	def setGravity(self, gravity):
 		ISceneNodeAnimatorCollisionResponse_setGravity(self.c_pointer, gravity.c_pointer)
 	def getGravity(self):
-		return vector3df(ISceneNodeAnimatorCollisionResponse_getGravity(self.c_pointer))
+		return vector3df(ISceneNodeAnimatorCollisionResponse_getGravity(self.c_pointer), True)
 	def jump(self, jumpSpeed):
 		ISceneNodeAnimatorCollisionResponse_jump(self.c_pointer, jumpSpeed)
-	def setAnimateTarget(self, enable):
+	def setAnimateTarget(self, enable = True):
 		ISceneNodeAnimatorCollisionResponse_setAnimateTarget(self.c_pointer, enable)
 	def getAnimateTarget(self):
 		return ISceneNodeAnimatorCollisionResponse_getAnimateTarget(self.c_pointer)
 	def setEllipsoidTranslation(self, translation):
 		ISceneNodeAnimatorCollisionResponse_setEllipsoidTranslation(self.c_pointer, translation.c_pointer)
 	def getEllipsoidTranslation(self):
-		return vector3df(ISceneNodeAnimatorCollisionResponse_getEllipsoidTranslation(self.c_pointer))
+		return vector3df(ISceneNodeAnimatorCollisionResponse_getEllipsoidTranslation(self.c_pointer), True)
 	def setWorld(self, newWorld):
 		ISceneNodeAnimatorCollisionResponse_setWorld(self.c_pointer, newWorld.c_pointer)
 	def getWorld(self):
@@ -12520,19 +12525,20 @@ class IVideoDriver(IReferenceCounted):
 		if isinstance(args[0], int):
 			if isinstance(args[1], dimension2du):# int, dimension2du
 				return self.createImage1(*args)
-			elif isinstance(args[1], IImage):# int, IImage
-				return self.createImage2(*args)
+			elif isinstance(args[1], IImage) and IRRLICHT_VERSION < 180:
+				return self.createImage2(*args)# int, IImage
 		else:
-			if isinstance(args[0], IImage):# IImage, position2di, dimension2du
-				return self.createImage3(*args)
-			elif isinstance(args[0], ITexture):# ITexture, position2di, dimension2du
+			if isinstance(args[0], ITexture):# ITexture, position2di, dimension2du
 				return self.createImage4(*args)
+			elif isinstance(args[0], IImage) and IRRLICHT_VERSION < 180:
+				return self.createImage3(*args)# IImage, position2di, dimension2du
 	def createImage1(self, format, size):
 		return IImage(IVideoDriver_createImage1(self.c_pointer, format, size.c_pointer))
-	def createImage2(self, format, imageToCopy):
-		return IImage(IVideoDriver_createImage2(self.c_pointer, format, imageToCopy.c_pointer))
-	def createImage3(self, imageToCopy, pos, size):
-		return IImage(IVideoDriver_createImage3(self.c_pointer, imageToCopy.c_pointer, pos.c_pointer, size.c_pointer))
+	if IRRLICHT_VERSION < 180:
+		def createImage2(self, format, imageToCopy):
+			return IImage(IVideoDriver_createImage2(self.c_pointer, format, imageToCopy.c_pointer))
+		def createImage3(self, imageToCopy, pos, size):
+			return IImage(IVideoDriver_createImage3(self.c_pointer, imageToCopy.c_pointer, pos.c_pointer, size.c_pointer))
 	def createImage4(self, texture, pos, size):
 		return IImage(IVideoDriver_createImage4(self.c_pointer, texture.c_pointer, pos.c_pointer, size.c_pointer))
 	def OnResize(self, size):

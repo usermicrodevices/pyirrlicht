@@ -136,12 +136,13 @@ class Maze(object):
 
 			material.EmissiveColor = SColor(255, 0, 0, 255)
 
+			material.setTexture(0, generate_texture(video_driver, image_size = dimension2du(128, 128)))
 			i_plane_mesh_bottom = i_geometry_creator.createPlaneMesh(dimension2df(50, 50), dimension2du(10, 10), material, dimension2df(10, 10))
 			i_plane_mesh_scene_node_bottom = scene_manager.addOctreeSceneNode(i_plane_mesh_bottom)
 			i_plane_mesh_scene_node_bottom.setPosition(vector3df(10,-1,5))
 			selector_bottom = scene_manager.createOctreeTriangleSelector(i_plane_mesh_bottom)
 			#~ i_plane_mesh_bottom.drop()
-			i_plane_mesh_scene_node_bottom.setDebugDataVisible(E_DEBUG_SCENE_TYPE+(i_plane_mesh_scene_node_bottom.isDebugDataVisible()^EDS_BBOX_BUFFERS))
+			#~ i_plane_mesh_scene_node_bottom.setDebugDataVisible(E_DEBUG_SCENE_TYPE+(i_plane_mesh_scene_node_bottom.isDebugDataVisible()^EDS_BBOX_BUFFERS))
 
 			material.EmissiveColor = SColor(255, 0, 100, 100)
 
@@ -158,8 +159,10 @@ class Maze(object):
 					material = box_scene_node.getMaterial(0)
 					material.EmissiveColor = SColor(255, 0, 0, 255)
 					#~ material.BackfaceCulling = False
+				material.setTexture(0, generate_texture(video_driver, image_size = dimension2du(8, 8)))
 				box_scene_node.setMaterial(material)
-				i_meta_triangle_selector.addTriangleSelector(scene_manager.createTriangleSelectorFromBoundingBox(box_scene_node))
+				#~ i_meta_triangle_selector.addTriangleSelector(scene_manager.createTriangleSelectorFromBoundingBox(box_scene_node))
+				i_meta_triangle_selector.addTriangleSelector(scene_manager.createOctreeTriangleSelector(box_scene_node.getMesh(), box_scene_node))
 
 			sphere_scene_node1 = scene_manager.addSphereSceneNode(0.25, position = vector3df(*self.start_cell))
 			material1 = sphere_scene_node1.getMaterial(0)
@@ -187,7 +190,7 @@ class Maze(object):
 			keyMap.set(8, EKA_JUMP_UP, KEY_KEY_J)
 			keyMap.set(9, EKA_CROUCH, KEY_KEY_C)
 
-			camera = scene_manager.addCameraSceneNodeFPS(moveSpeed = 0.01, jumpSpeed = 1, keyMapArray = keyMap, keyMapSize = keyMap.length)
+			camera = scene_manager.addCameraSceneNodeFPS(moveSpeed = 0.005, jumpSpeed = 0.5, keyMapArray = keyMap, keyMapSize = keyMap.length)
 			#~ camera.setPosition(vector3df(self.size[0] / 2, self.size[1] / 2, self.size[1] / 2))
 			camera.setPosition(vector3df(-10, 2, -10))
 			camera.setNearValue(0.001)
@@ -202,7 +205,7 @@ class Maze(object):
 			i_meta_triangle_selector.addTriangleSelector(sphere_selector2)
 			#~ i_meta_triangle_selector.addTriangleSelector(scene_manager.createTriangleSelectorFromBoundingBox(sphere_scene_node2))
 
-			anim = scene_manager.createCollisionResponseAnimator(i_meta_triangle_selector, camera, vector3df(0.1, 0.2, 0.1))
+			anim = scene_manager.createCollisionResponseAnimator(i_meta_triangle_selector, camera, vector3df(0.1, 0.2, 0.1), vector3df(0.0, -1.0, 0.0))
 			camera.addAnimator(anim)
 			anim.drop()
 

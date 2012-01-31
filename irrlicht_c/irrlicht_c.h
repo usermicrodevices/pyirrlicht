@@ -403,15 +403,34 @@ IRRLICHT_C_API const wchar_t* tool_char_to_wchar(const char* src_buf)
 #ifdef _COMPILE_WITH_STREAM_FUNCTIONS_
 
 IRRLICHT_C_API FILE* tool_get_stdin(){return stdin;}
-
 IRRLICHT_C_API FILE* tool_get_stdout(){return stdout;}
+IRRLICHT_C_API FILE* tool_get_stderr(){return stderr;}
 
 IRRLICHT_C_API FILE* tool_redirect_stdout_to_file(const char* file_name, const char* mode = "w")
 {
+	FILE *result_stream = 0;
 	if (!strlen(mode))
 		mode = "w";
-	return freopen(file_name, mode, stdout);
+	if( freopen_s(&result_stream, file_name, mode, stdout) != 0 )
+		fprintf( stdout, "ERROR: tool_redirect_stdout_to_file\n" );
+	return result_stream;
 }
+
+IRRLICHT_C_API FILE* tool_redirect_stderr_to_file(const char* file_name, const char* mode = "w")
+{
+	FILE *result_stream = 0;
+	if (!strlen(mode))
+		mode = "w";
+	if( freopen_s(&result_stream, file_name, mode, stderr) != 0 )
+		fprintf( stdout, "ERROR: tool_redirect_stderr_to_file\n" );
+	return result_stream;
+}
+
+//IRRLICHT_C_API void tool_redirect_stderr_to_stdout()
+//{
+//	fclose(stderr);
+//	dup(fileno(stdout));
+//}
 
 IRRLICHT_C_API int tool_close_stream(FILE* stream)
 {
