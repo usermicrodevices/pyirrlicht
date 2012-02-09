@@ -12413,7 +12413,7 @@ class IVideoDriver(IReferenceCounted):
 			if isinstance(color, SColor):
 				IVideoDriver_draw2DImage2(self.c_pointer, texture.c_pointer, destPos.c_pointer, sourceRect.c_pointer, clipRect.c_pointer, color.c_pointer, useAlphaChannelOfTexture)
 			else:
-				IVideoDriver_draw2DImage3(self.c_pointer, texture.c_pointer, destRec.c_pointer, sourceRect.c_pointer, clipRect.c_pointer, color, useAlphaChannelOfTexture)
+				IVideoDriver_draw2DImage3(self.c_pointer, texture.c_pointer, destPos.c_pointer, sourceRect.c_pointer, clipRect.c_pointer, color, useAlphaChannelOfTexture)
 	def draw2DImage1(self, texture, destPos):
 		IVideoDriver_draw2DImage1(self.c_pointer, texture.c_pointer, destPos.c_pointer)
 	def draw2DImage2(self, texture, destPos, sourceRect, clipRect = recti(0), color=SColor(255,255,255,255), useAlphaChannelOfTexture=False):
