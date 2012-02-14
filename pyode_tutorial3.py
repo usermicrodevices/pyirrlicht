@@ -198,7 +198,7 @@ def _idlefunc():
 		if counter == 500:
 			counter = 20
 	# Simulate
-	n = 2
+	n = 4
 	for i in range(n):
 		# Detect collisions and create contact joints
 		space.collide((world,contactgroup), near_callback)
