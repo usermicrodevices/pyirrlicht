@@ -91,6 +91,8 @@ public:
 									_height_ = (double)xml_reader->getAttributeValueAsFloat(L"height");
 							}
 							list_attr.clear();
+							_path_renderer_.push_attr();
+							//_path_renderer_.even_odd(fill_even_odd);//filling_rule_e fill_non_zero
 						}
 						//else if (_wcsnicmp(node_name, L"linearGradient", 14) == 0)
 						//{
@@ -242,7 +244,9 @@ public:
 				case io::EXN_ELEMENT_END:
 					{
 					const wchar_t* node_name = xml_reader->getNodeName();
-					if (wcslen(node_name) == 1)
+					if (_wcsnicmp(node_name, L"svg", 3) == 0)
+						_path_renderer_.pop_attr();
+					else if (wcslen(node_name) == 1)
 					{
 						if (node_name[0] == L'g')
 							_path_renderer_.pop_attr();
@@ -501,6 +505,7 @@ public:
 	{
 		if (!d)
 			return;
+		wchar_t prev_cmd = L'0';
 		array<stringw> cmds, arg;
 		stringw(d).trim().split(cmds, L"MmZzLlHhVvCcSsQqTtAaFfPp", 24, true, true);
 		u32 count = cmds.size();
@@ -513,6 +518,13 @@ public:
 					cmds[i].trim("Mm ").split(arg, L"-, ", 3, true, true);
 					if (arg.size() > 1)
 					{
+						if (prev_cmd == L'Z' || prev_cmd == L'z')
+						{
+							//_path_renderer_.end_path();
+							_path_renderer_.begin_sub_path();
+							//_path_renderer_.even_odd(fill_non_zero);//filling_rule_e fill_even_odd
+							//printf("=== prev cmd was Zz\n");
+						}
 						_path_renderer_.move_to(_wtof(arg[0].trim(", ").c_str()), _wtof(arg[1].trim(", ").c_str()), cmd == L'm');
 						for (u32 a = 1; a < arg.size()/2; a++)
 							_path_renderer_.line_to(_wtof(arg[a*2].trim(", ").c_str()), _wtof(arg[a*2+1].trim(", ").c_str()), cmd == L'm');
@@ -584,8 +596,12 @@ public:
 					wprintf(L"parse_path: Invalid Command %c\n", cmd);
 				}
 			}
+			prev_cmd = cmd;
+			if (!arg.empty())
+				arg.clear();
 		}
-		cmds.clear();
+		if (!cmds.empty())
+			cmds.clear();
 	}
 	void scale(double scale_value = 1.0)
 	{

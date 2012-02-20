@@ -23,6 +23,7 @@ struct container_fill
 {
 	bool f;
 	double r, g, b, a;
+	cairo_fill_rule_t rule;
 };
 
 struct container_stroke
@@ -56,7 +57,7 @@ public:
 	svg_cairo_image(IVideoDriver* video_driver, IFileSystem* fs, const irr::io::path& file_name = "tiger.svg", bool content_unicode = true, double alpha_value = 0.0, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, cairo_antialias_t antialias_type = CAIRO_ANTIALIAS_DEFAULT, double scale_x = 1.0, double scale_y = 1.0)
 	{
 		_video_driver_ = video_driver;
-		parse(fs, file_name, content_unicode, alpha_value, color_format, stride);
+		parse(fs, file_name, content_unicode, alpha_value, color_format, antialias_type, scale_x, scale_y);
 	}
 	void parse(IFileSystem* fs, const irr::io::path& file_name = "tiger.svg", bool content_unicode = true, double alpha_value = 0.0, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, cairo_antialias_t antialias_type = CAIRO_ANTIALIAS_DEFAULT, double scale_x = 1.0, double scale_y = 1.0)
 	{
@@ -67,8 +68,8 @@ public:
 		_color_format_ = color_format;
 		_use_alpha_ = use_alpha();
 		_current_pattern_ = cairo_pattern_create_rgba(0, 0, 0, _alpha_value_);
-		_cf_.r = _cf_.g = _cf_.b = _cf_.a = 0.0; _cf_.f = false;
-		_cs_.r = _cs_.g = _cs_.b = _cs_.a = 0.0; _cs_.f = false; _cs_.width = 0.1;
+		_cf_.r = _cf_.g = _cf_.b = _cf_.a = 0.0; _cf_.f = false, _cf_.rule = CAIRO_FILL_RULE_WINDING;
+		_cs_.r = _cs_.g = _cs_.b = _cs_.a = 0.0; _cs_.f = false; _cs_.width = 1.0;
 		IXMLReader* xml_reader;
 		if (content_unicode)
 			xml_reader = fs->createXMLReader(_file_name_);
@@ -194,9 +195,9 @@ public:
 								cairo_save(_cr_);
 								//cairo_push_group() calls cairo_save()
 								//cairo_push_group(_cr_);
-								parse_transform(xml_reader->getAttributeValue(L"transform"));
-								//if (xml_reader->getAttributeValue(L"transform"))
-								//	g_transform = stringw(xml_reader->getAttributeValue(L"transform"));
+								//parse_transform(xml_reader->getAttributeValue(L"transform"));
+								if (xml_reader->getAttributeValue(L"transform"))
+									g_transform = stringw(xml_reader->getAttributeValue(L"transform"));
 								//parse_style(xml_reader->getAttributeValue(L"style"));
 								g_style = stringw(xml_reader->getAttributeValue(L"style"));
 								//parse_attributes(xml_reader);
@@ -527,32 +528,28 @@ public:
 	}
 	void parse_fill(core::stringw value)
 	{
+		_cf_.f = true;
 		if (value.equalsn(L"none", 4))
 			_cf_.f = false;
 		else if (value.equalsn(L"#", 1))
-		{
 			parse_color(value, _cf_.r, _cf_.g, _cf_.b);
-			_cf_.f = true;
-		}
 		else if (value.equalsn(L"url", 3))
 		{//must be replaced with valid code
 			_cf_.r = 0.5;
 			_cf_.g = 0.5;
 			_cf_.b = 0.5;
-			_cf_.f = true;
 		}
 		else
-		{
 			parse_color_name(value.c_str(), _cf_.r, _cf_.g, _cf_.b, _cf_.a);
-			_cf_.f = true;
-		}
 	}
 	void parse_fill_rule(const wchar_t* value)
 	{
 		if (_wcsnicmp(value, L"evenodd", 7) == 0)
-			cairo_set_fill_rule(_cr_, CAIRO_FILL_RULE_EVEN_ODD);
+			_cf_.rule = CAIRO_FILL_RULE_EVEN_ODD;
+			//cairo_set_fill_rule(_cr_, CAIRO_FILL_RULE_EVEN_ODD);
 		else// if (_wcsnicmp(value, L"winding", 7) == 0)
-			cairo_set_fill_rule(_cr_, CAIRO_FILL_RULE_WINDING);
+			_cf_.rule = CAIRO_FILL_RULE_WINDING;
+			//cairo_set_fill_rule(_cr_, CAIRO_FILL_RULE_WINDING);
 	}
 	void parse_stroke(core::stringw value)
 	{
@@ -616,11 +613,12 @@ public:
 	}
 	void parse_style(const wchar_t* value)
 	{
-		bool has_stroke = false;
+		//wprintf(L"--- style = %s\n", value);
 		core::array<core::stringw> list_attr;
 		core::stringw v(value);
-		if (v.find(L"stroke:") != -1 && v.find(L"stroke:none") == -1)
-			has_stroke = true;
+		//_cs_.f = false;
+		//if (v.find(L"stroke:") != -1 && v.find(L"stroke:none") == -1)
+			//_cs_.f = true;
 		if (v.trim().split(list_attr, L";"))
 		{
 			for (int i = 0; i < list_attr.size(); i++)
@@ -688,10 +686,7 @@ public:
 	}
 	void css_parse_style(core::stringw value, container_style& css_style)
 	{
-		bool has_stroke = false;
 		core::array<core::stringw> list_attr;
-		if (value.find(L"stroke:") != -1 && value.find(L"stroke:none") == -1)
-			has_stroke = true;
 		if (value.trim().split(list_attr, L";"))
 		{
 			for (int i = 0; i < list_attr.size(); i++)
@@ -916,6 +911,11 @@ public:
 					cmds[i].trim("Mm ").split(arg, L"-, ", 3, true, true);
 					if (arg.size() > 1)
 					{
+						//if (prev_cmd == L'Z' || prev_cmd == L'z')
+						//{
+						//	paint();
+						//	cairo_new_sub_path(_cr_);
+						//}
 						if (cmd == L'm')
 							cairo_rel_move_to(_cr_, _wtof(arg[0].trim(", ").c_str()), _wtof(arg[1].trim(", ").c_str()));
 						else
@@ -1144,7 +1144,7 @@ public:
 		//cairo_save(_cr_);
 		if (_cf_.f)
 		{
-			//printf("===fill %g, %g, %g, %g\n", _cf_.r, _cf_.g, _cf_.b, _cf_.a);
+			//printf("===fill (%g, %g, %g, %g)\n", _cf_.r, _cf_.g, _cf_.b, _cf_.a);
 			if (_cf_.a)
 			{
 				cairo_set_source_rgba(_cr_, _cf_.r, _cf_.g, _cf_.b, _cf_.a);
@@ -1152,6 +1152,7 @@ public:
 			}
 			else
 				cairo_set_source_rgb(_cr_, _cf_.r, _cf_.g, _cf_.b);
+			cairo_set_fill_rule(_cr_, _cf_.rule);
 			if (_cs_.f)
 				cairo_fill_preserve(_cr_);
 			else
@@ -1159,7 +1160,7 @@ public:
 		}
 		if (_cs_.f)
 		{
-			//printf("===stroke %g, %g, %g, %g\n", _cs_.r, _cs_.g, _cs_.b, _cs_.a);
+			//printf("===stroke (%g, %g, %g, %g) width %g\n", _cs_.r, _cs_.g, _cs_.b, _cs_.a, _cs_.width);
 			if (_cs_.a)
 			{
 				cairo_set_source_rgba(_cr_, _cs_.r, _cs_.g, _cs_.b, _cs_.a);
@@ -1168,6 +1169,7 @@ public:
 			else
 				cairo_set_source_rgb(_cr_, _cs_.r, _cs_.g, _cs_.b);
 			cairo_set_line_width(_cr_, _cs_.width);
+			//_cs_.width = 1.0;
 			if (_cs_.miterlimit)
 				cairo_set_miter_limit(_cr_, _cs_.miterlimit);
 			if (_cs_.set_linecap)
@@ -1268,8 +1270,8 @@ extern "C" {
 
 IRRLICHT_C_API svg_cairo_image* svg_cairo_image_ctor1(IVideoDriver* video_driver, IFileSystem* fs, const fschar_t* file_name = "tiger.svg", bool content_unicode = true, double alpha_value = 0.0, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, cairo_antialias_t antialias_type = CAIRO_ANTIALIAS_DEFAULT, double scale_x = 1.0, double scale_y = 1.0)
 {return new svg_cairo_image(video_driver, fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, antialias_type, scale_x, scale_y);}
-IRRLICHT_C_API void svg_cairo_image_parse(svg_cairo_image* pointer, IFileSystem* fs, const fschar_t* file_name = "tiger.svg", bool content_unicode = true, u32 alpha_value = 128, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, int stride = 4)
-{pointer->parse(fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, stride);}
+IRRLICHT_C_API void svg_cairo_image_parse(svg_cairo_image* pointer, IFileSystem* fs, const fschar_t* file_name = "tiger.svg", bool content_unicode = true, double alpha_value = 0.0, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, cairo_antialias_t antialias_type = CAIRO_ANTIALIAS_DEFAULT, double scale_x = 1.0, double scale_y = 1.0)
+{pointer->parse(fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, antialias_type, scale_x, scale_y);}
 IRRLICHT_C_API void svg_cairo_image_scale(svg_cairo_image* pointer, double scale_x = 1.0, double scale_y = 1.0)
 {pointer->scale(scale_x, scale_y);}
 IRRLICHT_C_API IImage* svg_cairo_image_get_image(svg_cairo_image* pointer)

@@ -2,8 +2,8 @@
 # http://vosolok2008.narod.ru
 # BSD license
 
-__version__ = pyirrlicht_version = '1.0.5'
-__versionTime__ = '2012-01-31'
+__version__ = pyirrlicht_version = '1.0.6'
+__versionTime__ = '2012-02-20'
 __author__ = 'Max Kolosov <maxkolosov@inbox.ru>'
 __doc__ = '''
 pyirrlicht.py - is ctypes python module for
@@ -1299,11 +1299,20 @@ tool_getAsFloat = func_type(ctypes.c_float, ctypes.c_char_p, ctypes.c_void_p)(('
 #~ tool_getTextures = func_type(ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('tool_getTextures', c_module))
 tool_getTextures = func_type(None, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('tool_getTextures', c_module))
 
-tool_get_stdin = func_type(ctypes.c_void_p)(('tool_get_stdin', c_module))
-tool_get_stdout = func_type(ctypes.c_void_p)(('tool_get_stdout', c_module))
-tool_redirect_stdout_to_file = func_type(ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p)(('tool_redirect_stdout_to_file', c_module))
-tool_close_stream = func_type(ctypes.c_int, ctypes.c_void_p)(('tool_close_stream', c_module))
-tool_close_streams = func_type(ctypes.c_int)(('tool_close_streams', c_module))
+# tool_char_to_wchar mainly used with Blitz3D wrapper
+BUILD_WITH_CHAR_CONVERSION_FUNCTIONS = ctypes.c_int.in_dll(c_module, 'BUILD_WITH_CHAR_CONVERSION_FUNCTIONS').value
+if BUILD_WITH_CHAR_CONVERSION_FUNCTIONS:
+	tool_char_to_wchar = func_type(ctypes.c_wchar_p, ctypes.c_char_p)(('tool_char_to_wchar', c_module))
+
+# stream functions
+BUILD_WITH_STREAM_FUNCTIONS = ctypes.c_int.in_dll(c_module, 'BUILD_WITH_STREAM_FUNCTIONS').value
+if BUILD_WITH_STREAM_FUNCTIONS:
+	tool_get_stdin = func_type(ctypes.c_void_p)(('tool_get_stdin', c_module))
+	tool_get_stdout = func_type(ctypes.c_void_p)(('tool_get_stdout', c_module))
+	tool_redirect_stdout_to_file = func_type(ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p)(('tool_redirect_stdout_to_file', c_module))
+	tool_redirect_stderr_to_file = func_type(ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p)(('tool_redirect_stderr_to_file', c_module))
+	tool_close_stream = func_type(ctypes.c_int, ctypes.c_void_p)(('tool_close_stream', c_module))
+	tool_close_streams = func_type(ctypes.c_int)(('tool_close_streams', c_module))
 
 # agg functions
 BUILD_WITH_AGG = ctypes.c_int.in_dll(c_module, 'BUILD_WITH_AGG').value
@@ -1328,6 +1337,7 @@ if BUILD_WITH_AGG:
 BUILD_WITH_IRR_SVG_AGG = ctypes.c_int.in_dll(c_module, 'BUILD_WITH_IRR_SVG_AGG').value
 if BUILD_WITH_IRR_SVG_AGG:
 	svg_agg_image_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_byte, ctypes.c_uint, ctypes.c_int, ctypes.c_int)(('svg_agg_image_ctor1', c_module))
+	svg_agg_image_parse = func_type(None, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_byte, ctypes.c_uint, ctypes.c_int, ctypes.c_int)(('svg_agg_image_parse', c_module))
 	svg_agg_image_get_size = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_get_size', c_module))
 	svg_agg_image_scale = func_type(None, ctypes.c_void_p, ctypes.c_double)(('svg_agg_image_scale', c_module))
 	svg_agg_image_render = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_render', c_module))
@@ -1346,6 +1356,7 @@ if BUILD_WITH_IRR_SVG_CAIRO:
 	cairo_version_string = func_type(ctypes.c_char_p)(('tool_cairo_version_string', c_module))
 
 	svg_cairo_image_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_byte, ctypes.c_double, ctypes.c_int, ctypes.c_int, ctypes.c_double, ctypes.c_double)(('svg_cairo_image_ctor1', c_module))
+	svg_cairo_image_parse = func_type(None, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_byte, ctypes.c_double, ctypes.c_int, ctypes.c_int, ctypes.c_double, ctypes.c_double)(('svg_cairo_image_parse', c_module))
 	svg_cairo_image_scale = func_type(None, ctypes.c_void_p, ctypes.c_double, ctypes.c_double)(('svg_cairo_image_scale', c_module))
 	svg_cairo_image_get_image = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_cairo_image_get_image', c_module))
 	svg_cairo_image_get_texture = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_cairo_image_get_texture', c_module))
@@ -14376,92 +14387,99 @@ class MainLoop:
 	def stop(self):
 		MainLoop_stop(self.c_pointer)
 
-class svg_viewer(object):
-	def __init__(self, *args, **kwargs):
-		self.c_pointer = svg_viewer_ctor()
-	def set_video_driver(self, drv):
-		svg_viewer_set_video_driver(self.c_pointer, drv.c_pointer)
-	def scale(self, scale_value = 1.0):
-		svg_viewer_scale(self.c_pointer, scale_value)
-	def get_texture(self):
-		c_pointer = svg_viewer_get_texture(self.c_pointer)
-		if c_pointer:
-			return ITexture(c_pointer)
-		else:
-			return False
+if BUILD_WITH_AGG:
+	class svg_viewer(object):
+		def __init__(self, *args, **kwargs):
+			self.c_pointer = svg_viewer_ctor()
+		def set_video_driver(self, drv):
+			svg_viewer_set_video_driver(self.c_pointer, drv.c_pointer)
+		def scale(self, scale_value = 1.0):
+			svg_viewer_scale(self.c_pointer, scale_value)
+		def get_texture(self):
+			c_pointer = svg_viewer_get_texture(self.c_pointer)
+			if c_pointer:
+				return ITexture(c_pointer)
+			else:
+				return False
 
-class agg_svg_loader(IImageLoader):
-	def __init__(self, *args, **kwargs):
-		if hasattr(args[0], 'c_pointer'):
-			self.c_pointer = agg_svg_loader_ctor(args[0].c_pointer)
-		else:
-			self.c_pointer = agg_svg_loader_ctor(args[0])
+	class agg_svg_loader(IImageLoader):
+		def __init__(self, *args, **kwargs):
+			if hasattr(args[0], 'c_pointer'):
+				self.c_pointer = agg_svg_loader_ctor(args[0].c_pointer)
+			else:
+				self.c_pointer = agg_svg_loader_ctor(args[0])
 
-class svg_agg_image(object):
-	def __init__(self, *args, **kwargs):
-		'IVideoDriver* video_driver, IFileSystem* fs, const irr::io::path& file_name = "tiger.svg", bool content_unicode = true'
-		if len(args) > 1 and hasattr(args[0], 'c_pointer'):
-			content_unicode = True
-			if len(args) > 3:
-				content_unicode = args[3]
-			alpha_value = 128
-			if len(args) > 4:
-				alpha_value = args[4]
-			image_format = ECF_A8R8G8B8
-			if len(args) > 5:
-				image_format = args[5]
-			stride = 4
-			if len(args) > 6:
-				stride = args[6]
-			self.c_pointer = svg_agg_image_ctor1(args[0].c_pointer, args[1].c_pointer, args[2], content_unicode, alpha_value, image_format, stride)
-		elif 'c_pointer' in kwargs:
-			self.c_pointer = kwargs.pop('c_pointer', None)
-		else:
-			self.c_pointer = None
-	def get_size(self):
-		return dimension2du(pointer = svg_agg_image_get_size(self.c_pointer))
-	def scale(self, value = 1.0):
-		svg_agg_image_scale(self.c_pointer, value)
-	def render(self):
-		return IImage(svg_agg_image_scale(self.c_pointer))
-	def get_texture(self):
-		return ITexture(svg_agg_image_get_texture(self.c_pointer))
-	#~ def drop(self):
-		#~ return svg_agg_image_drop(self.c_pointer)
+if BUILD_WITH_IRR_SVG_AGG:
+	class svg_agg_image(object):
+		def __init__(self, *args, **kwargs):
+			'IVideoDriver* video_driver, IFileSystem* fs, const irr::io::path& file_name = "tiger.svg", bool content_unicode = true, u32 alpha_value = 128, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, int stride = 4'
+			if len(args) > 1 and hasattr(args[0], 'c_pointer'):
+				content_unicode = True
+				if len(args) > 3:
+					content_unicode = args[3]
+				alpha_value = 128
+				if len(args) > 4:
+					alpha_value = args[4]
+				color_format = ECF_A8R8G8B8
+				if len(args) > 5:
+					color_format = args[5]
+				stride = 4
+				if len(args) > 6:
+					stride = args[6]
+				self.c_pointer = svg_agg_image_ctor1(args[0].c_pointer, args[1].c_pointer, args[2], content_unicode, alpha_value, color_format, stride)
+			elif 'c_pointer' in kwargs:
+				self.c_pointer = kwargs.pop('c_pointer', None)
+			else:
+				self.c_pointer = None
+		def parse(self, fs, file_name = 'file.svg', content_unicode = True, alpha_value = 0, color_format = ECF_A8R8G8B8, stride = 4):
+			svg_cairo_image_parse(self.c_pointer, fs.c_pointer, file_name, content_unicode, alpha_value, color_format, stride)
+		def get_size(self):
+			return dimension2du(pointer = svg_agg_image_get_size(self.c_pointer))
+		def scale(self, value = 1.0):
+			svg_agg_image_scale(self.c_pointer, value)
+		def render(self):
+			return IImage(svg_agg_image_scale(self.c_pointer))
+		def get_texture(self):
+			return ITexture(svg_agg_image_get_texture(self.c_pointer))
+		#~ def drop(self):
+			#~ return svg_agg_image_drop(self.c_pointer)
 
-class svg_cairo_image(object):
-	def __init__(self, *args, **kwargs):
-		'IVideoDriver* video_driver, IFileSystem* fs, const irr::io::path& file_name = "tiger.svg", bool content_unicode = true'
-		if len(args) > 1 and hasattr(args[0], 'c_pointer'):
-			content_unicode = True
-			if len(args) > 3:
-				content_unicode = args[3]
-			alpha_value = 0.0
-			if len(args) > 4:
-				alpha_value = args[4]
-			image_format = ECF_A8R8G8B8
-			if len(args) > 5:
-				image_format = args[5]
-			antialias_type = CAIRO_ANTIALIAS_DEFAULT
-			if len(args) > 6:
-				antialias_type = args[6]
-			scale_x = 1.0
-			if len(args) > 7:
-				scale_x = args[7]
-			scale_y = 1.0
-			if len(args) > 8:
-				scale_y = args[8]
-			self.c_pointer = svg_cairo_image_ctor1(args[0].c_pointer, args[1].c_pointer, args[2], content_unicode, alpha_value, image_format, antialias_type, scale_x, scale_y)
-		elif 'c_pointer' in kwargs:
-			self.c_pointer = kwargs.pop('c_pointer', None)
-		else:
-			self.c_pointer = None
-	def scale(self, x = 1.0, y = 1.0):
-		svg_cairo_image_scale(self.c_pointer, x, y)
-	def get_image(self):
-		return IImage(svg_cairo_image_get_image(self.c_pointer))
-	def get_texture(self):
-		return ITexture(svg_cairo_image_get_texture(self.c_pointer))
+if BUILD_WITH_IRR_SVG_CAIRO:
+	class svg_cairo_image(object):
+		def __init__(self, *args, **kwargs):
+			'IVideoDriver* video_driver, IFileSystem* fs, const irr::io::path& file_name = "tiger.svg", bool content_unicode = true'
+			if len(args) > 1 and hasattr(args[0], 'c_pointer'):
+				content_unicode = True
+				if len(args) > 3:
+					content_unicode = args[3]
+				alpha_value = 0.0
+				if len(args) > 4:
+					alpha_value = args[4]
+				image_format = ECF_A8R8G8B8
+				if len(args) > 5:
+					image_format = args[5]
+				antialias_type = CAIRO_ANTIALIAS_DEFAULT
+				if len(args) > 6:
+					antialias_type = args[6]
+				scale_x = 1.0
+				if len(args) > 7:
+					scale_x = args[7]
+				scale_y = 1.0
+				if len(args) > 8:
+					scale_y = args[8]
+				self.c_pointer = svg_cairo_image_ctor1(args[0].c_pointer, args[1].c_pointer, args[2], content_unicode, alpha_value, image_format, antialias_type, scale_x, scale_y)
+			elif 'c_pointer' in kwargs:
+				self.c_pointer = kwargs.pop('c_pointer', None)
+			else:
+				self.c_pointer = None
+		def parse(self, fs, file_name = 'file.svg', content_unicode = True, alpha_value = 0.0, color_format = ECF_A8R8G8B8, antialias_type = CAIRO_ANTIALIAS_DEFAULT, scale_x = 1.0, scale_y = 1.0):
+			svg_cairo_image_parse(self.c_pointer, fs.c_pointer, file_name, content_unicode, alpha_value, color_format, antialias_type, scale_x, scale_y)
+		def scale(self, x = 1.0, y = 1.0):
+			svg_cairo_image_scale(self.c_pointer, x, y)
+		def get_image(self):
+			return IImage(svg_cairo_image_get_image(self.c_pointer))
+		def get_texture(self):
+			return ITexture(svg_cairo_image_get_texture(self.c_pointer))
 
 def createDevice(deviceType = EDT_SOFTWARE, windowSize = dimension2du(640,480), bits = 16, fullscreen = False, stencilbuffer = False, vsync = False, receiver = IEventReceiver(0)):
 	return IrrlichtDevice(deviceType, windowSize, bits, fullscreen, stencilbuffer, vsync, receiver)
