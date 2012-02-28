@@ -46,4 +46,10 @@
 
 @%1 3d_maze.py
 
+@%1 VehicleSceneNode.py
+
+@%1 cellular.py
+
+@%1 ChessGUI_Irrlicht_Table.py
+
 @PAUSE

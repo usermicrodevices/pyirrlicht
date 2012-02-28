@@ -19,11 +19,21 @@ IRRLICHT_C_API bool SOverrideMaterial_get_Enabled(SOverrideMaterial* pointer){re
 IRRLICHT_C_API void SOverrideMaterial_set_Enabled(SOverrideMaterial* pointer, bool value){pointer->Enabled = value;}
 
 //struct IRenderTarget
+#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR < 8)
+IRRLICHT_C_API IRenderTarget* IRenderTarget_ctor1(ITexture* texture, E_COLOR_PLANE colorMask = ECP_ALL, E_BLEND_FACTOR blendFuncSrc = EBF_ONE, E_BLEND_FACTOR blendFuncDst = EBF_ONE_MINUS_SRC_ALPHA, bool blendEnable = false)
+{return new IRenderTarget(texture, colorMask, blendFuncSrc, blendFuncDst, blendEnable);}
+#else
 IRRLICHT_C_API IRenderTarget* IRenderTarget_ctor1(ITexture* texture, E_COLOR_PLANE colorMask = ECP_ALL, E_BLEND_FACTOR blendFuncSrc = EBF_ONE, E_BLEND_FACTOR blendFuncDst = EBF_ONE_MINUS_SRC_ALPHA, E_BLEND_OPERATION blendOp = EBO_NONE)
 {return new IRenderTarget(texture, colorMask, blendFuncSrc, blendFuncDst, blendOp);}
+#endif
 
+#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR < 8)
+IRRLICHT_C_API IRenderTarget* IRenderTarget_ctor2(E_RENDER_TARGET target, E_COLOR_PLANE colorMask = ECP_ALL, E_BLEND_FACTOR blendFuncSrc = EBF_ONE, E_BLEND_FACTOR blendFuncDst = EBF_ONE_MINUS_SRC_ALPHA, bool blendEnable = false)
+{return new IRenderTarget(target, colorMask, blendFuncSrc, blendFuncDst, blendEnable);}
+#else
 IRRLICHT_C_API IRenderTarget* IRenderTarget_ctor2(E_RENDER_TARGET target, E_COLOR_PLANE colorMask = ECP_ALL, E_BLEND_FACTOR blendFuncSrc = EBF_ONE, E_BLEND_FACTOR blendFuncDst = EBF_ONE_MINUS_SRC_ALPHA, E_BLEND_OPERATION blendOp = EBO_NONE)
 {return new IRenderTarget(target, colorMask, blendFuncSrc, blendFuncDst, blendOp);}
+#endif
 
 IRRLICHT_C_API ITexture* IRenderTarget_get_RenderTexture(IRenderTarget* pointer){return pointer->RenderTexture;}
 IRRLICHT_C_API void IRenderTarget_set_RenderTexture(IRenderTarget* pointer, ITexture* value){pointer->RenderTexture = value;}
@@ -35,8 +45,13 @@ IRRLICHT_C_API E_BLEND_FACTOR IRenderTarget_get_BlendFuncSrc(IRenderTarget* poin
 IRRLICHT_C_API void IRenderTarget_set_BlendFuncSrc(IRenderTarget* pointer, E_BLEND_FACTOR value){pointer->BlendFuncSrc = value;}
 IRRLICHT_C_API E_BLEND_FACTOR IRenderTarget_get_BlendFuncDst(IRenderTarget* pointer){return pointer->BlendFuncDst;}
 IRRLICHT_C_API void IRenderTarget_set_BlendFuncDst(IRenderTarget* pointer, E_BLEND_FACTOR value){pointer->BlendFuncDst = value;}
+#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR < 8)
+IRRLICHT_C_API bool IRenderTarget_get_BlendEnable(IRenderTarget* pointer){return pointer->BlendEnable;}
+IRRLICHT_C_API void IRenderTarget_set_BlendEnable(IRenderTarget* pointer, bool value){pointer->BlendEnable = value;}
+#else
 IRRLICHT_C_API E_BLEND_OPERATION IRenderTarget_get_BlendOp(IRenderTarget* pointer){return pointer->BlendOp;}
 IRRLICHT_C_API void IRenderTarget_set_BlendOp(IRenderTarget* pointer, E_BLEND_OPERATION value){pointer->BlendOp = value;}
+#endif
 
 
 //class IVideoDriver
@@ -219,10 +234,10 @@ IRRLICHT_C_API IImage* IVideoDriver_createImageFromData(IVideoDriver* pointer, E
 {return pointer->createImageFromData(format, *size, data, ownForeignMemory, deleteMemory);}
 IRRLICHT_C_API IImage* IVideoDriver_createImage1(IVideoDriver* pointer, ECOLOR_FORMAT format, const core::dimension2d<u32>* size)
 {return pointer->createImage(format, *size);}
-IRRLICHT_C_API IImage* IVideoDriver_createImage2(IVideoDriver* pointer, ECOLOR_FORMAT format, IImage *imageToCopy)
-{return pointer->createImage(format, imageToCopy);}
-IRRLICHT_C_API IImage* IVideoDriver_createImage3(IVideoDriver* pointer, IImage* imageToCopy, const core::position2d<s32>* pos, const core::dimension2d<u32>* size)
-{return pointer->createImage(imageToCopy, *pos, *size);}
+#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR < 8)
+IRRLICHT_C_API IImage* IVideoDriver_createImage2(IVideoDriver* pointer, ECOLOR_FORMAT format, IImage *imageToCopy){return pointer->createImage(format, imageToCopy);}
+IRRLICHT_C_API IImage* IVideoDriver_createImage3(IVideoDriver* pointer, IImage* imageToCopy, const core::position2d<s32>* pos, const core::dimension2d<u32>* size){return pointer->createImage(imageToCopy, *pos, *size);}
+#endif
 IRRLICHT_C_API IImage* IVideoDriver_createImage4(IVideoDriver* pointer, ITexture* texture, const core::position2d<s32>* pos, const core::dimension2d<u32>* size)
 {return pointer->createImage(texture, *pos, *size);}
 IRRLICHT_C_API void IVideoDriver_OnResize(IVideoDriver* pointer, const core::dimension2d<u32>* size)

@@ -2,8 +2,8 @@
 # http://vosolok2008.narod.ru
 # BSD license
 
-__version__ = pyirrlicht_version = '1.0.6'
-__versionTime__ = '2012-02-20'
+__version__ = pyirrlicht_version = '1.0.7'
+__versionTime__ = '2012-02-28'
 __author__ = 'Max Kolosov <maxkolosov@inbox.ru>'
 __doc__ = '''
 pyirrlicht.py - is ctypes python module for
@@ -46,6 +46,7 @@ else:
 #~ PyFile_AsFile.restype = FILE_ptr
 #~ PyFile_AsFile.argtypes = [ctypes.py_object]
 
+#~ c_module = ctypes.CDLL('irrlicht_c_173')
 c_module = ctypes.CDLL('irrlicht_c')
 func_type = ctypes.CFUNCTYPE
 #~ if platform.system().lower() == 'windows':
@@ -169,6 +170,18 @@ EBF_ONE_MINUS_SRC_ALPHA = 7
 EBF_DST_ALPHA = 8
 EBF_ONE_MINUS_DST_ALPHA = 9
 EBF_SRC_ALPHA_SATURATE = 10
+
+E_BLEND_OPERATION = 0
+EBO_NONE = 0		#!< No blending happens
+EBO_ADD = 1			#!< Default blending adds the color values
+EBO_SUBTRACT = 2	#!< This mode subtracts the color values
+EBO_REVSUBTRACT = 3	#!< This modes subtracts destination from source
+EBO_MIN = 4			#!< Choose minimum value of each color channel
+EBO_MAX = 5			#!< Choose maximum value of each color channel
+EBO_MIN_FACTOR = 6	#!< Choose minimum value of each color channel after applying blend factors, not widely supported
+EBO_MAX_FACTOR = 7	#!< Choose maximum value of each color channel after applying blend factors, not widely supported
+EBO_MIN_ALPHA = 8	#!< Choose minimum value of each color channel based on alpha value, not widely supported
+EBO_MAX_ALPHA = 9	#!< Choose maximum value of each color channel based on alpha value, not widely supported
 
 EBT_NONE = 0
 EBT_VERTEX = 1
@@ -789,6 +802,11 @@ ETF_UTF16_BE = 2
 ETF_UTF16_LE = 3
 ETF_UTF32_BE = 4
 ETF_UTF32_LE = 5
+
+E_TEXTURE_LOCK_MODE = 0
+ETLM_READ_WRITE = 0
+ETLM_READ_ONLY = 1
+ETLM_WRITE_ONLY = 2
 
 ETPS_9 = 9
 ETPS_17 = 17
@@ -3337,8 +3355,12 @@ ISceneNode_setRotation = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ISc
 ISceneNode_getPosition = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNode_getPosition', c_module))
 ISceneNode_setPosition = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ISceneNode_setPosition', c_module))
 ISceneNode_getAbsolutePosition = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNode_getAbsolutePosition', c_module))
-ISceneNode_setAutomaticCulling = func_type(None, ctypes.c_void_p, ctypes.c_int)(('ISceneNode_setAutomaticCulling', c_module))
-ISceneNode_getAutomaticCulling = func_type(ctypes.c_int, ctypes.c_void_p)(('ISceneNode_getAutomaticCulling', c_module))
+if IRRLICHT_VERSION < 180:
+	ISceneNode_setAutomaticCulling = func_type(None, ctypes.c_void_p, ctypes.c_int)(('ISceneNode_setAutomaticCulling', c_module))
+	ISceneNode_getAutomaticCulling = func_type(ctypes.c_int, ctypes.c_void_p)(('ISceneNode_getAutomaticCulling', c_module))
+else:
+	ISceneNode_setAutomaticCulling = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('ISceneNode_setAutomaticCulling', c_module))
+	ISceneNode_getAutomaticCulling = func_type(ctypes.c_uint, ctypes.c_void_p)(('ISceneNode_getAutomaticCulling', c_module))
 ISceneNode_setDebugDataVisible = func_type(None, ctypes.c_void_p, ctypes.c_int)(('ISceneNode_setDebugDataVisible', c_module))
 ISceneNode_isDebugDataVisible = func_type(ctypes.c_int, ctypes.c_void_p)(('ISceneNode_isDebugDataVisible', c_module))
 ISceneNode_setIsDebugObject = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('ISceneNode_setIsDebugObject', c_module))
@@ -3382,7 +3404,10 @@ ISceneNodeAnimator_hasFinished = func_type(ctypes.c_byte, ctypes.c_void_p)(('ISc
 ISceneNodeAnimator_set_func_event = func_type(ctypes.c_byte, ctypes.c_void_p, OnEventFunc)(('ISceneNodeAnimator_set_func_event', c_module))
 
 # functions for class ITexture
-ITexture_lock = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_uint)(('ITexture_lock', c_module))
+if IRRLICHT_VERSION < 180:
+	ITexture_lock = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_uint)(('ITexture_lock', c_module))
+else:
+	ITexture_lock = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_uint)(('ITexture_lock', c_module))
 ITexture_unlock = func_type(None, ctypes.c_void_p)(('ITexture_unlock', c_module))
 ITexture_getOriginalSize = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ITexture_getOriginalSize', c_module))
 ITexture_getSize = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ITexture_getSize', c_module))
@@ -4370,8 +4395,12 @@ ITimer_isStopped = func_type(ctypes.c_byte, ctypes.c_void_p)(('ITimer_isStopped'
 ITimer_tick = func_type(None, ctypes.c_void_p)(('ITimer_tick', c_module))
 
 #struct IRenderTarget
-IRenderTarget_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('IRenderTarget_ctor1', c_module))
-IRenderTarget_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('IRenderTarget_ctor2', c_module))
+if IRRLICHT_VERSION < 180:
+	IRenderTarget_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('IRenderTarget_ctor1', c_module))
+	IRenderTarget_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('IRenderTarget_ctor2', c_module))
+else:
+	IRenderTarget_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('IRenderTarget_ctor1', c_module))
+	IRenderTarget_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('IRenderTarget_ctor2', c_module))
 IRenderTarget_get_RenderTexture = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IRenderTarget_get_RenderTexture', c_module))
 IRenderTarget_set_RenderTexture = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IRenderTarget_set_RenderTexture', c_module))
 IRenderTarget_get_TargetType = func_type(ctypes.c_int, ctypes.c_void_p)(('IRenderTarget_get_TargetType', c_module))
@@ -4382,8 +4411,12 @@ IRenderTarget_get_BlendFuncSrc = func_type(ctypes.c_int, ctypes.c_void_p)(('IRen
 IRenderTarget_set_BlendFuncSrc = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IRenderTarget_set_BlendFuncSrc', c_module))
 IRenderTarget_get_BlendFuncDst = func_type(ctypes.c_int, ctypes.c_void_p)(('IRenderTarget_get_BlendFuncDst', c_module))
 IRenderTarget_set_BlendFuncDst = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IRenderTarget_set_BlendFuncDst', c_module))
-IRenderTarget_get_BlendOp = func_type(ctypes.c_int, ctypes.c_void_p)(('IRenderTarget_get_BlendOp', c_module))
-IRenderTarget_set_BlendOp = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IRenderTarget_set_BlendOp', c_module))
+if IRRLICHT_VERSION < 180:
+	IRenderTarget_get_BlendEnable = func_type(ctypes.c_byte, ctypes.c_void_p)(('IRenderTarget_get_BlendEnable', c_module))
+	IRenderTarget_set_BlendEnable = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IRenderTarget_set_BlendEnable', c_module))
+else:
+	IRenderTarget_get_BlendOp = func_type(ctypes.c_int, ctypes.c_void_p)(('IRenderTarget_get_BlendOp', c_module))
+	IRenderTarget_set_BlendOp = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IRenderTarget_set_BlendOp', c_module))
 
 # functions for class IrrlichtDevice
 IrrlichtDevice_createDevice = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_uint32, ctypes.c_byte, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p)(('IrrlichtDevice_createDevice', c_module))#, ((1, 'deviceType', EDT_SOFTWARE), (1, 'windowSize', dimension2du_dimension2du(640, 480)), (1, 'bits', 16), (1, 'fullscreen', False), (1, 'stencilbuffer', False), (1, 'vsync', False), (1, 'receiver', 0)))
@@ -8205,10 +8238,16 @@ class IRenderTarget(object):
 		return bool(self.c_pointer)
 	def __bool__(self):
 		return bool(self.c_pointer)
-	def ctor1(self, texture, colorMask = ECP_ALL, blendFuncSrc = EBF_ONE, blendFuncDst = EBF_ONE_MINUS_SRC_ALPHA, blendEnable = False):
-		return IRenderTarget_ctor1(texture.c_pointer, colorMask, blendFuncSrc, blendFuncDst, blendEnable)
-	def ctor2(self, target, colorMask = ECP_ALL, blendFuncSrc = EBF_ONE, blendFuncDst = EBF_ONE_MINUS_SRC_ALPHA, blendEnable = False):
-		return IRenderTarget_ctor2(target, colorMask, blendFuncSrc, blendFuncDst, blendEnable)
+	if IRRLICHT_VERSION < 180:
+		def ctor1(self, texture, colorMask = ECP_ALL, blendFuncSrc = EBF_ONE, blendFuncDst = EBF_ONE_MINUS_SRC_ALPHA, blendEnable = False):
+			return IRenderTarget_ctor1(texture.c_pointer, colorMask, blendFuncSrc, blendFuncDst, blendEnable)
+		def ctor2(self, target, colorMask = ECP_ALL, blendFuncSrc = EBF_ONE, blendFuncDst = EBF_ONE_MINUS_SRC_ALPHA, blendEnable = False):
+			return IRenderTarget_ctor2(target, colorMask, blendFuncSrc, blendFuncDst, blendEnable)
+	else:
+		def ctor1(self, texture, colorMask = ECP_ALL, blendFuncSrc = EBF_ONE, blendFuncDst = EBF_ONE_MINUS_SRC_ALPHA, blendOp = EBO_NONE):
+			return IRenderTarget_ctor1(texture.c_pointer, colorMask, blendFuncSrc, blendFuncDst, blendEnable)
+		def ctor2(self, target, colorMask = ECP_ALL, blendFuncSrc = EBF_ONE, blendFuncDst = EBF_ONE_MINUS_SRC_ALPHA, blendOp = EBO_NONE):
+			return IRenderTarget_ctor2(target, colorMask, blendFuncSrc, blendFuncDst, blendEnable)
 	def get_RenderTexture(self):
 		return ITexture(IRenderTarget_get_RenderTexture(self.c_pointer))
 	def set_RenderTexture(self, value):
@@ -8234,11 +8273,18 @@ class IRenderTarget(object):
 	def set_BlendFuncDst(self, value):
 		IRenderTarget_set_BlendFuncDst(self.c_pointer, value)
 	BlendFuncDst = property(get_BlendFuncDst, set_BlendFuncDst) 
-	def get_BlendOp(self):
-		return IRenderTarget_get_BlendOp(self.c_pointer)
-	def set_BlendOp(self, value):
-		IRenderTarget_set_BlendOp(self.c_pointer, value)
-	BlendOp = property(get_BlendOp, set_BlendOp) 
+	if IRRLICHT_VERSION < 180:
+		def get_BlendEnable(self):
+			return IRenderTarget_get_BlendEnable(self.c_pointer)
+		def set_BlendEnable(self, value):
+			IRenderTarget_set_BlendEnable(self.c_pointer, value)
+		BlendEnable = property(get_BlendEnable, set_BlendEnable)
+	else:
+		def get_BlendOp(self):
+			return IRenderTarget_get_BlendOp(self.c_pointer)
+		def set_BlendOp(self, value):
+			IRenderTarget_set_BlendOp(self.c_pointer, value)
+		BlendOp = property(get_BlendOp, set_BlendOp)
 
 class ISceneUserDataSerializer:
 	def __init__(self, *args, **kwargs):
@@ -9428,8 +9474,12 @@ class ITexture(IReferenceCounted):
 		self.c_pointer = None
 		if len(args) > 0:
 			self.c_pointer = args[0]
-	def lock(self, readOnly = False, mipmapLevel = 0):
-		return ITexture_lock(self.c_pointer, readOnly, mipmapLevel)
+	if IRRLICHT_VERSION < 180:
+		def lock(self, readOnly = False, mipmapLevel = 0):
+			return ITexture_lock(self.c_pointer, readOnly, mipmapLevel)
+	else:
+		def lock(self, mode = ETLM_READ_WRITE, mipmapLevel = 0):
+			return ITexture_lock(self.c_pointer, mode, mipmapLevel)
 	def unlock(self):
 		ITexture_unlock(self.c_pointer)
 	def getOriginalSize(self):
@@ -10667,7 +10717,7 @@ class IGUIListBox(IGUIElement):
 	def setSelected2(self, item):
 		IGUIListBox_setSelected2(self.c_pointer, item)
 	def setSelected(self, arg):
-		if isinstance(arg, (int, float)):
+		if isinstance(arg, (int, long)):
 			self.setSelected1(arg)
 		else:
 			self.setSelected2(arg)

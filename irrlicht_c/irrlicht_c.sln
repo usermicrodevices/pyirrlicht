@@ -7,6 +7,7 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Release_agg|Win32 = Release_agg|Win32
+		Release_Irrlicht_173|Win32 = Release_Irrlicht_173|Win32
 		Release_stdcall|Win32 = Release_stdcall|Win32
 		Release_test|Win32 = Release_test|Win32
 		Release_with_cairo_dll|Win32 = Release_with_cairo_dll|Win32
@@ -18,6 +19,8 @@ Global
 		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Debug|Win32.Build.0 = Debug|Win32
 		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Release_agg|Win32.ActiveCfg = Release_agg|Win32
 		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Release_agg|Win32.Build.0 = Release_agg|Win32
+		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Release_Irrlicht_173|Win32.ActiveCfg = Release_Irrlicht_173|Win32
+		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Release_Irrlicht_173|Win32.Build.0 = Release_Irrlicht_173|Win32
 		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Release_stdcall|Win32.ActiveCfg = Release_stdcall|Win32
 		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Release_stdcall|Win32.Build.0 = Release_stdcall|Win32
 		{5EB71AFC-913B-4E9F-84FF-70A48184DB15}.Release_test|Win32.ActiveCfg = Release_test|Win32

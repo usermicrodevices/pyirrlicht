@@ -75,7 +75,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="irrlicht.lib"
+				AdditionalDependencies="irrlicht_static.lib"
 				OutputFile=".\Release/irrlicht_c.dll"
 				Version="1.0"
 				LinkIncremental="1"
@@ -602,6 +602,103 @@
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
+		<Configuration
+			Name="Release_Irrlicht_173|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="2"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="true"
+				SuppressStartupBanner="true"
+				TargetEnvironment="1"
+				TypeLibraryName=".\Release/irrlicht_c.tlb"
+				HeaderFileName=""
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="&quot;..\irrlicht-1.7.3\include&quot;;&quot;..\freetype-2.3.12\include&quot;;&quot;..\agg-2.5\include&quot;;&quot;..\expat-2.0.1\lib&quot;;&quot;..\cairo-1.11.2\src&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;XML_STATIC;_COMPILE_WITH_2DTTFONT_;CAIRO_WIN32_STATIC_BUILD"
+				StringPooling="true"
+				RuntimeLibrary="0"
+				EnableFunctionLevelLinking="true"
+				PrecompiledHeaderFile=".\Release/irrlicht_c.pch"
+				AssemblerListingLocation=".\Release/"
+				ObjectFile=".\Release/"
+				ProgramDataBaseFileName=".\Release/"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"
+				AdditionalIncludeDirectories="..//irrlicht-1.8.0.alpha//include"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="irrlicht_static.lib"
+				OutputFile=".\Release/irrlicht_c.dll"
+				Version="1.0"
+				LinkIncremental="1"
+				SuppressStartupBanner="true"
+				AdditionalLibraryDirectories="&quot;..\irrlicht-1.7.3\lib\Win32-visualStudio&quot;;&quot;..\irrlicht-1.7.3\lib\Win64-visualStudio&quot;;&quot;..\freetype-2.3.12\objs\win32\vc2008&quot;;&quot;..\expat-2.0.1\win32\bin\Release&quot;;&quot;..\pixman-0.24.0\pixman\release&quot;;&quot;..\cairo-1.11.2\src\release&quot;"
+				IgnoreDefaultLibraryNames=""
+				ProgramDatabaseFile=".\Release/irrlicht_c.pdb"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				ImportLibrary=".\Release/irrlicht_c.lib"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+				SuppressStartupBanner="true"
+				OutputFile=".\Release/irrlicht_c.bsc"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>
@@ -747,6 +844,15 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release_stdcall|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release_Irrlicht_173|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"

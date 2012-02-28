@@ -8,7 +8,11 @@ extern "C" {
 
 //================= ITexture
 //IRRLICHT_C_API ITexture* ITexture_ctor(const io::path& name){return new ITexture(name);}
+#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR < 8)
+IRRLICHT_C_API void* ITexture_lock(ITexture* pointer, bool readOnly = false, u32 mipmapLevel = 0){return pointer->lock(readOnly, mipmapLevel);}
+#else
 IRRLICHT_C_API void* ITexture_lock(ITexture* pointer, E_TEXTURE_LOCK_MODE mode = ETLM_READ_WRITE, u32 mipmapLevel = 0){return pointer->lock(mode, mipmapLevel);}
+#endif
 IRRLICHT_C_API void ITexture_unlock(ITexture* pointer){pointer->unlock();}
 IRRLICHT_C_API const dimension2d<u32>& ITexture_getOriginalSize(ITexture* pointer){return (const dimension2d<u32>&)pointer->getOriginalSize();}
 IRRLICHT_C_API const dimension2d<u32>& ITexture_getSize(ITexture* pointer){return (const dimension2d<u32>&)pointer->getSize();}

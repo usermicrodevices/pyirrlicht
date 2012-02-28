@@ -56,7 +56,11 @@ IRRLICHT_C_API void SColorf_setBlue(SColorf* pointer, f32 value){pointer->b = va
 //================= SColorHSL
 IRRLICHT_C_API SColorHSL* SColorHSL_ctor(f32 h = 0.f, f32 s = 0.f, f32 l = 0.f){return new SColorHSL(h, s, l);}
 IRRLICHT_C_API void SColorHSL_fromRGB(SColorHSL* pointer, SColor* color){pointer->fromRGB(*color);}
+#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR < 8)
+IRRLICHT_C_API void SColorHSL_toRGB(SColorHSL* pointer, SColor& color){pointer->toRGB(color);}
+#else
 IRRLICHT_C_API void SColorHSL_toRGB(SColorHSL* pointer, SColorf& color){pointer->toRGB(color);}
+#endif
 //IRRLICHT_C_API const f32 SColorHSL_toRGB1(SColorHSL* pointer, f32 rm1, f32 rm2, f32 rh){return pointer->toRGB1(rm1, rm2, rh);}
 IRRLICHT_C_API f32 SColorHSL_get_Hue(SColorHSL* pointer){return pointer->Hue;}
 IRRLICHT_C_API f32 SColorHSL_get_Saturation(SColorHSL* pointer){return pointer->Saturation;}
