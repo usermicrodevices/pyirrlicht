@@ -52,4 +52,6 @@
 
 @%1 ChessGUI_Irrlicht_Table.py
 
+@%1 bricka_i.py
+
 @PAUSE
