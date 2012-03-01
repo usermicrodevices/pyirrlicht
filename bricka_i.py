@@ -12,7 +12,10 @@ try:
 	from cellular import Cellular
 except:
 	class Cellular:
-		def get_texture(self): return None
+		def __init__(self, *args, **kwargs):
+			pass
+		def get_texture(self):
+			return None
 
 #~ driverType = EDT_NULL
 #~ driverType = EDT_SOFTWARE
