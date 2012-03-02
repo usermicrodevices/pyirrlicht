@@ -27,6 +27,7 @@ driverType = EDT_OPENGL
 # Object dimensions
 BALL_DIAMETER = 16
 BALL_RADIUS = BALL_DIAMETER / 2
+ball_delta = BALL_RADIUS / 2
 
 PADDLE_STEP = 10
 
@@ -291,7 +292,11 @@ class Bricka:
 						self.video_driver.draw2DRectangle(self.blue, self.paddle)
 					# Draw ball
 					#~ self.video_driver.draw2DRectangle(self.white, self.ball)
-					self.video_driver.draw2DPolygon(self.ball, BALL_RADIUS, self.white)
+					x1, y1 = self.ball.UpperLeftCorner.get_XY()
+					x2, y2 = self.ball.LowerRightCorner.get_XY()
+					self.video_driver.draw2DPolygon(recti(x1 + ball_delta, y1 + ball_delta, x2 + ball_delta, y2 + ball_delta), BALL_RADIUS, self.white)
+					#~ ball_draw = self.ball + ball_delta
+					#~ self.video_driver.draw2DPolygon(ball_draw, BALL_RADIUS, self.white)
 					self.show_stats()
 					if self.help_dialog:
 						self.gui_environment.drawAll()

@@ -2,8 +2,8 @@
 # http://vosolok2008.narod.ru
 # BSD license
 
-__version__ = pyirrlicht_version = '1.0.7'
-__versionTime__ = '2012-02-28'
+__version__ = pyirrlicht_version = '1.0.8'
+__versionTime__ = '2012-03-02'
 __author__ = 'Max Kolosov <maxkolosov@inbox.ru>'
 __doc__ = '''
 pyirrlicht.py - is ctypes python module for
@@ -5678,57 +5678,57 @@ class vector2di(object):
 	def operator_set_dimension2d(self, other):
 		return vector2di(vector2di_operator_set_dimension2d(self.c_pointer, other.c_pointer))
 	def __add__(self, value):
-		if isinstance(value, float):
+		if isinstance(value, int):
 			return vector2di(vector2di_operator_add_value(self.c_pointer, value))
 		elif isinstance(value, dimension2di):
 			return vector2di(vector2di_operator_add_dimension2d(self.c_pointer, value.c_pointer))
 		else:
 			return vector2di(vector2di_operator_add_other(self.c_pointer, value.c_pointer))
 	def __iadd__(self, value):
-		if isinstance(value, float):
+		if isinstance(value, int):
 			return vector2di(vector2di_operator_set_add_value(self.c_pointer, value))
 		elif isinstance(value, dimension2di):
 			return vector2di(vector2di_operator_set_add_dimension2d(self.c_pointer, value.c_pointer))
 		else:
 			return vector2di(vector2di_operator_set_add_other(self.c_pointer, value.c_pointer))
 	def __sub__(self, value):
-		if isinstance(value, float):
+		if isinstance(value, int):
 			return vector2di(vector2di_operator_sub_value(self.c_pointer, value))
 		elif isinstance(value, dimension2di):
 			return vector2di(vector2di_operator_sub_dimension2d(self.c_pointer, value.c_pointer))
 		else:
 			return vector2di(vector2di_operator_sub_other(self.c_pointer, value.c_pointer))
 	def __sub__(self, value):
-		if isinstance(value, float):
+		if isinstance(value, int):
 			return vector2di((self.c_pointer, value))
 		elif isinstance(value, dimension2di):
 			return vector2di((self.c_pointer, value.c_pointer))
 		else:
 			return vector2di((self.c_pointer, value.c_pointer))
 	def __isub__(self, value):
-		if isinstance(value, float):
+		if isinstance(value, int):
 			return vector2di(vector2di_operator_set_sub_value(self.c_pointer, value))
 		elif isinstance(value, dimension2di):
 			return vector2di(vector2di_operator_set_sub_dimension2d(self.c_pointer, value.c_pointer))
 		else:
 			return vector2di(vector2di_operator_set_sub_other(self.c_pointer, value.c_pointer))
 	def __mul__(self, value):
-		if isinstance(value, float):
+		if isinstance(value, int):
 			return vector2di(vector2di_operator_mult_value(self.c_pointer, value))
 		else:
 			return vector2di(vector2di_operator_mult_other(self.c_pointer, value.c_pointer))
 	def __imul__(self, value):
-		if isinstance(value, float):
+		if isinstance(value, int):
 			return vector2di(vector2di_operator_set_mult_value(self.c_pointer, value))
 		else:
 			return vector2di(vector2di_operator_set_mult_other(self.c_pointer, value.c_pointer))
 	def __div__(self, value):
-		if isinstance(value, float):
+		if isinstance(value, int):
 			return vector2di(vector2di_operator_div_value(self.c_pointer, value))
 		else:
 			return vector2di(vector2di_operator_div_other(self.c_pointer, value.c_pointer))
 	def __idiv__(self, value):
-		if isinstance(value, float):
+		if isinstance(value, int):
 			return vector2di(vector2di_operator_set_div_value(self.c_pointer, value))
 		else:
 			return vector2di(vector2di_operator_set_div_other(self.c_pointer, value.c_pointer))
@@ -6119,6 +6119,10 @@ class rectf(object):
 		return bool(self.c_pointer)
 	def __bool__(self):
 		return bool(self.c_pointer)
+	def __repr__(self):
+		return '%s(%f, %f, %f, %f)' % (self.__class__.__name__, self.UpperLeftCorner.X, self.UpperLeftCorner.Y, self.LowerRightCorner.X, self.LowerRightCorner.Y)
+	def __str__(self):
+		return self.__repr__()
 	def ctor1(self):
 		self.c_pointer = rectf_ctor1()
 	def ctor2(self, x = 0.0, y = 0.0, x2 = 0.0, y2 = 0.0):
@@ -6209,6 +6213,10 @@ class recti(object):
 		return bool(self.c_pointer)
 	def __bool__(self):
 		return bool(self.c_pointer)
+	def __repr__(self):
+		return '%s(%d, %d, %d, %d)' % (self.__class__.__name__, self.UpperLeftCorner.X, self.UpperLeftCorner.Y, self.LowerRightCorner.X, self.LowerRightCorner.Y)
+	def __str__(self):
+		return self.__repr__()
 	def ctor1(self):
 		self.c_pointer = recti_ctor1()
 	def ctor2(self, x = 0, y = 0, x2 = 0, y2 = 0):
