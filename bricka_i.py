@@ -245,11 +245,13 @@ class Bricka:
 			self.ball_vel.Y = -self.ball_vel.Y
 
 	def handle_collisions(self):
+		result = None
 		for brick in self.bricks:
 			if self.ball.isRectCollided(brick):
 				self.score += 3
 				self.ball_vel.Y = -self.ball_vel.Y
 				self.bricks.remove(brick)
+				result = brick
 				break
 		if len(self.bricks) == 0:
 			self.state = STATE_WON
@@ -262,8 +264,11 @@ class Bricka:
 				self.state = STATE_BALL_IN_PADDLE
 			else:
 				self.state = STATE_GAME_OVER
+		return result
 
 	def run(self):
+		destroyed_brick = None
+		destroyed_color = SColor(255, 0, 255, 0)
 		i_event_receiver = event_receiver()
 		i_event_receiver.game = self
 		self.device.setEventReceiver(i_event_receiver)
@@ -275,7 +280,15 @@ class Bricka:
 					if self.state == STATE_PLAYING:
 						if not self.help_dialog:
 							self.move_ball()
-							self.handle_collisions()
+							pos = self.handle_collisions()
+							if pos:
+								destroyed_brick = pos
+							if destroyed_brick:
+								self.video_driver.draw2DRectangle(destroyed_color, destroyed_brick)
+								destroyed_color.a = destroyed_color.a - 25
+								if destroyed_color.a < 50:
+									destroyed_brick = None
+									destroyed_color.a = 255
 					elif self.state == STATE_BALL_IN_PADDLE:
 						self.set_ball_x(self.paddle.UpperLeftCorner.X + self.paddle.getWidth() / 2)
 						self.set_ball_y(self.paddle.UpperLeftCorner.Y - self.ball.getHeight())
