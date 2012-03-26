@@ -1,3 +1,6 @@
+import os
+os.environ['IRRLICHT_C_LIBRARY'] = 'irrlicht_c_173'
+
 from pyirrlicht import *
 
 #~ driverType = EDT_NULL

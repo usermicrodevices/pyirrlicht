@@ -2,8 +2,8 @@
 # http://vosolok2008.narod.ru
 # BSD license
 
-__version__ = pyirrlicht_version = '1.0.8'
-__versionTime__ = '2012-03-02'
+__version__ = pyirrlicht_version = '1.0.9'
+__versionTime__ = '2012-03-19'
 __author__ = 'Max Kolosov <maxkolosov@inbox.ru>'
 __doc__ = '''
 pyirrlicht.py - is ctypes python module for
@@ -47,7 +47,13 @@ else:
 #~ PyFile_AsFile.argtypes = [ctypes.py_object]
 
 #~ c_module = ctypes.CDLL('irrlicht_c_173')
-c_module = ctypes.CDLL('irrlicht_c')
+from os import environ
+c_module_name = 'irrlicht_c'
+if 'IRRLICHT_C_LIBRARY' in environ:
+	c_module_name = environ['IRRLICHT_C_LIBRARY']
+	del environ
+c_module = ctypes.CDLL(c_module_name)
+
 func_type = ctypes.CFUNCTYPE
 #~ if platform.system().lower() == 'windows':
 #~ if platform in ('windows', 'win32'):
@@ -2255,6 +2261,7 @@ triangle3di_getArea = func_type(ctypes.c_int, ctypes.c_void_p)(('triangle3di_get
 triangle3di_set = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_set', c_module))
 
 #================= S3DVertex
+getVertexPitchFromType = func_type(ctypes.c_uint, ctypes.c_int)(('tool_getVertexPitchFromType', c_module))
 S3DVertex_ctor1 = func_type(ctypes.c_void_p, ctypes.c_int)(('S3DVertex_ctor1', c_module))
 S3DVertex_ctor2 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_float, ctypes.c_float)(('S3DVertex_ctor2', c_module))
 S3DVertex_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('S3DVertex_ctor3', c_module))
@@ -2272,6 +2279,8 @@ S3DVertex_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes
 S3DVertex_ne = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_ne', c_module))
 S3DVertex_less = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_less', c_module))
 S3DVertex_getType = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_getType', c_module))
+if IRRLICHT_VERSION >= 180:
+	S3DVertex_getInterpolated = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_int)(('S3DVertex_getInterpolated', c_module))
 
 # functions for class SColor
 SColor_ctor1 = func_type(ctypes.c_void_p)(('SColor_ctor1', c_module))
@@ -7411,6 +7420,9 @@ class S3DVertex(object):
 	Normal = property(get_Normal, set_Normal) 
 	Color = property(get_Color, set_Color) 
 	TCoords = property(get_TCoords, set_TCoords) 
+	if IRRLICHT_VERSION >= 180:
+		def S3DVertex_getInterpolated(self, other, d, index = 0):
+			return S3DVertex(c_pointer = S3DVertex_getInterpolated(self.c_pointer, other.c_pointer, d, index))
 
 class SColor(object):
 	def __init__(self, *args, **kwargs):

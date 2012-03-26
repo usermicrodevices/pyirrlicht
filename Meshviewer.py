@@ -1,3 +1,9 @@
+
+driver_type = 5
+full_screen = False
+stencil_buffer = False
+vsync = False
+
 from pyirrlicht import *
 
 Device = None
@@ -453,19 +459,15 @@ class MyEventReceiver(IEventReceiver):
 # eventreceiver as parameter. As you can see, there is also a call to
 # IrrlichtDevice::setResizeable(). This makes the render window resizeable, which
 # is quite useful for a mesh viewer.
-def main():
+def main(driver_type, full_screen, stencil_buffer, vsync):
 	global Device, StartUpModelFile, Caption, MessageText, SkyBox
 	from sys import argv
 	# create device and exit if creation failed
-	#~ driverType = EDT_NULL
-	#~ driverType = EDT_SOFTWARE
-	#~ driverType = EDT_BURNINGSVIDEO
-	#~ driverType = EDT_DIRECT3D8
-	#~ driverType = EDT_DIRECT3D9
-	driverType = EDT_OPENGL
+	if not driver_type:
+		driver_type = EDT_OPENGL
 	receiver = MyEventReceiver()
-	Device = createDevice(driverType, dimension2du(800, 600), 16, False, False, False, receiver)
-	#~ Device = createDevice(driverType, dimension2du(800, 600), 16)
+	#~ Device = createDevice(driverType, dimension2du(800, 600), 16, False, False, False, receiver)
+	Device = createDevice(driver_type, dimension2du(800, 600), 16, full_screen, stencil_buffer, vsync, receiver)
 
 	if not Device:
 		#~ print('could not create selected driver.')
@@ -701,4 +703,22 @@ def main():
 	Device.drop()
 
 if __name__ == "__main__":
-	main()
+	run_app = True
+	from video_choice_dialog import has_pywingui
+	if has_pywingui:
+		from video_choice_dialog import ChoiceDialog, IDOK, IDCANCEL
+		dialog = ChoiceDialog()
+		dialog.driver_type = driver_type
+		dialog.full_screen = full_screen
+		dialog.stencil_buffer = stencil_buffer
+		dialog.vsync = vsync
+		dialogResult = dialog.DoModal()
+		if dialogResult == IDOK:
+			driver_type = dialog.driver_type
+			full_screen = dialog.full_screen
+			stencil_buffer = dialog.stencil_buffer
+			vsync = dialog.vsync
+		elif dialogResult == IDCANCEL:
+			run_app = False
+	if run_app:
+		main(driver_type, full_screen, stencil_buffer, vsync)

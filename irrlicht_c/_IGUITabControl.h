@@ -35,7 +35,7 @@ IRRLICHT_C_API IGUITab* IGUITabControl_getTab(IGUITabControl* pointer, s32 idx)
 {return pointer->getTab(idx);}
 IRRLICHT_C_API bool IGUITabControl_setActiveTab1(IGUITabControl* pointer, s32 idx)
 {return pointer->setActiveTab(idx);}
-IRRLICHT_C_API bool IGUITabControl_setActiveTab2(IGUITabControl* pointer, IGUITab *tab)
+IRRLICHT_C_API bool IGUITabControl_setActiveTab2(IGUITabControl* pointer, IGUIElement *tab)
 {return pointer->setActiveTab(tab);}
 IRRLICHT_C_API s32 IGUITabControl_getActiveTab(IGUITabControl* pointer)
 {return pointer->getActiveTab();}

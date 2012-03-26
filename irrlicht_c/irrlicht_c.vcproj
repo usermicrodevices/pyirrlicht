@@ -663,7 +663,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="irrlicht_static.lib"
-				OutputFile=".\Release/irrlicht_c.dll"
+				OutputFile=".\Release/irrlicht_c_173.dll"
 				Version="1.0"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

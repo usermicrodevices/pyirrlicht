@@ -1,15 +1,16 @@
-'Setup video settings with venster GUI'
+'Setup video settings with pywingui'
 
-has_venster = True
+has_pywingui = True
 try:
-	from venster.wtl import *
-	from venster.dialog import *
+	from pywingui.wtl import *
+	from pywingui.dialog import *
+	from pywingui import comctl
 except:
-	has_venster = False
-	print('VENSTER MODULE IS NOT ACCESSIBLE')
+	has_pywingui = False
+	print('PYWINGUI MODULE IS NOT ACCESSIBLE')
 
-if has_venster:
-	class ChoiseDialog(Dialog):
+if has_pywingui:
+	class ChoiceDialog(Dialog):
 		driver_type = 0
 		full_screen = False
 		stencil_buffer = False
@@ -146,8 +147,8 @@ if has_venster:
 			self.ctrl_DOUBLE_BUFFER.SetCheck(int(self.double_buffer))
 
 if __name__ == '__main__':
-	if has_venster:
-		dialog = ChoiseDialog()
+	if has_pywingui:
+		dialog = ChoiceDialog()
 		dialogResult = dialog.DoModal()
 		if dialogResult == IDOK:
 			print('Pressed OK')

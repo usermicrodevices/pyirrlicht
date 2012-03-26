@@ -7,10 +7,10 @@ vsync = False
 
 run_app = True
 
-from venster_dialog import has_venster
-if has_venster:
-	from venster_dialog import ChoiseDialog, IDOK, IDCANCEL
-	dialog = ChoiseDialog()
+from video_choice_dialog import has_pywingui
+if has_pywingui:
+	from video_choice_dialog import ChoiceDialog, IDOK, IDCANCEL
+	dialog = ChoiceDialog()
 	dialog.driver_type = driver_type
 	dialog.full_screen = full_screen
 	dialog.stencil_buffer = stencil_buffer
@@ -43,7 +43,7 @@ if run_app:
 		driver = device.getVideoDriver()
 		scene_manager = device.getSceneManager()
 		guienv = device.getGUIEnvironment()
-		guienv.addStaticText('Hello World! This is the Irrlicht Software renderer!', pyirrlicht.recti(10,10,260,22), True)
+		static_text = guienv.addStaticText('Hello World! This is the Irrlicht Software renderer!', pyirrlicht.recti(10,10,300,22), True)
 		i_animated_mesh = scene_manager.getMesh('media//sydney.md2')
 		if i_animated_mesh:
 			node = scene_manager.addAnimatedMeshSceneNode(i_animated_mesh)
@@ -68,7 +68,9 @@ if run_app:
 
 					fps = driver.getFPS()
 					if lastFPS != fps:
-						device.setWindowCaption('%s [%s] FPS:%d' % (window_caption, driver.getName(), fps))
+						text = '%s [%s] FPS:%d' % (window_caption, driver.getName(), fps)
+						device.setWindowCaption(text)
+						static_text.setText(text)
 						lastFPS = fps
 				else:
 					device._yield()

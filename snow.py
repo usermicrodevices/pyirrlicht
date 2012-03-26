@@ -1,5 +1,8 @@
 # original on http://zenprogramming.tripod.com
 
+import os
+os.environ['IRRLICHT_C_LIBRARY'] = 'irrlicht_c_173'
+
 from pyirrlicht import *
 
 
