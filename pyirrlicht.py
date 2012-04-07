@@ -2,9 +2,9 @@
 # http://vosolok2008.narod.ru
 # BSD license
 
-__version__ = pyirrlicht_version = '1.0.9'
-__versionTime__ = '2012-03-19'
-__author__ = 'Max Kolosov <maxkolosov@inbox.ru>'
+__version__ = pyirrlicht_version = '1.1.0'
+__versionTime__ = '2012-04-07'
+__author__ = 'Maxim Kolosov <pyirrlicht@gmail.com>'
 __doc__ = '''
 pyirrlicht.py - is ctypes python module for
 Irrlicht Engine (http://irrlicht.sourceforge.net).
@@ -4839,6 +4839,28 @@ SExposedVideoData_set_OpenGLLinux_X11Display = func_type(None, ctypes.c_void_p, 
 SExposedVideoData_set_OpenGLLinux_X11Context = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SExposedVideoData_set_OpenGLLinux_X11Context', c_module))
 SExposedVideoData_set_OpenGLLinux_X11Window = func_type(None, ctypes.c_void_p, ctypes.c_ulong)(('SExposedVideoData_set_OpenGLLinux_X11Window', c_module))
 
+#================= I3DText
+BUILD_WITH_3D_TEXT = ctypes.c_byte.in_dll(c_module, 'BUILD_WITH_3D_TEXT').value
+if BUILD_WITH_3D_TEXT:
+	E_RCC_TYPE = 0
+	RCC_NO = 0#NOT USED RANDOM COLORS
+	RCC_AUTO = 1#USED RANDOM COLORS WITH AUTO CHANGES
+	RCC_CUSTOM = 2#USED RANDOM COLORS WITH CUSTOM CHANGES
+	E_ABSV_TYPE = 0
+	ABSV_INTERLEAVE = 0#INTERLEAVE Z VALUE FOR ONE PASS, RESULT IS CURVE
+	ABSV_INTERLEAVE_TWO_PASS = 1#RESULT IS TWO MIXED CURVE
+	ABSV_LINEAR = 2#ONE PASS Z=0, like flat text, but as 3d object
+	ABSV_LINEAR_TWO_PASS = 3#FIRST PASS Z=0, SECOND PASS Z=DEPTH
+
+	IText3D_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IText3D_ctor', c_module))
+	IText3D_setText = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_wchar_p, fschar_t, ctypes.c_void_p, ctypes.c_uint, ctypes.c_float, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('IText3D_setText', c_module))
+	IText3D_get_color_random_type = func_type(ctypes.c_int, ctypes.c_void_p)(('IText3D_get_color_random_type', c_module))
+	IText3D_set_color_random_type = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IText3D_set_color_random_type', c_module))
+	IText3D_get_custom_color = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IText3D_get_custom_color', c_module))
+	IText3D_set_custom_color = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IText3D_set_custom_color', c_module))
+	IText3D_set_auto_custom_color = func_type(None, ctypes.c_void_p)(('IText3D_set_auto_custom_color', c_module))
+
+
 # ============== Python classes
 
 class array:
@@ -6686,7 +6708,7 @@ class aabbox3df(object):
 	def __init__(self, *args, **kwargs):
 		self.c_pointer = 0
 		self.delete_c_pointer = True
-		if len(args) == 0:
+		if len(args) == 0 and len(kwargs) == 0:
 			self.c_pointer = aabbox3df_ctor1()
 		elif len(args) == 2:
 			if isinstance(args[0], vector3df) and isinstance(args[1], vector3df):
@@ -6701,6 +6723,8 @@ class aabbox3df(object):
 				self.delete_c_pointer = False
 		elif len(args) == 6:
 			self.c_pointer = aabbox3df_ctor4(*args, **kwargs)
+		elif 'c_pointer' in kwargs:
+			self.c_pointer = kwargs.pop('c_pointer', 0)
 	def __del__(self):
 		if self.c_pointer and self.delete_c_pointer:# and callable(delete_pointer):
 			try:
@@ -11704,11 +11728,11 @@ class ISceneNode(IAttributeExchangingObject):
 	def getBoundingBox(self):
 		return aabbox3df(ISceneNode_getBoundingBox(self.c_pointer))
 	def getTransformedBoundingBox(self):
-		return aabbox3df(ISceneNode_getTransformedBoundingBox(self.c_pointer))
+		return aabbox3df(c_pointer = ISceneNode_getTransformedBoundingBox(self.c_pointer))
 	def getAbsoluteTransformation(self):
 		return matrix4(ISceneNode_getAbsoluteTransformation(self.c_pointer))
 	def getRelativeTransformation(self):
-		return matrix4(ISceneNode_getRelativeTransformation(self.c_pointer))
+		return matrix4(c_pointer = ISceneNode_getRelativeTransformation(self.c_pointer))
 	def isVisible(self):
 		return ISceneNode_isVisible(self.c_pointer)
 	def isTrulyVisible(self):
@@ -11868,7 +11892,6 @@ class CustomSceneNode(ISceneNode):
 		'must be replaced with user class'
 	def getMaterialCount(self):
 		'must be replaced with user class'
-		
 
 class IParticleSystemSceneNode(ISceneNode):
 	def __init__(self, *args, **kwargs):
@@ -13039,7 +13062,7 @@ class ISceneManager(IReferenceCounted):
 	def setShadowColor(self, color = SColor(150,0,0,0)):
 		ISceneManager_setShadowColor(self.c_pointer, color.c_pointer)
 	def getShadowColor(self):
-		return ISceneManager_getShadowColor(self.c_pointer)
+		return SColor(c_pointer = ISceneManager_getShadowColor(self.c_pointer))
 	def registerNodeForRendering(self, node, param_pass = ESNRP_AUTOMATIC):
 		return ISceneManager_registerNodeForRendering(self.c_pointer, node.c_pointer, param_pass)
 	def drawAll(self):
@@ -14550,6 +14573,30 @@ if BUILD_WITH_IRR_SVG_CAIRO:
 			return IImage(svg_cairo_image_get_image(self.c_pointer))
 		def get_texture(self):
 			return ITexture(svg_cairo_image_get_texture(self.c_pointer))
+
+if BUILD_WITH_3D_TEXT:
+	class IText3D(ISceneNode):
+		def __init__(self, *args, **kwargs):
+			self.c_pointer = self.ctor(*args, **kwargs)
+		def ctor(self, parent, mgr, id = -1):
+			if not isinstance(parent, ISceneNode):
+				parent = mgr.getRootSceneNode()
+			return IText3D_ctor(parent.c_pointer, mgr.c_pointer, id)
+		def setText(self, text, font_file_name = 0, color = SColor(255, 255, 255, 255), size = 10, depth = 50.0, primitive_type = EPT_LINE_LOOP, index_type = EIT_16BIT, color_random = RCC_NO, algorithm_build_vertices = ABSV_INTERLEAVE):
+			if not font_file_name:
+				from os import environ
+				font_file_name = environ['SYSTEMROOT']+'/Fonts/Arial.ttf'
+			return IText3D_setText(self.c_pointer, text, font_file_name, color.c_pointer, size, depth, primitive_type, index_type, color_random, algorithm_build_vertices)
+		def get_color_random_type(self):
+			return IText3D_get_color_random_type(self.c_pointer)
+		def set_color_random_type(self, new_value = RCC_NO):
+			IText3D_set_color_random_type(self.c_pointer, new_value)
+		def get_custom_color(self):
+			return SColor(IText3D_get_custom_color(self.c_pointer))
+		def set_custom_color(self, new_value = SColor(255, 255, 255, 255)):
+			IText3D_set_custom_color(self.c_pointer, new_value.c_pointer)
+		def set_auto_custom_color(self):
+			IText3D_set_auto_custom_color(self.c_pointer)
 
 def createDevice(deviceType = EDT_SOFTWARE, windowSize = dimension2du(640,480), bits = 16, fullscreen = False, stencilbuffer = False, vsync = False, receiver = IEventReceiver(0)):
 	return IrrlichtDevice(deviceType, windowSize, bits, fullscreen, stencilbuffer, vsync, receiver)
