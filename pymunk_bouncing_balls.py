@@ -77,7 +77,7 @@ if run_app:
 		while device.run():
 			if device.isWindowActive():
 				### compute balls
-				ticks_to_next_ball -= 1
+				ticks_to_next_ball = ticks_to_next_ball - 1
 				if ticks_to_next_ball <= 0:
 					ticks_to_next_ball = 100
 					mass = 10
@@ -98,7 +98,7 @@ if run_app:
 							balls_to_remove.append(ball)
 						#~ video_driver.draw2DPolygon(recti(int(ball.body.position.x), int(ball.body.position.y), int(ball.body.position.x+ball.radius*2), int(ball.body.position.y+ball.radius*2)), ball.radius, color_ball)
 						x, y = reverse_coords(ball.body.position)
-						video_driver.draw2DPolygon(recti(x, y, x+int(ball.radius*2), y+int(ball.radius*2)), ball.radius, color_ball)
+						video_driver.draw2DPolygon(recti(x, y, x+int(ball.radius*2), y+int(ball.radius*2)), ball.radius, color_ball, 100)
 					for ball in balls_to_remove:
 						space.remove(ball, ball.body)
 						balls.remove(ball)

@@ -3,7 +3,7 @@
 # BSD license
 
 __version__ = pyirrlicht_version = '1.1.0'
-__versionTime__ = '2012-04-07'
+__versionTime__ = '2012-04-10'
 __author__ = 'Maxim Kolosov <pyirrlicht@gmail.com>'
 __doc__ = '''
 pyirrlicht.py - is ctypes python module for
@@ -2282,6 +2282,28 @@ S3DVertex_getType = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_int)(('S3D
 if IRRLICHT_VERSION >= 180:
 	S3DVertex_getInterpolated = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_int)(('S3DVertex_getInterpolated', c_module))
 
+#struct S3DVertex2TCoords : public S3DVertex
+S3DVertex2TCoords_ctor1 = func_type(ctypes.c_void_p, ctypes.c_int)(('S3DVertex2TCoords_ctor1', c_module))
+S3DVertex2TCoords_ctor2 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('S3DVertex2TCoords_ctor2', c_module))
+S3DVertex2TCoords_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('S3DVertex2TCoords_ctor3', c_module))
+S3DVertex2TCoords_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('S3DVertex2TCoords_ctor4', c_module))
+S3DVertex2TCoords_ctor5 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('S3DVertex2TCoords_ctor5', c_module))
+S3DVertex2TCoords_ctor6 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_float, ctypes.c_float)(('S3DVertex2TCoords_ctor6', c_module))
+S3DVertex2TCoords_ctor7 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('S3DVertex2TCoords_ctor7', c_module))
+S3DVertex2TCoords_ctor8 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('S3DVertex2TCoords_ctor8', c_module))
+S3DVertex2TCoords_get_TCoords2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertex2TCoords_get_TCoords2', c_module))
+S3DVertex2TCoords_set_TCoords2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertex2TCoords_set_TCoords2', c_module))
+
+#struct S3DVertexTangents : public S3DVertex
+S3DVertexTangents_ctor1 = func_type(ctypes.c_void_p, ctypes.c_int)(('S3DVertexTangents_ctor1', c_module))
+S3DVertexTangents_ctor2 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('S3DVertexTangents_ctor2', c_module))
+S3DVertexTangents_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('S3DVertexTangents_ctor3', c_module))
+S3DVertexTangents_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('S3DVertexTangents_ctor4', c_module))
+S3DVertexTangents_get_Tangent = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertexTangents_get_Tangent', c_module))
+S3DVertexTangents_set_Tangent = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertexTangents_set_Tangent', c_module))
+S3DVertexTangents_get_Binormal = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertexTangents_get_Binormal', c_module))
+S3DVertexTangents_set_Binormal = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertexTangents_set_Binormal', c_module))
+
 # functions for class SColor
 SColor_ctor1 = func_type(ctypes.c_void_p)(('SColor_ctor1', c_module))
 SColor_ctor2 = func_type(ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_uint, ctypes.c_uint)(('SColor_ctor2', c_module))
@@ -3741,20 +3763,25 @@ IVideoDriver_removeTexture = func_type(None, ctypes.c_void_p, ctypes.c_void_p)((
 IVideoDriver_removeAllTextures = func_type(None, ctypes.c_void_p)(('IVideoDriver_removeAllTextures', c_module))
 IVideoDriver_removeHardwareBuffer = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_removeHardwareBuffer', c_module))
 IVideoDriver_removeAllHardwareBuffers = func_type(None, ctypes.c_void_p)(('IVideoDriver_removeAllHardwareBuffers', c_module))
-IVideoDriver_makeColorKeyTexture = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('IVideoDriver_makeColorKeyTexture', c_module))
+
+#~ if IRRLICHT_VERSION >= 180:
+
+IVideoDriver_makeColorKeyTexture1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('IVideoDriver_makeColorKeyTexture1', c_module))
 IVideoDriver_makeColorKeyTexture2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('IVideoDriver_makeColorKeyTexture2', c_module))
 IVideoDriver_makeNormalMapTexture = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('IVideoDriver_makeNormalMapTexture', c_module))
-IVideoDriver_setRenderTarget = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p)(('IVideoDriver_setRenderTarget', c_module))
+IVideoDriver_setRenderTarget1 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p)(('IVideoDriver_setRenderTarget1', c_module))
 IVideoDriver_setRenderTarget2 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p)(('IVideoDriver_setRenderTarget2', c_module))
+IVideoDriver_setRenderTarget3 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p)(('IVideoDriver_setRenderTarget3', c_module))
 IVideoDriver_setViewPort = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IVideoDriver_setViewPort', c_module))
 IVideoDriver_getViewPort = func_type(ctypes.c_int, ctypes.c_void_p)(('IVideoDriver_getViewPort', c_module))
 IVideoDriver_drawVertexPrimitiveList = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p, ctypes.c_uint, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('IVideoDriver_drawVertexPrimitiveList', c_module))
 IVideoDriver_draw2DVertexPrimitiveList = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p, ctypes.c_uint, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('IVideoDriver_draw2DVertexPrimitiveList', c_module))
-IVideoDriver_drawIndexedTriangleList = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint16, ctypes.c_uint)(('IVideoDriver_drawIndexedTriangleList', c_module))
+IVideoDriver_drawIndexedTriangleList1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint16, ctypes.c_uint)(('IVideoDriver_drawIndexedTriangleList1', c_module))
 IVideoDriver_drawIndexedTriangleList2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint16, ctypes.c_uint)(('IVideoDriver_drawIndexedTriangleList2', c_module))
 IVideoDriver_drawIndexedTriangleList3 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint16, ctypes.c_uint)(('IVideoDriver_drawIndexedTriangleList3', c_module))
 IVideoDriver_drawIndexedTriangleFan = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint16, ctypes.c_uint)(('IVideoDriver_drawIndexedTriangleFan', c_module))
-IVideoDriver_drawIndexedTriangleFan2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint16, ctypes.c_uint)(('IVideoDriver_drawIndexedTriangleFan2', c_module))
+#~ IVideoDriver_drawIndexedTriangleFan1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint16, ctypes.c_uint)(('IVideoDriver_drawIndexedTriangleFan1', c_module))
+#~ IVideoDriver_drawIndexedTriangleFan2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint16, ctypes.c_uint)(('IVideoDriver_drawIndexedTriangleFan2', c_module))
 IVideoDriver_draw3DLine = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_draw3DLine', c_module))
 IVideoDriver_draw3DTriangle = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_draw3DTriangle', c_module))
 IVideoDriver_draw3DBox = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_draw3DBox', c_module))
@@ -3776,6 +3803,7 @@ else:
 IVideoDriver_drawStencilShadow = func_type(None, ctypes.c_void_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_drawStencilShadow', c_module))
 IVideoDriver_drawMeshBuffer = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_drawMeshBuffer', c_module))
 IVideoDriver_setFog = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_byte, ctypes.c_byte)(('IVideoDriver_setFog', c_module))
+IVideoDriver_getFog = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_getFog', c_module))
 IVideoDriver_getColorFormat = func_type(ctypes.c_int, ctypes.c_void_p)(('IVideoDriver_getColorFormat', c_module))
 IVideoDriver_getScreenSize = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_getScreenSize', c_module))
 IVideoDriver_getCurrentRenderTargetSize = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_getCurrentRenderTargetSize', c_module))
@@ -7370,18 +7398,21 @@ class S3DVertex(object):
 		if 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer')
 			self.delete_c_pointer = False
-		elif len(args) in (0, 1):
-			self.c_pointer = self.ctor1(*args)
+		elif len(args) == 0:
+			self.c_pointer = self.ctor1()
+		elif len(args) == 1:
+			if isinstance(args[0], (int, long)):
+				self.c_pointer = self.ctor1(args[0])
+			elif isinstance(args[0], (tuple, list)):
+				idx = 0
+				self.c_pointer = self.ctor1(len(args[0]))
+				for it in args[0]:
+					self.set_item(it.c_pointer, idx)
+					idx = idx + 1
 		elif len(args) == 4:
 			self.c_pointer = self.ctor3(*args)
 		elif len(args) == 9:
 			self.c_pointer = self.ctor2(*args)
-		elif isinstance(args[0], (tuple, list)):
-			idx = 0
-			self.c_pointer = self.ctor1(len(args[0]))
-			for it in args[0]:
-				self.set_item(it.c_pointer, idx)
-				idx = idx + 1
 	def ctor1(self, length = 1):
 		return S3DVertex_ctor1(length)
 	def ctor2(self, x, y, z, nx, ny, nz, c, tu, tv):
@@ -7447,6 +7478,100 @@ class S3DVertex(object):
 	if IRRLICHT_VERSION >= 180:
 		def S3DVertex_getInterpolated(self, other, d, index = 0):
 			return S3DVertex(c_pointer = S3DVertex_getInterpolated(self.c_pointer, other.c_pointer, d, index))
+
+class S3DVertex2TCoords(S3DVertex):
+	def __init__(self, *args, **kwargs):
+		self.c_pointer = None
+		self.delete_c_pointer = True
+		if 'c_pointer' in kwargs:
+			self.c_pointer = kwargs.pop('c_pointer')
+			self.delete_c_pointer = False
+		elif len(args) == 0:
+			self.c_pointer = self.ctor1()
+		elif len(args) == 1:
+			if isinstance(args[0], (int, long)):
+				self.c_pointer = self.ctor1(args[0])
+			elif hasattr(args[0], 'c_pointer'):
+				self.c_pointer = self.ctor8(args[0])
+			elif isinstance(args[0], (tuple, list)):
+				idx = 0
+				self.c_pointer = self.ctor1(len(args[0]))
+				for it in args[0]:
+					self.set_item(it.c_pointer, idx)
+					idx = idx + 1
+		elif len(args) == 4:
+			if isinstance(args[0], SColor):
+				self.c_pointer = self.ctor3(*args)
+			else:
+				self.c_pointer = self.ctor7(*args)
+		elif len(args) == 5:
+			self.c_pointer = self.ctor4(*args)
+		elif len(args) == 8:
+			self.c_pointer = self.ctor2(*args)
+		elif len(args) == 9:
+			self.c_pointer = self.ctor6(*args)
+		elif len(args) == 11:
+			self.c_pointer = self.ctor5(*args)
+	def ctor1(self, length = 1):
+		return S3DVertex2TCoords_ctor1(length)
+	def ctor2(self, x, y, z, c, tu, tv, tu2, tv2):
+		return S3DVertex2TCoords_ctor2(x, y, z, c.c_pointer, tu, tv, tu2, tv2)
+	def ctor3(self, pos, color, tcoords, tcoords2):
+		return S3DVertex2TCoords_ctor3(pos.c_pointer, color.c_pointer, tcoords.c_pointer, tcoords2.c_pointer)
+	def ctor4(self, pos, normal, color, tcoords, tcoords2):
+		return S3DVertex2TCoords_ctor4(pos.c_pointer, normal.c_pointer, color.c_pointer, tcoords.c_pointer, tcoords2.c_pointer)
+	def ctor5(self, x, y, z, nx, ny, nz, c, tu, tv, tu2, tv2):
+		return S3DVertex2TCoords_ctor5(x, y, z, nx, ny, nz, c.c_pointer, tu, tv, tu2, tv2)
+	def ctor6(self, x, y, z, nx, ny, nz, c, tu, tv):
+		return S3DVertex2TCoords_ctor6(x, y, z, nx, ny, nz, c.c_pointer, tu, tv)
+	def ctor7(self, pos, normal, color, tcoords):
+		return S3DVertex2TCoords_ctor7(pos.c_pointer, normal.c_pointer, color.c_pointer, tcoords.c_pointer)
+	def ctor8(self, other):
+		return S3DVertex2TCoords_ctor8(other.c_pointer)
+	def get_TCoords2(self, index = 0):
+		return vector2df(S3DVertex_get_TCoords2(self.c_pointer, index))
+	def set_TCoords2(self, value, index = 0):
+		S3DVertex_set_TCoords2(self.c_pointer, value.c_pointer, index)
+	TCoords2 = property(get_TCoords2, set_TCoords2) 
+	def __repr__(self):
+		return '%s(%s, %s, %s, %s, %s)' % (self.__class__.__name__, str(self.Pos), str(self.Normal), str(self.Color), str(self.TCoords), str(self.TCoords2))
+
+class S3DVertexTangents(S3DVertex):
+	class SColor(object):
+		'Dummy class of original, used for default parameters'
+		def __init__(self, *args, **kwargs):
+			self.c_pointer = None
+	def __init__(self, *args, **kwargs):
+		self.c_pointer = None
+		self.delete_c_pointer = True
+		if 'c_pointer' in kwargs:
+			self.c_pointer = kwargs.pop('c_pointer')
+			self.delete_c_pointer = False
+		elif len(args) == 0:
+			self.c_pointer = self.ctor1()
+		elif len(args) == 1:
+			if isinstance(args[0], (int, long)):
+				self.c_pointer = self.ctor1(args[0])
+	def ctor1(self, length = 1):
+		return S3DVertex2TCoords_ctor1(length)
+	def ctor2(self, x, y, z, nx = 0.0, ny = 0.0, nz = 0.0, c = SColor(255, 255, 255, 255), tu = 0.0, tv = 0.0, tanx = 0.0, tany = 0.0, tanz = 0.0, bx = 0.0, by = 0.0, bz = 0.0):
+		return S3DVertexTangents_ctor2(x, y, z, nx, ny, nz, c.c_pointer, tu, tv, tanx, tany, tanz, bx, by, bz)
+	def ctor3(self, pos, c, tcoords):
+		return S3DVertexTangents_ctor3(pos.c_pointer, c.c_pointer, tcoords.c_pointer)
+	def ctor4(self, pos, normal, c, tcoords, tangent = vector3df(), binormal = vector3df()):
+		return S3DVertexTangents_ctor4(pos.c_pointer, normal.c_pointer, c.c_pointer, tcoords.c_pointer, tangent.c_pointer, binormal.c_pointer)
+	def get_Tangent(self, index):
+		return S3DVertexTangents_get_Tangent(self.c_pointer, index)
+	def set_Tangent(self, value, index):
+		S3DVertexTangents_set_Tangent(self.c_pointer, value.c_pointer, index)
+	Tangent = property(get_Tangent, set_Tangent) 
+	def get_Binormal(self, index):
+		return S3DVertexTangents_get_Binormal(self.c_pointer, index)
+	def set_Binormal(self, value, index):
+		S3DVertexTangents_set_Binormal(self.c_pointer, value.c_pointer, index)
+	Binormal = property(get_Binormal, set_Binormal) 
+	def __repr__(self):
+		return '%s(%s, %s, %s, %s, %s, %s)' % (self.__class__.__name__, str(self.Pos), str(self.Normal), str(self.Color), str(self.TCoords), str(self.Tangent), str(self.Binormal))
 
 class SColor(object):
 	def __init__(self, *args, **kwargs):
@@ -12454,25 +12579,26 @@ class IVideoDriver(IReferenceCounted):
 		IVideoDriver_removeHardwareBuffer(self.c_pointer, mb)
 	def removeAllHardwareBuffers(self):
 		IVideoDriver_removeAllHardwareBuffers(self.c_pointer)
-	def makeColorKeyTexture(self, *args):
-		zeroTexels = False
-		texture, color_or_KeyPixelPos = args[0], args[1]
-		if len(args) > 2:
-			zeroTexels = args[2]
-		if isinstance(color_or_KeyPixelPos, (SColor, SColorf)):
-			IVideoDriver_makeColorKeyTexture(self.c_pointer, texture.c_pointer, color_or_KeyPixelPos.c_pointer, zeroTexels)
-		else:
-			IVideoDriver_makeColorKeyTexture2(self.c_pointer, texture.c_pointer, color_or_KeyPixelPos.c_pointer, zeroTexels)
 	def makeColorKeyTexture1(self, texture, color, zeroTexels = False):
-		IVideoDriver_makeColorKeyTexture(self.c_pointer, texture.c_pointer, color.c_pointer, zeroTexels)
+		IVideoDriver_makeColorKeyTexture1(self.c_pointer, texture.c_pointer, color.c_pointer, zeroTexels)
 	def makeColorKeyTexture2(self, texture, colorKeyPixelPos, zeroTexels = False):
 		IVideoDriver_makeColorKeyTexture2(self.c_pointer, texture.c_pointer, colorKeyPixelPos.c_pointer, zeroTexels)
+	def makeColorKeyTexture(self, *args, **kwargs):
+		if isinstance(args[1], (SColor, SColorf)):
+			self.makeColorKeyTexture1(*args, **kwargs)
+		else:
+			self.makeColorKeyTexture2(*args, **kwargs)
 	def makeNormalMapTexture(self, texture, amplitude=1.0):
 		IVideoDriver_makeNormalMapTexture(self.c_pointer, texture, amplitude)
-	def setRenderTarget(self, texture, clearBackBuffer=True, clearZBuffer=True, color=SColor(0,0,0,0)):
-		return IVideoDriver_setRenderTarget(self.c_pointer, texture.c_pointer, clearBackBuffer, clearZBuffer, color.c_pointer)
+	def setRenderTarget1(self, texture, clearBackBuffer=True, clearZBuffer=True, color=SColor(0,0,0,0)):
+		return IVideoDriver_setRenderTarget1(self.c_pointer, texture.c_pointer, clearBackBuffer, clearZBuffer, color.c_pointer)
 	def setRenderTarget2(self, target, clearTarget=True, clearZBuffer=True, color=SColor(0,0,0,0)):
 		return IVideoDriver_setRenderTarget2(self.c_pointer, target, clearTarget, clearZBuffer, color.c_pointer)
+	def setRenderTarget(self, *args, **kwargs):
+		if isinstance(args[0], int):
+			self.setRenderTarget2(*args, **kwargs)
+		else:
+			self.setRenderTarget1(*args, **kwargs)
 	def setViewPort(self, area):
 		IVideoDriver_setViewPort(self.c_pointer, area.c_pointer)
 	def getViewPort(self):
@@ -12481,16 +12607,26 @@ class IVideoDriver(IReferenceCounted):
 		IVideoDriver_drawVertexPrimitiveList(self.c_pointer, vertices.c_pointer, vertexCount, indexList, primCount, vType, pType, iType)
 	def draw2DVertexPrimitiveList(self, vertices, vertexCount, indexList, primCount, vType=EVT_STANDARD, pType=EPT_TRIANGLES, iType=EIT_16BIT):
 		IVideoDriver_draw2DVertexPrimitiveList(self.c_pointer, vertices.c_pointer, vertexCount, indexList, primCount, vType, pType, iType)
-	def drawIndexedTriangleList(self, vertices, vertexCount, indexList, triangleCount):
-		IVideoDriver_drawIndexedTriangleList(self.c_pointer, vertices.c_pointer, vertexCount, indexList, triangleCount)
+	def drawIndexedTriangleList1(self, vertices, vertexCount, indexList, triangleCount):
+		IVideoDriver_drawIndexedTriangleList1(self.c_pointer, vertices.c_pointer, vertexCount, indexList, triangleCount)
 	def drawIndexedTriangleList2(self, vertices, vertexCount, indexList, triangleCount):
 		IVideoDriver_drawIndexedTriangleList2(self.c_pointer, vertices.c_pointer, vertexCount, indexList, triangleCount)
 	def drawIndexedTriangleList3(self, vertices, vertexCount, indexList, triangleCount):
 		IVideoDriver_drawIndexedTriangleList3(self.c_pointer, vertices.c_pointer, vertexCount, indexList, triangleCount)
+	def drawIndexedTriangleList(self, *args, **kwargs):
+		if isinstance(args[0], S3DVertex):
+			self.drawIndexedTriangleList1(*args, **kwargs)
+		elif isinstance(args[0], S3DVertex2TCoords):
+			self.drawIndexedTriangleList1(*args, **kwargs)
+		else:#S3DVertexTangents
+			self.drawIndexedTriangleList3(*args, **kwargs)
 	def drawIndexedTriangleFan(self, vertices, vertexCount, indexList, triangleCount):
+		'vertices can be as S3DVertex, S3DVertex2TCoords or S3DVertexTangents'
 		IVideoDriver_drawIndexedTriangleFan(self.c_pointer, vertices.c_pointer, vertexCount, indexList, triangleCount)
-	def drawIndexedTriangleFan2(self, vertices, vertexCount, indexList, triangleCount):
-		IVideoDriver_drawIndexedTriangleFan2(self.c_pointer, vertices.c_pointer, vertexCount, indexList, triangleCount)
+	#~ def drawIndexedTriangleFan1(self, vertices, vertexCount, indexList, triangleCount):
+		#~ IVideoDriver_drawIndexedTriangleFan1(self.c_pointer, vertices.c_pointer, vertexCount, indexList, triangleCount)
+	#~ def drawIndexedTriangleFan2(self, vertices, vertexCount, indexList, triangleCount):
+		#~ IVideoDriver_drawIndexedTriangleFan2(self.c_pointer, vertices.c_pointer, vertexCount, indexList, triangleCount)
 	def draw3DLine(self, start, end, color = SColor(255,255,255,255)):
 		IVideoDriver_draw3DLine(self.c_pointer, start.c_pointer, end.c_pointer, color.c_pointer)
 	def draw3DTriangle(self, triangle, color = SColor(255,255,255,255)):
@@ -12571,6 +12707,16 @@ class IVideoDriver(IReferenceCounted):
 		IVideoDriver_drawMeshBuffer(self.c_pointer, mb.c_pointer)
 	def setFog(self, color=SColor(0,255,255,255), fogType=EFT_FOG_LINEAR, start=50.0, end=100.0, density=0.01, pixelFog=False, rangeFog=False):
 		IVideoDriver_setFog(self.c_pointer, color.c_pointer, fogType, start, end, density, pixelFog, rangeFog)
+	def getFog(self):
+		color = ctypes.c_void_p()
+		fogType = ctypes.c_int()
+		start = ctypes.c_float()
+		end = ctypes.c_float()
+		density = ctypes.c_float()
+		pixelFog = ctypes.c_byte()
+		rangeFog = ctypes.c_byte()
+		IVideoDriver_getFog(self.c_pointer, ctypes.byref(color), ctypes.byref(fogType), ctypes.byref(start), ctypes.byref(end), ctypes.byref(density), ctypes.byref(pixelFog), ctypes.byref(rangeFog))
+		return SColor(ctypes.pointer(color)), fogType.value, start.value, end.value, density.value, bool(pixelFog.value), bool(rangeFog.value)
 	def getColorFormat(self):
 		return IVideoDriver_getColorFormat(self.c_pointer)
 	def getScreenSize(self):

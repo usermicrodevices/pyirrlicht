@@ -42,15 +42,22 @@ if run_app:
 		static_text = guienv.addStaticText(window_caption, recti(10, 10, 300, 22), True)
 		root_scene_node = scene_manager.getRootSceneNode()
 
-		# set text 3d
+		# set points text 3d
+		text3d0 = IText3D(root_scene_node, scene_manager)
+		result_set_text = text3d0.setText(window_caption, color_random = RCC_CUSTOM, primitive_type = EPT_POINTS, algorithm_build_vertices = ABSV_LINEAR_TWO_PASS)
+		print('result_set_text %s' % repr(bool(result_set_text)))
+		text3d0.setPosition(vector3df(300, 1000, 1800))
+		text3d0.setRotation(vector3df(0, 90, 0))
+		text3d0.setDebugDataVisible(EDS_BBOX)
+
+		# set curve text 3d
 		text3d1 = IText3D(root_scene_node, scene_manager)
 		result_set_text = text3d1.setText(window_caption, color = SColor(255, 0, 255, 0))#, size = 10, primitive_type = EPT_POINTS)#, EPT_LINE_LOOP, EPT_POLYGON
 		print('result_set_text %s' % repr(bool(result_set_text)))
 		text3d1.setPosition(vector3df(300, 500, 1800))
 		text3d1.setRotation(vector3df(0, 90, 0))
-		text3d1.setDebugDataVisible(EDS_BBOX)
 
-		# set other text 3d
+		# set flat text 3d
 		russian_text_from_wx_StyledTextCtrl_example = '\xd0\x9f\xd0\xb8\xd1\x82\xd0\xbe\xd0\xbd - \xd0\xbb\xd1\x83\xd1\x87\xd1\x88\xd0\xb8\xd0\xb9 \xd1\x8f\xd0\xb7\xd1\x8b\xd0\xba \xd0\xbf\xd1\x80\xd0\xbe\xd0\xb3\xd1\x80\xd0\xb0\xd0\xbc\xd0\xbc\xd0\xb8\xd1\x80\xd0\xbe\xd0\xb2\xd0\xb0\xd0\xbd\xd0\xb8\xd1\x8f!'.decode('utf-8')
 		text3d2 = IText3D(root_scene_node, scene_manager)
 		result_set_text = text3d2.setText(russian_text_from_wx_StyledTextCtrl_example, color_random = RCC_CUSTOM, algorithm_build_vertices = ABSV_LINEAR)
@@ -58,7 +65,7 @@ if run_app:
 		text3d2.setPosition(vector3df(300, 0, 1800))
 		text3d2.setRotation(vector3df(0, 90, 0))
 
-		# set yet one text 3d
+		# set double flat text 3d
 		text3d3 = IText3D(root_scene_node, scene_manager)
 		result_set_text = text3d3.setText(window_caption, color_random = RCC_CUSTOM, algorithm_build_vertices = ABSV_LINEAR_TWO_PASS)
 		print('result_set_text %s' % repr(bool(result_set_text)))
@@ -78,6 +85,8 @@ if run_app:
 			if device.isWindowActive():
 				if driver.beginScene(True, True, scolor):
 					if device.getTimer().getTime()/500 % 2:
+						text3d0.set_auto_custom_color()
+					else:
 						text3d2.set_auto_custom_color()
 					scene_manager.drawAll()
 					guienv.drawAll()
