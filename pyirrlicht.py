@@ -3,7 +3,7 @@
 # BSD license
 
 __version__ = pyirrlicht_version = '1.1.0'
-__versionTime__ = '2012-04-10'
+__versionTime__ = '2012-04-11'
 __author__ = 'Maxim Kolosov <pyirrlicht@gmail.com>'
 __doc__ = '''
 pyirrlicht.py - is ctypes python module for
@@ -12589,7 +12589,7 @@ class IVideoDriver(IReferenceCounted):
 		else:
 			self.makeColorKeyTexture2(*args, **kwargs)
 	def makeNormalMapTexture(self, texture, amplitude=1.0):
-		IVideoDriver_makeNormalMapTexture(self.c_pointer, texture, amplitude)
+		IVideoDriver_makeNormalMapTexture(self.c_pointer, texture.c_pointer, amplitude)
 	def setRenderTarget1(self, texture, clearBackBuffer=True, clearZBuffer=True, color=SColor(0,0,0,0)):
 		return IVideoDriver_setRenderTarget1(self.c_pointer, texture.c_pointer, clearBackBuffer, clearZBuffer, color.c_pointer)
 	def setRenderTarget2(self, target, clearTarget=True, clearZBuffer=True, color=SColor(0,0,0,0)):

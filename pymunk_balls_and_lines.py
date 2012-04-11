@@ -92,11 +92,10 @@ def main():
 				global line_point1
 				event = irr.SEvent(evt)
 				if event.EventType is irr.EET_KEY_INPUT_EVENT:
-					self.shift = self.KeyInput.Shift
-					self.control = self.KeyInput.Control
-					self.pressed_down = self.KeyInput.PressedDown
-					key = self.KeyInput.Key
-					self.KeyIsDown[key] = self.pressed_down
+					self.shift = event.KeyInput.Shift
+					self.control = event.KeyInput.Control
+					self.pressed_down = event.KeyInput.PressedDown
+					self.KeyIsDown[event.KeyInput.Key] = self.pressed_down
 				elif event.EventType is irr.EET_MOUSE_INPUT_EVENT:
 					if event.MouseInput.EventType == irr.EMIE_MOUSE_MOVED:
 						self.mouse_position.x = event.MouseInput.X
@@ -115,7 +114,7 @@ def main():
 					elif event.MouseInput.EventType == irr.EMIE_RMOUSE_LEFT_UP: 
 						if line_point1 is not None:
 							line_point2 = Vec2d(event.MouseInput.X, flipy(event.MouseInput.Y))
-							print('%s %s' % (repr(line_point1), repr(line_point2)))
+							#~ print('%s %s' % (repr(line_point1), repr(line_point2)))
 							body = pm.Body()
 							shape= pm.Segment(body, line_point1, line_point2, 0.0)
 							shape.friction = 0.99
@@ -157,71 +156,72 @@ def main():
 			while device.run():
 				if device.isWindowActive():
 					if i_event_receiver.IsKeyDown(irr.KEY_ESCAPE):
-						break
-					elif i_event_receiver.IsKeyDown(irr.KEY_SPACE):    
 						run_physics = not run_physics
+						break
 
-				p = i_event_receiver.mouse_pos()
-				mouse_pos = Vec2d(p[X],flipy(p[Y]))
-				mouse_body.position = mouse_pos
+					p = i_event_receiver.mouse_pos()
+					mouse_pos = Vec2d(p[X],flipy(p[Y]))
+					mouse_body.position = mouse_pos
 
-				if i_event_receiver.shift and i_event_receiver.pressed_down:
-					body = pm.Body(10, 10)
-					body.position = mouse_pos
-					shape = pm.Circle(body, 10, (0,0))
-					shape.collision_type = COLLTYPE_BALL
-					space.add(body, shape)
-					balls.append(shape)
+					if i_event_receiver.shift and i_event_receiver.pressed_down:
+						body = pm.Body(10, 10)
+						body.position = mouse_pos
+						shape = pm.Circle(body, 10, (0,0))
+						shape.collision_type = COLLTYPE_BALL
+						space.add(body, shape)
+						balls.append(shape)
 
-				### Update physics
-				if run_physics:
-					dt = 1.0/60.0
-					for x in range(1):
-						space.step(dt)
+					### Update physics
+					if run_physics:
+						dt = 1.0/60.0
+						for x in range(1):
+							space.step(dt)
 
-				if video_driver.beginScene(True, True, color_screen):
+					if video_driver.beginScene(True, True, color_screen):
 
-					### Display some text
-					#~ font.draw(text, irr.recti(5, 40, screen_x-10, 50), color_text)
+						### Display some text
+						#~ font.draw(text, irr.recti(5, 40, screen_x-10, 50), color_text)
 
-					for ball in balls:           
-						r = ball.radius
-						v = ball.body.position
-						rot = ball.body.rotation_vector
-						x1, y1 = int(v.x), int(flipy(v.y))
-						x2, y2 = (Vec2d(rot.x, -rot.y) * r * 0.9).int_tuple
-						video_driver.draw2DPolygon(irr.recti(x1, y1, x1+int(r*2), y1+int(r*2)), int(r), color_blue, 100)
-						video_driver.draw2DLine(irr.position2di(x1, y1), irr.position2di(x2, y2), color_red)
+						for ball in balls:           
+							r = ball.radius
+							v = ball.body.position
+							rot = ball.body.rotation_vector
+							x1, y1 = int(v.x), int(flipy(v.y))
+							x2, y2 = (Vec2d(rot.x, -rot.y) * r * 0.9 + (x1, y1)).int_tuple
+							video_driver.draw2DPolygon(irr.recti(x1, y1, x1+int(r*2), y1+int(r*2)), int(r), color_blue, 100)
+							video_driver.draw2DLine(irr.position2di(x1, y1), irr.position2di(x2, y2), color_red)
 
-					if line_point1 is not None:
-						x1, y1 = int(line_point1.x), int(flipy(line_point1.y))
-						x2, y2 = int(mouse_pos.x), int(flipy(mouse_pos.y))
-						video_driver.draw2DLine(irr.position2di(x1, y1), irr.position2di(x2, y2), color_black)
+						if line_point1 is not None:
+							x1, y1 = int(line_point1.x), int(flipy(line_point1.y))
+							x2, y2 = int(mouse_pos.x), int(flipy(mouse_pos.y))
+							video_driver.draw2DLine(irr.position2di(x1, y1), irr.position2di(x2, y2), color_black)
 
-					for line in static_lines:
-						body = line.body
-						pv1 = body.position + line.a.rotated(body.angle)
-						pv2 = body.position + line.b.rotated(body.angle)
-						x1, y1 = int(pv1.x), int(flipy(pv1.y))
-						x2, y2 = int(pv2.x), int(flipy(pv2.y))
-						video_driver.draw2DLine(irr.position2di(x1, y1), irr.position2di(x2, y2), color_lightgray)
+						for line in static_lines:
+							body = line.body
+							pv1 = body.position + line.a.rotated(body.angle)
+							pv2 = body.position + line.b.rotated(body.angle)
+							x1, y1 = int(pv1.x), int(flipy(pv1.y))
+							x2, y2 = int(pv2.x), int(flipy(pv2.y))
+							video_driver.draw2DLine(irr.position2di(x1, y1), irr.position2di(x2, y2), color_lightgray)
 
-					gui_environment.drawAll()
-					video_driver.endScene()
+						gui_environment.drawAll()
+						video_driver.endScene()
 
-				#~ device.sleep(10)
+					device.sleep(10)
 
-				fps = video_driver.getFPS()
-				if lastFPS != fps:
-					caption = '%s [%s] FPS:%d' % (window_caption, video_driver.getName(), fps)
-					device.setWindowCaption(caption)
-					static_text.setText(caption + text)
-					lastFPS = fps
-			else:
-				device._yield()
-		device.closeDevice()
-	else:
-		print('ERROR createDevice')
+					fps = video_driver.getFPS()
+					if lastFPS != fps:
+						caption = '%s [%s] FPS:%d' % (window_caption, video_driver.getName(), fps)
+						device.setWindowCaption(caption)
+						static_text.setText(caption + text)
+						lastFPS = fps
+				else:
+					device._yield()
+
+			device.closeDevice()
+		else:
+			print('ERROR createDevice')
+
 
 if __name__ == '__main__':
 	doprof = 0
