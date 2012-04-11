@@ -1,4 +1,4 @@
-'pyMunk bouncing balls example based on pyIrrlicht'
+'pyMunk bouncing balls example'
 
 ### video choice dialog pyWinGUI block
 driver_type = 1
@@ -69,7 +69,7 @@ if run_app:
 		video_driver = device.getVideoDriver()
 		scene_manager = device.getSceneManager()
 		gui_environment = device.getGUIEnvironment()
-		static_text = gui_environment.addStaticText(window_caption, recti(10,10,300,22), True)
+		static_text = gui_environment.addStaticText(window_caption, recti(10,10,400,22), True)
 		color_screen = SColor(255, 100, 100, 100)
 		color_line = SColor(255, 200, 200, 200)
 		color_ball = SColor(255, 0, 0, 255)
@@ -110,23 +110,24 @@ if run_app:
 						x1, y1 = reverse_coords(pv1)
 						x2, y2 = reverse_coords(pv2)
 						video_driver.draw2DLine(position2di(x1, y1), position2di(x2, y2), color_line)
-					scene_manager.drawAll()
+					#~ scene_manager.drawAll()
 					gui_environment.drawAll()
-					video_driver.endScene()
-					device.sleep(10)
 					### Update physics
 					dt = 1.0/60.0
 					for x in range(1):
 						space.step(dt)
-					### FPS information
-					fps = video_driver.getFPS()
-					if lastFPS != fps:
-						text = '%s [%s] FPS:%d' % (window_caption, video_driver.getName(), fps)
-						device.setWindowCaption(text)
-						static_text.setText(text)
-						lastFPS = fps
-				else:
-					device._yield()
+					### END DRAWING
+					video_driver.endScene()
+				device.sleep(10)
+				### FPS information
+				fps = video_driver.getFPS()
+				if lastFPS != fps:
+					text = '%s [%s] FPS:%d' % (window_caption, video_driver.getName(), fps)
+					device.setWindowCaption(text)
+					static_text.setText(text)
+					lastFPS = fps
+			else:
+				device._yield()
 		device.closeDevice()
 	else:
 		print('ERROR createDevice')
