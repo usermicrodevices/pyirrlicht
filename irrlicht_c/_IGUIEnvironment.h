@@ -69,8 +69,15 @@ IRRLICHT_C_API IGUITreeView* IGUIEnvironment_addTreeView(IGUIEnvironment* pointe
 {return pointer->addTreeView(rectangle, parent, id, drawBackground, scrollBarVertical, scrollBarHorizontal);}
 IRRLICHT_C_API IGUIMeshViewer* IGUIEnvironment_addMeshViewer(IGUIEnvironment* pointer, const core::rect<s32>& rectangle, IGUIElement* parent=0, s32 id=-1, const wchar_t* text=0)
 {return pointer->addMeshViewer(rectangle, parent, id, text);}
+
+#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR < 8)
 IRRLICHT_C_API IGUIFileOpenDialog* IGUIEnvironment_addFileOpenDialog(IGUIEnvironment* pointer, const wchar_t* title = 0, bool modal=true, IGUIElement* parent=0, s32 id=-1)
 {return pointer->addFileOpenDialog(title, modal, parent, id);}
+#else
+IRRLICHT_C_API IGUIFileOpenDialog* IGUIEnvironment_addFileOpenDialog(IGUIEnvironment* pointer, const wchar_t* title = 0, bool modal=true, IGUIElement* parent=0, s32 id=-1, bool restoreCWD=false, io::path::char_type* startDir=0)
+{return pointer->addFileOpenDialog(title, modal, parent, id, restoreCWD, startDir);}
+#endif
+
 IRRLICHT_C_API IGUIColorSelectDialog* IGUIEnvironment_addColorSelectDialog(IGUIEnvironment* pointer, const wchar_t* title = 0, bool modal=true, IGUIElement* parent=0, s32 id=-1)
 {return pointer->addColorSelectDialog(title, modal, parent, id);}
 IRRLICHT_C_API IGUIStaticText* IGUIEnvironment_addStaticText(IGUIEnvironment* pointer, const wchar_t* text, const core::rect<s32>& rectangle, bool border=false, bool wordWrap=true, IGUIElement* parent=0, s32 id=-1, bool fillBackground = false)
@@ -121,9 +128,38 @@ IRRLICHT_C_API void IGUIEnvironment_writeGUIElement(IGUIEnvironment* pointer, io
 {pointer->writeGUIElement(writer, node);}
 IRRLICHT_C_API void IGUIEnvironment_readGUIElement(IGUIEnvironment* pointer, io::IXMLReader* reader, IGUIElement* node)
 {pointer->readGUIElement(reader, node);}
+
 #if defined(_IRR_COMPILE_WITH_CGUITTFONT_)
 IRRLICHT_C_API IGUIFont* IGUIEnvironment_getTTFont(IGUIEnvironment* pointer, const io::path& filename, u32 fontsize, bool antialias = true, bool transparency = true)
 {return pointer->getFont(filename, fontsize, antialias, transparency);}
+#endif
+
+#ifdef _COMPILE_WITH_GUI_FILE_SELECTOR_
+//#include "CGUIModalScreen.h"
+//#include "CGUIFileSelector.h"
+//class CGUIModalScreen : public IGUIElement
+//{
+//public:
+//	CGUIModalScreen(IGUIEnvironment* environment, IGUIElement* parent, s32 id);
+//	virtual void addChild(IGUIElement* child);
+//};
+IRRLICHT_C_API CGUIFileSelector* IGUIEnvironment_addFileSelectorDialog(IGUIEnvironment* pointer, const wchar_t* title = 0, bool modal = true, IGUIElement* parent = 0, s32 id = -1, rect<s32>* rectangle = 0, E_FILESELECTOR_TYPE type = EFST_OPEN_DIALOG)
+{
+	parent = parent ? parent : pointer->getRootGUIElement();
+	CGUIFileSelector* d;
+	if (rectangle)
+		d = new CGUIFileSelector(title, pointer, parent, id, rectangle, type);
+	else
+		d = new CGUIFileSelector(title, pointer, parent, id, type);
+	d->drop();
+	//if (modal)
+	//{
+	//	CGUIModalScreen * modalScreen = new CGUIModalScreen(pointer, parent, -1);
+	//	modalScreen->drop();
+	//	modalScreen->addChild(d);
+	//}
+	return d;
+}
 #endif
 
 #ifdef __cplusplus

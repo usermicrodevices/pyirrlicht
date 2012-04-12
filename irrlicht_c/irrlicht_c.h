@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2012 maxkolosov@inbox.ru
+// http://pir.sourceforge.net
 // BSD license
 
 // for __stdcall Irrlicht.lib must be builded with _STDCALL_SUPPORTED flag
@@ -8,7 +8,11 @@
 
 //#define _COMPILE_WITH_2DTTFONT_
 
+#define _COMPILE_WITH_3D_TEXT_
+
 #define _COMPILE_WITH_GRID_SCENE_NODE_
+
+#define _COMPILE_WITH_GUI_FILE_SELECTOR_
 
 #define _COMPILE_WITH_AGG_
 
@@ -48,6 +52,10 @@ using namespace quake3;
 
 #ifdef _COMPILE_WITH_GRID_SCENE_NODE_
 #include "_CGridSceneNode.h"
+#endif
+
+#ifdef _COMPILE_WITH_GUI_FILE_SELECTOR_
+#include "_CGUIFileSelector.h"
 #endif
 
 #include "_CDynamicMeshBuffer.h"
@@ -173,6 +181,10 @@ using namespace quake3;
 #include "lib_agg.h"
 #endif
 
+#ifdef _COMPILE_WITH_3D_TEXT_
+#include "text3d.h"
+#endif
+
 inline core::array<double> string_split_d(const wchar_t* str, u32 size = 8, const wchar_t* delimiter = L",")
 {
 	core::array<double> container(size);
@@ -222,6 +234,12 @@ IRRLICHT_C_API unsigned char _IRRLICHT_VERSION_MAJOR = IRRLICHT_VERSION_MAJOR;
 IRRLICHT_C_API unsigned char _IRRLICHT_VERSION_MINOR = IRRLICHT_VERSION_MINOR;
 IRRLICHT_C_API unsigned char _IRRLICHT_VERSION_REVISION = IRRLICHT_VERSION_REVISION;
 IRRLICHT_C_API unsigned char _IRRLICHT_VERSION = IRRLICHT_VERSION_MAJOR*100 + IRRLICHT_VERSION_MINOR*10 + IRRLICHT_VERSION_REVISION;
+
+#ifdef _COMPILE_WITH_3D_TEXT_
+IRRLICHT_C_API bool BUILD_WITH_3D_TEXT = true;
+#else
+IRRLICHT_C_API bool BUILD_WITH_3D_TEXT = false;
+#endif
 
 #ifdef _COMPILE_WITH_AGG_
 IRRLICHT_C_API bool BUILD_WITH_AGG = true;
@@ -279,6 +297,12 @@ IRRLICHT_C_API bool IRR_IMPROVE_UNICODE = false;
 IRRLICHT_C_API bool IRR_USE_INPUT_METHOD = true;
 #else
 IRRLICHT_C_API bool IRR_USE_INPUT_METHOD = false;
+#endif
+
+#ifdef _COMPILE_WITH_GUI_FILE_SELECTOR_
+IRRLICHT_C_API bool BUILD_WITH_GUI_FILE_SELECTOR = true;
+#else
+IRRLICHT_C_API bool BUILD_WITH_GUI_FILE_SELECTOR = false;
 #endif
 
 IRRLICHT_C_API IrrXMLReader* createIrrXMLReader1(const char* filename){return createIrrXMLReader(filename);}

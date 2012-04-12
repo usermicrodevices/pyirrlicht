@@ -3,7 +3,7 @@
 # BSD license
 
 __version__ = pyirrlicht_version = '1.1.0'
-__versionTime__ = '2012-04-11'
+__versionTime__ = '2012-04-12'
 __author__ = 'Maxim Kolosov <pyirrlicht@gmail.com>'
 __doc__ = '''
 pyirrlicht.py - is ctypes python module for
@@ -1472,6 +1472,23 @@ CGridSceneNode_SetAxisLineActive = func_type(None, ctypes.c_void_p, ctypes.c_byt
 CGridSceneNode_SetAxisLineXColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_SetAxisLineXColor', c_module))
 CGridSceneNode_SetAxisLineZColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_SetAxisLineZColor', c_module))
 CGridSceneNode_SetMaterial = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_SetMaterial', c_module))
+
+#class CGUIFileSelector : public IGUIFileOpenDialog
+BUILD_WITH_GUI_FILE_SELECTOR = ctypes.c_byte.in_dll(c_module, 'BUILD_WITH_GUI_FILE_SELECTOR').value
+if BUILD_WITH_GUI_FILE_SELECTOR:
+	E_FILESELECTOR_TYPE = 0
+	EFST_OPEN_DIALOG = 0#<! For opening files
+	EFST_SAVE_DIALOG = 1#<! For saving files
+	EFST_NUM_TYPES = 2#<! Not used, just specifies how many possible types there are
+	CGUIFileSelector_ctor = func_type(ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('CGUIFileSelector_ctor', c_module))
+	CGUIFileSelector_getFileName = func_type(ctypes.c_wchar_p, ctypes.c_void_p)(('CGUIFileSelector_getFileName', c_module))
+	CGUIFileSelector_getDirectoryName = func_type(ctypes.c_void_p, ctypes.c_void_p)(('CGUIFileSelector_getDirectoryName', c_module))
+	CGUIFileSelector_getFileFilter = func_type(ctypes.c_wchar_p, ctypes.c_void_p)(('CGUIFileSelector_getFileFilter', c_module))
+	CGUIFileSelector_getDialogType = func_type(ctypes.c_int, ctypes.c_void_p)(('CGUIFileSelector_getDialogType', c_module))
+	CGUIFileSelector_addFileFilter = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_void_p)(('CGUIFileSelector_addFileFilter', c_module))
+	CGUIFileSelector_setCustomFileIcon = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGUIFileSelector_setCustomFileIcon', c_module))
+	CGUIFileSelector_setCustomDirectoryIcon = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGUIFileSelector_setCustomDirectoryIcon', c_module))
+	CGUIFileSelector_setDirectoryChoosable = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('CGUIFileSelector_setDirectoryChoosable', c_module))
 
 # functions for Structure class SViewFrustum
 SMaterialLayer_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMaterialLayer_ctor1', c_module))
@@ -3994,7 +4011,12 @@ IGUIEnvironment_addCheckBox = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes
 IGUIEnvironment_addListBox = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('IGUIEnvironment_addListBox', c_module))
 IGUIEnvironment_addTreeView = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte, ctypes.c_byte, ctypes.c_byte)(('IGUIEnvironment_addTreeView', c_module))
 IGUIEnvironment_addMeshViewer = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_wchar_p)(('IGUIEnvironment_addMeshViewer', c_module))
-IGUIEnvironment_addFileOpenDialog = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addFileOpenDialog', c_module))
+if IRRLICHT_VERSION < 180:
+	IGUIEnvironment_addFileOpenDialog = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addFileOpenDialog', c_module))
+else:
+	IGUIEnvironment_addFileOpenDialog = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte, fschar_t)(('IGUIEnvironment_addFileOpenDialog', c_module))
+if BUILD_WITH_GUI_FILE_SELECTOR:
+	IGUIEnvironment_addFileSelectorDialog = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addFileSelectorDialog', c_module))
 IGUIEnvironment_addColorSelectDialog = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addColorSelectDialog', c_module))
 IGUIEnvironment_addStaticText = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('IGUIEnvironment_addStaticText', c_module))
 IGUIEnvironment_addEditBox = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addEditBox', c_module))
@@ -10292,7 +10314,7 @@ class IGUIEditBox(IGUIElement):
 	def isPasswordBox(self):
 		return IGUIEditBox_isPasswordBox(self.c_pointer)
 	def getTextDimension(self):
-		return IGUIEditBox_getTextDimension(self.c_pointer)
+		return dimension2du(IGUIEditBox_getTextDimension(self.c_pointer))
 	def setMax(self, max):
 		IGUIEditBox_setMax(self.c_pointer, max)
 	def getMax(self):
@@ -10302,17 +10324,63 @@ class IGUIFileOpenDialog(IGUIElement):
 	def __init__(self, *args, **kwargs):
 		IGUIElement.__init__(self)
 		self.c_pointer = None
-		if len(args) == 1:
-			if hasattr(args[0], 'c_pointer'):
+		if 'c_pointer' in kwargs:
+			self.c_pointer = kwargs.pop('c_pointer', None)
+		elif len(args) > 0:
+			if isinstance(args[0], (int, long)):
+				self.c_pointer = args[0]
+			elif isinstance(args[0], IGUIElement):
 				self.c_pointer = args[0].c_pointer
 			else:
-				self.c_pointer = args[0]
-		elif len(args) > 3:
-			self.c_pointer = IGUIFileOpenDialog_ctor(args[0].c_pointer, args[1].c_pointer, args[2], args[3].c_pointer)
+				self.c_pointer = self.ctor(*args, **kwargs)
+	def ctor(self, gui_environment, parent = IGUIElement(), id = -1, rectangle = recti(0,0,200,200)):
+		if not isinstance(parent, IGUIElement):
+			parent = gui_environment.getRootGUIElement()
+		return IGUIFileOpenDialog_ctor(gui_environment.c_pointer, parent.c_pointer, id, rectangle.c_pointer)
 	def getFileName(self):
 		return IGUIFileOpenDialog_getFileName(self.c_pointer)
 	def getDirectoryName(self):
 		return IGUIFileOpenDialog_getDirectoryName(self.c_pointer)
+
+if BUILD_WITH_GUI_FILE_SELECTOR:
+	class CGUIFileSelector(IGUIFileOpenDialog):
+		def __init__(self, *args, **kwargs):
+			self.c_pointer = None
+			self.delete_c_pointer = False
+			if 'c_pointer' in kwargs:
+				self.c_pointer = kwargs.pop('c_pointer', None)
+			elif len(args) > 0:
+				if isinstance(args[0], (int, long)):
+					self.c_pointer = args[0]
+				elif isinstance(args[0], IGUIElement):
+					self.c_pointer = args[0].c_pointer
+				else:
+					self.c_pointer = self.ctor(*args, **kwargs)
+		def ctor(self, title, gui_environment, parent = IGUIElement(), id = -1, type = EFST_OPEN_DIALOG):
+			if not isinstance(parent, IGUIElement):
+				parent = gui_environment.getRootGUIElement()
+			return CGUIFileSelector_ctor(title, gui_environment.c_pointer, parent.c_pointer, id, type)
+		def getFileName(self):
+			return CGUIFileSelector_getFileName(self.c_pointer)
+		def getDirectoryName(self):
+			return CGUIFileSelector_getDirectoryName(self.c_pointer)
+		def getFileFilter(self):
+			return CGUIFileSelector_getFileFilter(self.c_pointer)
+		def getDialogType(self):
+			return CGUIFileSelector_getDialogType(self.c_pointer)
+		#~ def addFileFilter(self, name, ext, texture = ITexture(0)):
+			#~ CGUIFileSelector_addFileFilter(self.c_pointer, name, ext, texture.c_pointer)
+		def addFileFilter(self, name, ext, texture = 0):
+			if hasattr(texture, 'c_pointer'):
+				CGUIFileSelector_addFileFilter(self.c_pointer, name, ext, texture.c_pointer)
+			else:
+				CGUIFileSelector_addFileFilter(self.c_pointer, name, ext, texture)
+		def setCustomFileIcon(self, texture):
+			CGUIFileSelector_setCustomFileIcon(self.c_pointer, texture.c_pointer)
+		def setCustomDirectoryIcon(self, texture):
+			CGUIFileSelector_setCustomDirectoryIcon(self.c_pointer, texture.c_pointer)
+		def setDirectoryChoosable(self, choosable = True):
+			CGUIFileSelector_setDirectoryChoosable(self.c_pointer, choosable)
 
 class IGUIFont(IReferenceCounted):
 	def __init__(self, *args, **kwargs):
@@ -10322,7 +10390,7 @@ class IGUIFont(IReferenceCounted):
 	def draw(self, text, position, color, hcenter = False, vcenter = False, clip = recti(0)):
 		IGUIFont_draw(self.c_pointer, text, position.c_pointer, color.c_pointer, hcenter, vcenter, clip.c_pointer)
 	def getDimension(self, text):
-		return dimension2du(pointer = IGUIFont_getDimension(self.c_pointer, text))
+		return dimension2du(IGUIFont_getDimension(self.c_pointer, text))
 	def getCharacterFromPos(self, text, pixel_x):
 		return IGUIFont_getCharacterFromPos(self.c_pointer, text, pixel_x)
 	def getType(self):
@@ -11837,7 +11905,10 @@ class ISceneNodeAnimatorList:
 
 class ISceneNode(IAttributeExchangingObject):
 	def __init__(self, *args, **kwargs):
-		self.c_pointer = args[0]
+		try:
+			self.c_pointer = args[0]
+		except:
+			self.c_pointer = None
 	#~ def Destructor(self):
 		#~ ISceneNode_Destructor(self.c_pointer)
 	def OnRegisterSceneNode(self):
@@ -13522,8 +13593,15 @@ class IGUIEnvironment(IReferenceCounted):
 		return IGUITreeView(IGUIEnvironment_addTreeView(self.c_pointer, rectangle.c_pointer, parent.c_pointer, id, drawBackground, scrollBarVertical, scrollBarHorizontal))
 	def addMeshViewer(self, rectangle, parent = IGUIElement(), id = -1, text = ''):
 		return IGUIMeshViewer(IGUIEnvironment_addMeshViewer(self.c_pointer, rectangle, parent.c_pointer, id, text))
-	def addFileOpenDialog(self, title = '', modal = True, parent = IGUIElement(), id = -1):
-		return IGUIFileOpenDialog(IGUIEnvironment_addFileOpenDialog(self.c_pointer, title, modal, parent.c_pointer, id))
+	if IRRLICHT_VERSION < 180:
+		def addFileOpenDialog(self, title = '', modal = True, parent = IGUIElement(), id = -1):
+			return IGUIFileOpenDialog(IGUIEnvironment_addFileOpenDialog(self.c_pointer, title, modal, parent.c_pointer, id))
+	else:
+		def addFileOpenDialog(self, title = '', modal = True, parent = IGUIElement(), id = -1, type = 0):
+			return IGUIFileOpenDialog(IGUIEnvironment_addFileOpenDialog(self.c_pointer, title, modal, parent.c_pointer, id, type))
+	if BUILD_WITH_GUI_FILE_SELECTOR:
+		def addFileSelectorDialog(self, title = '', modal = True, parent = IGUIElement(), id = -1, rectangle = recti(0,0,350,265), type = EFST_OPEN_DIALOG):
+			return CGUIFileSelector(IGUIEnvironment_addFileSelectorDialog(self.c_pointer, title, modal, parent.c_pointer, id, rectangle.c_pointer, type))
 	def addColorSelectDialog(self, title = '', modal = True, parent = IGUIElement(), id = -1):
 		return IGUIColorSelectDialog(IGUIEnvironment_addColorSelectDialog(self.c_pointer, title, modal, parent.c_pointer, id))
 	def addStaticText(self, text, rectangle, border = False, wordWrap = True, parent = IGUIElement(), id = -1, fillBackground = False):

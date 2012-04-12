@@ -1,15 +1,18 @@
-# Copyright(c) Max Kolosov 2010 maxkolosov@inbox.ru
-# http://vosolok2008.narod.ru
+# Copyright(c) Max Kolosov 2010-2012 maxkolosov@inbox.ru
+# http://pir.sourceforge.net     http://pyirrlicht.googlecode.com
 # BSD license
+'pyge.py - Python 3d Game Editor for create 3d world'
 
+import os
+#~ os.environ['IRRLICHT_C_LIBRARY'] = 'irrlicht_c_173'
 
-import os, sys
+import sys
 from math import pow, sqrt, acos, tan, atan, degrees
 from pyirrlicht import *
 from random import randint
 from locale import getdefaultlocale
 
-app_name = 'Python Game Editor'
+app_name = __doc__
 app_path = os.getcwd()
 app_file_name = os.path.basename(sys.argv[0].split('.')[0])
 
@@ -33,6 +36,8 @@ GUI_ID_MODEL_INSERT = 0x10010
 GUI_ID_MODEL_INSERT_DIALOG = 0x10011
 GUI_ID_MODEL_SET_ARCHIVE = 0x10012
 GUI_ID_MODEL_SET_ARCHIVE_DIALOG = 0x10013
+GUI_ID_FILE_DIALOG_LOAD_PROJECT = 0x10014
+GUI_ID_FILE_DIALOG_SAVE_PROJECT = 0x10015
 
 # simple language translator
 default_locale = getdefaultlocale()[0]
@@ -165,13 +170,13 @@ class UserIEventReceiver(IEventReceiver):
 				elif menu_id == GUI_ID_ABOUT:
 					self.framework.guienv.addMessageBox(_('About'), app_file_name + ' - ' + _(app_name))
 				elif menu_id == GUI_ID_LOAD:
-					project_file = '%s/%s' % (app_path, 'pygegame.xml')
-					self.framework.scene_manager.loadScene(project_file)
+					dlg = self.framework.guienv.addFileSelectorDialog(_('Please select project file name for load'), rectangle = recti(10,30,500,450), id = GUI_ID_FILE_DIALOG_LOAD_PROJECT)
+					dlg.addFileFilter('XML', 'xml')
+					return True
 				elif menu_id == GUI_ID_SAVE:
-					project_file = '%s/%s' % (app_path, 'pygegame.xml')
-					#~ xml_writer = self.framework.file_system.createXMLWriter(project_file)
-					result = self.framework.scene_manager.saveScene(project_file)
-					print('+++', result, project_file)
+					dlg = self.framework.guienv.addFileSelectorDialog(_('Please insert project file name for save'), rectangle = recti(10,30,500,450), id = GUI_ID_FILE_DIALOG_SAVE_PROJECT, type = EFST_SAVE_DIALOG)
+					dlg.addFileFilter('XML', 'xml')
+					return True
 				elif menu_id == GUI_ID_CAMERA_NONE:
 					self.framework.active_camera_off()
 				elif menu_id == GUI_ID_CAMERA_MAYA:
@@ -203,11 +208,21 @@ class UserIEventReceiver(IEventReceiver):
 					self.framework.guienv.addFileOpenDialog(_('Please select a model file to insert'), id = GUI_ID_MODEL_INSERT_DIALOG)
 				elif menu_id == GUI_ID_MODEL_SET_ARCHIVE:
 					self.framework.guienv.addFileOpenDialog(_('Please select models archive/directory'), id = GUI_ID_MODEL_SET_ARCHIVE_DIALOG)
+			elif gui_event_type == EGET_FILE_SELECTED and caller_id == GUI_ID_FILE_DIALOG_LOAD_PROJECT:
+				project_file = type_str(CGUIFileSelector(caller).getFileName())
+				print('=== LOAD PROJECT FILE %s' % project_file)
+				self.framework.scene_manager.loadScene(project_file)
+			elif gui_event_type == EGET_FILE_SELECTED and caller_id == GUI_ID_FILE_DIALOG_SAVE_PROJECT:
+				project_file = type_str(CGUIFileSelector(caller).getFileName())
+				print('=== SAVE PROJECT FILE %s' % project_file)
+				result = self.framework.scene_manager.saveScene(project_file)
 			elif gui_event_type == EGET_FILE_SELECTED and caller_id == GUI_ID_OPEN_FILE_DIALOG_WALL_TEXTURE:
 				gui_dialog = IGUIFileOpenDialog(caller)
 				wall_texture_file = type_str(gui_dialog.getFileName())
 				i_mesh_scene_node = self.framework.walls[-1]
-				i_mesh_scene_node.setMaterialTexture(0, self.framework.driver.getTexture(wall_texture_file))
+				texture = self.framework.driver.getTexture(wall_texture_file)
+				#~ self.framework.driver.makeNormalMapTexture(texture)
+				i_mesh_scene_node.setMaterialTexture(0, texture)
 				self.is_gui_active = False
 			elif gui_event_type == EGET_FILE_SELECTED and caller_id == GUI_ID_MODEL_INSERT_DIALOG:
 				file_name = type_str(IGUIFileOpenDialog(caller).getFileName())
@@ -279,6 +294,7 @@ class UserIEventReceiver(IEventReceiver):
 							vector3df(x, y, z),# POSITION
 							vector3df(270,angle,0),# ROTATION
 							vector2df(vlength, 100),# TILE_SIZE
+							#~ texture_repeat = vector2df(1,1),
 							texture_repeat = vector2df(
 								self.framework.wall_texture_repeat_count.X / vlength,
 								self.framework.wall_texture_repeat_count.Y
