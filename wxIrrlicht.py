@@ -1,3 +1,8 @@
+'wxPython Irrlicht canvas example'
+
+import os
+os.environ['IRRLICHT_C_LIBRARY'] = 'irrlicht_c_173'
+
 import wx
 from pyirrlicht import *
 
@@ -51,7 +56,7 @@ class irrlicht_canvas(wx.ScrolledWindow):
 		self.param.IgnoreInput = True
 		self.device = createDeviceEx(self.param)
 		if self.device:
-			self.device.setWindowCaption('Quake 3 Map! - Irrlicht Engine Demo')
+			self.device.setWindowCaption('Quake 3 Map as internal wxCanvas! - Irrlicht Engine Demo')
 			self.device.setResizable(True)
 			#~ self.device.getCursorControl().setVisible(False)
 			self.scene_manager = self.device.getSceneManager()
@@ -75,7 +80,10 @@ class irrlicht_canvas(wx.ScrolledWindow):
 			self.camera = self.scene_manager.addCameraSceneNodeMaya()
 			#~ self.camera = self.scene_manager.addCameraSceneNode()
 			self.scolor = SColor(255, 200, 200, 200)
-			self.device.getFileSystem().addZipFileArchive('media//map-20kdm2.pk3')
+			if IRRLICHT_VERSION < 180:
+				self.device.getFileSystem().addZipFileArchive('media//map-20kdm2.pk3')
+			else:
+				self.device.getFileSystem().addFileArchive('media//map-20kdm2.pk3')
 			i_animated_mesh = self.scene_manager.getMesh('20kdm2.bsp')
 			if i_animated_mesh:
 				i_mesh = i_animated_mesh.getMesh(0)
@@ -161,7 +169,7 @@ class irrlicht_canvas(wx.ScrolledWindow):
 def main():
 	from wx.lib.scrolledpanel import ScrolledPanel
 	app = wx.PySimpleApp()
-	frame = wx.Frame(None, wx.ID_ANY, 'wxPython Irrlicht canvas')
+	frame = wx.Frame(None, wx.ID_ANY, __doc__)
 	#~ sizer = wx.GridSizer(1, 1)
 	#~ canvas = irrlicht_canvas(frame)
 	panel = ScrolledPanel(frame, wx.ID_ANY)
