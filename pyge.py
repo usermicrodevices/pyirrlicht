@@ -1,7 +1,7 @@
 # Copyright(c) Max Kolosov 2010-2012 maxkolosov@inbox.ru
 # http://pir.sourceforge.net     http://pyirrlicht.googlecode.com
 # BSD license
-'pyge.py - Python 3d Game Editor for create 3d world'
+'Python 3d Game Editor for create 3d world'
 
 import os
 #~ os.environ['IRRLICHT_C_LIBRARY'] = 'irrlicht_c_173'
@@ -150,6 +150,7 @@ class UserIEventReceiver(IEventReceiver):
 	l_mouse_pressed = False
 	r_mouse_pressed = False
 	is_gui_active = False
+
 	def OnEvent(self, event):
 		event_type = self.GetEventType(event)
 		if event_type is EET_KEY_INPUT_EVENT:
@@ -336,13 +337,11 @@ class framework:
 		self.sleep_delay = self.config.get_int('sleep_delay', 10)
 		self.texture_from_file = self.config.get_bool('texture_from_file', False)
 		#~ self.device_type = self.config.get_int('device_type', EDT_OPENGL)
-		#~ self.window_size = dimension2du(self.config.get_int('window_width', 640), self.config.get_int('window_height', 480))
 		self.driver = None
-		#~ self.device = createDevice(self.device_type, self.window_size)
 		self.device_parameters = SIrrlichtCreationParameters()
 		self.device_parameters.DriverType = self.config.get_int('driver_type', EDT_OPENGL)
 		self.device_parameters.WindowSize = dimension2du(self.config.get_int('window_width', 640), self.config.get_int('window_height', 480))
-		self.device_parameters.AntiAlias = True
+		self.device_parameters.AntiAlias = 2
 		self.device_parameters.WithAlphaChannel = True
 		self.device = createDeviceEx(self.device_parameters)
 		self.init_framework()
@@ -397,10 +396,6 @@ class framework:
 			self.log_file_stream = None
 
 	def init_framework(self):
-		#~ i_event_receiver = UserIEventReceiver()
-		#~ self.device = createDevice(drv, window_size, receiver = i_event_receiver)
-		#~ i_event_receiver.framework = self
-		#~ self.device = createDevice(self.drv, self.window_size)
 		if self.device:
 			self.device.setWindowCaption(_(app_name))
 			self.device.setResizable(True)
@@ -717,19 +712,21 @@ class framework:
 				else:
 					self.device._yield()
 			self.device.drop()
+			# framework attribute must be deleted for worked __del__ method
+			i_event_receiver.framework = None
 		else:
-			print ('ERROR createDevice')
+			print('ERROR createDevice')
 
 	def stop(self):
 		if self.device:
-			self.device.drop()
+			#~ self.device.drop()
 			self.device.closeDevice()
 			self.device = None
-			if self.window_size.Width < 320:
-				self.window_size.Width = 320
-			if self.window_size.Height < 240:
-				self.window_size.Height = 240
-			self.config.set_many((('window_width', int(self.window_size.Width)), ('window_height', int(self.window_size.Height))))
+			if self.device_parameters.WindowSize.Width < 320:
+				self.device_parameters.WindowSize.Width = 320
+			if self.device_parameters.WindowSize.Height < 240:
+				self.device_parameters.WindowSize.Height = 240
+			self.config.set_many((('window_width', int(self.device_parameters.WindowSize.Width)), ('window_height', int(self.device_parameters.WindowSize.Height))))
 
 def main():
 	frmwrk = framework()

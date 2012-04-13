@@ -22,7 +22,7 @@ if use_parameters:
 	#~ p.Fullscreen = False
 	#~ p.Stencilbuffer = False
 	#~ p.Vsync = False
-	p.AntiAlias = True
+	p.AntiAlias = 2
 	device = createDeviceEx(p)
 else:
 	device = createDevice(driverType, windowSize, 16, False, False, False, 0)

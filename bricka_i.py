@@ -2,10 +2,12 @@
  bricka (a breakout clone)
  Original version developed by Leonel Machava <leonelmachava@gmail.com> http://codentronix.com
 
- pyIrrlicht version - Maxim Kolosov
+ pyIrrlicht version - Maxim Kolosov <pyirrlicht@gmail.com>
 """
 
 import os, sys
+#~ os.environ['IRRLICHT_C_LIBRARY'] = 'irrlicht_c_173'
+
 from pyirrlicht import *
 
 try:
@@ -21,8 +23,8 @@ except:
 #~ driverType = EDT_SOFTWARE
 #~ driverType = EDT_BURNINGSVIDEO
 #~ driverType = EDT_DIRECT3D8
-#~ driverType = EDT_DIRECT3D9
-driverType = EDT_OPENGL
+driverType = EDT_DIRECT3D9
+#~ driverType = EDT_OPENGL
 
 # Object dimensions
 BALL_DIAMETER = 16
@@ -37,7 +39,8 @@ STATE_PLAYING = 1
 STATE_WON = 2
 STATE_GAME_OVER = 3
 
-def _(value): return value
+def _(value):
+	return value
 
 class event_receiver(IEventReceiver):
 	game = None
@@ -87,7 +90,6 @@ class Bricka:
 		self.back_color = SColor(255, 80, 80, 80)
 		self.white = SColor(255, 255, 255, 255)
 		self.brick_color = SColor(255, 200, 200, 0)
-		self.blue = SColor(255, 0, 0, 255)
 		self.ball_vel_default = position2di(2, -2)
 		self.texture_paddle = None
 		self.texture_brick = None
@@ -127,6 +129,12 @@ class Bricka:
 			self.font = CGUITTFont(self.gui_environment, os.environ['SYSTEMROOT']+'/Fonts/arial.ttf', self.font_height)
 			if self.font:
 				self.skin.setFont(self.font)
+			# add 3d ball
+			#~ self.ball3d = self.scene_manager.addSphereSceneNode(float(BALL_DIAMETER))
+			# add camera for 3d view
+			self.camera = self.scene_manager.addCameraSceneNode(position = vector3df(0,0,-400))
+			#~ self.camera = self.scene_manager.addCameraSceneNodeMaya(distance = 400)
+			# initialize first level
 			self.init_game()
 
 	def offset_x(self, rect, value):
@@ -178,6 +186,7 @@ class Bricka:
 		self.paddle = recti(self.paddle_x, self.paddle_y, self.paddle_x + self.paddle_width, self.paddle_y + self.paddle_height)
 		self.ball = recti(self.ball_x, self.ball_y, self.ball_x + BALL_DIAMETER, self.ball_y + BALL_DIAMETER)
 		self.ball_vel = self.ball_vel_default
+		#~ self.ball3d.setPosition(vector3df(self.ball_x, self.ball_y, 0))
 		# cellular texture generator
 		self.cell_paddle = Cellular(self.video_driver, self.paddle_width, self.paddle_height, 128)
 		self.cell_brick = Cellular(self.video_driver, self.brick_width, self.brick_height, 128)
@@ -210,8 +219,8 @@ class Bricka:
 	def create_bricks(self):
 		screen_size = self.video_driver.getScreenSize()
 		x_delta = self.brick_width + 10
-		count_rows = abs(screen_size.Y/68)
-		count_columns = abs(screen_size.X/x_delta-1)
+		count_rows = abs(screen_size.Y / 68)
+		count_columns = abs(screen_size.X / x_delta - 1)
 		x1 = (screen_size.X - x_delta * count_columns) / 2
 		y_ofs = 35
 		self.bricks = []
@@ -268,10 +277,18 @@ class Bricka:
 
 	def run(self):
 		destroyed_brick = None
-		destroyed_color = SColor(255, 0, 255, 0)
+		destroyed_color1 = SColor(255, 0, 255, 0)
+		destroyed_color2 = SColor(255, 255, 255, 0)
+		destroyed_color3 = SColor(255, 0, 0, 255)
+		destroyed_color4 = SColor(255, 255, 0, 0)
+		color_red = SColor(255, 200, 0, 0)
+		color_yellow = SColor(255, 200, 200, 0)
+		color_green = SColor(255, 0, 200, 0)
+		color_blue = SColor(255, 0, 0, 200)
 		i_event_receiver = event_receiver()
 		i_event_receiver.game = self
 		self.device.setEventReceiver(i_event_receiver)
+		self.device.getTimer().setSpeed(10.0)
 		while self.device.run():
 			if self.device.isWindowActive():
 				if i_event_receiver.stop:
@@ -279,16 +296,28 @@ class Bricka:
 				if self.video_driver.beginScene(True, True, self.back_color):
 					if self.state == STATE_PLAYING:
 						if not self.help_dialog:
-							self.move_ball()
+							if self.device.getTimer().getTime() > 100:
+								self.move_ball()
+								self.device.getTimer().setTime(0)
 							pos = self.handle_collisions()
 							if pos:
 								destroyed_brick = pos
 							if destroyed_brick:
-								self.video_driver.draw2DRectangle(destroyed_color, destroyed_brick)
-								destroyed_color.a = destroyed_color.a - 25
-								if destroyed_color.a < 50:
+								if self.use_cellular_brick:
+									self.video_driver.draw2DRectangle(destroyed_color1, destroyed_brick)
+								else:
+									self.video_driver.draw2DRectangle(destroyed_brick, destroyed_color1, destroyed_color2, destroyed_color3, destroyed_color4)
+									destroyed_color2.a = destroyed_color2.a - 25
+									destroyed_color3.a = destroyed_color3.a - 25
+									destroyed_color4.a = destroyed_color4.a - 25
+								destroyed_color1.a = destroyed_color1.a - 25
+								if destroyed_color1.a < 50:
 									destroyed_brick = None
-									destroyed_color.a = 255
+									destroyed_color1.a = 255
+									if not self.use_cellular_brick:
+										destroyed_color2.a = 255
+										destroyed_color3.a = 255
+										destroyed_color4.a = 255
 					elif self.state == STATE_BALL_IN_PADDLE:
 						self.set_ball_x(self.paddle.UpperLeftCorner.X + self.paddle.getWidth() / 2)
 						self.set_ball_y(self.paddle.UpperLeftCorner.Y - self.ball.getHeight())
@@ -302,7 +331,7 @@ class Bricka:
 					if self.texture_paddle and self.use_cellular_paddle:
 						self.video_driver.draw2DImage(self.texture_paddle, self.paddle.UpperLeftCorner)
 					else:
-						self.video_driver.draw2DRectangle(self.blue, self.paddle)
+						self.video_driver.draw2DRectangle(self.paddle, color_yellow, color_red, color_green, color_blue)
 					# Draw ball
 					#~ self.video_driver.draw2DRectangle(self.white, self.ball)
 					x1, y1 = self.ball.UpperLeftCorner.get_XY()
@@ -310,11 +339,13 @@ class Bricka:
 					self.video_driver.draw2DPolygon(recti(x1 + ball_delta, y1 + ball_delta, x2 + ball_delta, y2 + ball_delta), BALL_RADIUS, self.white)
 					#~ ball_draw = self.ball + ball_delta
 					#~ self.video_driver.draw2DPolygon(ball_draw, BALL_RADIUS, self.white)
+					#~ self.ball3d.setPosition(vector3df(x1 + ball_delta, y1 + ball_delta, 0))
+					#~ self.scene_manager.drawAll()
 					self.show_stats()
 					if self.help_dialog:
 						self.gui_environment.drawAll()
 					self.video_driver.endScene()
-				self.device.sleep(10)
+				self.device.sleep(1)
 			else:
 				self.device._yield()
 		self.device.closeDevice()

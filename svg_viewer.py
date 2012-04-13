@@ -166,9 +166,12 @@ class UserIEventReceiver(IEventReceiver):
 				elif menu_id == GUI_ID_ABOUT:
 					self.about_dialog = self.app.guienv.addMessageBox(_('About'), _('SVG Viewer'))
 				elif menu_id == GUI_ID_LOAD:
-					self.app.guienv.addFileOpenDialog(_('Please select a SVG file to open'), id = GUI_ID_LOAD)
+					dlg = self.app.guienv.addFileSelectorDialog(_('Please select a SVG file to open'), rectangle = recti(10,30,500,450), id = GUI_ID_LOAD)
+					dlg.addFileFilter('SVG', 'svg')
 				elif menu_id == GUI_ID_SAVE:
-					self.app.guienv.addFileOpenDialog(_('Please write a file name to save'), id = GUI_ID_SAVE)
+					#~ self.app.guienv.addFileOpenDialog(_('Please write a file name to save'), id = GUI_ID_SAVE)
+					dlg = self.app.guienv.addFileSelectorDialog(_('Please write a file name to save'), rectangle = recti(10,30,500,450), id = GUI_ID_SAVE, type = EFST_SAVE_DIALOG)
+					dlg.addFileFilter('PNG', 'png')
 				elif menu_id == GUI_ID_EDT_SOFTWARE:
 					self.app.set_device_type(EDT_SOFTWARE)
 				elif menu_id == GUI_ID_EDT_OPENGL:
@@ -182,11 +185,8 @@ class UserIEventReceiver(IEventReceiver):
 				if dialog.getID() == GUI_ID_LOAD:
 					self.app.open_file(dialog.getFileName())
 				elif dialog.getID() == GUI_ID_SAVE:
-					print(dialog.getFileName(), dialog.getDirectoryName())
-					#~ self.app.guienv.addEditBox(_('Please write a file name to save'), recti(0, 50, 400, 100))
-					#~ IImage* self.app.video_driver.createScreenShot()
-					#~ IImage* self.app.video_driver.createImage(ITexture* texture, position2d<s32>& pos, dimension2d<u32>& size)
-					#~ self.app.video_driver.writeImageToFile(IImage* image, const io::path& filename)
+					#~ print(dialog.getFileName(), dialog.getDirectoryName())
+					self.app.video_driver.writeImageToFile(self.app.video_driver.createScreenShot(), dialog.getFileName())
 				else:
 					print('it is not required', dialog.getID(), dialog.getTypeName(), dialog.getText())
 		elif event.EventType is EET_KEY_INPUT_EVENT:
@@ -207,7 +207,7 @@ class app:
 		p = SIrrlichtCreationParameters()
 		p.DriverType = self.driver_type
 		p.WindowSize = self.window_size
-		p.AntiAlias = True
+		p.AntiAlias = 2
 		self.device = createDeviceEx(p)
 		self.menu_device_types = {}
 		self.help_dialog = None
@@ -348,6 +348,7 @@ class app:
 					self.device.sleep(10)
 				else:
 					self.device.yield_self()
+			i_event_receiver.app = None
 		else:
 			print('ERROR createDevice')
 

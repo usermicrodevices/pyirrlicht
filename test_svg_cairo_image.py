@@ -10,7 +10,7 @@ def test():
 	p = SIrrlichtCreationParameters()
 	p.DriverType = driverType
 	p.WindowSize = dimension2du(320, 240)
-	p.AntiAlias = True
+	p.AntiAlias = 2
 	p.WithAlphaChannel = True
 	device = createDeviceEx(p)
 	if device:

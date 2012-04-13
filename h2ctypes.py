@@ -1,5 +1,5 @@
-# Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-# http://vosolok2008.narod.ru
+# Copyright(c) Max Kolosov 2010-2012 maxkolosov@inbox.ru
+# http://pir.sourceforge.net
 # BSD license
 
 import sys
@@ -7,15 +7,15 @@ import sys
 type_convention_container = {
 'void':'None',
 'bool':'c_byte',
+'s8':'c_byte',
 'unsigned char':'c_ubyte',
+'u8':'c_ubyte',
 'short':'c_short',
 's16':'c_short',
 'u16':'c_ushort',
 'unsigned short':'c_ushort',
-'s8':'c_byte',
 'int':'c_int',
 's32':'c_int',
-'u8':'c_ubyte',
 'unsigned int':'c_uint',
 'u32':'c_uint',
 '__int64':'c_longlong',
@@ -100,6 +100,8 @@ type_convention_container = {
 'array<stringc>*':'c_void_p',
 'array<stringw>*':'c_void_p',
 'S3DVertex':'c_void_p',
+'S3DVertex2TCoords':'c_void_p',
+'S3DVertexTangents':'c_void_p',
 'SExposedVideoData':'c_void_p',
 'SLight':'c_void_p',
 'SMaterial':'c_void_p',
@@ -232,6 +234,7 @@ def convert(h_file_name, py_file_name = ''):
 	if len(funcs_container) > 0:
 		class_name = ''
 		for func_name, func_type, func_args, hfile_line_info in funcs_container:
+			is_constructor = func_name.find('_ctor') > -1
 			class_name_from_current_func = func_name.split('_')[0]
 			if class_name_from_current_func != class_name:
 				class_name = class_name_from_current_func
@@ -260,7 +263,10 @@ def convert(h_file_name, py_file_name = ''):
 					write_line1 += arg_name
 				args_line2 += arg_name
 			pyfile.write(write_line1 + '):\n')
-			write_line2 = func_name + '(self.c_pointer' + args_line2 + ')'
+			if is_constructor:
+				write_line2 = func_name + '(' + args_line2[2:] + ')'
+			else:
+				write_line2 = func_name + '(self.c_pointer' + args_line2 + ')'
 			if func_type == 'void':
 				pyfile.write('		' + write_line2 + '\n')
 			else:

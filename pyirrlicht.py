@@ -3,7 +3,7 @@
 # BSD license
 
 __version__ = pyirrlicht_version = '1.1.0'
-__versionTime__ = '2012-04-12'
+__versionTime__ = '2012-04-14'
 __author__ = 'Maxim Kolosov <pyirrlicht@gmail.com>'
 __doc__ = '''
 pyirrlicht.py - is ctypes python module for
@@ -428,6 +428,7 @@ EFAT_PAK     = ctypes.c_int.in_dll(c_module, '_EFAT_PAK').value
 EFAT_TAR     = ctypes.c_int.in_dll(c_module, '_EFAT_TAR').value
 EFAT_UNKNOWN = ctypes.c_int.in_dll(c_module, '_EFAT_UNKNOWN').value
 
+#E_FOG_TYPE
 EFT_FOG_EXP = 0
 EFT_FOG_LINEAR = 1
 EFT_FOG_EXP2 = 2
@@ -505,6 +506,7 @@ ELL_WARNING = 1
 ELL_ERROR = 2
 ELL_NONE = 3
 
+#E_LOST_RESOURCE
 ELR_DEVICE = 1
 ELR_TEXTURES = 2
 ELR_RTTS = 4
@@ -552,6 +554,7 @@ EMBF_YES = 0x4
 EMBF_NO = 0x8
 EMBF_FORCE_32BIT = 0x7fffffff
 
+#E_MOUSE_BUTTON_STATE_MASK
 EMBSM_LEFT    = 0x01
 EMBSM_RIGHT   = 0x02
 EMBSM_MIDDLE  = 0x04
@@ -626,9 +629,13 @@ EMIE_RMOUSE_LEFT_UP = 4
 EMIE_MMOUSE_LEFT_UP = 5
 EMIE_MOUSE_MOVED = 6
 EMIE_MOUSE_WHEEL = 7
-EMIE_MOUSE_DOUBLE_CLICK = 8
-EMIE_MOUSE_TRIPLE_CLICK = 9
-EMIE_COUNT = 10
+EMIE_LMOUSE_DOUBLE_CLICK = 8
+EMIE_RMOUSE_DOUBLE_CLICK = 9
+EMIE_MMOUSE_DOUBLE_CLICK = 10
+EMIE_LMOUSE_TRIPLE_CLICK = 11
+EMIE_RMOUSE_TRIPLE_CLICK = 12
+EMIE_MMOUSE_TRIPLE_CLICK = 13
+EMIE_COUNT = 14
 
 EMT_SOLID = 0
 EMT_SOLID_2_LAYER = 1
@@ -727,16 +734,18 @@ SAWTOOTH_INVERSE	= WAVE_MODIFIER_FUNCTION + 6
 NOISE				= WAVE_MODIFIER_FUNCTION + 7
 UNKNOWN				= -2
 
+#E_RENDER_TARGET
 ERT_FRAME_BUFFER = 0
-ERT_STEREO_LEFT_BUFFER = 0
 ERT_RENDER_TEXTURE = 1
-ERT_STEREO_RIGHT_BUFFER = 2
-ERT_STEREO_BOTH_BUFFERS = 3
-ERT_AUX_BUFFER0 = 4
-ERT_AUX_BUFFER1 = 5
-ERT_AUX_BUFFER2 = 6
-ERT_AUX_BUFFER3 = 7
-ERT_AUX_BUFFER4 = 8
+ERT_MULTI_RENDER_TEXTURES = 2
+ERT_STEREO_LEFT_BUFFER = 3
+ERT_STEREO_RIGHT_BUFFER = 4
+ERT_STEREO_BOTH_BUFFERS = 5
+ERT_AUX_BUFFER0 = 6
+ERT_AUX_BUFFER1 = 7
+ERT_AUX_BUFFER2 = 8
+ERT_AUX_BUFFER3 = 9
+ERT_AUX_BUFFER4 = 10
 
 ESCENE_NODE_ANIMATOR_TYPE = 0
 ESNAT_FLY_CIRCLE = 0
@@ -3753,13 +3762,16 @@ ISceneNodeFactory_getCreateableSceneNodeTypeName1 = func_type(ctypes.c_char_p, c
 ISceneNodeFactory_getCreateableSceneNodeTypeName2 = func_type(ctypes.c_char_p, ctypes.c_void_p, ctypes.c_int)(('ISceneNodeFactory_getCreateableSceneNodeTypeName2', c_module))
 
 # functions for class IVideoDriver
-IVideoDriver_beginScene_old = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_beginScene', c_module))
-#~ IVideoDriver_beginScene = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p, ctypes.POINTER(SExposedVideoData), ctypes.c_void_p)(('IVideoDriver_beginScene', c_module))
-IVideoDriver_beginScene = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_beginScene', c_module))
+if IRRLICHT_VERSION < 170:
+	IVideoDriver_beginScene = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IVideoDriver_beginScene', c_module))
+else:
+	IVideoDriver_beginScene = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_beginScene', c_module))
 IVideoDriver_beginSceneDefault = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p)(('IVideoDriver_beginSceneDefault', c_module))
 IVideoDriver_endScene = func_type(ctypes.c_byte, ctypes.c_void_p)(('IVideoDriver_endScene', c_module))
 IVideoDriver_queryFeature = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IVideoDriver_queryFeature', c_module))
 IVideoDriver_disableFeature = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('IVideoDriver_disableFeature', c_module))
+if IRRLICHT_VERSION >= 180:
+	IVideoDriver_getDriverAttributes = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_getDriverAttributes', c_module))
 IVideoDriver_checkDriverReset = func_type(ctypes.c_byte, ctypes.c_void_p)(('IVideoDriver_checkDriverReset', c_module))
 IVideoDriver_setTransform = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IVideoDriver_setTransform', c_module))
 IVideoDriver_getTransform = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IVideoDriver_getTransform', c_module))
@@ -3780,9 +3792,15 @@ IVideoDriver_removeTexture = func_type(None, ctypes.c_void_p, ctypes.c_void_p)((
 IVideoDriver_removeAllTextures = func_type(None, ctypes.c_void_p)(('IVideoDriver_removeAllTextures', c_module))
 IVideoDriver_removeHardwareBuffer = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_removeHardwareBuffer', c_module))
 IVideoDriver_removeAllHardwareBuffers = func_type(None, ctypes.c_void_p)(('IVideoDriver_removeAllHardwareBuffers', c_module))
-
-#~ if IRRLICHT_VERSION >= 180:
-
+if IRRLICHT_VERSION >= 180:
+	IVideoDriver_addOcclusionQuery = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_addOcclusionQuery', c_module))
+	IVideoDriver_removeOcclusionQuery = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_removeOcclusionQuery', c_module))
+	IVideoDriver_removeAllOcclusionQueries = func_type(None, ctypes.c_void_p)(('IVideoDriver_removeAllOcclusionQueries', c_module))
+	IVideoDriver_runOcclusionQuery = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('IVideoDriver_runOcclusionQuery', c_module))
+	IVideoDriver_runAllOcclusionQueries = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IVideoDriver_runAllOcclusionQueries', c_module))
+	IVideoDriver_updateOcclusionQuery = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('IVideoDriver_updateOcclusionQuery', c_module))
+	IVideoDriver_updateAllOcclusionQueries = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IVideoDriver_updateAllOcclusionQueries', c_module))
+	IVideoDriver_getOcclusionQueryResult = func_type(ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_getOcclusionQueryResult', c_module))
 IVideoDriver_makeColorKeyTexture1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('IVideoDriver_makeColorKeyTexture1', c_module))
 IVideoDriver_makeColorKeyTexture2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('IVideoDriver_makeColorKeyTexture2', c_module))
 IVideoDriver_makeNormalMapTexture = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('IVideoDriver_makeNormalMapTexture', c_module))
@@ -4804,8 +4822,8 @@ SIrrlichtCreationParameters_get_Stencilbuffer = func_type(ctypes.c_byte, ctypes.
 SIrrlichtCreationParameters_set_Stencilbuffer = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SIrrlichtCreationParameters_set_Stencilbuffer', c_module))
 SIrrlichtCreationParameters_get_Vsync = func_type(ctypes.c_byte, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_Vsync', c_module))
 SIrrlichtCreationParameters_set_Vsync = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SIrrlichtCreationParameters_set_Vsync', c_module))
-SIrrlichtCreationParameters_get_AntiAlias = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_AntiAlias', c_module))
-SIrrlichtCreationParameters_set_AntiAlias = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SIrrlichtCreationParameters_set_AntiAlias', c_module))
+SIrrlichtCreationParameters_get_AntiAlias = func_type(ctypes.c_ubyte, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_AntiAlias', c_module))
+SIrrlichtCreationParameters_set_AntiAlias = func_type(None, ctypes.c_void_p, ctypes.c_ubyte)(('SIrrlichtCreationParameters_set_AntiAlias', c_module))
 SIrrlichtCreationParameters_get_WithAlphaChannel = func_type(ctypes.c_byte, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_WithAlphaChannel', c_module))
 SIrrlichtCreationParameters_set_WithAlphaChannel = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SIrrlichtCreationParameters_set_WithAlphaChannel', c_module))
 SIrrlichtCreationParameters_get_Doublebuffer = func_type(ctypes.c_byte, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_Doublebuffer', c_module))
@@ -5357,8 +5375,6 @@ class IEventReceiver:
 		return bool(self.c_pointer)
 	def __bool__(self):
 		return bool(self.c_pointer)
-	#~ def Destructor(self):
-		#~ IEventReceiver_Destructor(self.c_pointer)
 	def set_func_event(self, event_func):
 		IEventReceiver_set_func_event(self.c_pointer, event_func)
 	def OnEvent(self, event):
@@ -12572,7 +12588,7 @@ class IVideoDriver(IReferenceCounted):
 		#~ self.callback = OnResizeFunc(self.OnResize)
 		if IRRLICHT_VERSION < 170:
 			def beginScene(backBuffer = True, zBuffer = True, color = SColor(255,0,0,0), windowId = 0, sourceRect = recti(0)):
-				return IVideoDriver_beginScene_old(self.c_pointer, backBuffer, zBuffer, color.c_pointer, windowId, sourceRect.c_pointer)
+				return IVideoDriver_beginScene(self.c_pointer, backBuffer, zBuffer, color.c_pointer, windowId, sourceRect.c_pointer)
 			self.beginScene = beginScene
 		else:
 			def beginScene(backBuffer = True, zBuffer = True, color = SColor(255,0,0,0), videoData = SExposedVideoData(), sourceRect = recti(0)):
@@ -12587,16 +12603,19 @@ class IVideoDriver(IReferenceCounted):
 			return self.beginSceneFull(*args, **kwargs)
 	def endScene(self):
 		return IVideoDriver_endScene(self.c_pointer)
-	def queryFeature(self, feature):
+	def queryFeature(self, feature):#E_VIDEO_DRIVER_FEATURE
 		return IVideoDriver_queryFeature(self.c_pointer, feature)
 	def disableFeature(self, feature, flag = True):
 		IVideoDriver_disableFeature(self.c_pointer, feature, flag)
+	if IRRLICHT_VERSION >= 180:
+		def getDriverAttributes(self):
+			return IAttributes(IVideoDriver_getDriverAttributes(self.c_pointer))
 	def checkDriverReset(self):
 		return IVideoDriver_checkDriverReset(self.c_pointer)
 	def setTransform(self, state, mat):
 		IVideoDriver_setTransform(self.c_pointer, state, mat.c_pointer)
 	def getTransform(self, state):
-		return IVideoDriver_getTransform(self.c_pointer, state)
+		return matrix4(IVideoDriver_getTransform(self.c_pointer, state))
 	def getImageLoaderCount(self):
 		return IVideoDriver_getImageLoaderCount(self.c_pointer)
 	def getImageLoader(self, n):
@@ -12646,10 +12665,27 @@ class IVideoDriver(IReferenceCounted):
 		IVideoDriver_removeTexture(self.c_pointer, texture.c_pointer)
 	def removeAllTextures(self):
 		IVideoDriver_removeAllTextures(self.c_pointer)
-	def removeHardwareBuffer(self, mb):
-		IVideoDriver_removeHardwareBuffer(self.c_pointer, mb)
+	def removeHardwareBuffer(self, mb):#IMeshBuffer
+		IVideoDriver_removeHardwareBuffer(self.c_pointer, mb.c_pointer)
 	def removeAllHardwareBuffers(self):
 		IVideoDriver_removeAllHardwareBuffers(self.c_pointer)
+	if IRRLICHT_VERSION >= 180:
+		def addOcclusionQuery(self, node, mesh = IMesh(0)):
+			IVideoDriver_addOcclusionQuery(self.c_pointer, node.c_pointer, mesh.c_pointer)
+		def removeOcclusionQuery(self, node):
+			IVideoDriver_removeOcclusionQuery(self.c_pointer, node.c_pointer)
+		def removeAllOcclusionQueries(self):
+			IVideoDriver_removeAllOcclusionQueries(self.c_pointer)
+		def runOcclusionQuery(self, node, visible = False):
+			IVideoDriver_runOcclusionQuery(self.c_pointer, node.c_pointer, visible)
+		def runAllOcclusionQueries(self, visible = False):
+			IVideoDriver_runAllOcclusionQueries(self.c_pointer, visible)
+		def updateOcclusionQuery(self, node, block = True):
+			IVideoDriver_updateOcclusionQuery(self.c_pointer, node.c_pointer, block)
+		def updateAllOcclusionQueries(self, block = True):
+			IVideoDriver_updateAllOcclusionQueries(self.c_pointer, block)
+		def getOcclusionQueryResult(self, node):
+			return IVideoDriver_getOcclusionQueryResult(self.c_pointer, node.c_pointer)
 	def makeColorKeyTexture1(self, texture, color, zeroTexels = False):
 		IVideoDriver_makeColorKeyTexture1(self.c_pointer, texture.c_pointer, color.c_pointer, zeroTexels)
 	def makeColorKeyTexture2(self, texture, colorKeyPixelPos, zeroTexels = False):
@@ -12704,10 +12740,19 @@ class IVideoDriver(IReferenceCounted):
 		IVideoDriver_draw3DTriangle(self.c_pointer, triangle.c_pointer, color.c_pointer)
 	def draw3DBox(self, box, color = SColor(255,255,255,255)):
 		IVideoDriver_draw3DBox(self.c_pointer, box.c_pointer, color.c_pointer)
-	def draw2DImage(self, *args):
+	def draw2DImage1(self, texture, destPos):
+		'ITexture, position2di'
+		IVideoDriver_draw2DImage1(self.c_pointer, texture.c_pointer, destPos.c_pointer)
+	def draw2DImage2(self, texture, destPos, sourceRect, clipRect = recti(0), color=SColor(255,255,255,255), useAlphaChannelOfTexture=False):
+		'ITexture, position2di, recti, recti, SColor, bool'
+		IVideoDriver_draw2DImage2(self.c_pointer, texture.c_pointer, destPos.c_pointer, sourceRect.c_pointer, clipRect.c_pointer, color.c_pointer, useAlphaChannelOfTexture)
+	def draw2DImage3(self, texture, destRect, sourceRect, clipRect =0, colors=0, useAlphaChannelOfTexture=False):
+		'ITexture, position2di, recti, recti, SColor* array(4), bool'
+		IVideoDriver_draw2DImage3(self.c_pointer, texture.c_pointer, destRec.c_pointer, sourceRect.c_pointer, clipRect.c_pointer, colors, useAlphaChannelOfTexture)
+	def draw2DImage(self, *args, **kwargs):
 		if len(args) == 2:
 			self.draw2DImage1(*args)
-		else:
+		elif len(kwargs) == 0:
 			clipRect = recti(0)
 			color = SColor(255,255,255,255)
 			useAlphaChannelOfTexture = False
@@ -12722,24 +12767,29 @@ class IVideoDriver(IReferenceCounted):
 			if isinstance(clipRect, int):
 				clipRect = recti(clipRect)
 			if isinstance(color, SColor):
-				IVideoDriver_draw2DImage2(self.c_pointer, texture.c_pointer, destPos.c_pointer, sourceRect.c_pointer, clipRect.c_pointer, color.c_pointer, useAlphaChannelOfTexture)
+				self.draw2DImage2(texture, destPos, sourceRect, clipRect, color, useAlphaChannelOfTexture)
 			else:
-				IVideoDriver_draw2DImage3(self.c_pointer, texture.c_pointer, destPos.c_pointer, sourceRect.c_pointer, clipRect.c_pointer, color, useAlphaChannelOfTexture)
-	def draw2DImage1(self, texture, destPos):
-		IVideoDriver_draw2DImage1(self.c_pointer, texture.c_pointer, destPos.c_pointer)
-	def draw2DImage2(self, texture, destPos, sourceRect, clipRect = recti(0), color=SColor(255,255,255,255), useAlphaChannelOfTexture=False):
-		IVideoDriver_draw2DImage2(self.c_pointer, texture.c_pointer, destPos.c_pointer, sourceRect.c_pointer, clipRect.c_pointer, color.c_pointer, useAlphaChannelOfTexture)
-	def draw2DImage3(self, texture, destRect, sourceRect, clipRect =0, colors=0, useAlphaChannelOfTexture=False):
-		IVideoDriver_draw2DImage3(self.c_pointer, texture.c_pointer, destRec.c_pointer, sourceRect.c_pointer, clipRect.c_pointer, colors, useAlphaChannelOfTexture)
+				self.draw2DImage3(texture, destPos, sourceRect, clipRect, color, useAlphaChannelOfTexture)
+		else:
+			if 'color' in kwargs:
+				self.draw2DImage2(*args, **kwargs)
+			else:
+				self.draw2DImage3(*args, **kwargs)
+	def draw2DImageBatch1(self, texture, pos, sourceRects, indices, kerningWidth=0, clipRect=0, color=SColor(255,255,255,255), useAlphaChannelOfTexture=False):
+		IVideoDriver_draw2DImageBatch1(self.c_pointer, texture.c_pointer, pos.c_pointer, sourceRects, indices, kerningWidth, clipRect.c_pointer, color.c_pointer, useAlphaChannelOfTexture)
+	def draw2DImageBatch2(self, texture, positions, sourceRects, clipRect = recti(0), color=SColor(255,255,255,255), useAlphaChannelOfTexture=False):
+		IVideoDriver_draw2DImageBatch2(self.c_pointer, texture.c_pointer, positions, sourceRects, clipRect.c_pointer, color.c_pointer, useAlphaChannelOfTexture)
 	def draw2DImageBatch(self, *args, **kwargs):
 		if isinstance(args[1], position2di):
 			self.draw2DImageBatch1(*args, **kwargs)
 		else:
 			self.draw2DImageBatch2(*args, **kwargs)
-	def draw2DImageBatch1(self, texture, pos, sourceRects, indices, kerningWidth=0, clipRect=0, color=SColor(255,255,255,255), useAlphaChannelOfTexture=False):
-		IVideoDriver_draw2DImageBatch1(self.c_pointer, texture.c_pointer, pos.c_pointer, sourceRects, indices, kerningWidth, clipRect.c_pointer, color.c_pointer, useAlphaChannelOfTexture)
-	def draw2DImageBatch2(self, texture, positions, sourceRects, clipRect = recti(0), color=SColor(255,255,255,255), useAlphaChannelOfTexture=False):
-		IVideoDriver_draw2DImageBatch2(self.c_pointer, texture.c_pointer, positions, sourceRects, clipRect.c_pointer, color.c_pointer, useAlphaChannelOfTexture)
+	def draw2DRectangle1(self, color, pos, clip = recti(0)):
+		'SColor, recti, recti'
+		IVideoDriver_draw2DRectangle1(self.c_pointer, color.c_pointer, pos.c_pointer, clip.c_pointer)
+	def draw2DRectangle2(self, pos, colorLeftUp, colorRightUp, colorLeftDown, colorRightDown, clip = recti(0)):
+		'recti, SColor, SColor, SColor, SColor, recti'
+		IVideoDriver_draw2DRectangle2(self.c_pointer, pos.c_pointer, colorLeftUp.c_pointer, colorRightUp.c_pointer, colorLeftDown.c_pointer, colorRightDown.c_pointer, clip.c_pointer)
 	def draw2DRectangle(self, *args):
 		clip = recti(0)
 		if isinstance(args[0], SColor):
@@ -12747,17 +12797,13 @@ class IVideoDriver(IReferenceCounted):
 				color, pos = args
 			else:
 				color, pos, clip = args
-			IVideoDriver_draw2DRectangle1(self.c_pointer, color.c_pointer, pos.c_pointer, clip.c_pointer)
+			self.draw2DRectangle1(color, pos, clip)
 		else:
 			if len(args) == 5:
 				pos, colorLeftUp, colorRightUp, colorLeftDown, colorRightDown = args
 			else:
 				pos, colorLeftUp, colorRightUp, colorLeftDown, colorRightDown, clip = args
-			IVideoDriver_draw2DRectangle2(self.c_pointer, pos.c_pointer, colorLeftUp, colorRightUp, colorLeftDown, colorRightDown, clip)
-	def draw2DRectangle1(self, color, pos, clip = recti(0)):
-		IVideoDriver_draw2DRectangle1(self.c_pointer, color.c_pointer, pos.c_pointer, clip.c_pointer)
-	def draw2DRectangle2(self, pos, colorLeftUp, colorRightUp, colorLeftDown, colorRightDown, clip = recti(0)):
-		IVideoDriver_draw2DRectangle2(self.c_pointer, pos.c_pointer, colorLeftUp, colorRightUp, colorLeftDown, colorRightDown, clip)
+			self.draw2DRectangle2(pos, colorLeftUp, colorRightUp, colorLeftDown, colorRightDown, clip)
 	def draw2DRectangleOutline(self, pos, color=SColor(255,255,255,255)):
 		IVideoDriver_draw2DRectangleOutline(self.c_pointer, pos.c_pointer, color.c_pointer)
 	def draw2DLine(self, start, end, color=SColor(255,255,255,255)):
@@ -12775,6 +12821,7 @@ class IVideoDriver(IReferenceCounted):
 	def drawStencilShadow(self, clearStencilBuffer=False, leftUpEdge = SColor(255,0,0,0), rightUpEdge = SColor(255,0,0,0), leftDownEdge = SColor(255,0,0,0), rightDownEdge = SColor(255,0,0,0)):
 		IVideoDriver_drawStencilShadow(self.c_pointer, clearStencilBuffer, leftUpEdge.c_pointer, rightUpEdge.c_pointer, leftDownEdge.c_pointer, rightDownEdge.c_pointer)
 	def drawMeshBuffer(self, mb):
+		'IMeshBuffer'
 		IVideoDriver_drawMeshBuffer(self.c_pointer, mb.c_pointer)
 	def setFog(self, color=SColor(0,255,255,255), fogType=EFT_FOG_LINEAR, start=50.0, end=100.0, density=0.01, pixelFog=False, rangeFog=False):
 		IVideoDriver_setFog(self.c_pointer, color.c_pointer, fogType, start, end, density, pixelFog, rangeFog)
@@ -12832,7 +12879,7 @@ class IVideoDriver(IReferenceCounted):
 	def createImageFromFile2(self, file):
 		return IImage(IVideoDriver_createImageFromFile2(self.c_pointer, file.c_pointer))
 	def writeImageToFile(self, image, file_or_filename, param = 0):
-		if isinstance(file_or_filename, str):
+		if isinstance(file_or_filename, (type_str, type_unicode)):
 			return self.writeImageToFile1(image, file_or_filename, param)
 		else:
 			return self.writeImageToFile2(image, file_or_filename, param)
@@ -13597,8 +13644,8 @@ class IGUIEnvironment(IReferenceCounted):
 		def addFileOpenDialog(self, title = '', modal = True, parent = IGUIElement(), id = -1):
 			return IGUIFileOpenDialog(IGUIEnvironment_addFileOpenDialog(self.c_pointer, title, modal, parent.c_pointer, id))
 	else:
-		def addFileOpenDialog(self, title = '', modal = True, parent = IGUIElement(), id = -1, type = 0):
-			return IGUIFileOpenDialog(IGUIEnvironment_addFileOpenDialog(self.c_pointer, title, modal, parent.c_pointer, id, type))
+		def addFileOpenDialog(self, title = '', modal = True, parent = IGUIElement(), id = -1, restoreCWD = False, startDir = ''):
+			return IGUIFileOpenDialog(IGUIEnvironment_addFileOpenDialog(self.c_pointer, title, modal, parent.c_pointer, id, restoreCWD, startDir))
 	if BUILD_WITH_GUI_FILE_SELECTOR:
 		def addFileSelectorDialog(self, title = '', modal = True, parent = IGUIElement(), id = -1, rectangle = recti(0,0,350,265), type = EFST_OPEN_DIALOG):
 			return CGUIFileSelector(IGUIEnvironment_addFileSelectorDialog(self.c_pointer, title, modal, parent.c_pointer, id, rectangle.c_pointer, type))
