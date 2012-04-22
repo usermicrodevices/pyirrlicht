@@ -1,13 +1,14 @@
-# Copyright(c) Max Kolosov 2010 - 2012 maxkolosov@inbox.ru
-# http://vosolok2008.narod.ru
+# Copyright(c) Max Kolosov 2010 - 2012 pyirrlicht@gmail.com
+# http://pir.sourceforge.net
 # BSD license
 
 __version__ = pyirrlicht_version = '1.1.0'
-__versionTime__ = '2012-04-14'
-__author__ = 'Maxim Kolosov <pyirrlicht@gmail.com>'
+__versionTime__ = '2012-04-22'
+__author__ = 'Maxim Kolosov'
+__author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
 pyirrlicht.py - is ctypes python module for
-Irrlicht Engine (http://irrlicht.sourceforge.net).
+Irrlicht Engine SDK(http://irrlicht.sourceforge.net).
 '''
 
 IRR_ENCODING = 'cp1251'
@@ -22,6 +23,9 @@ IDI_SHIELD = 32518
 
 import ctypes
 from sys import hexversion, platform
+
+if hexversion < 0x02060000:
+	ctypes.c_bool = ctypes.c_byte
 
 class FILE(ctypes.Structure):
 	pass
@@ -73,7 +77,7 @@ ALLOC_STRATEGY_SAFE = 0
 ALLOC_STRATEGY_DOUBLE = 1
 ALLOC_STRATEGY_SQRT = 2
 
-IRR_WCHAR_FILESYSTEM = ctypes.c_int.in_dll(c_module, 'IRR_WCHAR_FILESYSTEM').value
+IRR_WCHAR_FILESYSTEM = ctypes.c_bool.in_dll(c_module, 'IRR_WCHAR_FILESYSTEM').value
 fschar_t = ctypes.c_char_p
 if IRR_WCHAR_FILESYSTEM:
 	fschar_t = ctypes.c_wchar_p
@@ -93,8 +97,8 @@ def as_ansi(value, encoding = IRR_ENCODING):
 	else:
 		return value
 
-IRR_IMPROVE_UNICODE = ctypes.c_int.in_dll(c_module, 'IRR_IMPROVE_UNICODE').value
-IRR_USE_INPUT_METHOD = ctypes.c_int.in_dll(c_module, 'IRR_USE_INPUT_METHOD').value
+IRR_IMPROVE_UNICODE = ctypes.c_bool.in_dll(c_module, 'IRR_IMPROVE_UNICODE').value
+IRR_USE_INPUT_METHOD = ctypes.c_bool.in_dll(c_module, 'IRR_USE_INPUT_METHOD').value
 
 eQ3MeshIndex = 0
 E_Q3_MESH_GEOMETRY = 0
@@ -104,6 +108,7 @@ E_Q3_MESH_FOG = 3
 E_Q3_MESH_UNRESOLVED = 4
 E_Q3_MESH_SIZE = 5
 
+E_ANTI_ALIASING_MODE = 0
 EAAM_OFF = 0
 EAAM_SIMPLE = 1
 EAAM_QUALITY = 3
@@ -1114,15 +1119,15 @@ class SAttributeReadWriteOptions(ctypes.Structure):
 				#~ ('WindowSize', ctypes.c_void_p),
 				#~ ('Bits', ctypes.c_int),
 				#~ ('ZBufferBits', ctypes.c_int),
-				#~ ('Fullscreen', ctypes.c_byte),
-				#~ ('Stencilbuffer', ctypes.c_byte),
-				#~ ('Vsync', ctypes.c_byte),
+				#~ ('Fullscreen', ctypes.c_bool),
+				#~ ('Stencilbuffer', ctypes.c_bool),
+				#~ ('Vsync', ctypes.c_bool),
 				#~ ('AntiAlias', ctypes.c_ubyte),
-				#~ ('WithAlphaChannel', ctypes.c_byte),
-				#~ ('Doublebuffer', ctypes.c_byte),
-				#~ ('IgnoreInput', ctypes.c_byte),
-				#~ ('Stereobuffer', ctypes.c_byte),
-				#~ ('HighPrecisionFPU', ctypes.c_byte),
+				#~ ('WithAlphaChannel', ctypes.c_bool),
+				#~ ('Doublebuffer', ctypes.c_bool),
+				#~ ('IgnoreInput', ctypes.c_bool),
+				#~ ('Stereobuffer', ctypes.c_bool),
+				#~ ('HighPrecisionFPU', ctypes.c_bool),
 				#~ ('EventReceiver', ctypes.c_void_p),
 				#~ ('WindowId', ctypes.c_void_p),
 				#~ ('SDK_version_do_not_use', ctypes.c_char_p)
@@ -1153,7 +1158,7 @@ class SAttributeReadWriteOptions(ctypes.Structure):
 	#~ _fields_ = [('Material', ctypes.c_void_p),
 				#~ ('EnableFlags', ctypes.c_uint),
 				#~ ('EnablePasses', ctypes.c_ubyte),
-				#~ ('Enabled', ctypes.c_byte),
+				#~ ('Enabled', ctypes.c_bool),
 				#~ ('apply', SOverrideMaterial_apply)
 				#~ ]
 
@@ -1176,21 +1181,21 @@ class SAttributeReadWriteOptions(ctypes.Structure):
 	#~ _fields_ = [('X', ctypes.c_int),
 				#~ ('Y', ctypes.c_int),
 				#~ ('Wheel', ctypes.c_float),
-				#~ ('Shift', ctypes.c_byte),
-				#~ ('Control', ctypes.c_byte),
+				#~ ('Shift', ctypes.c_bool),
+				#~ ('Control', ctypes.c_bool),
 				#~ ('ButtonStates', ctypes.c_uint),
-				#~ ('isLeftPressed', func_type(ctypes.c_byte)),
-				#~ ('isRightPressed', func_type(ctypes.c_byte)),
-				#~ ('isMiddlePressed', func_type(ctypes.c_byte)),
+				#~ ('isLeftPressed', func_type(ctypes.c_bool)),
+				#~ ('isRightPressed', func_type(ctypes.c_bool)),
+				#~ ('isMiddlePressed', func_type(ctypes.c_bool)),
 				#~ ('Event', ctypes.c_int)
 				#~ ]
 
 #~ class SKeyInput(ctypes.Structure):
 	#~ _fields_ = [('Char', ctypes.c_wchar_p),
 				#~ ('Key', ctypes.c_int),
-				#~ ('PressedDown', ctypes.c_byte),
-				#~ ('Shift', ctypes.c_byte),
-				#~ ('Control', ctypes.c_byte)
+				#~ ('PressedDown', ctypes.c_bool),
+				#~ ('Shift', ctypes.c_bool),
+				#~ ('Control', ctypes.c_bool)
 				#~ ]
 
 NUMBER_OF_BUTTONS = 32
@@ -1207,7 +1212,7 @@ NUMBER_OF_AXES = 6
 				#~ ('Axis', ctypes.c_short * NUMBER_OF_AXES),
 				#~ ('POV', ctypes.c_ushort),
 				#~ ('Joystick', ctypes.c_ubyte),
-				#~ ('IsButtonPressed', func_type(ctypes.c_byte, ctypes.c_uint))
+				#~ ('IsButtonPressed', func_type(ctypes.c_bool, ctypes.c_uint))
 				#~ ]
 
 #~ class SLogEvent(ctypes.Structure):
@@ -1300,7 +1305,7 @@ class SLight(ctypes.Structure):
 				('Direction', ctypes.c_void_p),# vector3df
 				('Radius', ctypes.c_float),
 				('Type', ctypes.c_int),
-				('CastShadows', ctypes.c_byte)
+				('CastShadows', ctypes.c_bool)
 				]
 
 #~ class IRenderTarget(ctypes.Structure):
@@ -1309,7 +1314,7 @@ class SLight(ctypes.Structure):
 				#~ ('ColorMask', ctypes.c_int),# E_COLOR_PLANE
 				#~ ('BlendFuncSrc', ctypes.c_int),# E_BLEND_FACTOR
 				#~ ('BlendFuncDst', ctypes.c_int),# E_BLEND_FACTOR
-				#~ ('BlendEnable', ctypes.c_byte)
+				#~ ('BlendEnable', ctypes.c_bool)
 				#~ ]
 
 #~ class SGUISpriteFrame(ctypes.Structure):
@@ -1333,12 +1338,12 @@ tool_getAsFloat = func_type(ctypes.c_float, ctypes.c_char_p, ctypes.c_void_p)(('
 tool_getTextures = func_type(None, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('tool_getTextures', c_module))
 
 # tool_char_to_wchar mainly used with Blitz3D wrapper
-BUILD_WITH_CHAR_CONVERSION_FUNCTIONS = ctypes.c_int.in_dll(c_module, 'BUILD_WITH_CHAR_CONVERSION_FUNCTIONS').value
+BUILD_WITH_CHAR_CONVERSION_FUNCTIONS = ctypes.c_bool.in_dll(c_module, 'BUILD_WITH_CHAR_CONVERSION_FUNCTIONS').value
 if BUILD_WITH_CHAR_CONVERSION_FUNCTIONS:
 	tool_char_to_wchar = func_type(ctypes.c_wchar_p, ctypes.c_char_p)(('tool_char_to_wchar', c_module))
 
 # stream functions
-BUILD_WITH_STREAM_FUNCTIONS = ctypes.c_int.in_dll(c_module, 'BUILD_WITH_STREAM_FUNCTIONS').value
+BUILD_WITH_STREAM_FUNCTIONS = ctypes.c_bool.in_dll(c_module, 'BUILD_WITH_STREAM_FUNCTIONS').value
 if BUILD_WITH_STREAM_FUNCTIONS:
 	tool_get_stdin = func_type(ctypes.c_void_p)(('tool_get_stdin', c_module))
 	tool_get_stdout = func_type(ctypes.c_void_p)(('tool_get_stdout', c_module))
@@ -1348,7 +1353,7 @@ if BUILD_WITH_STREAM_FUNCTIONS:
 	tool_close_streams = func_type(ctypes.c_int)(('tool_close_streams', c_module))
 
 # agg functions
-BUILD_WITH_AGG = ctypes.c_int.in_dll(c_module, 'BUILD_WITH_AGG').value
+BUILD_WITH_AGG = ctypes.c_bool.in_dll(c_module, 'BUILD_WITH_AGG').value
 if BUILD_WITH_AGG:
 	tool_texture_from_svg = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_int, ctypes.c_char_p, ctypes.c_uint)(('tool_texture_from_svg', c_module))
 	tool_texture_from_test_vectors = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_uint)(('tool_texture_from_test_vectors', c_module))
@@ -1367,18 +1372,19 @@ if BUILD_WITH_AGG:
 	svg_viewer_get_texture = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_viewer_get_texture', c_module))
 
 # svg_agg_image
-BUILD_WITH_IRR_SVG_AGG = ctypes.c_int.in_dll(c_module, 'BUILD_WITH_IRR_SVG_AGG').value
+BUILD_WITH_IRR_SVG_AGG = ctypes.c_bool.in_dll(c_module, 'BUILD_WITH_IRR_SVG_AGG').value
 if BUILD_WITH_IRR_SVG_AGG:
-	svg_agg_image_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_byte, ctypes.c_uint, ctypes.c_int, ctypes.c_int)(('svg_agg_image_ctor1', c_module))
-	svg_agg_image_parse = func_type(None, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_byte, ctypes.c_uint, ctypes.c_int, ctypes.c_int)(('svg_agg_image_parse', c_module))
+	svg_agg_image_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_bool, ctypes.c_uint, ctypes.c_int, ctypes.c_int)(('svg_agg_image_ctor1', c_module))
+	svg_agg_image_parse = func_type(None, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_bool, ctypes.c_uint, ctypes.c_int, ctypes.c_int)(('svg_agg_image_parse', c_module))
 	svg_agg_image_get_size = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_get_size', c_module))
 	svg_agg_image_scale = func_type(None, ctypes.c_void_p, ctypes.c_double)(('svg_agg_image_scale', c_module))
-	svg_agg_image_render = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_render', c_module))
-	svg_agg_image_get_texture = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_get_texture', c_module))
-	#~ svg_agg_image_drop = func_type(ctypes.c_byte, ctypes.c_void_p)(('svg_agg_image_drop', c_module))
+	#~ svg_agg_image_render = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_render', c_module))
+	svg_agg_image_get_image = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('svg_agg_image_get_image', c_module))
+	svg_agg_image_get_texture = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool)(('svg_agg_image_get_texture', c_module))
+	#~ svg_agg_image_drop = func_type(ctypes.c_bool, ctypes.c_void_p)(('svg_agg_image_drop', c_module))
 
 # svg_cairo_image
-BUILD_WITH_IRR_SVG_CAIRO = ctypes.c_int.in_dll(c_module, 'BUILD_WITH_IRR_SVG_CAIRO').value
+BUILD_WITH_IRR_SVG_CAIRO = ctypes.c_bool.in_dll(c_module, 'BUILD_WITH_IRR_SVG_CAIRO').value
 if BUILD_WITH_IRR_SVG_CAIRO:
 	CAIRO_ANTIALIAS_DEFAULT = 0
 	CAIRO_ANTIALIAS_NONE = 1
@@ -1388,14 +1394,14 @@ if BUILD_WITH_IRR_SVG_CAIRO:
 	cairo_version = func_type(ctypes.c_int)(('tool_cairo_version', c_module))
 	cairo_version_string = func_type(ctypes.c_char_p)(('tool_cairo_version_string', c_module))
 
-	svg_cairo_image_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_byte, ctypes.c_double, ctypes.c_int, ctypes.c_int, ctypes.c_double, ctypes.c_double)(('svg_cairo_image_ctor1', c_module))
-	svg_cairo_image_parse = func_type(None, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_byte, ctypes.c_double, ctypes.c_int, ctypes.c_int, ctypes.c_double, ctypes.c_double)(('svg_cairo_image_parse', c_module))
+	svg_cairo_image_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_bool, ctypes.c_double, ctypes.c_int, ctypes.c_int, ctypes.c_double, ctypes.c_double)(('svg_cairo_image_ctor1', c_module))
+	svg_cairo_image_parse = func_type(None, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_bool, ctypes.c_double, ctypes.c_int, ctypes.c_int, ctypes.c_double, ctypes.c_double)(('svg_cairo_image_parse', c_module))
 	svg_cairo_image_scale = func_type(None, ctypes.c_void_p, ctypes.c_double, ctypes.c_double)(('svg_cairo_image_scale', c_module))
 	svg_cairo_image_get_image = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_cairo_image_get_image', c_module))
 	svg_cairo_image_get_texture = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_cairo_image_get_texture', c_module))
 
 # MainLoop main loop helper example
-MainLoop_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_byte)(('MainLoop_ctor', c_module))
+MainLoop_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_bool)(('MainLoop_ctor', c_module))
 MainLoop_start = func_type(None, ctypes.c_void_p)(('MainLoop_start', c_module))
 MainLoop_stop = func_type(None, ctypes.c_void_p)(('MainLoop_stop', c_module))
 
@@ -1409,12 +1415,12 @@ array_push_back = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('array_push
 array_push_front = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('array_push_front', c_module))
 array_insert = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('array_insert', c_module))
 array_clear = func_type(None, ctypes.c_void_p)(('array_clear', c_module))
-array_set_pointer = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_byte, ctypes.c_byte)(('array_set_pointer', c_module))
-array_set_free_when_destroyed = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('array_set_free_when_destroyed', c_module))
+array_set_pointer = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_bool, ctypes.c_bool)(('array_set_pointer', c_module))
+array_set_free_when_destroyed = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('array_set_free_when_destroyed', c_module))
 array_set_used = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('array_set_used', c_module))
 array_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('array_set', c_module))
-array_operator_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('array_operator_eq', c_module))
-array_operator_neq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('array_operator_neq', c_module))
+array_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('array_operator_eq', c_module))
+array_operator_neq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('array_operator_neq', c_module))
 array_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('array_get_item', c_module))
 array_set_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p)(('array_set_item', c_module))
 array_getLast = func_type(ctypes.c_void_p, ctypes.c_void_p)(('array_getLast', c_module))
@@ -1422,7 +1428,7 @@ array_pointer = func_type(ctypes.c_void_p, ctypes.c_void_p)(('array_pointer', c_
 array_const_pointer = func_type(ctypes.c_void_p, ctypes.c_void_p)(('array_const_pointer', c_module))
 array_size = func_type(ctypes.c_uint, ctypes.c_void_p)(('array_size', c_module))
 array_allocated_size = func_type(ctypes.c_uint, ctypes.c_void_p)(('array_allocated_size', c_module))
-array_empty = func_type(ctypes.c_byte, ctypes.c_void_p)(('array_empty', c_module))
+array_empty = func_type(ctypes.c_bool, ctypes.c_void_p)(('array_empty', c_module))
 array_sort = func_type(None, ctypes.c_void_p)(('array_sort', c_module))
 array_binary_search1 = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('array_binary_search1', c_module))
 array_binary_search2 = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('array_binary_search2', c_module))
@@ -1431,7 +1437,7 @@ array_linear_search = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(
 array_linear_reverse_search = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('array_linear_reverse_search', c_module))
 array_erase1 = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('array_erase1', c_module))
 array_erase2 = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_int)(('array_erase2', c_module))
-array_set_sorted = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('array_set_sorted', c_module))
+array_set_sorted = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('array_set_sorted', c_module))
 array_swap = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('array_swap', c_module))
 
 #================= SJoystickInfo
@@ -1450,13 +1456,13 @@ SJoystickInfo_get_PovHat = func_type(ctypes.c_int, ctypes.c_void_p)(('SJoystickI
 arraySJoystickInfo_ctor = func_type(ctypes.c_void_p)(('arraySJoystickInfo_ctor', c_module))
 arraySJoystickInfo_allocated_size = func_type(ctypes.c_uint, ctypes.c_void_p)(('arraySJoystickInfo_allocated_size', c_module))
 arraySJoystickInfo_size = func_type(ctypes.c_uint, ctypes.c_void_p)(('arraySJoystickInfo_size', c_module))
-arraySJoystickInfo_set_free_when_destroyed = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('arraySJoystickInfo_set_free_when_destroyed', c_module))
+arraySJoystickInfo_set_free_when_destroyed = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('arraySJoystickInfo_set_free_when_destroyed', c_module))
 arraySJoystickInfo_set_used = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('arraySJoystickInfo_set_used', c_module))
 arraySJoystickInfo_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('arraySJoystickInfo_get_item', c_module))
 #~ arraySJoystickInfo_get_item = func_type(ctypes.POINTER(SJoystickInfo), ctypes.c_void_p, ctypes.c_uint)(('arraySJoystickInfo_get_item', c_module))
 
 # functions for class CGridSceneNode
-CGridSceneNode_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p, ctypes.c_byte)(('CGridSceneNode_ctor', c_module))
+CGridSceneNode_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p, ctypes.c_bool)(('CGridSceneNode_ctor', c_module))
 CGridSceneNode_clone = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_clone', c_module))
 CGridSceneNode_OnRegisterSceneNode = func_type(None, ctypes.c_void_p)(('CGridSceneNode_OnRegisterSceneNode', c_module))
 CGridSceneNode_render = func_type(None, ctypes.c_void_p)(('CGridSceneNode_render', c_module))
@@ -1469,7 +1475,7 @@ CGridSceneNode_GetSize = func_type(ctypes.c_uint, ctypes.c_void_p)(('CGridSceneN
 CGridSceneNode_GetGridColor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_GetGridColor', c_module))
 CGridSceneNode_GetAccentlineOffset = func_type(ctypes.c_uint, ctypes.c_void_p)(('CGridSceneNode_GetAccentlineOffset', c_module))
 CGridSceneNode_GetAccentlineColor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_GetAccentlineColor', c_module))
-CGridSceneNode_AreAxisLineActive = func_type(ctypes.c_byte, ctypes.c_void_p)(('CGridSceneNode_AreAxisLineActive', c_module))
+CGridSceneNode_AreAxisLineActive = func_type(ctypes.c_bool, ctypes.c_void_p)(('CGridSceneNode_AreAxisLineActive', c_module))
 CGridSceneNode_GetAxisLineXColor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_GetAxisLineXColor', c_module))
 CGridSceneNode_GetAxisLineZColor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_GetAxisLineZColor', c_module))
 CGridSceneNode_SetSpacing = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('CGridSceneNode_SetSpacing', c_module))
@@ -1477,13 +1483,13 @@ CGridSceneNode_SetSize = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('CGrid
 CGridSceneNode_SetGridColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_SetGridColor', c_module))
 CGridSceneNode_SetAccentlineOffset = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('CGridSceneNode_SetAccentlineOffset', c_module))
 CGridSceneNode_SetAccentlineColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_SetAccentlineColor', c_module))
-CGridSceneNode_SetAxisLineActive = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('CGridSceneNode_SetAxisLineActive', c_module))
+CGridSceneNode_SetAxisLineActive = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('CGridSceneNode_SetAxisLineActive', c_module))
 CGridSceneNode_SetAxisLineXColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_SetAxisLineXColor', c_module))
 CGridSceneNode_SetAxisLineZColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_SetAxisLineZColor', c_module))
 CGridSceneNode_SetMaterial = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_SetMaterial', c_module))
 
 #class CGUIFileSelector : public IGUIFileOpenDialog
-BUILD_WITH_GUI_FILE_SELECTOR = ctypes.c_byte.in_dll(c_module, 'BUILD_WITH_GUI_FILE_SELECTOR').value
+BUILD_WITH_GUI_FILE_SELECTOR = ctypes.c_bool.in_dll(c_module, 'BUILD_WITH_GUI_FILE_SELECTOR').value
 if BUILD_WITH_GUI_FILE_SELECTOR:
 	E_FILESELECTOR_TYPE = 0
 	EFST_OPEN_DIALOG = 0#<! For opening files
@@ -1497,11 +1503,11 @@ if BUILD_WITH_GUI_FILE_SELECTOR:
 	CGUIFileSelector_addFileFilter = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_void_p)(('CGUIFileSelector_addFileFilter', c_module))
 	CGUIFileSelector_setCustomFileIcon = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGUIFileSelector_setCustomFileIcon', c_module))
 	CGUIFileSelector_setCustomDirectoryIcon = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGUIFileSelector_setCustomDirectoryIcon', c_module))
-	CGUIFileSelector_setDirectoryChoosable = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('CGUIFileSelector_setDirectoryChoosable', c_module))
+	CGUIFileSelector_setDirectoryChoosable = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('CGUIFileSelector_setDirectoryChoosable', c_module))
 
 # functions for Structure class SViewFrustum
-SMaterialLayer_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMaterialLayer_ctor1', c_module))
-SMaterialLayer_ctor2 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMaterialLayer_ctor2', c_module))
+SViewFrustum_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SViewFrustum_ctor1', c_module))
+SViewFrustum_ctor2 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SViewFrustum_ctor2', c_module))
 SViewFrustum_transform = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SViewFrustum_transform', c_module))
 SViewFrustum_getFarLeftUp = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SViewFrustum_getFarLeftUp', c_module))
 SViewFrustum_getFarLeftDown = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SViewFrustum_getFarLeftDown', c_module))
@@ -1511,7 +1517,7 @@ SViewFrustum_getBoundingBox = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SVie
 SViewFrustum_recalculateBoundingBox = func_type(None, ctypes.c_void_p)(('SViewFrustum_recalculateBoundingBox', c_module))
 SViewFrustum_setFrom = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SViewFrustum_setFrom', c_module))
 SViewFrustum_getTransform = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('SViewFrustum_getTransform', c_module))
-SViewFrustum_clipLine = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('SViewFrustum_clipLine', c_module))
+SViewFrustum_clipLine = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('SViewFrustum_clipLine', c_module))
 
 # functions for class IEventReceiver
 #~ SEvent_GetEventType = func_type(ctypes.c_int, ctypes.POINTER(SEvent))(('SEvent_GetEventType', c_module))
@@ -1530,50 +1536,50 @@ SGUIEvent_GetEventType = func_type(ctypes.c_int, ctypes.c_void_p)(('SGUIEvent_Ge
 #~ SMouseInput_GetX = func_type(ctypes.c_int, ctypes.POINTER(SMouseInput))(('SMouseInput_GetX', c_module))
 #~ SMouseInput_GetY = func_type(ctypes.c_int, ctypes.POINTER(SMouseInput))(('SMouseInput_GetY', c_module))
 #~ SMouseInput_GetWheel = func_type(ctypes.c_float, ctypes.POINTER(SMouseInput))(('SMouseInput_GetWheel', c_module))
-#~ SMouseInput_GetShift = func_type(ctypes.c_byte, ctypes.POINTER(SMouseInput))(('SMouseInput_GetShift', c_module))
-#~ SMouseInput_GetControl = func_type(ctypes.c_byte, ctypes.POINTER(SMouseInput))(('SMouseInput_GetControl', c_module))
+#~ SMouseInput_GetShift = func_type(ctypes.c_bool, ctypes.POINTER(SMouseInput))(('SMouseInput_GetShift', c_module))
+#~ SMouseInput_GetControl = func_type(ctypes.c_bool, ctypes.POINTER(SMouseInput))(('SMouseInput_GetControl', c_module))
 #~ SMouseInput_GetButtonStates = func_type(ctypes.c_uint, ctypes.POINTER(SMouseInput))(('SMouseInput_GetButtonStates', c_module))
-#~ SMouseInput_isLeftPressed = func_type(ctypes.c_byte, ctypes.POINTER(SMouseInput))(('SMouseInput_isLeftPressed', c_module))
-#~ SMouseInput_isRightPressed = func_type(ctypes.c_byte, ctypes.POINTER(SMouseInput))(('SMouseInput_isRightPressed', c_module))
-#~ SMouseInput_isMiddlePressed = func_type(ctypes.c_byte, ctypes.POINTER(SMouseInput))(('SMouseInput_isMiddlePressed', c_module))
+#~ SMouseInput_isLeftPressed = func_type(ctypes.c_bool, ctypes.POINTER(SMouseInput))(('SMouseInput_isLeftPressed', c_module))
+#~ SMouseInput_isRightPressed = func_type(ctypes.c_bool, ctypes.POINTER(SMouseInput))(('SMouseInput_isRightPressed', c_module))
+#~ SMouseInput_isMiddlePressed = func_type(ctypes.c_bool, ctypes.POINTER(SMouseInput))(('SMouseInput_isMiddlePressed', c_module))
 #~ SMouseInput_GetEventType = func_type(ctypes.c_int, ctypes.POINTER(SMouseInput))(('SMouseInput_GetEventType', c_module))
 SEvent_GetSMouseInput = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SEvent_GetSMouseInput', c_module))
 SMouseInput_GetX = func_type(ctypes.c_int, ctypes.c_void_p)(('SMouseInput_GetX', c_module))
 SMouseInput_GetY = func_type(ctypes.c_int, ctypes.c_void_p)(('SMouseInput_GetY', c_module))
 SMouseInput_GetWheel = func_type(ctypes.c_float, ctypes.c_void_p)(('SMouseInput_GetWheel', c_module))
-SMouseInput_GetShift = func_type(ctypes.c_byte, ctypes.c_void_p)(('SMouseInput_GetShift', c_module))
-SMouseInput_GetControl = func_type(ctypes.c_byte, ctypes.c_void_p)(('SMouseInput_GetControl', c_module))
+SMouseInput_GetShift = func_type(ctypes.c_bool, ctypes.c_void_p)(('SMouseInput_GetShift', c_module))
+SMouseInput_GetControl = func_type(ctypes.c_bool, ctypes.c_void_p)(('SMouseInput_GetControl', c_module))
 SMouseInput_GetButtonStates = func_type(ctypes.c_uint, ctypes.c_void_p)(('SMouseInput_GetButtonStates', c_module))
-SMouseInput_isLeftPressed = func_type(ctypes.c_byte, ctypes.c_void_p)(('SMouseInput_isLeftPressed', c_module))
-SMouseInput_isRightPressed = func_type(ctypes.c_byte, ctypes.c_void_p)(('SMouseInput_isRightPressed', c_module))
-SMouseInput_isMiddlePressed = func_type(ctypes.c_byte, ctypes.c_void_p)(('SMouseInput_isMiddlePressed', c_module))
+SMouseInput_isLeftPressed = func_type(ctypes.c_bool, ctypes.c_void_p)(('SMouseInput_isLeftPressed', c_module))
+SMouseInput_isRightPressed = func_type(ctypes.c_bool, ctypes.c_void_p)(('SMouseInput_isRightPressed', c_module))
+SMouseInput_isMiddlePressed = func_type(ctypes.c_bool, ctypes.c_void_p)(('SMouseInput_isMiddlePressed', c_module))
 SMouseInput_GetEventType = func_type(ctypes.c_int, ctypes.c_void_p)(('SMouseInput_GetEventType', c_module))
 
 #~ SEvent_GetSKeyInput = func_type(ctypes.POINTER(SKeyInput), ctypes.POINTER(SEvent))(('SEvent_GetSKeyInput', c_module))
 #~ SKeyInput_GetChar = func_type(ctypes.c_wchar, ctypes.POINTER(SKeyInput))(('SKeyInput_GetChar', c_module))
 #~ SKeyInput_GetKey = func_type(ctypes.c_int, ctypes.POINTER(SKeyInput))(('SKeyInput_GetKey', c_module))
-#~ SKeyInput_GetPressedDown = func_type(ctypes.c_byte, ctypes.POINTER(SKeyInput))(('SKeyInput_GetPressedDown', c_module))
-#~ SKeyInput_GetShift = func_type(ctypes.c_byte, ctypes.POINTER(SKeyInput))(('SKeyInput_GetShift', c_module))
-#~ SKeyInput_GetControl = func_type(ctypes.c_byte, ctypes.POINTER(SKeyInput))(('SKeyInput_GetControl', c_module))
+#~ SKeyInput_GetPressedDown = func_type(ctypes.c_bool, ctypes.POINTER(SKeyInput))(('SKeyInput_GetPressedDown', c_module))
+#~ SKeyInput_GetShift = func_type(ctypes.c_bool, ctypes.POINTER(SKeyInput))(('SKeyInput_GetShift', c_module))
+#~ SKeyInput_GetControl = func_type(ctypes.c_bool, ctypes.POINTER(SKeyInput))(('SKeyInput_GetControl', c_module))
 SEvent_GetSKeyInput = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SEvent_GetSKeyInput', c_module))
 SKeyInput_GetChar = func_type(ctypes.c_wchar, ctypes.c_void_p)(('SKeyInput_GetChar', c_module))
 SKeyInput_GetKey = func_type(ctypes.c_int, ctypes.c_void_p)(('SKeyInput_GetKey', c_module))
-SKeyInput_GetPressedDown = func_type(ctypes.c_byte, ctypes.c_void_p)(('SKeyInput_GetPressedDown', c_module))
-SKeyInput_GetShift = func_type(ctypes.c_byte, ctypes.c_void_p)(('SKeyInput_GetShift', c_module))
-SKeyInput_GetControl = func_type(ctypes.c_byte, ctypes.c_void_p)(('SKeyInput_GetControl', c_module))
+SKeyInput_GetPressedDown = func_type(ctypes.c_bool, ctypes.c_void_p)(('SKeyInput_GetPressedDown', c_module))
+SKeyInput_GetShift = func_type(ctypes.c_bool, ctypes.c_void_p)(('SKeyInput_GetShift', c_module))
+SKeyInput_GetControl = func_type(ctypes.c_bool, ctypes.c_void_p)(('SKeyInput_GetControl', c_module))
 
 #~ SEvent_GetSJoystickEvent = func_type(ctypes.POINTER(SJoystickEvent), ctypes.POINTER(SEvent))(('SEvent_GetSJoystickEvent', c_module))
 #~ SJoystickEvent_GetButtonStates = func_type(ctypes.c_uint, ctypes.POINTER(SJoystickEvent))(('SJoystickEvent_GetButtonStates', c_module))
 #~ SJoystickEvent_GetAxis = func_type(ctypes.c_short * NUMBER_OF_AXES, ctypes.POINTER(SJoystickEvent))(('SJoystickEvent_GetAxis', c_module))
 #~ SJoystickEvent_GetPOV = func_type(ctypes.c_ushort, ctypes.POINTER(SJoystickEvent))(('SJoystickEvent_GetPOV', c_module))
 #~ SJoystickEvent_GetJoystick = func_type(ctypes.c_ubyte, ctypes.POINTER(SJoystickEvent))(('SJoystickEvent_GetJoystick', c_module))
-#~ SJoystickEvent_IsButtonPressed = func_type(ctypes.c_byte, ctypes.POINTER(SJoystickEvent), ctypes.c_uint)(('SJoystickEvent_IsButtonPressed', c_module))
+#~ SJoystickEvent_IsButtonPressed = func_type(ctypes.c_bool, ctypes.POINTER(SJoystickEvent), ctypes.c_uint)(('SJoystickEvent_IsButtonPressed', c_module))
 SEvent_GetSJoystickEvent = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SEvent_GetSJoystickEvent', c_module))
 SJoystickEvent_GetButtonStates = func_type(ctypes.c_uint, ctypes.c_void_p)(('SJoystickEvent_GetButtonStates', c_module))
 SJoystickEvent_GetAxis = func_type(ctypes.c_short * NUMBER_OF_AXES, ctypes.c_void_p)(('SJoystickEvent_GetAxis', c_module))
 SJoystickEvent_GetPOV = func_type(ctypes.c_ushort, ctypes.c_void_p)(('SJoystickEvent_GetPOV', c_module))
 SJoystickEvent_GetJoystick = func_type(ctypes.c_ubyte, ctypes.c_void_p)(('SJoystickEvent_GetJoystick', c_module))
-SJoystickEvent_IsButtonPressed = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_uint)(('SJoystickEvent_IsButtonPressed', c_module))
+SJoystickEvent_IsButtonPressed = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_uint)(('SJoystickEvent_IsButtonPressed', c_module))
 
 #~ SEvent_GetSLogEvent = func_type(ctypes.POINTER(SLogEvent), ctypes.POINTER(SEvent))(('SEvent_GetSLogEvent', c_module))
 #~ SLogEvent_GetText = func_type(ctypes.c_char_p, ctypes.POINTER(SLogEvent))(('SLogEvent_GetText', c_module))
@@ -1604,10 +1610,10 @@ if IRR_USE_INPUT_METHOD:
 	SInputMethodEvent_GetChar = func_type(ctypes.c_wchar, ctypes.c_void_p)(('SInputMethodEvent_GetChar', c_module))
 	SInputMethodEvent_GetEvent = func_type(ctypes.c_int, ctypes.c_void_p)(('SInputMethodEvent_GetEvent', c_module))
 
-#~ OnEventFunc = func_type(ctypes.c_byte, ctypes.POINTER(SEvent))
-OnEventFunc = func_type(ctypes.c_byte, ctypes.c_void_p)
-#~ OnEventFunc = ctypes.PYFUNCTYPE(ctypes.c_byte, ctypes.POINTER(SEvent))
-#~ OnEventFunc = func_type(ctypes.c_byte, SEvent)
+#~ OnEventFunc = func_type(ctypes.c_bool, ctypes.POINTER(SEvent))
+OnEventFunc = func_type(ctypes.c_bool, ctypes.c_void_p)
+#~ OnEventFunc = ctypes.PYFUNCTYPE(ctypes.c_bool, ctypes.POINTER(SEvent))
+#~ OnEventFunc = func_type(ctypes.c_bool, SEvent)
 IEventReceiver_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IEventReceiver_ctor1', c_module))
 IEventReceiver_ctor2 = func_type(ctypes.c_void_p, OnEventFunc)(('IEventReceiver_ctor2', c_module))
 #IEventReceiver_Destructor = func_type(None, ctypes.c_void_p)(('IEventReceiver_Destructor', c_module))
@@ -1615,31 +1621,31 @@ IEventReceiver_set_func_event = func_type(None, ctypes.c_void_p, OnEventFunc)(('
 
 # functions for class IFileSystem
 IFileSystem_createAndOpenFile = func_type(ctypes.c_void_p, ctypes.c_void_p, fschar_t)(('IFileSystem_createAndOpenFile', c_module))
-IFileSystem_createMemoryReadFile = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, fschar_t, ctypes.c_byte)(('IFileSystem_createMemoryReadFile', c_module))
+IFileSystem_createMemoryReadFile = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, fschar_t, ctypes.c_bool)(('IFileSystem_createMemoryReadFile', c_module))
 IFileSystem_createLimitReadFile = func_type(ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_void_p, ctypes.c_long, ctypes.c_long)(('IFileSystem_createLimitReadFile', c_module))
-IFileSystem_createMemoryWriteFile = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, fschar_t, ctypes.c_byte)(('IFileSystem_createMemoryWriteFile', c_module))
-IFileSystem_createAndWriteFile = func_type(ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_byte)(('IFileSystem_createAndWriteFile', c_module))
-IFileSystem_addFileArchive = func_type(ctypes.c_byte, ctypes.c_void_p, fschar_t, ctypes.c_byte, ctypes.c_byte, ctypes.c_int)(('IFileSystem_addFileArchive', c_module))
+IFileSystem_createMemoryWriteFile = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, fschar_t, ctypes.c_bool)(('IFileSystem_createMemoryWriteFile', c_module))
+IFileSystem_createAndWriteFile = func_type(ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_bool)(('IFileSystem_createAndWriteFile', c_module))
+IFileSystem_addFileArchive = func_type(ctypes.c_bool, ctypes.c_void_p, fschar_t, ctypes.c_bool, ctypes.c_bool, ctypes.c_int)(('IFileSystem_addFileArchive', c_module))
 IFileSystem_addArchiveLoader = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IFileSystem_addArchiveLoader', c_module))
 IFileSystem_getFileArchiveCount = func_type(ctypes.c_uint, ctypes.c_void_p)(('IFileSystem_getFileArchiveCount', c_module))
-IFileSystem_removeFileArchive1 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_uint)(('IFileSystem_removeFileArchive1', c_module))
-IFileSystem_removeFileArchive2 = func_type(ctypes.c_byte, ctypes.c_void_p, fschar_t)(('IFileSystem_removeFileArchive2', c_module))
-IFileSystem_moveFileArchive = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_uint, ctypes.c_int)(('IFileSystem_moveFileArchive', c_module))
+IFileSystem_removeFileArchive1 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_uint)(('IFileSystem_removeFileArchive1', c_module))
+IFileSystem_removeFileArchive2 = func_type(ctypes.c_bool, ctypes.c_void_p, fschar_t)(('IFileSystem_removeFileArchive2', c_module))
+IFileSystem_moveFileArchive = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_uint, ctypes.c_int)(('IFileSystem_moveFileArchive', c_module))
 IFileSystem_getFileArchive = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IFileSystem_getFileArchive', c_module))
 if IRRLICHT_VERSION < 180:
-	IFileSystem_addZipFileArchive = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_byte, ctypes.c_byte)(('IFileSystem_addZipFileArchive', c_module))
-	IFileSystem_addFolderFileArchive = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_byte, ctypes.c_byte)(('IFileSystem_addFolderFileArchive', c_module))
-	IFileSystem_addPakFileArchive = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_byte, ctypes.c_byte)(('IFileSystem_addPakFileArchive', c_module))
+	IFileSystem_addZipFileArchive = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_bool, ctypes.c_bool)(('IFileSystem_addZipFileArchive', c_module))
+	IFileSystem_addFolderFileArchive = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_bool, ctypes.c_bool)(('IFileSystem_addFolderFileArchive', c_module))
+	IFileSystem_addPakFileArchive = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_bool, ctypes.c_bool)(('IFileSystem_addPakFileArchive', c_module))
 IFileSystem_getWorkingDirectory = func_type(fschar_t, ctypes.c_void_p)(('IFileSystem_getWorkingDirectory', c_module))
-IFileSystem_changeWorkingDirectoryTo = func_type(ctypes.c_byte, ctypes.c_void_p, fschar_t)(('IFileSystem_changeWorkingDirectoryTo', c_module))
+IFileSystem_changeWorkingDirectoryTo = func_type(ctypes.c_bool, ctypes.c_void_p, fschar_t)(('IFileSystem_changeWorkingDirectoryTo', c_module))
 IFileSystem_getAbsolutePath = func_type(fschar_t, ctypes.c_void_p, fschar_t)(('IFileSystem_getAbsolutePath', c_module))
 IFileSystem_getFileDir = func_type(fschar_t, ctypes.c_void_p, fschar_t)(('IFileSystem_getFileDir', c_module))
-IFileSystem_getFileBasename = func_type(fschar_t, ctypes.c_void_p, fschar_t, ctypes.c_byte)(('IFileSystem_getFileBasename', c_module))
+IFileSystem_getFileBasename = func_type(fschar_t, ctypes.c_void_p, fschar_t, ctypes.c_bool)(('IFileSystem_getFileBasename', c_module))
 IFileSystem_flattenFilename = func_type(fschar_t, ctypes.c_void_p, fschar_t, fschar_t)(('IFileSystem_flattenFilename', c_module))
 IFileSystem_createFileList = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IFileSystem_createFileList', c_module))
-IFileSystem_createEmptyFileList = func_type(ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_byte, ctypes.c_byte)(('IFileSystem_createEmptyFileList', c_module))
+IFileSystem_createEmptyFileList = func_type(ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_bool, ctypes.c_bool)(('IFileSystem_createEmptyFileList', c_module))
 IFileSystem_setFileListSystem = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_int)(('IFileSystem_setFileListSystem', c_module))
-IFileSystem_existFile = func_type(ctypes.c_byte, ctypes.c_void_p, fschar_t)(('IFileSystem_existFile', c_module))
+IFileSystem_existFile = func_type(ctypes.c_bool, ctypes.c_void_p, fschar_t)(('IFileSystem_existFile', c_module))
 IFileSystem_createXMLReader1 = func_type(ctypes.c_void_p, ctypes.c_void_p, fschar_t)(('IFileSystem_createXMLReader1', c_module))
 IFileSystem_createXMLReader2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IFileSystem_createXMLReader2', c_module))
 IFileSystem_createXMLReaderUTF8 = func_type(ctypes.c_void_p, ctypes.c_void_p, fschar_t)(('IFileSystem_createXMLReaderUTF8', c_module))
@@ -1657,8 +1663,8 @@ matrix4_set1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_set1'
 matrix4_set2 = func_type(None, ctypes.c_void_p, ctypes.c_float)(('matrix4_set2', c_module))
 matrix4_const_pointer = func_type(ctypes.c_float*16, ctypes.c_void_p)(('matrix4_const_pointer', c_module))
 matrix4_pointer = func_type(ctypes.c_float*16, ctypes.c_void_p)(('matrix4_pointer', c_module))
-matrix4_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_eq', c_module))
-matrix4_noteq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_noteq', c_module))
+matrix4_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_eq', c_module))
+matrix4_noteq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_noteq', c_module))
 matrix4_add = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_add', c_module))
 matrix4_get_add = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_get_add', c_module))
 matrix4_sub = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_sub', c_module))
@@ -1670,9 +1676,9 @@ matrix4_multiplication2 = func_type(None, ctypes.c_void_p, ctypes.c_float)(('mat
 matrix4_get_multiplication1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_get_multiplication1', c_module))
 matrix4_get_multiplication2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('matrix4_get_multiplication2', c_module))
 matrix4_makeIdentity = func_type(ctypes.c_void_p, ctypes.c_void_p)(('matrix4_makeIdentity', c_module))
-matrix4_isIdentity = func_type(ctypes.c_byte, ctypes.c_void_p)(('matrix4_isIdentity', c_module))
-matrix4_isOrthogonal = func_type(ctypes.c_byte, ctypes.c_void_p)(('matrix4_isOrthogonal', c_module))
-matrix4_isIdentity_integer_base = func_type(ctypes.c_byte, ctypes.c_void_p)(('matrix4_isIdentity_integer_base', c_module))
+matrix4_isIdentity = func_type(ctypes.c_bool, ctypes.c_void_p)(('matrix4_isIdentity', c_module))
+matrix4_isOrthogonal = func_type(ctypes.c_bool, ctypes.c_void_p)(('matrix4_isOrthogonal', c_module))
+matrix4_isIdentity_integer_base = func_type(ctypes.c_bool, ctypes.c_void_p)(('matrix4_isIdentity_integer_base', c_module))
 matrix4_setTranslation = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_setTranslation', c_module))
 matrix4_getTranslation = func_type(ctypes.c_void_p, ctypes.c_void_p)(('matrix4_getTranslation', c_module))
 matrix4_setInverseTranslation = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_setInverseTranslation', c_module))
@@ -1698,9 +1704,9 @@ matrix4_transformPlane2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctyp
 matrix4_transformBox = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_transformBox', c_module))
 matrix4_transformBoxEx = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_transformBoxEx', c_module))
 matrix4_multiplyWith1x4Matrix = func_type(None, ctypes.c_void_p, ctypes.c_float*4)(('matrix4_multiplyWith1x4Matrix', c_module))
-matrix4_makeInverse = func_type(ctypes.c_byte, ctypes.c_void_p)(('matrix4_makeInverse', c_module))
-matrix4_getInversePrimitive = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_getInversePrimitive', c_module))
-matrix4_getInverse = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_getInverse', c_module))
+matrix4_makeInverse = func_type(ctypes.c_bool, ctypes.c_void_p)(('matrix4_makeInverse', c_module))
+matrix4_getInversePrimitive = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_getInversePrimitive', c_module))
+matrix4_getInverse = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_getInverse', c_module))
 matrix4_buildProjectionMatrixPerspectiveFovRH = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('matrix4_buildProjectionMatrixPerspectiveFovRH', c_module))
 matrix4_buildProjectionMatrixPerspectiveFovLH = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('matrix4_buildProjectionMatrixPerspectiveFovLH', c_module))
 matrix4_buildProjectionMatrixPerspectiveRH = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('matrix4_buildProjectionMatrixPerspectiveRH', c_module))
@@ -1725,8 +1731,8 @@ matrix4_setTextureScale = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_f
 matrix4_setTextureScaleCenter = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float)(('matrix4_setTextureScaleCenter', c_module))
 matrix4_setM = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float*16)(('matrix4_setM', c_module))
 #~ matrix4_setM = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_setM', c_module))
-matrix4_setDefinitelyIdentityMatrix = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('matrix4_setDefinitelyIdentityMatrix', c_module))
-matrix4_getDefinitelyIdentityMatrix = func_type(ctypes.c_byte, ctypes.c_void_p)(('matrix4_getDefinitelyIdentityMatrix', c_module))
+matrix4_setDefinitelyIdentityMatrix = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('matrix4_setDefinitelyIdentityMatrix', c_module))
+matrix4_getDefinitelyIdentityMatrix = func_type(ctypes.c_bool, ctypes.c_void_p)(('matrix4_getDefinitelyIdentityMatrix', c_module))
 
 # functions for class vector2df
 vector2df_ctor1 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float)(('vector2df_ctor1', c_module))
@@ -1756,13 +1762,13 @@ vector2df_operator_div_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctype
 vector2df_operator_set_div_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector2df_operator_set_div_other', c_module))
 vector2df_operator_div_value = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('vector2df_operator_div_value', c_module))
 vector2df_operator_set_div_value = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('vector2df_operator_set_div_value', c_module))
-vector2df_operator_le = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector2df_operator_le', c_module))
-vector2df_operator_ge = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector2df_operator_ge', c_module))
-vector2df_operator_lt = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector2df_operator_lt', c_module))
-vector2df_operator_gt = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector2df_operator_gt', c_module))
-vector2df_operator_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector2df_operator_eq', c_module))
-vector2df_operator_ne = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector2df_operator_ne', c_module))
-vector2df_equals = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector2df_equals', c_module))
+vector2df_operator_le = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector2df_operator_le', c_module))
+vector2df_operator_ge = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector2df_operator_ge', c_module))
+vector2df_operator_lt = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector2df_operator_lt', c_module))
+vector2df_operator_gt = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector2df_operator_gt', c_module))
+vector2df_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector2df_operator_eq', c_module))
+vector2df_operator_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector2df_operator_ne', c_module))
+vector2df_equals = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector2df_equals', c_module))
 vector2df_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float)(('vector2df_set', c_module))
 vector2df_set2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector2df_set2', c_module))
 vector2df_getLength = func_type(ctypes.c_float, ctypes.c_void_p)(('vector2df_getLength', c_module))
@@ -1775,7 +1781,7 @@ vector2df_normalize = func_type(ctypes.c_void_p, ctypes.c_void_p)(('vector2df_no
 vector2df_getAngleTrig = func_type(ctypes.c_float, ctypes.c_void_p)(('vector2df_getAngleTrig', c_module))
 vector2df_getAngle = func_type(ctypes.c_float, ctypes.c_void_p)(('vector2df_getAngle', c_module))
 vector2df_getAngleWith = func_type(ctypes.c_float, ctypes.c_void_p)(('vector2df_getAngleWith', c_module))
-vector2df_isBetweenPoints = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector2df_isBetweenPoints', c_module))
+vector2df_isBetweenPoints = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector2df_isBetweenPoints', c_module))
 vector2df_getInterpolated = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('vector2df_getInterpolated', c_module))
 vector2df_getInterpolated_quadratic = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('vector2df_getInterpolated_quadratic', c_module))
 vector2df_interpolate = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('vector2df_interpolate', c_module))
@@ -1812,13 +1818,13 @@ vector2di_operator_div_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctype
 vector2di_operator_set_div_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector2di_operator_set_div_other', c_module))
 vector2di_operator_div_value = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('vector2di_operator_div_value', c_module))
 vector2di_operator_set_div_value = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('vector2di_operator_set_div_value', c_module))
-vector2di_operator_le = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector2di_operator_le', c_module))
-vector2di_operator_ge = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector2di_operator_ge', c_module))
-vector2di_operator_lt = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector2di_operator_lt', c_module))
-vector2di_operator_gt = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector2di_operator_gt', c_module))
-vector2di_operator_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector2di_operator_eq', c_module))
-vector2di_operator_ne = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector2di_operator_ne', c_module))
-vector2di_equals = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector2di_equals', c_module))
+vector2di_operator_le = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector2di_operator_le', c_module))
+vector2di_operator_ge = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector2di_operator_ge', c_module))
+vector2di_operator_lt = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector2di_operator_lt', c_module))
+vector2di_operator_gt = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector2di_operator_gt', c_module))
+vector2di_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector2di_operator_eq', c_module))
+vector2di_operator_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector2di_operator_ne', c_module))
+vector2di_equals = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector2di_equals', c_module))
 vector2di_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('vector2di_set', c_module))
 vector2di_set2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector2di_set2', c_module))
 vector2di_getLength = func_type(ctypes.c_int, ctypes.c_void_p)(('vector2di_getLength', c_module))
@@ -1831,7 +1837,7 @@ vector2di_normalize = func_type(ctypes.c_void_p, ctypes.c_void_p)(('vector2di_no
 vector2di_getAngleTrig = func_type(ctypes.c_float, ctypes.c_void_p)(('vector2di_getAngleTrig', c_module))
 vector2di_getAngle = func_type(ctypes.c_float, ctypes.c_void_p)(('vector2di_getAngle', c_module))
 vector2di_getAngleWith = func_type(ctypes.c_float, ctypes.c_void_p)(('vector2di_getAngleWith', c_module))
-vector2di_isBetweenPoints = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector2di_isBetweenPoints', c_module))
+vector2di_isBetweenPoints = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector2di_isBetweenPoints', c_module))
 vector2di_getInterpolated = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('vector2di_getInterpolated', c_module))
 vector2di_getInterpolated_quadratic = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('vector2di_getInterpolated_quadratic', c_module))
 vector2di_interpolate = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('vector2di_interpolate', c_module))
@@ -1858,10 +1864,10 @@ dimension2df_ctor2 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float)(
 dimension2df_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('dimension2df_ctor3', c_module))
 dimension2df_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('dimension2df_ctor4', c_module))
 dimension2df_operator_set_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('dimension2df_operator_set_other', c_module))
-dimension2df_operator_eq_other = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('dimension2df_operator_eq_other', c_module))
-dimension2df_operator_ne_other = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('dimension2df_operator_ne_other', c_module))
-dimension2df_operator_eq_vector2d = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('dimension2df_operator_eq_vector2d', c_module))
-dimension2df_operator_ne_vector2d = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('dimension2df_operator_ne_vector2d', c_module))
+dimension2df_operator_eq_other = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('dimension2df_operator_eq_other', c_module))
+dimension2df_operator_ne_other = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('dimension2df_operator_ne_other', c_module))
+dimension2df_operator_eq_vector2d = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('dimension2df_operator_eq_vector2d', c_module))
+dimension2df_operator_ne_vector2d = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('dimension2df_operator_ne_vector2d', c_module))
 dimension2df_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float)(('dimension2df_set', c_module))
 dimension2df_operator_set_div_value = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('dimension2df_operator_set_div_value', c_module))
 dimension2df_operator_div_value = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('dimension2df_operator_div_value', c_module))
@@ -1871,7 +1877,7 @@ dimension2df_operator_set_add_other = func_type(ctypes.c_void_p, ctypes.c_void_p
 dimension2df_operator_set_sub_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('dimension2df_operator_set_sub_other', c_module))
 dimension2df_operator_add_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('dimension2df_operator_add_other', c_module))
 dimension2df_getArea = func_type(ctypes.c_float, ctypes.c_void_p)(('dimension2df_getArea', c_module))
-dimension2df_getOptimalSize = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_byte, ctypes.c_float)(('dimension2df_getOptimalSize', c_module))
+dimension2df_getOptimalSize = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_bool, ctypes.c_float)(('dimension2df_getOptimalSize', c_module))
 dimension2df_getInterpolated = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('dimension2df_getInterpolated', c_module))
 dimension2df_get_Width = func_type(ctypes.c_float, ctypes.c_void_p)(('dimension2df_get_Width', c_module))
 dimension2df_set_Width = func_type(None, ctypes.c_void_p, ctypes.c_float)(('dimension2df_set_Width', c_module))
@@ -1884,10 +1890,10 @@ dimension2du_ctor2 = func_type(ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint)(('
 dimension2du_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('dimension2du_ctor3', c_module))
 dimension2du_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('dimension2du_ctor4', c_module))
 dimension2du_operator_set_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('dimension2du_operator_set_other', c_module))
-dimension2du_operator_eq_other = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('dimension2du_operator_eq_other', c_module))
-dimension2du_operator_ne_other = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('dimension2du_operator_ne_other', c_module))
-dimension2du_operator_eq_vector2d = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('dimension2du_operator_eq_vector2d', c_module))
-dimension2du_operator_ne_vector2d = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('dimension2du_operator_ne_vector2d', c_module))
+dimension2du_operator_eq_other = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('dimension2du_operator_eq_other', c_module))
+dimension2du_operator_ne_other = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('dimension2du_operator_ne_other', c_module))
+dimension2du_operator_eq_vector2d = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('dimension2du_operator_eq_vector2d', c_module))
+dimension2du_operator_ne_vector2d = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('dimension2du_operator_ne_vector2d', c_module))
 dimension2du_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint)(('dimension2du_set', c_module))
 dimension2du_operator_set_div_value = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('dimension2du_operator_set_div_value', c_module))
 dimension2du_operator_div_value = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('dimension2du_operator_div_value', c_module))
@@ -1897,7 +1903,7 @@ dimension2du_operator_set_add_other = func_type(ctypes.c_void_p, ctypes.c_void_p
 dimension2du_operator_set_sub_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('dimension2du_operator_set_sub_other', c_module))
 dimension2du_operator_add_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('dimension2du_operator_add_other', c_module))
 dimension2du_getArea = func_type(ctypes.c_uint, ctypes.c_void_p)(('dimension2du_getArea', c_module))
-dimension2du_getOptimalSize = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_byte, ctypes.c_uint)(('dimension2du_getOptimalSize', c_module))
+dimension2du_getOptimalSize = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_bool, ctypes.c_uint)(('dimension2du_getOptimalSize', c_module))
 dimension2du_getInterpolated = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('dimension2du_getInterpolated', c_module))
 dimension2du_get_Width = func_type(ctypes.c_uint, ctypes.c_void_p)(('dimension2du_get_Width', c_module))
 dimension2du_set_Width = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('dimension2du_set_Width', c_module))
@@ -1910,10 +1916,10 @@ dimension2di_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('di
 dimension2di_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('dimension2di_ctor3', c_module))
 dimension2di_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('dimension2di_ctor4', c_module))
 dimension2di_operator_set_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('dimension2di_operator_set_other', c_module))
-dimension2di_operator_eq_other = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('dimension2di_operator_eq_other', c_module))
-dimension2di_operator_ne_other = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('dimension2di_operator_ne_other', c_module))
-dimension2di_operator_eq_vector2d = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('dimension2di_operator_eq_vector2d', c_module))
-dimension2di_operator_ne_vector2d = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('dimension2di_operator_ne_vector2d', c_module))
+dimension2di_operator_eq_other = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('dimension2di_operator_eq_other', c_module))
+dimension2di_operator_ne_other = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('dimension2di_operator_ne_other', c_module))
+dimension2di_operator_eq_vector2d = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('dimension2di_operator_eq_vector2d', c_module))
+dimension2di_operator_ne_vector2d = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('dimension2di_operator_ne_vector2d', c_module))
 dimension2di_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('dimension2di_set', c_module))
 dimension2di_operator_set_div_value = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('dimension2di_operator_set_div_value', c_module))
 dimension2di_operator_div_value = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('dimension2di_operator_div_value', c_module))
@@ -1923,7 +1929,7 @@ dimension2di_operator_set_add_other = func_type(ctypes.c_void_p, ctypes.c_void_p
 dimension2di_operator_set_sub_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('dimension2di_operator_set_sub_other', c_module))
 dimension2di_operator_add_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('dimension2di_operator_add_other', c_module))
 dimension2di_getArea = func_type(ctypes.c_int, ctypes.c_void_p)(('dimension2di_getArea', c_module))
-dimension2di_getOptimalSize = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_byte, ctypes.c_int)(('dimension2di_getOptimalSize', c_module))
+dimension2di_getOptimalSize = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_bool, ctypes.c_int)(('dimension2di_getOptimalSize', c_module))
 dimension2di_getInterpolated = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('dimension2di_getInterpolated', c_module))
 dimension2di_get_Width = func_type(ctypes.c_int, ctypes.c_void_p)(('dimension2di_get_Width', c_module))
 dimension2di_set_Width = func_type(None, ctypes.c_void_p, ctypes.c_int)(('dimension2di_set_Width', c_module))
@@ -1939,18 +1945,18 @@ rectf_add = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('rectf
 rectf_add_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('rectf_add_set', c_module))
 rectf_sub = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('rectf_sub', c_module))
 rectf_sub_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('rectf_sub_set', c_module))
-rectf_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('rectf_eq', c_module))
-rectf_ne = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('rectf_ne', c_module))
-rectf_le = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('rectf_le', c_module))
+rectf_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('rectf_eq', c_module))
+rectf_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('rectf_ne', c_module))
+rectf_le = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('rectf_le', c_module))
 rectf_getArea = func_type(ctypes.c_float, ctypes.c_void_p)(('rectf_getArea', c_module))
-rectf_isPointInside = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('rectf_isPointInside', c_module))
-rectf_isRectCollided = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('rectf_isRectCollided', c_module))
+rectf_isPointInside = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('rectf_isPointInside', c_module))
+rectf_isRectCollided = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('rectf_isRectCollided', c_module))
 rectf_clipAgainst = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('rectf_clipAgainst', c_module))
-rectf_constrainTo = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('rectf_constrainTo', c_module))
+rectf_constrainTo = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('rectf_constrainTo', c_module))
 rectf_getWidth = func_type(ctypes.c_float, ctypes.c_void_p)(('rectf_getWidth', c_module))
 rectf_getHeight = func_type(ctypes.c_float, ctypes.c_void_p)(('rectf_getHeight', c_module))
 rectf_repair = func_type(None, ctypes.c_void_p)(('rectf_repair', c_module))
-rectf_isValid = func_type(ctypes.c_byte, ctypes.c_void_p)(('rectf_isValid', c_module))
+rectf_isValid = func_type(ctypes.c_bool, ctypes.c_void_p)(('rectf_isValid', c_module))
 rectf_getCenter = func_type(ctypes.c_void_p, ctypes.c_void_p)(('rectf_getCenter', c_module))
 rectf_getSize = func_type(ctypes.c_void_p, ctypes.c_void_p)(('rectf_getSize', c_module))
 rectf_addInternalPoint1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('rectf_addInternalPoint1', c_module))
@@ -1969,18 +1975,18 @@ recti_add = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('recti
 recti_add_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('recti_add_set', c_module))
 recti_sub = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('recti_sub', c_module))
 recti_sub_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('recti_sub_set', c_module))
-recti_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('recti_eq', c_module))
-recti_ne = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('recti_ne', c_module))
-recti_le = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('recti_le', c_module))
+recti_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('recti_eq', c_module))
+recti_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('recti_ne', c_module))
+recti_le = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('recti_le', c_module))
 recti_getArea = func_type(ctypes.c_int, ctypes.c_void_p)(('recti_getArea', c_module))
-recti_isPointInside = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('recti_isPointInside', c_module))
-recti_isRectCollided = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('recti_isRectCollided', c_module))
+recti_isPointInside = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('recti_isPointInside', c_module))
+recti_isRectCollided = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('recti_isRectCollided', c_module))
 recti_clipAgainst = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('recti_clipAgainst', c_module))
-recti_constrainTo = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('recti_constrainTo', c_module))
+recti_constrainTo = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('recti_constrainTo', c_module))
 recti_getWidth = func_type(ctypes.c_int, ctypes.c_void_p)(('recti_getWidth', c_module))
 recti_getHeight = func_type(ctypes.c_int, ctypes.c_void_p)(('recti_getHeight', c_module))
 recti_repair = func_type(None, ctypes.c_void_p)(('recti_repair', c_module))
-recti_isValid = func_type(ctypes.c_byte, ctypes.c_void_p)(('recti_isValid', c_module))
+recti_isValid = func_type(ctypes.c_bool, ctypes.c_void_p)(('recti_isValid', c_module))
 recti_getCenter = func_type(ctypes.c_void_p, ctypes.c_void_p)(('recti_getCenter', c_module))
 recti_getSize = func_type(ctypes.c_void_p, ctypes.c_void_p)(('recti_getSize', c_module))
 recti_addInternalPoint1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('recti_addInternalPoint1', c_module))
@@ -2019,13 +2025,13 @@ vector3df_operator_div_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctype
 vector3df_operator_set_div_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector3df_operator_set_div_other', c_module))
 vector3df_operator_div_value = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('vector3df_operator_div_value', c_module))
 vector3df_operator_set_div_value = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('vector3df_operator_set_div_value', c_module))
-vector3df_operator_le = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector3df_operator_le', c_module))
-vector3df_operator_ge = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector3df_operator_ge', c_module))
-vector3df_operator_lt = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector3df_operator_lt', c_module))
-vector3df_operator_gt = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector3df_operator_gt', c_module))
-vector3df_operator_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector3df_operator_eq', c_module))
-vector3df_operator_ne = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector3df_operator_ne', c_module))
-vector3df_equals = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('vector3df_equals', c_module))
+vector3df_operator_le = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector3df_operator_le', c_module))
+vector3df_operator_ge = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector3df_operator_ge', c_module))
+vector3df_operator_lt = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector3df_operator_lt', c_module))
+vector3df_operator_gt = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector3df_operator_gt', c_module))
+vector3df_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector3df_operator_eq', c_module))
+vector3df_operator_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector3df_operator_ne', c_module))
+vector3df_equals = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('vector3df_equals', c_module))
 vector3df_set1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('vector3df_set1', c_module))
 vector3df_set2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector3df_set2', c_module))
 vector3df_getLength = func_type(ctypes.c_float, ctypes.c_void_p)(('vector3df_getLength', c_module))
@@ -2034,7 +2040,7 @@ vector3df_dotProduct = func_type(ctypes.c_float, ctypes.c_void_p, ctypes.c_void_
 vector3df_getDistanceFrom = func_type(ctypes.c_float, ctypes.c_void_p, ctypes.c_void_p)(('vector3df_getDistanceFrom', c_module))
 vector3df_getDistanceFromSQ = func_type(ctypes.c_float, ctypes.c_void_p, ctypes.c_void_p)(('vector3df_getDistanceFromSQ', c_module))
 vector3df_crossProduct = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector3df_crossProduct', c_module))
-vector3df_isBetweenPoints = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector3df_isBetweenPoints', c_module))
+vector3df_isBetweenPoints = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector3df_isBetweenPoints', c_module))
 vector3df_normalize = func_type(ctypes.c_void_p, ctypes.c_void_p)(('vector3df_normalize', c_module))
 vector3df_setLength = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('vector3df_setLength', c_module))
 vector3df_invert = func_type(ctypes.c_void_p, ctypes.c_void_p)(('vector3df_invert', c_module))
@@ -2078,13 +2084,13 @@ vector3di_operator_div_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctype
 vector3di_operator_set_div_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector3di_operator_set_div_other', c_module))
 vector3di_operator_div_value = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('vector3di_operator_div_value', c_module))
 vector3di_operator_set_div_value = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('vector3di_operator_set_div_value', c_module))
-vector3di_operator_le = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector3di_operator_le', c_module))
-vector3di_operator_ge = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector3di_operator_ge', c_module))
-vector3di_operator_lt = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector3di_operator_lt', c_module))
-vector3di_operator_gt = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector3di_operator_gt', c_module))
-vector3di_operator_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector3di_operator_eq', c_module))
-vector3di_operator_ne = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('vector3di_operator_ne', c_module))
-vector3di_equals = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('vector3di_equals', c_module))
+vector3di_operator_le = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector3di_operator_le', c_module))
+vector3di_operator_ge = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector3di_operator_ge', c_module))
+vector3di_operator_lt = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector3di_operator_lt', c_module))
+vector3di_operator_gt = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector3di_operator_gt', c_module))
+vector3di_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector3di_operator_eq', c_module))
+vector3di_operator_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('vector3di_operator_ne', c_module))
+vector3di_equals = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('vector3di_equals', c_module))
 vector3di_set1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('vector3di_set1', c_module))
 vector3di_set2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector3di_set2', c_module))
 vector3di_getLength = func_type(ctypes.c_int, ctypes.c_void_p)(('vector3di_getLength', c_module))
@@ -2093,7 +2099,7 @@ vector3di_dotProduct = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)
 vector3di_getDistanceFrom = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('vector3di_getDistanceFrom', c_module))
 vector3di_getDistanceFromSQ = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('vector3di_getDistanceFromSQ', c_module))
 vector3di_crossProduct = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector3di_crossProduct', c_module))
-vector3di_isBetweenPoints = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector3di_isBetweenPoints', c_module))
+vector3di_isBetweenPoints = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector3di_isBetweenPoints', c_module))
 vector3di_normalize = func_type(ctypes.c_void_p, ctypes.c_void_p)(('vector3di_normalize', c_module))
 vector3di_setLength = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('vector3di_setLength', c_module))
 vector3di_invert = func_type(ctypes.c_void_p, ctypes.c_void_p)(('vector3di_invert', c_module))
@@ -2113,8 +2119,8 @@ aabbox3df_ctor1 = func_type(ctypes.c_void_p)(('aabbox3df_ctor1', c_module))
 aabbox3df_ctor2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_ctor2', c_module), ((1, 'min', vector3df_ctor2(-1.0, -1.0, -1.0)), (1, 'max', vector3df_ctor2(1.0, 1.0, 1.0))))
 aabbox3df_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_ctor3', c_module), ((1, 'init', vector3df_ctor2(-1.0, -1.0, -1.0)), ))
 aabbox3df_ctor4 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('aabbox3df_ctor4', c_module), ((1, 'minx', -1.0), (1, 'miny', -1.0), (1, 'minz', -1.0), (1, 'maxx', 1.0), (1, 'maxy', 1.0), (1, 'maxz', 1.0)))
-aabbox3df_operator_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_operator_eq', c_module))
-aabbox3df_operator_ne = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_operator_ne', c_module))
+aabbox3df_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_operator_eq', c_module))
+aabbox3df_operator_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_operator_ne', c_module))
 aabbox3df_reset1 = func_type(None, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('aabbox3df_reset1', c_module))
 aabbox3df_reset2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_reset2', c_module))
 aabbox3df_reset3 = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_reset3', c_module))
@@ -2123,18 +2129,18 @@ aabbox3df_addInternalPoint1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(
 aabbox3df_addInternalPoint2 = func_type(None, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('aabbox3df_addInternalPoint2', c_module))
 aabbox3df_getCenter = func_type(ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_getCenter', c_module))
 aabbox3df_getExtent = func_type(ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_getExtent', c_module))
-aabbox3df_isEmpty = func_type(ctypes.c_byte, ctypes.c_void_p)(('aabbox3df_isEmpty', c_module))
+aabbox3df_isEmpty = func_type(ctypes.c_bool, ctypes.c_void_p)(('aabbox3df_isEmpty', c_module))
 aabbox3df_getVolume = func_type(ctypes.c_float, ctypes.c_void_p)(('aabbox3df_getVolume', c_module))
 aabbox3df_getArea = func_type(ctypes.c_float, ctypes.c_void_p)(('aabbox3df_getArea', c_module))
 aabbox3df_getEdges = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_getEdges', c_module))
 aabbox3df_repair = func_type(None, ctypes.c_void_p)(('aabbox3df_repair', c_module))
 aabbox3df_getInterpolated = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('aabbox3df_getInterpolated', c_module))
-aabbox3df_isPointInside = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_isPointInside', c_module))
-aabbox3df_isPointTotalInside = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_isPointTotalInside', c_module))
-aabbox3df_isFullInside = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_isFullInside', c_module))
-aabbox3df_intersectsWithBox = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_intersectsWithBox', c_module))
-aabbox3df_intersectsWithLine1 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_intersectsWithLine1', c_module))
-aabbox3df_intersectsWithLine2 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('aabbox3df_intersectsWithLine2', c_module))
+aabbox3df_isPointInside = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_isPointInside', c_module))
+aabbox3df_isPointTotalInside = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_isPointTotalInside', c_module))
+aabbox3df_isFullInside = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_isFullInside', c_module))
+aabbox3df_intersectsWithBox = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_intersectsWithBox', c_module))
+aabbox3df_intersectsWithLine1 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_intersectsWithLine1', c_module))
+aabbox3df_intersectsWithLine2 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('aabbox3df_intersectsWithLine2', c_module))
 aabbox3df_classifyPlaneRelation = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_classifyPlaneRelation', c_module))
 aabbox3df_get_MinEdge = func_type(ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_get_MinEdge', c_module))
 aabbox3df_set_MinEdge = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_set_MinEdge', c_module))
@@ -2146,8 +2152,8 @@ aabbox3di_ctor1 = func_type(ctypes.c_void_p)(('aabbox3di_ctor1', c_module))
 aabbox3di_ctor2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_ctor2', c_module), ((1, 'min', vector3di_ctor2(-1, -1, -1)), (1, 'max', vector3di_ctor2(1, 1, 1))))
 aabbox3di_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_ctor3', c_module), ((1, 'init', vector3di_ctor2(-1, -1, -1)), ))
 aabbox3di_ctor4 = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('aabbox3di_ctor4', c_module), ((1, 'minx', -1), (1, 'miny', -1), (1, 'minz', -1), (1, 'maxx', 1), (1, 'maxy', 1), (1, 'maxz', 1)))
-aabbox3di_operator_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_operator_eq', c_module))
-aabbox3di_operator_ne = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_operator_ne', c_module))
+aabbox3di_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_operator_eq', c_module))
+aabbox3di_operator_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_operator_ne', c_module))
 aabbox3di_reset1 = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('aabbox3di_reset1', c_module))
 aabbox3di_reset2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_reset2', c_module))
 aabbox3di_reset3 = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_reset3', c_module))
@@ -2156,18 +2162,18 @@ aabbox3di_addInternalPoint1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(
 aabbox3di_addInternalPoint2 = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('aabbox3di_addInternalPoint2', c_module))
 aabbox3di_getCenter = func_type(ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_getCenter', c_module))
 aabbox3di_getExtent = func_type(ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_getExtent', c_module))
-aabbox3di_isEmpty = func_type(ctypes.c_byte, ctypes.c_void_p)(('aabbox3di_isEmpty', c_module))
+aabbox3di_isEmpty = func_type(ctypes.c_bool, ctypes.c_void_p)(('aabbox3di_isEmpty', c_module))
 aabbox3di_getVolume = func_type(ctypes.c_int, ctypes.c_void_p)(('aabbox3di_getVolume', c_module))
 aabbox3di_getArea = func_type(ctypes.c_int, ctypes.c_void_p)(('aabbox3di_getArea', c_module))
 aabbox3di_getEdges = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_getEdges', c_module))
 aabbox3di_repair = func_type(None, ctypes.c_void_p)(('aabbox3di_repair', c_module))
 aabbox3di_getInterpolated = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('aabbox3di_getInterpolated', c_module))
-aabbox3di_isPointInside = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_isPointInside', c_module))
-aabbox3di_isPointTotalInside = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_isPointTotalInside', c_module))
-aabbox3di_isFullInside = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_isFullInside', c_module))
-aabbox3di_intersectsWithBox = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_intersectsWithBox', c_module))
-#~ aabbox3di_intersectsWithLine1 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_intersectsWithLine1', c_module))
-#~ aabbox3di_intersectsWithLine2 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('aabbox3di_intersectsWithLine2', c_module))
+aabbox3di_isPointInside = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_isPointInside', c_module))
+aabbox3di_isPointTotalInside = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_isPointTotalInside', c_module))
+aabbox3di_isFullInside = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_isFullInside', c_module))
+aabbox3di_intersectsWithBox = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_intersectsWithBox', c_module))
+#~ aabbox3di_intersectsWithLine1 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_intersectsWithLine1', c_module))
+#~ aabbox3di_intersectsWithLine2 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('aabbox3di_intersectsWithLine2', c_module))
 aabbox3di_classifyPlaneRelation = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_classifyPlaneRelation', c_module))
 aabbox3di_get_MinEdge = func_type(ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_get_MinEdge', c_module))
 aabbox3di_set_MinEdge = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_set_MinEdge', c_module))
@@ -2199,8 +2205,8 @@ line3df_add = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('lin
 line3df_add_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('line3df_add_set', c_module))
 line3df_sub = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('line3df_sub', c_module))
 line3df_sub_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('line3df_sub_set', c_module))
-line3df_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('line3df_eq', c_module))
-line3df_ne = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('line3df_ne', c_module))
+line3df_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('line3df_eq', c_module))
+line3df_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('line3df_ne', c_module))
 line3df_setLine1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('line3df_setLine1', c_module))
 line3df_setLine2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('line3df_setLine2', c_module))
 line3df_setLine3 = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('line3df_setLine3', c_module))
@@ -2208,9 +2214,9 @@ line3df_getLength = func_type(ctypes.c_float, ctypes.c_void_p)(('line3df_getLeng
 line3df_getLengthSQ = func_type(ctypes.c_float, ctypes.c_void_p)(('line3df_getLengthSQ', c_module))
 line3df_getMiddle = func_type(ctypes.c_void_p, ctypes.c_void_p)(('line3df_getMiddle', c_module))
 line3df_getVector = func_type(ctypes.c_void_p, ctypes.c_void_p)(('line3df_getVector', c_module))
-line3df_isPointBetweenStartAndEnd = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('line3df_isPointBetweenStartAndEnd', c_module))
+line3df_isPointBetweenStartAndEnd = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('line3df_isPointBetweenStartAndEnd', c_module))
 line3df_getClosestPoint = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('line3df_getClosestPoint', c_module))
-line3df_getIntersectionWithSphere = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p)(('line3df_getIntersectionWithSphere', c_module))
+line3df_getIntersectionWithSphere = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p)(('line3df_getIntersectionWithSphere', c_module))
 
 # functions for class line3di
 line3di_ctor1 = func_type(ctypes.c_void_p)(('line3di_ctor1', c_module))
@@ -2224,8 +2230,8 @@ line3di_add = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('lin
 line3di_add_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('line3di_add_set', c_module))
 line3di_sub = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('line3di_sub', c_module))
 line3di_sub_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('line3di_sub_set', c_module))
-line3di_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('line3di_eq', c_module))
-line3di_ne = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('line3di_ne', c_module))
+line3di_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('line3di_eq', c_module))
+line3di_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('line3di_ne', c_module))
 line3di_setLine1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('line3di_setLine1', c_module))
 line3di_setLine2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('line3di_setLine2', c_module))
 line3di_setLine3 = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('line3di_setLine3', c_module))
@@ -2233,9 +2239,9 @@ line3di_getLength = func_type(ctypes.c_int, ctypes.c_void_p)(('line3di_getLength
 line3di_getLengthSQ = func_type(ctypes.c_int, ctypes.c_void_p)(('line3di_getLengthSQ', c_module))
 line3di_getMiddle = func_type(ctypes.c_void_p, ctypes.c_void_p)(('line3di_getMiddle', c_module))
 line3di_getVector = func_type(ctypes.c_void_p, ctypes.c_void_p)(('line3di_getVector', c_module))
-line3di_isPointBetweenStartAndEnd = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('line3di_isPointBetweenStartAndEnd', c_module))
+line3di_isPointBetweenStartAndEnd = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('line3di_isPointBetweenStartAndEnd', c_module))
 line3di_getClosestPoint = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('line3di_getClosestPoint', c_module))
-line3di_getIntersectionWithSphere = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('line3di_getIntersectionWithSphere', c_module))
+line3di_getIntersectionWithSphere = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('line3di_getIntersectionWithSphere', c_module))
 
 # triangle3d
 triangle3df_ctor1 = func_type(ctypes.c_void_p)(('triangle3df_ctor1', c_module))
@@ -2246,18 +2252,18 @@ triangle3df_get_pointC = func_type(ctypes.c_void_p, ctypes.c_void_p)(('triangle3
 triangle3df_set_pointA = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_set_pointA', c_module))
 triangle3df_set_pointB = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_set_pointB', c_module))
 triangle3df_set_pointC = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_set_pointC', c_module))
-triangle3df_operator_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_operator_eq', c_module))
-triangle3df_operator_ne = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_operator_ne', c_module))
-triangle3df_isTotalInsideBox = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_isTotalInsideBox', c_module))
-triangle3df_isTotalOutsideBox = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_isTotalOutsideBox', c_module))
+triangle3df_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_operator_eq', c_module))
+triangle3df_operator_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_operator_ne', c_module))
+triangle3df_isTotalInsideBox = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_isTotalInsideBox', c_module))
+triangle3df_isTotalOutsideBox = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_isTotalOutsideBox', c_module))
 triangle3df_closestPointOnTriangle = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_closestPointOnTriangle', c_module))
-triangle3df_isPointInside = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_isPointInside', c_module))
-triangle3df_isPointInsideFast = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_isPointInsideFast', c_module))
-triangle3df_getIntersectionWithLimitedLine = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_getIntersectionWithLimitedLine', c_module))
-triangle3df_getIntersectionWithLine = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_getIntersectionWithLine', c_module))
-triangle3df_getIntersectionOfPlaneWithLine = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_getIntersectionOfPlaneWithLine', c_module))
+triangle3df_isPointInside = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_isPointInside', c_module))
+triangle3df_isPointInsideFast = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_isPointInsideFast', c_module))
+triangle3df_getIntersectionWithLimitedLine = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_getIntersectionWithLimitedLine', c_module))
+triangle3df_getIntersectionWithLine = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_getIntersectionWithLine', c_module))
+triangle3df_getIntersectionOfPlaneWithLine = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_getIntersectionOfPlaneWithLine', c_module))
 triangle3df_getNormal = func_type(ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_getNormal', c_module))
-triangle3df_isFrontFacing = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_isFrontFacing', c_module))
+triangle3df_isFrontFacing = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_isFrontFacing', c_module))
 triangle3df_getPlane = func_type(ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_getPlane', c_module))
 triangle3df_getArea = func_type(ctypes.c_float, ctypes.c_void_p)(('triangle3df_getArea', c_module))
 triangle3df_set = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_set', c_module))
@@ -2270,18 +2276,18 @@ triangle3di_get_pointC = func_type(ctypes.c_void_p, ctypes.c_void_p)(('triangle3
 triangle3di_set_pointA = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_set_pointA', c_module))
 triangle3di_set_pointB = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_set_pointB', c_module))
 triangle3di_set_pointC = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_set_pointC', c_module))
-triangle3di_operator_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_operator_eq', c_module))
-triangle3di_operator_ne = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_operator_ne', c_module))
-triangle3di_isTotalInsideBox = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_isTotalInsideBox', c_module))
-triangle3di_isTotalOutsideBox = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_isTotalOutsideBox', c_module))
+triangle3di_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_operator_eq', c_module))
+triangle3di_operator_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_operator_ne', c_module))
+triangle3di_isTotalInsideBox = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_isTotalInsideBox', c_module))
+triangle3di_isTotalOutsideBox = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_isTotalOutsideBox', c_module))
 triangle3di_closestPointOnTriangle = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_closestPointOnTriangle', c_module))
-triangle3di_isPointInside = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_isPointInside', c_module))
-triangle3di_isPointInsideFast = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_isPointInsideFast', c_module))
-triangle3di_getIntersectionWithLimitedLine = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_getIntersectionWithLimitedLine', c_module))
-triangle3di_getIntersectionWithLine = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_getIntersectionWithLine', c_module))
-triangle3di_getIntersectionOfPlaneWithLine = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_getIntersectionOfPlaneWithLine', c_module))
+triangle3di_isPointInside = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_isPointInside', c_module))
+triangle3di_isPointInsideFast = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_isPointInsideFast', c_module))
+triangle3di_getIntersectionWithLimitedLine = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_getIntersectionWithLimitedLine', c_module))
+triangle3di_getIntersectionWithLine = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_getIntersectionWithLine', c_module))
+triangle3di_getIntersectionOfPlaneWithLine = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_getIntersectionOfPlaneWithLine', c_module))
 triangle3di_getNormal = func_type(ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_getNormal', c_module))
-triangle3di_isFrontFacing = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_isFrontFacing', c_module))
+triangle3di_isFrontFacing = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_isFrontFacing', c_module))
 triangle3di_getPlane = func_type(ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_getPlane', c_module))
 triangle3di_getArea = func_type(ctypes.c_int, ctypes.c_void_p)(('triangle3di_getArea', c_module))
 triangle3di_set = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_set', c_module))
@@ -2301,9 +2307,9 @@ S3DVertex_get_Color = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(
 S3DVertex_set_Color = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_set_Color', c_module))
 S3DVertex_get_TCoords = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_get_TCoords', c_module))
 S3DVertex_set_TCoords = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_set_TCoords', c_module))
-S3DVertex_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_eq', c_module))
-S3DVertex_ne = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_ne', c_module))
-S3DVertex_less = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_less', c_module))
+S3DVertex_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_eq', c_module))
+S3DVertex_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_ne', c_module))
+S3DVertex_less = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_less', c_module))
 S3DVertex_getType = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_getType', c_module))
 if IRRLICHT_VERSION >= 180:
 	S3DVertex_getInterpolated = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_int)(('S3DVertex_getInterpolated', c_module))
@@ -2348,9 +2354,9 @@ SColor_toA1R5G5B5 = func_type(ctypes.c_ushort, ctypes.c_void_p)(('SColor_toA1R5G
 SColor_toOpenGLColor = func_type(None, ctypes.c_void_p, ctypes.POINTER(ctypes.c_ubyte))(('SColor_toOpenGLColor', c_module))
 SColor_set = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_uint, ctypes.c_uint)(('SColor_set', c_module))
 SColor_set2 = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('SColor_set2', c_module))
-SColor_operator_equal = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('SColor_operator_equal', c_module))
-SColor_operator_notequal = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('SColor_operator_notequal', c_module))
-SColor_operator_less = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('SColor_operator_less', c_module))
+SColor_operator_equal = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('SColor_operator_equal', c_module))
+SColor_operator_notequal = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('SColor_operator_notequal', c_module))
+SColor_operator_less = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('SColor_operator_less', c_module))
 SColor_operator_add = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('SColor_operator_add', c_module))
 SColor_getInterpolated = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('SColor_getInterpolated', c_module))
 SColor_getInterpolated_quadratic = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('SColor_getInterpolated_quadratic', c_module))
@@ -2390,10 +2396,10 @@ SColorHSL_set_Luminance = func_type(None, ctypes.c_void_p, ctypes.c_float)(('SCo
 IReferenceCounted_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IReferenceCounted_ctor', c_module))
 #~ IReferenceCounted_Destructor = func_type(None, ctypes.c_void_p)(('IReferenceCounted_Destructor', c_module))
 IReferenceCounted_grab = func_type(None, ctypes.c_void_p)(('IReferenceCounted_grab', c_module))
-IReferenceCounted_drop = func_type(ctypes.c_byte, ctypes.c_void_p)(('IReferenceCounted_drop', c_module))
+IReferenceCounted_drop = func_type(ctypes.c_bool, ctypes.c_void_p)(('IReferenceCounted_drop', c_module))
 IReferenceCounted_getReferenceCount = func_type(ctypes.c_int, ctypes.c_void_p)(('IReferenceCounted_getReferenceCount', c_module))
 IReferenceCounted_getDebugName = func_type(ctypes.c_char_p, ctypes.c_void_p)(('IReferenceCounted_getDebugName', c_module))
-IReferenceCounted_is_null = func_type(ctypes.c_byte, ctypes.c_void_p)(('IReferenceCounted_is_null', c_module))
+IReferenceCounted_is_null = func_type(ctypes.c_bool, ctypes.c_void_p)(('IReferenceCounted_is_null', c_module))
 
 # functions for class IAttributes
 IAttributes_getAttributeCount = func_type(ctypes.c_uint, ctypes.c_void_p)(('IAttributes_getAttributeCount', c_module))
@@ -2402,11 +2408,11 @@ IAttributes_getAttributeType1 = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.
 IAttributes_getAttributeType2 = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_int)(('IAttributes_getAttributeType2', c_module))
 IAttributes_getAttributeTypeString1 = func_type(ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_char_p)(('IAttributes_getAttributeTypeString1', c_module))
 IAttributes_getAttributeTypeString2 = func_type(ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_int)(('IAttributes_getAttributeTypeString2', c_module))
-IAttributes_existsAttribute = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_char_p)(('IAttributes_existsAttribute', c_module))
+IAttributes_existsAttribute = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_char_p)(('IAttributes_existsAttribute', c_module))
 IAttributes_findAttribute = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_char_p)(('IAttributes_findAttribute', c_module))
 IAttributes_clear = func_type(None, ctypes.c_void_p)(('IAttributes_clear', c_module))
-IAttributes_read = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_wchar_p)(('IAttributes_read', c_module))
-IAttributes_write = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_wchar_p)(('IAttributes_write', c_module))
+IAttributes_read = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_wchar_p)(('IAttributes_read', c_module))
+IAttributes_write = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_wchar_p)(('IAttributes_write', c_module))
 IAttributes_addInt = func_type(None, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_int)(('IAttributes_addInt', c_module))
 IAttributes_setAttribute1 = func_type(None, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_int)(('IAttributes_setAttribute1', c_module))
 IAttributes_setAttribute2 = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('IAttributes_setAttribute2', c_module))
@@ -2420,8 +2426,8 @@ IAttributes_setAttribute9 = func_type(None, ctypes.c_void_p, ctypes.c_char_p, ct
 IAttributes_setAttribute10 = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_int)(('IAttributes_setAttribute10', c_module))
 IAttributes_setAttribute11 = func_type(None, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p)(('IAttributes_setAttribute11', c_module))
 IAttributes_setAttribute12 = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IAttributes_setAttribute12', c_module))
-IAttributes_setAttribute13 = func_type(None, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_byte)(('IAttributes_setAttribute13', c_module))
-IAttributes_setAttribute14 = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('IAttributes_setAttribute14', c_module))
+IAttributes_setAttribute13 = func_type(None, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_bool)(('IAttributes_setAttribute13', c_module))
+IAttributes_setAttribute14 = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('IAttributes_setAttribute14', c_module))
 IAttributes_setAttribute15 = func_type(None, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_void_p)(('IAttributes_setAttribute15', c_module))
 IAttributes_setAttribute16 = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_char_p, ctypes.c_void_p)(('IAttributes_setAttribute16', c_module))
 IAttributes_setAttribute17 = func_type(None, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p)(('IAttributes_setAttribute17', c_module))
@@ -2471,9 +2477,9 @@ IAttributes_getAttributeAsBinaryData1 = func_type(None, ctypes.c_void_p, ctypes.
 IAttributes_getAttributeAsBinaryData2 = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_int)(('IAttributes_getAttributeAsBinaryData2', c_module))
 IAttributes_getAttributeAsArray1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p)(('IAttributes_getAttributeAsArray1', c_module))
 IAttributes_getAttributeAsArray2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IAttributes_getAttributeAsArray2', c_module))
-IAttributes_addBool = func_type(None, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_byte)(('IAttributes_addBool', c_module))
-IAttributes_getAttributeAsBool1 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_char_p)(('IAttributes_getAttributeAsBool1', c_module))
-IAttributes_getAttributeAsBool2 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IAttributes_getAttributeAsBool2', c_module))
+IAttributes_addBool = func_type(None, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_bool)(('IAttributes_addBool', c_module))
+IAttributes_getAttributeAsBool1 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_char_p)(('IAttributes_getAttributeAsBool1', c_module))
+IAttributes_getAttributeAsBool2 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_int)(('IAttributes_getAttributeAsBool2', c_module))
 IAttributes_addEnum1 = func_type(None, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_void_p)(('IAttributes_addEnum1', c_module))
 IAttributes_addEnum2 = func_type(None, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_int, ctypes.c_void_p)(('IAttributes_addEnum2', c_module))
 IAttributes_getAttributeAsEnumeration1 = func_type(ctypes.c_char_p, ctypes.c_void_p, ctypes.c_char_p)(('IAttributes_getAttributeAsEnumeration1', c_module))
@@ -2530,7 +2536,7 @@ IBoneSceneNode_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_
 if IRRLICHT_VERSION < 180:
 	IBoneSceneNode_getBoneName = func_type(ctypes.c_char_p, ctypes.c_void_p)(('IBoneSceneNode_getBoneName', c_module))
 IBoneSceneNode_getBoneIndex = func_type(ctypes.c_uint, ctypes.c_void_p)(('IBoneSceneNode_getBoneIndex', c_module))
-IBoneSceneNode_setAnimationMode = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IBoneSceneNode_setAnimationMode', c_module))
+IBoneSceneNode_setAnimationMode = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_int)(('IBoneSceneNode_setAnimationMode', c_module))
 IBoneSceneNode_getAnimationMode = func_type(ctypes.c_int, ctypes.c_void_p)(('IBoneSceneNode_getAnimationMode', c_module))
 IBoneSceneNode_getBoundingBox = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IBoneSceneNode_getBoundingBox', c_module))
 IBoneSceneNode_OnAnimate = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('IBoneSceneNode_OnAnimate', c_module))
@@ -2591,27 +2597,27 @@ IFileArchive_get_Password = func_type(ctypes.c_char_p, ctypes.c_void_p)(('IFileA
 IFileArchive_set_Password = func_type(None, ctypes.c_void_p, ctypes.c_char_p)(('IFileArchive_set_Password', c_module))
 
 #================= IArchiveLoader
-IArchiveLoader_isALoadableFileFormat1 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_char_p)(('IArchiveLoader_isALoadableFileFormat1', c_module))
-IArchiveLoader_isALoadableFileFormat2 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IArchiveLoader_isALoadableFileFormat2', c_module))
-IArchiveLoader_isALoadableFileFormat3 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IArchiveLoader_isALoadableFileFormat3', c_module))
-IArchiveLoader_createArchive1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_byte, ctypes.c_byte)(('IArchiveLoader_createArchive1', c_module))
-IArchiveLoader_createArchive2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte)(('IArchiveLoader_createArchive2', c_module))
+IArchiveLoader_isALoadableFileFormat1 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_char_p)(('IArchiveLoader_isALoadableFileFormat1', c_module))
+IArchiveLoader_isALoadableFileFormat2 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IArchiveLoader_isALoadableFileFormat2', c_module))
+IArchiveLoader_isALoadableFileFormat3 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_int)(('IArchiveLoader_isALoadableFileFormat3', c_module))
+IArchiveLoader_createArchive1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_bool, ctypes.c_bool)(('IArchiveLoader_createArchive1', c_module))
+IArchiveLoader_createArchive2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool)(('IArchiveLoader_createArchive2', c_module))
 
 #================= IFileList
 IFileList_getFileCount = func_type(ctypes.c_uint, ctypes.c_void_p)(('IFileList_getFileCount', c_module))
 IFileList_getFileSize = func_type(ctypes.c_uint, ctypes.c_void_p, ctypes.c_uint)(('IFileList_getFileSize', c_module))
 IFileList_getID = func_type(ctypes.c_uint, ctypes.c_void_p, ctypes.c_uint)(('IFileList_getID', c_module))
-IFileList_isDirectory = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_uint)(('IFileList_isDirectory', c_module))
+IFileList_isDirectory = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_uint)(('IFileList_isDirectory', c_module))
 IFileList_sort = func_type(None, ctypes.c_void_p)(('IFileList_sort', c_module))
 
 IFileList_getFileName = func_type(fschar_t, ctypes.c_void_p, ctypes.c_uint)(('IFileList_getFileName', c_module))
 IFileList_getFullFileName = func_type(fschar_t, ctypes.c_void_p, ctypes.c_uint)(('IFileList_getFullFileName', c_module))
-IFileList_findFile = func_type(ctypes.c_int, ctypes.c_void_p, fschar_t, ctypes.c_byte)(('IFileList_findFile', c_module))
+IFileList_findFile = func_type(ctypes.c_int, ctypes.c_void_p, fschar_t, ctypes.c_bool)(('IFileList_findFile', c_module))
 IFileList_getPath = func_type(fschar_t, ctypes.c_void_p)(('IFileList_getPath', c_module))
 if IRRLICHT_VERSION < 180:
-	IFileList_addItem = func_type(ctypes.c_uint, ctypes.c_void_p, fschar_t, ctypes.c_uint, ctypes.c_byte, ctypes.c_uint)(('IFileList_addItem', c_module))
+	IFileList_addItem = func_type(ctypes.c_uint, ctypes.c_void_p, fschar_t, ctypes.c_uint, ctypes.c_bool, ctypes.c_uint)(('IFileList_addItem', c_module))
 else:
-	IFileList_addItem = func_type(ctypes.c_uint, ctypes.c_void_p, fschar_t, ctypes.c_uint, ctypes.c_uint, ctypes.c_byte, ctypes.c_uint)(('IFileList_addItem', c_module))
+	IFileList_addItem = func_type(ctypes.c_uint, ctypes.c_void_p, fschar_t, ctypes.c_uint, ctypes.c_uint, ctypes.c_bool, ctypes.c_uint)(('IFileList_addItem', c_module))
 
 # functions for class IImage
 IImage_lock = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IImage_lock', c_module))
@@ -2622,7 +2628,7 @@ IImage_getBytesPerPixel = func_type(ctypes.c_uint, ctypes.c_void_p)(('IImage_get
 IImage_getImageDataSizeInBytes = func_type(ctypes.c_uint, ctypes.c_void_p)(('IImage_getImageDataSizeInBytes', c_module))
 IImage_getImageDataSizeInPixels = func_type(ctypes.c_uint, ctypes.c_void_p)(('IImage_getImageDataSizeInPixels', c_module))
 IImage_getPixel = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint)(('IImage_getPixel', c_module))
-IImage_setPixel = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_byte)(('IImage_setPixel', c_module))
+IImage_setPixel = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_bool)(('IImage_setPixel', c_module))
 IImage_getColorFormat = func_type(ctypes.c_int, ctypes.c_void_p)(('IImage_getColorFormat', c_module))
 IImage_getRedMask = func_type(ctypes.c_uint, ctypes.c_void_p)(('IImage_getRedMask', c_module))
 IImage_getGreenMask = func_type(ctypes.c_uint, ctypes.c_void_p)(('IImage_getGreenMask', c_module))
@@ -2634,19 +2640,19 @@ IImage_copyToScaling2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IIma
 IImage_copyTo1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IImage_copyTo1', c_module))
 IImage_copyTo2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IImage_copyTo2', c_module))
 IImage_copyToWithAlpha = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IImage_copyToWithAlpha', c_module))
-IImage_copyToScalingBoxFilter = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('IImage_copyToScalingBoxFilter', c_module))
+IImage_copyToScalingBoxFilter = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('IImage_copyToScalingBoxFilter', c_module))
 IImage_fill = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IImage_fill', c_module))
 IImage_getBitsPerPixelFromFormat = func_type(ctypes.c_uint, ctypes.c_void_p, ctypes.c_int)(('IImage_getBitsPerPixelFromFormat', c_module))
-IImage_isRenderTargetOnlyFormat = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IImage_isRenderTargetOnlyFormat', c_module))
+IImage_isRenderTargetOnlyFormat = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_int)(('IImage_isRenderTargetOnlyFormat', c_module))
 
 #===== IImageLoader
-IImageLoader_isALoadableFileExtension = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IImageLoader_isALoadableFileExtension', c_module))
-IImageLoader_isALoadableFileFormat = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IImageLoader_isALoadableFileFormat', c_module))
+IImageLoader_isALoadableFileExtension = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IImageLoader_isALoadableFileExtension', c_module))
+IImageLoader_isALoadableFileFormat = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IImageLoader_isALoadableFileFormat', c_module))
 IImageLoader_loadImage = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IImageLoader_loadImage', c_module))
 
 #=== IImageWriter
-IImageWriter_isAWriteableFileExtension = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IImageWriter_isAWriteableFileExtension', c_module))
-IImageWriter_writeImage = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IImageWriter_writeImage', c_module))
+IImageWriter_isAWriteableFileExtension = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IImageWriter_isAWriteableFileExtension', c_module))
+IImageWriter_writeImage = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IImageWriter_writeImage', c_module))
 
 # functions for class ITriangleSelector
 #~ ITriangleSelector_Destructor = func_type(None, ctypes.c_void_p)(('ITriangleSelector_Destructor', c_module))
@@ -2658,7 +2664,7 @@ ITriangleSelector_getSceneNodeForTriangle = func_type(ctypes.c_void_p, ctypes.c_
 
 # functions for class IMetaTriangleSelector
 IMetaTriangleSelector_addTriangleSelector = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IMetaTriangleSelector_addTriangleSelector', c_module))
-IMetaTriangleSelector_removeTriangleSelector = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IMetaTriangleSelector_removeTriangleSelector', c_module))
+IMetaTriangleSelector_removeTriangleSelector = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IMetaTriangleSelector_removeTriangleSelector', c_module))
 IMetaTriangleSelector_removeAllTriangleSelectors = func_type(None, ctypes.c_void_p)(('IMetaTriangleSelector_removeAllTriangleSelectors', c_module))
 
 # functions for class IAttributeExchangingObject
@@ -2669,8 +2675,8 @@ IAttributeExchangingObject_deserializeAttributes = func_type(None, ctypes.c_void
 listIGUIElementIterator_ctor = func_type(ctypes.c_void_p)(('listIGUIElementIterator_ctor', c_module))
 listIGUIElementIterator_operator_next = func_type(ctypes.c_void_p, ctypes.c_void_p)(('listIGUIElementIterator_operator_next', c_module))
 listIGUIElementIterator_operator_prev = func_type(ctypes.c_void_p, ctypes.c_void_p)(('listIGUIElementIterator_operator_prev', c_module))
-listIGUIElementIterator_operator_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('listIGUIElementIterator_operator_eq', c_module))
-listIGUIElementIterator_operator_ne = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('listIGUIElementIterator_operator_ne', c_module))
+listIGUIElementIterator_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('listIGUIElementIterator_operator_eq', c_module))
+listIGUIElementIterator_operator_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('listIGUIElementIterator_operator_ne', c_module))
 listIGUIElementIterator_operator_add_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('listIGUIElementIterator_operator_add_set', c_module))
 listIGUIElementIterator_operator_add = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('listIGUIElementIterator_operator_add', c_module))
 listIGUIElementIterator_operator_sub = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('listIGUIElementIterator_operator_sub', c_module))
@@ -2683,7 +2689,7 @@ listIGUIElement_operator_set = func_type(None, ctypes.c_void_p, ctypes.c_void_p)
 listIGUIElement_size = func_type(ctypes.c_uint, ctypes.c_void_p)(('listIGUIElement_size', c_module))
 listIGUIElement_getSize = func_type(ctypes.c_uint, ctypes.c_void_p)(('listIGUIElement_getSize', c_module))
 listIGUIElement_clear = func_type(None, ctypes.c_void_p)(('listIGUIElement_clear', c_module))
-listIGUIElement_empty = func_type(ctypes.c_byte, ctypes.c_void_p)(('listIGUIElement_empty', c_module))
+listIGUIElement_empty = func_type(ctypes.c_bool, ctypes.c_void_p)(('listIGUIElement_empty', c_module))
 listIGUIElement_push_back = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('listIGUIElement_push_back', c_module))
 listIGUIElement_push_front = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('listIGUIElement_push_front', c_module))
 listIGUIElement_begin = func_type(ctypes.c_void_p, ctypes.c_void_p)(('listIGUIElement_begin', c_module))
@@ -2702,22 +2708,22 @@ IGUIButton_setImage2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.
 IGUIButton_setPressedImage1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUIButton_setPressedImage1', c_module))
 IGUIButton_setPressedImage2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUIButton_setPressedImage2', c_module))
 IGUIButton_setSpriteBank = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUIButton_setSpriteBank', c_module))
-IGUIButton_setSprite = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_void_p, ctypes.c_byte)(('IGUIButton_setSprite', c_module))
-IGUIButton_setIsPushButton = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIButton_setIsPushButton', c_module))
-IGUIButton_setPressed = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIButton_setPressed', c_module))
-IGUIButton_isPressed = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIButton_isPressed', c_module))
-IGUIButton_setUseAlphaChannel = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIButton_setUseAlphaChannel', c_module))
-IGUIButton_isAlphaChannelUsed = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIButton_isAlphaChannelUsed', c_module))
-IGUIButton_isPushButton = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIButton_isPushButton', c_module))
-IGUIButton_setDrawBorder = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIButton_setDrawBorder', c_module))
-IGUIButton_isDrawingBorder = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIButton_isDrawingBorder', c_module))
-IGUIButton_setScaleImage = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIButton_setScaleImage', c_module))
-IGUIButton_isScalingImage = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIButton_isScalingImage', c_module))
+IGUIButton_setSprite = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_void_p, ctypes.c_bool)(('IGUIButton_setSprite', c_module))
+IGUIButton_setIsPushButton = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIButton_setIsPushButton', c_module))
+IGUIButton_setPressed = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIButton_setPressed', c_module))
+IGUIButton_isPressed = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIButton_isPressed', c_module))
+IGUIButton_setUseAlphaChannel = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIButton_setUseAlphaChannel', c_module))
+IGUIButton_isAlphaChannelUsed = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIButton_isAlphaChannelUsed', c_module))
+IGUIButton_isPushButton = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIButton_isPushButton', c_module))
+IGUIButton_setDrawBorder = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIButton_setDrawBorder', c_module))
+IGUIButton_isDrawingBorder = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIButton_isDrawingBorder', c_module))
+IGUIButton_setScaleImage = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIButton_setScaleImage', c_module))
+IGUIButton_isScalingImage = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIButton_isScalingImage', c_module))
 
 # functions for class IGUICheckBox
 IGUICheckBox_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IGUICheckBox_ctor', c_module))
-IGUICheckBox_setChecked = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUICheckBox_setChecked', c_module))
-IGUICheckBox_isChecked = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUICheckBox_isChecked', c_module))
+IGUICheckBox_setChecked = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUICheckBox_setChecked', c_module))
+IGUICheckBox_isChecked = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUICheckBox_isChecked', c_module))
 
 # functions for class IGUIColorSelectDialog
 IGUIColorSelectDialog_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IGUIColorSelectDialog_ctor', c_module))
@@ -2740,41 +2746,41 @@ IGUIContextMenu_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void
 IGUIContextMenu_setCloseHandling = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IGUIContextMenu_setCloseHandling', c_module))
 IGUIContextMenu_getCloseHandling = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUIContextMenu_getCloseHandling', c_module))
 IGUIContextMenu_getItemCount = func_type(ctypes.c_uint, ctypes.c_void_p)(('IGUIContextMenu_getItemCount', c_module))
-IGUIContextMenu_addItem = func_type(ctypes.c_uint, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_int, ctypes.c_byte, ctypes.c_byte, ctypes.c_byte, ctypes.c_byte)(('IGUIContextMenu_addItem', c_module))
-IGUIContextMenu_insertItem = func_type(ctypes.c_uint, ctypes.c_void_p, ctypes.c_uint, ctypes.c_wchar_p, ctypes.c_int, ctypes.c_byte, ctypes.c_byte, ctypes.c_byte, ctypes.c_byte)(('IGUIContextMenu_insertItem', c_module))
+IGUIContextMenu_addItem = func_type(ctypes.c_uint, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_int, ctypes.c_bool, ctypes.c_bool, ctypes.c_bool, ctypes.c_bool)(('IGUIContextMenu_addItem', c_module))
+IGUIContextMenu_insertItem = func_type(ctypes.c_uint, ctypes.c_void_p, ctypes.c_uint, ctypes.c_wchar_p, ctypes.c_int, ctypes.c_bool, ctypes.c_bool, ctypes.c_bool, ctypes.c_bool)(('IGUIContextMenu_insertItem', c_module))
 IGUIContextMenu_findItemWithCommandId = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_uint)(('IGUIContextMenu_findItemWithCommandId', c_module))
 IGUIContextMenu_addSeparator = func_type(None, ctypes.c_void_p)(('IGUIContextMenu_addSeparator', c_module))
 IGUIContextMenu_getItemText = func_type(ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_uint)(('IGUIContextMenu_getItemText', c_module))
 IGUIContextMenu_setItemText = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_wchar_p)(('IGUIContextMenu_setItemText', c_module))
-IGUIContextMenu_isItemEnabled = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_uint)(('IGUIContextMenu_isItemEnabled', c_module))
-IGUIContextMenu_setItemEnabled = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_byte)(('IGUIContextMenu_setItemEnabled', c_module))
-IGUIContextMenu_setItemChecked = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_byte)(('IGUIContextMenu_setItemChecked', c_module))
-IGUIContextMenu_isItemChecked = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_uint)(('IGUIContextMenu_isItemChecked', c_module))
+IGUIContextMenu_isItemEnabled = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_uint)(('IGUIContextMenu_isItemEnabled', c_module))
+IGUIContextMenu_setItemEnabled = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_bool)(('IGUIContextMenu_setItemEnabled', c_module))
+IGUIContextMenu_setItemChecked = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_bool)(('IGUIContextMenu_setItemChecked', c_module))
+IGUIContextMenu_isItemChecked = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_uint)(('IGUIContextMenu_isItemChecked', c_module))
 IGUIContextMenu_removeItem = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('IGUIContextMenu_removeItem', c_module))
 IGUIContextMenu_removeAllItems = func_type(None, ctypes.c_void_p)(('IGUIContextMenu_removeAllItems', c_module))
 IGUIContextMenu_getSelectedItem = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUIContextMenu_getSelectedItem', c_module))
 IGUIContextMenu_getItemCommandId = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_uint)(('IGUIContextMenu_getItemCommandId', c_module))
 IGUIContextMenu_setItemCommandId = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_int)(('IGUIContextMenu_setItemCommandId', c_module))
 IGUIContextMenu_getSubMenu = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IGUIContextMenu_getSubMenu', c_module))
-IGUIContextMenu_setItemAutoChecking = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_byte)(('IGUIContextMenu_setItemAutoChecking', c_module))
-IGUIContextMenu_getItemAutoChecking = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_uint)(('IGUIContextMenu_getItemAutoChecking', c_module))
+IGUIContextMenu_setItemAutoChecking = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_bool)(('IGUIContextMenu_setItemAutoChecking', c_module))
+IGUIContextMenu_getItemAutoChecking = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_uint)(('IGUIContextMenu_getItemAutoChecking', c_module))
 IGUIContextMenu_setEventParent = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUIContextMenu_setEventParent', c_module))
 
 # functions for class IGUIEditBox
 IGUIEditBox_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IGUIEditBox_ctor', c_module))
 IGUIEditBox_setOverrideFont = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEditBox_setOverrideFont', c_module))
 IGUIEditBox_setOverrideColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEditBox_setOverrideColor', c_module))
-IGUIEditBox_enableOverrideColor = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIEditBox_enableOverrideColor', c_module))
-IGUIEditBox_setDrawBorder = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIEditBox_setDrawBorder', c_module))
+IGUIEditBox_enableOverrideColor = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIEditBox_enableOverrideColor', c_module))
+IGUIEditBox_setDrawBorder = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIEditBox_setDrawBorder', c_module))
 IGUIEditBox_setTextAlignment = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('IGUIEditBox_setTextAlignment', c_module))
-IGUIEditBox_setWordWrap = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIEditBox_setWordWrap', c_module))
-IGUIEditBox_isWordWrapEnabled = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIEditBox_isWordWrapEnabled', c_module))
-IGUIEditBox_setMultiLine = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIEditBox_setMultiLine', c_module))
-IGUIEditBox_isMultiLineEnabled = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIEditBox_isMultiLineEnabled', c_module))
-IGUIEditBox_setAutoScroll = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIEditBox_setAutoScroll', c_module))
-IGUIEditBox_isAutoScrollEnabled = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIEditBox_isAutoScrollEnabled', c_module))
-IGUIEditBox_setPasswordBox = func_type(None, ctypes.c_void_p, ctypes.c_byte, ctypes.c_void_p)(('IGUIEditBox_setPasswordBox', c_module))
-IGUIEditBox_isPasswordBox = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIEditBox_isPasswordBox', c_module))
+IGUIEditBox_setWordWrap = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIEditBox_setWordWrap', c_module))
+IGUIEditBox_isWordWrapEnabled = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIEditBox_isWordWrapEnabled', c_module))
+IGUIEditBox_setMultiLine = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIEditBox_setMultiLine', c_module))
+IGUIEditBox_isMultiLineEnabled = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIEditBox_isMultiLineEnabled', c_module))
+IGUIEditBox_setAutoScroll = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIEditBox_setAutoScroll', c_module))
+IGUIEditBox_isAutoScrollEnabled = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIEditBox_isAutoScrollEnabled', c_module))
+IGUIEditBox_setPasswordBox = func_type(None, ctypes.c_void_p, ctypes.c_bool, ctypes.c_void_p)(('IGUIEditBox_setPasswordBox', c_module))
+IGUIEditBox_isPasswordBox = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIEditBox_isPasswordBox', c_module))
 IGUIEditBox_getTextDimension = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIEditBox_getTextDimension', c_module))
 IGUIEditBox_setMax = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('IGUIEditBox_setMax', c_module))
 IGUIEditBox_getMax = func_type(ctypes.c_uint, ctypes.c_void_p)(('IGUIEditBox_getMax', c_module))
@@ -2789,46 +2795,46 @@ IGUIElement_setRelativePosition2 = func_type(None, ctypes.c_void_p, ctypes.c_voi
 IGUIElement_setRelativePositionProportional = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_setRelativePositionProportional', c_module))
 IGUIElement_getAbsolutePosition = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_getAbsolutePosition', c_module))
 IGUIElement_getAbsoluteClippingRect = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_getAbsoluteClippingRect', c_module))
-IGUIElement_setNotClipped = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIElement_setNotClipped', c_module))
-IGUIElement_isNotClipped = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIElement_isNotClipped', c_module))
+IGUIElement_setNotClipped = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIElement_setNotClipped', c_module))
+IGUIElement_isNotClipped = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIElement_isNotClipped', c_module))
 IGUIElement_setMaxSize = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_setMaxSize', c_module))
 IGUIElement_setMinSize = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_setMinSize', c_module))
 IGUIElement_setAlignment = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('IGUIElement_setAlignment', c_module))
 IGUIElement_updateAbsolutePosition = func_type(None, ctypes.c_void_p)(('IGUIElement_updateAbsolutePosition', c_module))
 IGUIElement_getElementFromPoint = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_getElementFromPoint', c_module))
-IGUIElement_isPointInside = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_isPointInside', c_module))
+IGUIElement_isPointInside = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_isPointInside', c_module))
 IGUIElement_addChild = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_addChild', c_module))
 IGUIElement_removeChild = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_removeChild', c_module))
 IGUIElement_remove = func_type(None, ctypes.c_void_p)(('IGUIElement_remove', c_module))
 IGUIElement_draw = func_type(None, ctypes.c_void_p)(('IGUIElement_draw', c_module))
 IGUIElement_OnPostRender = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('IGUIElement_OnPostRender', c_module))
 IGUIElement_move = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_move', c_module))
-IGUIElement_isVisible = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIElement_isVisible', c_module))
-IGUIElement_setVisible = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIElement_setVisible', c_module))
-IGUIElement_isSubElement = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIElement_isSubElement', c_module))
-IGUIElement_setSubElement = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIElement_setSubElement', c_module))
-IGUIElement_setTabStop = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIElement_setTabStop', c_module))
-IGUIElement_isTabStop = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIElement_isTabStop', c_module))
+IGUIElement_isVisible = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIElement_isVisible', c_module))
+IGUIElement_setVisible = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIElement_setVisible', c_module))
+IGUIElement_isSubElement = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIElement_isSubElement', c_module))
+IGUIElement_setSubElement = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIElement_setSubElement', c_module))
+IGUIElement_setTabStop = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIElement_setTabStop', c_module))
+IGUIElement_isTabStop = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIElement_isTabStop', c_module))
 IGUIElement_setTabOrder = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IGUIElement_setTabOrder', c_module))
 IGUIElement_getTabOrder = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUIElement_getTabOrder', c_module))
-IGUIElement_setTabGroup = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIElement_setTabGroup', c_module))
-IGUIElement_isTabGroup = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIElement_isTabGroup', c_module))
+IGUIElement_setTabGroup = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIElement_setTabGroup', c_module))
+IGUIElement_isTabGroup = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIElement_isTabGroup', c_module))
 IGUIElement_getTabGroup = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_getTabGroup', c_module))
-IGUIElement_isEnabled = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIElement_isEnabled', c_module))
-IGUIElement_setEnabled = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIElement_setEnabled', c_module))
+IGUIElement_isEnabled = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIElement_isEnabled', c_module))
+IGUIElement_setEnabled = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIElement_setEnabled', c_module))
 IGUIElement_setText = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p)(('IGUIElement_setText', c_module))
 IGUIElement_getText = func_type(ctypes.c_wchar_p, ctypes.c_void_p)(('IGUIElement_getText', c_module))
 IGUIElement_setToolTipText = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p)(('IGUIElement_setToolTipText', c_module))
 IGUIElement_getToolTipText = func_type(ctypes.c_wchar_p, ctypes.c_void_p)(('IGUIElement_getToolTipText', c_module))
 IGUIElement_getID = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUIElement_getID', c_module))
 IGUIElement_setID = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IGUIElement_setID', c_module))
-IGUIElement_bringToFront = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_bringToFront', c_module))
+IGUIElement_bringToFront = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_bringToFront', c_module))
 IGUIElement_getChildren = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_getChildren', c_module))
-IGUIElement_getElementFromId = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('IGUIElement_getElementFromId', c_module))
-IGUIElement_isMyChild = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_isMyChild', c_module))
-IGUIElement_getNextElement = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('IGUIElement_getNextElement', c_module))
+IGUIElement_getElementFromId = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('IGUIElement_getElementFromId', c_module))
+IGUIElement_isMyChild = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_isMyChild', c_module))
+IGUIElement_getNextElement = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool, ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('IGUIElement_getNextElement', c_module))
 IGUIElement_getType = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUIElement_getType', c_module))
-IGUIElement_hasType = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IGUIElement_hasType', c_module))
+IGUIElement_hasType = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_int)(('IGUIElement_hasType', c_module))
 IGUIElement_getTypeName = func_type(ctypes.c_char_p, ctypes.c_void_p)(('IGUIElement_getTypeName', c_module))
 IGUIElement_serializeAttributes = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_serializeAttributes', c_module))
 IGUIElement_deserializeAttributes = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_deserializeAttributes', c_module))
@@ -2869,10 +2875,10 @@ IGUIFontBitmap_getKerningWidth = func_type(ctypes.c_int, ctypes.c_void_p, ctypes
 IGUIImage_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IGUIImage_ctor', c_module))
 IGUIImage_setImage = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUIImage_setImage', c_module))
 IGUIImage_setColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUIImage_setColor', c_module))
-IGUIImage_setScaleImage = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIImage_setScaleImage', c_module))
-IGUIImage_setUseAlphaChannel = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIImage_setUseAlphaChannel', c_module))
-IGUIImage_isImageScaled = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIImage_isImageScaled', c_module))
-IGUIImage_isAlphaChannelUsed = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIImage_isAlphaChannelUsed', c_module))
+IGUIImage_setScaleImage = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIImage_setScaleImage', c_module))
+IGUIImage_setUseAlphaChannel = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIImage_setUseAlphaChannel', c_module))
+IGUIImage_isImageScaled = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIImage_isImageScaled', c_module))
+IGUIImage_isAlphaChannelUsed = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIImage_isAlphaChannelUsed', c_module))
 
 # functions for class IGUIImageList
 IGUIImageList_draw = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('IGUIImageList_draw', c_module))
@@ -2886,7 +2892,7 @@ IGUIInOutFader_setColor1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('I
 IGUIInOutFader_setColor2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUIInOutFader_setColor2', c_module))
 IGUIInOutFader_fadeIn = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('IGUIInOutFader_fadeIn', c_module))
 IGUIInOutFader_fadeOut = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('IGUIInOutFader_fadeOut', c_module))
-IGUIInOutFader_isReady = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIInOutFader_isReady', c_module))
+IGUIInOutFader_isReady = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIInOutFader_isReady', c_module))
 
 # functions for class CGUITTFont
 CGUITTFont_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_uint)(('CGUITTFont_ctor', c_module))
@@ -2894,10 +2900,10 @@ CGUITTFont_as_IGUIFont = func_type(ctypes.c_void_p, ctypes.c_void_p)(('CGUITTFon
 CGUITTFont_createTTFont = func_type(ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_uint)(('CGUITTFont_createTTFont', c_module))
 CGUITTFont_setBatchLoadSize = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('CGUITTFont_setBatchLoadSize', c_module))
 CGUITTFont_setMaxPageTextureSize = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGUITTFont_setMaxPageTextureSize', c_module))
-CGUITTFont_setTransparency = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('CGUITTFont_setTransparency', c_module))
-CGUITTFont_setMonochrome = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('CGUITTFont_setMonochrome', c_module))
-CGUITTFont_setFontHinting = func_type(None, ctypes.c_void_p, ctypes.c_byte, ctypes.c_void_p)(('CGUITTFont_setFontHinting', c_module))
-CGUITTFont_draw = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p)(('CGUITTFont_draw', c_module))
+CGUITTFont_setTransparency = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('CGUITTFont_setTransparency', c_module))
+CGUITTFont_setMonochrome = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('CGUITTFont_setMonochrome', c_module))
+CGUITTFont_setFontHinting = func_type(None, ctypes.c_void_p, ctypes.c_bool, ctypes.c_void_p)(('CGUITTFont_setFontHinting', c_module))
+CGUITTFont_draw = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_void_p)(('CGUITTFont_draw', c_module))
 CGUITTFont_getDimension1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p)(('CGUITTFont_getDimension1', c_module))
 CGUITTFont_getDimension2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.POINTER(ctypes.c_ushort))(('CGUITTFont_getDimension2', c_module))
 CGUITTFont_getCharacterFromPos1 = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_int)(('CGUITTFont_getCharacterFromPos1', c_module))
@@ -2914,9 +2920,9 @@ CGUITTFont_forceGlyphUpdate = func_type(None, ctypes.c_void_p)(('CGUITTFont_forc
 #functions for class IGUITab
 IGUITab_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IGUITab_ctor', c_module))
 IGUITab_getNumber = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUITab_getNumber', c_module))
-IGUITab_setDrawBackground = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUITab_setDrawBackground', c_module))
+IGUITab_setDrawBackground = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUITab_setDrawBackground', c_module))
 IGUITab_setBackgroundColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUITab_setBackgroundColor', c_module))
-IGUITab_isDrawingBackground = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUITab_isDrawingBackground', c_module))
+IGUITab_isDrawingBackground = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUITab_isDrawingBackground', c_module))
 IGUITab_getBackgroundColor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUITab_getBackgroundColor', c_module))
 IGUITab_setTextColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUITab_setTextColor', c_module))
 IGUITab_getTextColor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUITab_getTextColor', c_module))
@@ -2926,8 +2932,8 @@ IGUITabControl_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_
 IGUITabControl_addTab = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_int)(('IGUITabControl_addTab', c_module))
 IGUITabControl_getTabCount = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUITabControl_getTabCount', c_module))
 IGUITabControl_getTab = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IGUITabControl_getTab', c_module))
-IGUITabControl_setActiveTab1 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IGUITabControl_setActiveTab1', c_module))
-IGUITabControl_setActiveTab2 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IGUITabControl_setActiveTab2', c_module))
+IGUITabControl_setActiveTab1 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_int)(('IGUITabControl_setActiveTab1', c_module))
+IGUITabControl_setActiveTab2 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IGUITabControl_setActiveTab2', c_module))
 IGUITabControl_getActiveTab = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUITabControl_getActiveTab', c_module))
 IGUITabControl_setTabHeight = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IGUITabControl_setTabHeight', c_module))
 IGUITabControl_getTabHeight = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUITabControl_getTabHeight', c_module))
@@ -2940,7 +2946,7 @@ IGUITabControl_getTabExtraWidth = func_type(ctypes.c_int, ctypes.c_void_p)(('IGU
 
 #functions for class IGUIToolBar
 IGUIToolBar_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IGUIToolBar_ctor', c_module))
-IGUIToolBar_addButton = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte)(('IGUIToolBar_addButton', c_module))
+IGUIToolBar_addButton = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool)(('IGUIToolBar_addButton', c_module))
 
 #================= IGUITreeViewNode
 IGUITreeViewNode_getOwner = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeViewNode_getOwner', c_module))
@@ -2960,7 +2966,7 @@ IGUITreeViewNode_setData2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('
 IGUITreeViewNode_getChildCount = func_type(ctypes.c_uint, ctypes.c_void_p)(('IGUITreeViewNode_getChildCount', c_module))
 if IRRLICHT_VERSION < 180:
 	IGUITreeViewNode_clearChilds = func_type(None, ctypes.c_void_p)(('IGUITreeViewNode_clearChilds', c_module))
-	IGUITreeViewNode_hasChilds = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUITreeViewNode_hasChilds', c_module))
+	IGUITreeViewNode_hasChilds = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUITreeViewNode_hasChilds', c_module))
 IGUITreeViewNode_addChildBack = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_int, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeViewNode_addChildBack', c_module))
 IGUITreeViewNode_addChildFront = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_int, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeViewNode_addChildFront', c_module))
 IGUITreeViewNode_insertChildAfter = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_int, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeViewNode_insertChildAfter', c_module))
@@ -2970,28 +2976,28 @@ IGUITreeViewNode_getLastChild = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IG
 IGUITreeViewNode_getPrevSibling = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeViewNode_getPrevSibling', c_module))
 IGUITreeViewNode_getNextSibling = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeViewNode_getNextSibling', c_module))
 IGUITreeViewNode_getNextVisible = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeViewNode_getNextVisible', c_module))
-IGUITreeViewNode_deleteChild = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeViewNode_deleteChild', c_module))
-IGUITreeViewNode_moveChildUp = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeViewNode_moveChildUp', c_module))
-IGUITreeViewNode_moveChildDown = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeViewNode_moveChildDown', c_module))
-IGUITreeViewNode_getExpanded = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUITreeViewNode_getExpanded', c_module))
-IGUITreeViewNode_setExpanded = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUITreeViewNode_setExpanded', c_module))
-IGUITreeViewNode_getSelected = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUITreeViewNode_getSelected', c_module))
-IGUITreeViewNode_setSelected = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUITreeViewNode_setSelected', c_module))
-IGUITreeViewNode_isRoot = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUITreeViewNode_isRoot', c_module))
+IGUITreeViewNode_deleteChild = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeViewNode_deleteChild', c_module))
+IGUITreeViewNode_moveChildUp = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeViewNode_moveChildUp', c_module))
+IGUITreeViewNode_moveChildDown = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeViewNode_moveChildDown', c_module))
+IGUITreeViewNode_getExpanded = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUITreeViewNode_getExpanded', c_module))
+IGUITreeViewNode_setExpanded = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUITreeViewNode_setExpanded', c_module))
+IGUITreeViewNode_getSelected = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUITreeViewNode_getSelected', c_module))
+IGUITreeViewNode_setSelected = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUITreeViewNode_setSelected', c_module))
+IGUITreeViewNode_isRoot = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUITreeViewNode_isRoot', c_module))
 IGUITreeViewNode_getLevel = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUITreeViewNode_getLevel', c_module))
-IGUITreeViewNode_isVisible = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUITreeViewNode_isVisible', c_module))
+IGUITreeViewNode_isVisible = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUITreeViewNode_isVisible', c_module))
 
 #================= IGUITreeView
 IGUITreeView_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IGUITreeView_ctor', c_module))
 IGUITreeView_getRoot = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeView_getRoot', c_module))
 IGUITreeView_getSelected = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeView_getSelected', c_module))
-IGUITreeView_getLinesVisible = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUITreeView_getLinesVisible', c_module))
-IGUITreeView_setLinesVisible = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUITreeView_setLinesVisible', c_module))
+IGUITreeView_getLinesVisible = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUITreeView_getLinesVisible', c_module))
+IGUITreeView_setLinesVisible = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUITreeView_setLinesVisible', c_module))
 IGUITreeView_setIconFont = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeView_setIconFont', c_module))
 IGUITreeView_setImageList = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeView_setImageList', c_module))
 IGUITreeView_getImageList = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeView_getImageList', c_module))
-IGUITreeView_setImageLeftOfIcon = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUITreeView_setImageLeftOfIcon', c_module))
-IGUITreeView_getImageLeftOfIcon = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUITreeView_getImageLeftOfIcon', c_module))
+IGUITreeView_setImageLeftOfIcon = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUITreeView_setImageLeftOfIcon', c_module))
+IGUITreeView_getImageLeftOfIcon = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUITreeView_getImageLeftOfIcon', c_module))
 IGUITreeView_getLastEventNode = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUITreeView_getLastEventNode', c_module))
 
 # functions for class IGUIScrollBar
@@ -3022,13 +3028,13 @@ IGUISkin_getIcon = func_type(ctypes.c_uint, ctypes.c_void_p, ctypes.c_int)(('IGU
 IGUISkin_setIcon = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('IGUISkin_setIcon', c_module))
 IGUISkin_draw3DButtonPaneStandard = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUISkin_draw3DButtonPaneStandard', c_module))
 IGUISkin_draw3DButtonPanePressed = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUISkin_draw3DButtonPanePressed', c_module))
-IGUISkin_draw3DSunkenPane = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IGUISkin_draw3DSunkenPane', c_module))
-IGUISkin_draw3DWindowBackground = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUISkin_draw3DWindowBackground', c_module))
+IGUISkin_draw3DSunkenPane = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IGUISkin_draw3DSunkenPane', c_module))
+IGUISkin_draw3DWindowBackground = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUISkin_draw3DWindowBackground', c_module))
 IGUISkin_draw3DMenuPane = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUISkin_draw3DMenuPane', c_module))
 IGUISkin_draw3DToolBar = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUISkin_draw3DToolBar', c_module))
-IGUISkin_draw3DTabButton = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IGUISkin_draw3DTabButton', c_module))
-IGUISkin_draw3DTabBody = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('IGUISkin_draw3DTabBody', c_module))
-IGUISkin_drawIcon = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_byte, ctypes.c_void_p)(('IGUISkin_drawIcon', c_module))
+IGUISkin_draw3DTabButton = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IGUISkin_draw3DTabButton', c_module))
+IGUISkin_draw3DTabBody = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('IGUISkin_draw3DTabBody', c_module))
+IGUISkin_drawIcon = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_bool, ctypes.c_void_p)(('IGUISkin_drawIcon', c_module))
 IGUISkin_draw2DRectangle = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUISkin_draw2DRectangle', c_module))
 IGUISkin_getType = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUISkin_getType', c_module))
 
@@ -3052,12 +3058,12 @@ rects32array_push_back = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('rec
 rects32array_push_front = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('rects32array_push_front', c_module))
 rects32array_insert = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('rects32array_insert', c_module))
 rects32array_clear = func_type(None, ctypes.c_void_p)(('rects32array_clear', c_module))
-rects32array_set_pointer = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_byte, ctypes.c_byte)(('rects32array_set_pointer', c_module))
-rects32array_set_free_when_destroyed = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('rects32array_set_free_when_destroyed', c_module))
+rects32array_set_pointer = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_bool, ctypes.c_bool)(('rects32array_set_pointer', c_module))
+rects32array_set_free_when_destroyed = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('rects32array_set_free_when_destroyed', c_module))
 rects32array_set_used = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('rects32array_set_used', c_module))
 rects32array_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('rects32array_get_item', c_module))
 rects32array_size = func_type(ctypes.c_uint, ctypes.c_void_p)(('rects32array_size', c_module))
-rects32array_empty = func_type(ctypes.c_byte, ctypes.c_void_p)(('rects32array_empty', c_module))
+rects32array_empty = func_type(ctypes.c_bool, ctypes.c_void_p)(('rects32array_empty', c_module))
 rects32array_sort = func_type(None, ctypes.c_void_p)(('rects32array_sort', c_module))
 rects32array_binary_search1 = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('rects32array_binary_search1', c_module))
 rects32array_binary_search2 = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('rects32array_binary_search2', c_module))
@@ -3066,7 +3072,7 @@ rects32array_linear_search = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_v
 rects32array_linear_reverse_search = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('rects32array_linear_reverse_search', c_module))
 rects32array_erase1 = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('rects32array_erase1', c_module))
 rects32array_erase2 = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_int)(('rects32array_erase2', c_module))
-rects32array_set_sorted = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('rects32array_set_sorted', c_module))
+rects32array_set_sorted = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('rects32array_set_sorted', c_module))
 rects32array_swap = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('rects32array_swap', c_module))
 
 #================= SGUISpriteFrame
@@ -3084,15 +3090,15 @@ SGUISpriteFrameArray_push_back = func_type(None, ctypes.c_void_p, ctypes.c_void_
 SGUISpriteFrameArray_push_front = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SGUISpriteFrameArray_push_front', c_module))
 SGUISpriteFrameArray_insert = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('SGUISpriteFrameArray_insert', c_module))
 SGUISpriteFrameArray_clear = func_type(None, ctypes.c_void_p)(('SGUISpriteFrameArray_clear', c_module))
-SGUISpriteFrameArray_set_pointer = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_byte, ctypes.c_byte)(('SGUISpriteFrameArray_set_pointer', c_module))
-SGUISpriteFrameArray_set_free_when_destroyed = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SGUISpriteFrameArray_set_free_when_destroyed', c_module))
+SGUISpriteFrameArray_set_pointer = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_bool, ctypes.c_bool)(('SGUISpriteFrameArray_set_pointer', c_module))
+SGUISpriteFrameArray_set_free_when_destroyed = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SGUISpriteFrameArray_set_free_when_destroyed', c_module))
 SGUISpriteFrameArray_set_used = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('SGUISpriteFrameArray_set_used', c_module))
 SGUISpriteFrameArray_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('SGUISpriteFrameArray_get_item', c_module))
 SGUISpriteFrameArray_size = func_type(ctypes.c_uint, ctypes.c_void_p)(('SGUISpriteFrameArray_size', c_module))
-SGUISpriteFrameArray_empty = func_type(ctypes.c_byte, ctypes.c_void_p)(('SGUISpriteFrameArray_empty', c_module))
+SGUISpriteFrameArray_empty = func_type(ctypes.c_bool, ctypes.c_void_p)(('SGUISpriteFrameArray_empty', c_module))
 SGUISpriteFrameArray_erase1 = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('SGUISpriteFrameArray_erase1', c_module))
 SGUISpriteFrameArray_erase2 = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_int)(('SGUISpriteFrameArray_erase2', c_module))
-SGUISpriteFrameArray_set_sorted = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SGUISpriteFrameArray_set_sorted', c_module))
+SGUISpriteFrameArray_set_sorted = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SGUISpriteFrameArray_set_sorted', c_module))
 SGUISpriteFrameArray_swap = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SGUISpriteFrameArray_swap', c_module))
 
 #================= SGUISprite
@@ -3110,15 +3116,15 @@ SGUISpriteArray_push_back = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('
 SGUISpriteArray_push_front = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SGUISpriteArray_push_front', c_module))
 SGUISpriteArray_insert = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('SGUISpriteArray_insert', c_module))
 SGUISpriteArray_clear = func_type(None, ctypes.c_void_p)(('SGUISpriteArray_clear', c_module))
-SGUISpriteArray_set_pointer = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_byte, ctypes.c_byte)(('SGUISpriteArray_set_pointer', c_module))
-SGUISpriteArray_set_free_when_destroyed = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SGUISpriteArray_set_free_when_destroyed', c_module))
+SGUISpriteArray_set_pointer = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_bool, ctypes.c_bool)(('SGUISpriteArray_set_pointer', c_module))
+SGUISpriteArray_set_free_when_destroyed = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SGUISpriteArray_set_free_when_destroyed', c_module))
 SGUISpriteArray_set_used = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('SGUISpriteArray_set_used', c_module))
 SGUISpriteArray_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('SGUISpriteArray_get_item', c_module))
 SGUISpriteArray_size = func_type(ctypes.c_uint, ctypes.c_void_p)(('SGUISpriteArray_size', c_module))
-SGUISpriteArray_empty = func_type(ctypes.c_byte, ctypes.c_void_p)(('SGUISpriteArray_empty', c_module))
+SGUISpriteArray_empty = func_type(ctypes.c_bool, ctypes.c_void_p)(('SGUISpriteArray_empty', c_module))
 SGUISpriteArray_erase1 = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('SGUISpriteArray_erase1', c_module))
 SGUISpriteArray_erase2 = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_int)(('SGUISpriteArray_erase2', c_module))
-SGUISpriteArray_set_sorted = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SGUISpriteArray_set_sorted', c_module))
+SGUISpriteArray_set_sorted = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SGUISpriteArray_set_sorted', c_module))
 SGUISpriteArray_swap = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SGUISpriteArray_swap', c_module))
 
 # functions for class IGUISpriteBank
@@ -3139,14 +3145,14 @@ IGUIStaticText_setOverrideFont = func_type(None, ctypes.c_void_p, ctypes.c_void_
 IGUIStaticText_getOverrideFont = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIStaticText_getOverrideFont', c_module))
 IGUIStaticText_setOverrideColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUIStaticText_setOverrideColor', c_module))
 IGUIStaticText_getOverrideColor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIStaticText_getOverrideColor', c_module))
-IGUIStaticText_enableOverrideColor = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIStaticText_enableOverrideColor', c_module))
-IGUIStaticText_isOverrideColorEnabled = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIStaticText_isOverrideColorEnabled', c_module))
+IGUIStaticText_enableOverrideColor = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIStaticText_enableOverrideColor', c_module))
+IGUIStaticText_isOverrideColorEnabled = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIStaticText_isOverrideColorEnabled', c_module))
 IGUIStaticText_setBackgroundColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUIStaticText_setBackgroundColor', c_module))
-IGUIStaticText_setDrawBackground = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIStaticText_setDrawBackground', c_module))
-IGUIStaticText_setDrawBorder = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIStaticText_setDrawBorder', c_module))
+IGUIStaticText_setDrawBackground = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIStaticText_setDrawBackground', c_module))
+IGUIStaticText_setDrawBorder = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIStaticText_setDrawBorder', c_module))
 IGUIStaticText_setTextAlignment = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('IGUIStaticText_setTextAlignment', c_module))
-IGUIStaticText_setWordWrap = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIStaticText_setWordWrap', c_module))
-IGUIStaticText_isWordWrapEnabled = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIStaticText_isWordWrapEnabled', c_module))
+IGUIStaticText_setWordWrap = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIStaticText_setWordWrap', c_module))
+IGUIStaticText_isWordWrapEnabled = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIStaticText_isWordWrapEnabled', c_module))
 IGUIStaticText_getTextHeight = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUIStaticText_getTextHeight', c_module))
 IGUIStaticText_getTextWidth = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUIStaticText_getTextWidth', c_module))
 
@@ -3155,12 +3161,12 @@ IGUIWindow_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, c
 IGUIWindow_getCloseButton = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIWindow_getCloseButton', c_module))
 IGUIWindow_getMinimizeButton = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIWindow_getMinimizeButton', c_module))
 IGUIWindow_getMaximizeButton = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIWindow_getMaximizeButton', c_module))
-IGUIWindow_isDraggable = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIWindow_isDraggable', c_module))
-IGUIWindow_setDraggable = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIWindow_setDraggable', c_module))
-IGUIWindow_setDrawBackground = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIWindow_setDrawBackground', c_module))
-IGUIWindow_getDrawBackground = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIWindow_getDrawBackground', c_module))
-IGUIWindow_setDrawTitlebar = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIWindow_setDrawTitlebar', c_module))
-IGUIWindow_getDrawTitlebar = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIWindow_getDrawTitlebar', c_module))
+IGUIWindow_isDraggable = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIWindow_isDraggable', c_module))
+IGUIWindow_setDraggable = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIWindow_setDraggable', c_module))
+IGUIWindow_setDrawBackground = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIWindow_setDrawBackground', c_module))
+IGUIWindow_getDrawBackground = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIWindow_getDrawBackground', c_module))
+IGUIWindow_setDrawTitlebar = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIWindow_setDrawTitlebar', c_module))
+IGUIWindow_getDrawTitlebar = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIWindow_getDrawTitlebar', c_module))
 IGUIWindow_getClientRect = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIWindow_getClientRect', c_module))
 
 #class IMeshCache
@@ -3175,10 +3181,10 @@ IMeshCache_getMeshByName = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_
 IMeshCache_getMeshNameByIndex = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IMeshCache_getMeshNameByIndex', c_module))
 IMeshCache_getMeshName1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshCache_getMeshName1', c_module))
 IMeshCache_getMeshName2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshCache_getMeshName2', c_module))
-IMeshCache_renameMeshByIndex = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p)(('IMeshCache_renameMeshByIndex', c_module))
-IMeshCache_renameMesh1 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshCache_renameMesh1', c_module))
-IMeshCache_renameMesh2 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshCache_renameMesh2', c_module))
-IMeshCache_isMeshLoaded = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IMeshCache_isMeshLoaded', c_module))
+IMeshCache_renameMeshByIndex = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p)(('IMeshCache_renameMeshByIndex', c_module))
+IMeshCache_renameMesh1 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshCache_renameMesh1', c_module))
+IMeshCache_renameMesh2 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshCache_renameMesh2', c_module))
+IMeshCache_isMeshLoaded = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IMeshCache_isMeshLoaded', c_module))
 IMeshCache_clear = func_type(None, ctypes.c_void_p)(('IMeshCache_clear', c_module))
 IMeshCache_clearUnusedMeshes = func_type(None, ctypes.c_void_p)(('IMeshCache_clearUnusedMeshes', c_module))
 
@@ -3186,9 +3192,9 @@ IMeshCache_clearUnusedMeshes = func_type(None, ctypes.c_void_p)(('IMeshCache_cle
 IMeshManipulator_flipSurfaces = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IMeshManipulator_flipSurfaces', c_module))
 IMeshManipulator_setVertexColorAlpha = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IMeshManipulator_setVertexColorAlpha', c_module))
 IMeshManipulator_setVertexColors = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshManipulator_setVertexColors', c_module))
-IMeshManipulator_recalculateNormals1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte)(('IMeshManipulator_recalculateNormals1', c_module))
-IMeshManipulator_recalculateNormals2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte)(('IMeshManipulator_recalculateNormals2', c_module))
-IMeshManipulator_recalculateTangents = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_byte)(('IMeshManipulator_recalculateTangents', c_module))
+IMeshManipulator_recalculateNormals1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool)(('IMeshManipulator_recalculateNormals1', c_module))
+IMeshManipulator_recalculateNormals2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool)(('IMeshManipulator_recalculateNormals2', c_module))
+IMeshManipulator_recalculateTangents = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_bool)(('IMeshManipulator_recalculateTangents', c_module))
 IMeshManipulator_scale1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshManipulator_scale1', c_module))
 IMeshManipulator_scale2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshManipulator_scale2', c_module))
 if IRRLICHT_VERSION < 180:
@@ -3202,7 +3208,7 @@ IMeshManipulator_createMeshCopy = func_type(ctypes.c_void_p, ctypes.c_void_p, ct
 IMeshManipulator_makePlanarTextureMapping1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('IMeshManipulator_makePlanarTextureMapping1', c_module))
 IMeshManipulator_makePlanarTextureMapping2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('IMeshManipulator_makePlanarTextureMapping2', c_module))
 IMeshManipulator_makePlanarTextureMapping3 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_ubyte, ctypes.c_void_p)(('IMeshManipulator_makePlanarTextureMapping3', c_module))
-IMeshManipulator_createMeshWithTangents = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_byte, ctypes.c_byte)(('IMeshManipulator_createMeshWithTangents', c_module))
+IMeshManipulator_createMeshWithTangents = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_bool, ctypes.c_bool)(('IMeshManipulator_createMeshWithTangents', c_module))
 IMeshManipulator_createMeshWith2TCoords = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshManipulator_createMeshWith2TCoords', c_module))
 IMeshManipulator_createMeshWith1TCoords = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshManipulator_createMeshWith1TCoords', c_module))
 IMeshManipulator_createMeshUniquePrimitives = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMeshManipulator_createMeshUniquePrimitives', c_module))
@@ -3214,32 +3220,32 @@ IMeshManipulator_createAnimatedMesh = func_type(ctypes.c_void_p, ctypes.c_void_p
 #class IParticleAffector
 IParticleAffector_ctor = func_type(ctypes.c_void_p)(('IParticleAffector_ctor', c_module))
 IParticleAffector_affect = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p, ctypes.c_uint)(('IParticleAffector_affect', c_module))
-IParticleAffector_setEnabled = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IParticleAffector_setEnabled', c_module))
-IParticleAffector_getEnabled = func_type(ctypes.c_byte, ctypes.c_void_p)(('IParticleAffector_getEnabled', c_module))
+IParticleAffector_setEnabled = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IParticleAffector_setEnabled', c_module))
+IParticleAffector_getEnabled = func_type(ctypes.c_bool, ctypes.c_void_p)(('IParticleAffector_getEnabled', c_module))
 IParticleAffector_getType = func_type(ctypes.c_int, ctypes.c_void_p)(('IParticleAffector_getType', c_module))
 
 #class IParticleAnimatedMeshSceneNodeEmitter : public IParticleEmitter
 IParticleAnimatedMeshSceneNodeEmitter_setAnimatedMeshSceneNode = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IParticleAnimatedMeshSceneNodeEmitter_setAnimatedMeshSceneNode', c_module))
-IParticleAnimatedMeshSceneNodeEmitter_setUseNormalDirection = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IParticleAnimatedMeshSceneNodeEmitter_setUseNormalDirection', c_module))
+IParticleAnimatedMeshSceneNodeEmitter_setUseNormalDirection = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IParticleAnimatedMeshSceneNodeEmitter_setUseNormalDirection', c_module))
 IParticleAnimatedMeshSceneNodeEmitter_setNormalDirectionModifier = func_type(None, ctypes.c_void_p, ctypes.c_float)(('IParticleAnimatedMeshSceneNodeEmitter_setNormalDirectionModifier', c_module))
-IParticleAnimatedMeshSceneNodeEmitter_setEveryMeshVertex = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IParticleAnimatedMeshSceneNodeEmitter_setEveryMeshVertex', c_module))
+IParticleAnimatedMeshSceneNodeEmitter_setEveryMeshVertex = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IParticleAnimatedMeshSceneNodeEmitter_setEveryMeshVertex', c_module))
 IParticleAnimatedMeshSceneNodeEmitter_getAnimatedMeshSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IParticleAnimatedMeshSceneNodeEmitter_getAnimatedMeshSceneNode', c_module))
-IParticleAnimatedMeshSceneNodeEmitter_isUsingNormalDirection = func_type(ctypes.c_byte, ctypes.c_void_p)(('IParticleAnimatedMeshSceneNodeEmitter_isUsingNormalDirection', c_module))
+IParticleAnimatedMeshSceneNodeEmitter_isUsingNormalDirection = func_type(ctypes.c_bool, ctypes.c_void_p)(('IParticleAnimatedMeshSceneNodeEmitter_isUsingNormalDirection', c_module))
 IParticleAnimatedMeshSceneNodeEmitter_getNormalDirectionModifier = func_type(ctypes.c_float, ctypes.c_void_p)(('IParticleAnimatedMeshSceneNodeEmitter_getNormalDirectionModifier', c_module))
-IParticleAnimatedMeshSceneNodeEmitter_getEveryMeshVertex = func_type(ctypes.c_byte, ctypes.c_void_p)(('IParticleAnimatedMeshSceneNodeEmitter_getEveryMeshVertex', c_module))
+IParticleAnimatedMeshSceneNodeEmitter_getEveryMeshVertex = func_type(ctypes.c_bool, ctypes.c_void_p)(('IParticleAnimatedMeshSceneNodeEmitter_getEveryMeshVertex', c_module))
 IParticleAnimatedMeshSceneNodeEmitter_getType = func_type(ctypes.c_int, ctypes.c_void_p)(('IParticleAnimatedMeshSceneNodeEmitter_getType', c_module))
 
 #class IParticleAttractionAffector : public IParticleAffector
 IParticleAttractionAffector_setPoint = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IParticleAttractionAffector_setPoint', c_module))
-IParticleAttractionAffector_setAttract = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IParticleAttractionAffector_setAttract', c_module))
-IParticleAttractionAffector_setAffectX = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IParticleAttractionAffector_setAffectX', c_module))
-IParticleAttractionAffector_setAffectY = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IParticleAttractionAffector_setAffectY', c_module))
-IParticleAttractionAffector_setAffectZ = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IParticleAttractionAffector_setAffectZ', c_module))
+IParticleAttractionAffector_setAttract = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IParticleAttractionAffector_setAttract', c_module))
+IParticleAttractionAffector_setAffectX = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IParticleAttractionAffector_setAffectX', c_module))
+IParticleAttractionAffector_setAffectY = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IParticleAttractionAffector_setAffectY', c_module))
+IParticleAttractionAffector_setAffectZ = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IParticleAttractionAffector_setAffectZ', c_module))
 IParticleAttractionAffector_getPoint = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IParticleAttractionAffector_getPoint', c_module))
-IParticleAttractionAffector_getAttract = func_type(ctypes.c_byte, ctypes.c_void_p)(('IParticleAttractionAffector_getAttract', c_module))
-IParticleAttractionAffector_getAffectX = func_type(ctypes.c_byte, ctypes.c_void_p)(('IParticleAttractionAffector_getAffectX', c_module))
-IParticleAttractionAffector_getAffectY = func_type(ctypes.c_byte, ctypes.c_void_p)(('IParticleAttractionAffector_getAffectY', c_module))
-IParticleAttractionAffector_getAffectZ = func_type(ctypes.c_byte, ctypes.c_void_p)(('IParticleAttractionAffector_getAffectZ', c_module))
+IParticleAttractionAffector_getAttract = func_type(ctypes.c_bool, ctypes.c_void_p)(('IParticleAttractionAffector_getAttract', c_module))
+IParticleAttractionAffector_getAffectX = func_type(ctypes.c_bool, ctypes.c_void_p)(('IParticleAttractionAffector_getAffectX', c_module))
+IParticleAttractionAffector_getAffectY = func_type(ctypes.c_bool, ctypes.c_void_p)(('IParticleAttractionAffector_getAffectY', c_module))
+IParticleAttractionAffector_getAffectZ = func_type(ctypes.c_bool, ctypes.c_void_p)(('IParticleAttractionAffector_getAffectZ', c_module))
 IParticleAttractionAffector_getType = func_type(ctypes.c_int, ctypes.c_void_p)(('IParticleAttractionAffector_getType', c_module))
 
 #class IParticleBoxEmitter : public IParticleEmitter
@@ -3252,12 +3258,12 @@ IParticleCylinderEmitter_setCenter = func_type(None, ctypes.c_void_p, ctypes.c_v
 IParticleCylinderEmitter_setNormal = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IParticleCylinderEmitter_setNormal', c_module))
 IParticleCylinderEmitter_setRadius = func_type(None, ctypes.c_void_p, ctypes.c_float)(('IParticleCylinderEmitter_setRadius', c_module))
 IParticleCylinderEmitter_setLength = func_type(None, ctypes.c_void_p, ctypes.c_float)(('IParticleCylinderEmitter_setLength', c_module))
-IParticleCylinderEmitter_setOutlineOnly = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IParticleCylinderEmitter_setOutlineOnly', c_module))
+IParticleCylinderEmitter_setOutlineOnly = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IParticleCylinderEmitter_setOutlineOnly', c_module))
 IParticleCylinderEmitter_getCenter = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IParticleCylinderEmitter_getCenter', c_module))
 IParticleCylinderEmitter_getNormal = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IParticleCylinderEmitter_getNormal', c_module))
 IParticleCylinderEmitter_getRadius = func_type(ctypes.c_float, ctypes.c_void_p)(('IParticleCylinderEmitter_getRadius', c_module))
 IParticleCylinderEmitter_getLength = func_type(ctypes.c_float, ctypes.c_void_p)(('IParticleCylinderEmitter_getLength', c_module))
-IParticleCylinderEmitter_getOutlineOnly = func_type(ctypes.c_byte, ctypes.c_void_p)(('IParticleCylinderEmitter_getOutlineOnly', c_module))
+IParticleCylinderEmitter_getOutlineOnly = func_type(ctypes.c_bool, ctypes.c_void_p)(('IParticleCylinderEmitter_getOutlineOnly', c_module))
 IParticleCylinderEmitter_getType = func_type(ctypes.c_int, ctypes.c_void_p)(('IParticleCylinderEmitter_getType', c_module))
 
 #class IParticleEmitter
@@ -3298,13 +3304,13 @@ IParticleGravityAffector_getType = func_type(ctypes.c_int, ctypes.c_void_p)(('IP
 
 #class IParticleMeshEmitter : public IParticleEmitter
 IParticleMeshEmitter_setMesh = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IParticleMeshEmitter_setMesh', c_module))
-IParticleMeshEmitter_setUseNormalDirection = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IParticleMeshEmitter_setUseNormalDirection', c_module))
+IParticleMeshEmitter_setUseNormalDirection = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IParticleMeshEmitter_setUseNormalDirection', c_module))
 IParticleMeshEmitter_setNormalDirectionModifier = func_type(None, ctypes.c_void_p, ctypes.c_float)(('IParticleMeshEmitter_setNormalDirectionModifier', c_module))
-IParticleMeshEmitter_setEveryMeshVertex = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IParticleMeshEmitter_setEveryMeshVertex', c_module))
+IParticleMeshEmitter_setEveryMeshVertex = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IParticleMeshEmitter_setEveryMeshVertex', c_module))
 IParticleMeshEmitter_getMesh = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IParticleMeshEmitter_getMesh', c_module))
-IParticleMeshEmitter_isUsingNormalDirection = func_type(ctypes.c_byte, ctypes.c_void_p)(('IParticleMeshEmitter_isUsingNormalDirection', c_module))
+IParticleMeshEmitter_isUsingNormalDirection = func_type(ctypes.c_bool, ctypes.c_void_p)(('IParticleMeshEmitter_isUsingNormalDirection', c_module))
 IParticleMeshEmitter_getNormalDirectionModifier = func_type(ctypes.c_float, ctypes.c_void_p)(('IParticleMeshEmitter_getNormalDirectionModifier', c_module))
-IParticleMeshEmitter_getEveryMeshVertex = func_type(ctypes.c_byte, ctypes.c_void_p)(('IParticleMeshEmitter_getEveryMeshVertex', c_module))
+IParticleMeshEmitter_getEveryMeshVertex = func_type(ctypes.c_bool, ctypes.c_void_p)(('IParticleMeshEmitter_getEveryMeshVertex', c_module))
 IParticleMeshEmitter_getType = func_type(ctypes.c_int, ctypes.c_void_p)(('IParticleMeshEmitter_getType', c_module))
 
 #class IParticleRingEmitter : public IParticleEmitter
@@ -3333,19 +3339,19 @@ IParticleSphereEmitter_getType = func_type(ctypes.c_int, ctypes.c_void_p)(('IPar
 #class IParticleSystemSceneNode : public ISceneNode
 IParticleSystemSceneNode_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IParticleSystemSceneNode_ctor', c_module))
 IParticleSystemSceneNode_setParticleSize = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IParticleSystemSceneNode_setParticleSize', c_module))
-IParticleSystemSceneNode_setParticlesAreGlobal = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IParticleSystemSceneNode_setParticlesAreGlobal', c_module))
+IParticleSystemSceneNode_setParticlesAreGlobal = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IParticleSystemSceneNode_setParticlesAreGlobal', c_module))
 IParticleSystemSceneNode_getEmitter = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IParticleSystemSceneNode_getEmitter', c_module))
 IParticleSystemSceneNode_setEmitter = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IParticleSystemSceneNode_setEmitter', c_module))
 IParticleSystemSceneNode_addAffector = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IParticleSystemSceneNode_addAffector', c_module))
 IParticleSystemSceneNode_removeAllAffectors = func_type(None, ctypes.c_void_p)(('IParticleSystemSceneNode_removeAllAffectors', c_module))
-IParticleSystemSceneNode_createAnimatedMeshSceneNodeEmitter = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_float, ctypes.c_int, ctypes.c_byte, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('IParticleSystemSceneNode_createAnimatedMeshSceneNodeEmitter', c_module))
+IParticleSystemSceneNode_createAnimatedMeshSceneNodeEmitter = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_void_p, ctypes.c_float, ctypes.c_int, ctypes.c_bool, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('IParticleSystemSceneNode_createAnimatedMeshSceneNodeEmitter', c_module))
 IParticleSystemSceneNode_createBoxEmitter = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('IParticleSystemSceneNode_createBoxEmitter', c_module))
-IParticleSystemSceneNode_createCylinderEmitter = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p, ctypes.c_float, ctypes.c_byte, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('IParticleSystemSceneNode_createCylinderEmitter', c_module))
-IParticleSystemSceneNode_createMeshEmitter = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_float, ctypes.c_int, ctypes.c_byte, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('IParticleSystemSceneNode_createMeshEmitter', c_module))
+IParticleSystemSceneNode_createCylinderEmitter = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p, ctypes.c_float, ctypes.c_bool, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('IParticleSystemSceneNode_createCylinderEmitter', c_module))
+IParticleSystemSceneNode_createMeshEmitter = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_void_p, ctypes.c_float, ctypes.c_int, ctypes.c_bool, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('IParticleSystemSceneNode_createMeshEmitter', c_module))
 IParticleSystemSceneNode_createPointEmitter = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('IParticleSystemSceneNode_createPointEmitter', c_module))
 IParticleSystemSceneNode_createRingEmitter = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('IParticleSystemSceneNode_createRingEmitter', c_module))
 IParticleSystemSceneNode_createSphereEmitter = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('IParticleSystemSceneNode_createSphereEmitter', c_module))
-IParticleSystemSceneNode_createAttractionAffector = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_byte, ctypes.c_byte, ctypes.c_byte, ctypes.c_byte)(('IParticleSystemSceneNode_createAttractionAffector', c_module))
+IParticleSystemSceneNode_createAttractionAffector = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_bool, ctypes.c_bool, ctypes.c_bool, ctypes.c_bool)(('IParticleSystemSceneNode_createAttractionAffector', c_module))
 IParticleSystemSceneNode_createScaleParticleAffector = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IParticleSystemSceneNode_createScaleParticleAffector', c_module))
 IParticleSystemSceneNode_createFadeOutParticleAffector = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IParticleSystemSceneNode_createFadeOutParticleAffector', c_module))
 IParticleSystemSceneNode_createGravityAffector = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IParticleSystemSceneNode_createGravityAffector', c_module))
@@ -3354,12 +3360,12 @@ IParticleSystemSceneNode_createRotationAffector = func_type(ctypes.c_void_p, cty
 #================= list<ISceneNodeAnimator*> (ISceneNodeAnimatorList)
 ISceneNodeAnimatorList_size = func_type(ctypes.c_uint, ctypes.c_void_p)(('ISceneNodeAnimatorList_size', c_module))
 ISceneNodeAnimatorList_clear = func_type(None, ctypes.c_void_p)(('ISceneNodeAnimatorList_clear', c_module))
-ISceneNodeAnimatorList_empty = func_type(ctypes.c_byte, ctypes.c_void_p)(('ISceneNodeAnimatorList_empty', c_module))
+ISceneNodeAnimatorList_empty = func_type(ctypes.c_bool, ctypes.c_void_p)(('ISceneNodeAnimatorList_empty', c_module))
 ISceneNodeAnimatorList_push_back = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimatorList_push_back', c_module))
 ISceneNodeAnimatorList_push_front = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimatorList_push_front', c_module))
 ISceneNodeAnimatorList_first = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimatorList_first', c_module))
 ISceneNodeAnimatorList_current = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimatorList_current', c_module))
-ISceneNodeAnimatorList_next = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('ISceneNodeAnimatorList_next', c_module))
+ISceneNodeAnimatorList_next = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('ISceneNodeAnimatorList_next', c_module))
 ISceneNodeAnimatorList_last = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimatorList_last', c_module))
 ISceneNodeAnimatorList_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('ISceneNodeAnimatorList_get_item', c_module))
 
@@ -3367,11 +3373,11 @@ ISceneNodeAnimatorList_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ct
 ISceneNodeList_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeList_ctor', c_module))
 ISceneNodeList_size = func_type(ctypes.c_uint, ctypes.c_void_p)(('ISceneNodeList_size', c_module))
 ISceneNodeList_clear = func_type(None, ctypes.c_void_p)(('ISceneNodeList_clear', c_module))
-ISceneNodeList_empty = func_type(ctypes.c_byte, ctypes.c_void_p)(('ISceneNodeList_empty', c_module))
+ISceneNodeList_empty = func_type(ctypes.c_bool, ctypes.c_void_p)(('ISceneNodeList_empty', c_module))
 ISceneNodeList_push_back = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeList_push_back', c_module))
 ISceneNodeList_push_front = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeList_push_front', c_module))
 ISceneNodeList_first = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeList_first', c_module))
-ISceneNodeList_next = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('ISceneNodeList_next', c_module))
+ISceneNodeList_next = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('ISceneNodeList_next', c_module))
 ISceneNodeList_last = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeList_last', c_module))
 ISceneNodeList_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('ISceneNodeList_get_item', c_module))
 
@@ -3386,13 +3392,13 @@ ISceneNode_getBoundingBox = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IScene
 ISceneNode_getTransformedBoundingBox = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNode_getTransformedBoundingBox', c_module))
 ISceneNode_getAbsoluteTransformation = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNode_getAbsoluteTransformation', c_module))
 ISceneNode_getRelativeTransformation = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNode_getRelativeTransformation', c_module))
-ISceneNode_isVisible = func_type(ctypes.c_byte, ctypes.c_void_p)(('ISceneNode_isVisible', c_module))
-ISceneNode_isTrulyVisible = func_type(ctypes.c_byte, ctypes.c_void_p)(('ISceneNode_isTrulyVisible', c_module))
-ISceneNode_setVisible = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('ISceneNode_setVisible', c_module))
+ISceneNode_isVisible = func_type(ctypes.c_bool, ctypes.c_void_p)(('ISceneNode_isVisible', c_module))
+ISceneNode_isTrulyVisible = func_type(ctypes.c_bool, ctypes.c_void_p)(('ISceneNode_isTrulyVisible', c_module))
+ISceneNode_setVisible = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('ISceneNode_setVisible', c_module))
 ISceneNode_getID = func_type(ctypes.c_int, ctypes.c_void_p)(('ISceneNode_getID', c_module))
 ISceneNode_setID = func_type(None, ctypes.c_void_p, ctypes.c_int)(('ISceneNode_setID', c_module))
 ISceneNode_addChild = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ISceneNode_addChild', c_module))
-ISceneNode_removeChild = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('ISceneNode_removeChild', c_module))
+ISceneNode_removeChild = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('ISceneNode_removeChild', c_module))
 ISceneNode_removeAll = func_type(None, ctypes.c_void_p)(('ISceneNode_removeAll', c_module))
 ISceneNode_remove = func_type(None, ctypes.c_void_p)(('ISceneNode_remove', c_module))
 ISceneNode_addAnimator = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ISceneNode_addAnimator', c_module))
@@ -3402,7 +3408,7 @@ ISceneNode_removeAnimators = func_type(None, ctypes.c_void_p)(('ISceneNode_remov
 ISceneNode_getMaterial = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('ISceneNode_getMaterial', c_module))
 ISceneNode_setMaterial = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('ISceneNode_setMaterial', c_module))
 ISceneNode_getMaterialCount = func_type(ctypes.c_uint, ctypes.c_void_p)(('ISceneNode_getMaterialCount', c_module))
-ISceneNode_setMaterialFlag = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('ISceneNode_setMaterialFlag', c_module))
+ISceneNode_setMaterialFlag = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('ISceneNode_setMaterialFlag', c_module))
 ISceneNode_setMaterialTexture = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p)(('ISceneNode_setMaterialTexture', c_module))
 ISceneNode_setMaterialType = func_type(None, ctypes.c_void_p, ctypes.c_int)(('ISceneNode_setMaterialType', c_module))
 ISceneNode_getScale = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNode_getScale', c_module))
@@ -3420,8 +3426,8 @@ else:
 	ISceneNode_getAutomaticCulling = func_type(ctypes.c_uint, ctypes.c_void_p)(('ISceneNode_getAutomaticCulling', c_module))
 ISceneNode_setDebugDataVisible = func_type(None, ctypes.c_void_p, ctypes.c_int)(('ISceneNode_setDebugDataVisible', c_module))
 ISceneNode_isDebugDataVisible = func_type(ctypes.c_int, ctypes.c_void_p)(('ISceneNode_isDebugDataVisible', c_module))
-ISceneNode_setIsDebugObject = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('ISceneNode_setIsDebugObject', c_module))
-ISceneNode_isDebugObject = func_type(ctypes.c_byte, ctypes.c_void_p)(('ISceneNode_isDebugObject', c_module))
+ISceneNode_setIsDebugObject = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('ISceneNode_setIsDebugObject', c_module))
+ISceneNode_isDebugObject = func_type(ctypes.c_bool, ctypes.c_void_p)(('ISceneNode_isDebugObject', c_module))
 ISceneNode_getChildren = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNode_getChildren', c_module))
 ISceneNode_setParent = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ISceneNode_setParent', c_module))
 ISceneNode_getTriangleSelector = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNode_getTriangleSelector', c_module))
@@ -3454,15 +3460,15 @@ CustomSceneNode_set_getMaterialCount = func_type(None, ctypes.c_void_p, func_get
 # functions for class ISceneNodeAnimator
 ISceneNodeAnimator_animateNode = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('ISceneNodeAnimator_animateNode', c_module))
 ISceneNodeAnimator_createClone = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimator_createClone', c_module))
-ISceneNodeAnimator_isEventReceiverEnabled = func_type(ctypes.c_byte, ctypes.c_void_p)(('ISceneNodeAnimator_isEventReceiverEnabled', c_module))
-ISceneNodeAnimator_OnEvent = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimator_OnEvent', c_module))
+ISceneNodeAnimator_isEventReceiverEnabled = func_type(ctypes.c_bool, ctypes.c_void_p)(('ISceneNodeAnimator_isEventReceiverEnabled', c_module))
+ISceneNodeAnimator_OnEvent = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimator_OnEvent', c_module))
 ISceneNodeAnimator_getType = func_type(ctypes.c_int, ctypes.c_void_p)(('ISceneNodeAnimator_getType', c_module))
-ISceneNodeAnimator_hasFinished = func_type(ctypes.c_byte, ctypes.c_void_p)(('ISceneNodeAnimator_hasFinished', c_module))
-ISceneNodeAnimator_set_func_event = func_type(ctypes.c_byte, ctypes.c_void_p, OnEventFunc)(('ISceneNodeAnimator_set_func_event', c_module))
+ISceneNodeAnimator_hasFinished = func_type(ctypes.c_bool, ctypes.c_void_p)(('ISceneNodeAnimator_hasFinished', c_module))
+ISceneNodeAnimator_set_func_event = func_type(ctypes.c_bool, ctypes.c_void_p, OnEventFunc)(('ISceneNodeAnimator_set_func_event', c_module))
 
 # functions for class ITexture
 if IRRLICHT_VERSION < 180:
-	ITexture_lock = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_uint)(('ITexture_lock', c_module))
+	ITexture_lock = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_uint)(('ITexture_lock', c_module))
 else:
 	ITexture_lock = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_uint)(('ITexture_lock', c_module))
 ITexture_unlock = func_type(None, ctypes.c_void_p)(('ITexture_unlock', c_module))
@@ -3471,10 +3477,10 @@ ITexture_getSize = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ITexture_getSiz
 ITexture_getDriverType = func_type(ctypes.c_int, ctypes.c_void_p)(('ITexture_getDriverType', c_module))
 ITexture_getColorFormat = func_type(ctypes.c_int, ctypes.c_void_p)(('ITexture_getColorFormat', c_module))
 ITexture_getPitch = func_type(ctypes.c_uint, ctypes.c_void_p)(('ITexture_getPitch', c_module))
-ITexture_hasMipMaps = func_type(ctypes.c_byte, ctypes.c_void_p)(('ITexture_hasMipMaps', c_module))
-ITexture_hasAlpha = func_type(ctypes.c_byte, ctypes.c_void_p)(('ITexture_hasAlpha', c_module))
+ITexture_hasMipMaps = func_type(ctypes.c_bool, ctypes.c_void_p)(('ITexture_hasMipMaps', c_module))
+ITexture_hasAlpha = func_type(ctypes.c_bool, ctypes.c_void_p)(('ITexture_hasAlpha', c_module))
 ITexture_regenerateMipMapLevels = func_type(None, ctypes.c_void_p)(('ITexture_regenerateMipMapLevels', c_module))
-ITexture_isRenderTarget = func_type(ctypes.c_byte, ctypes.c_void_p)(('ITexture_isRenderTarget', c_module))
+ITexture_isRenderTarget = func_type(ctypes.c_bool, ctypes.c_void_p)(('ITexture_isRenderTarget', c_module))
 ITexture_getName = func_type(ctypes.c_char_p, ctypes.c_void_p)(('ITexture_getName', c_module))
 
 # functions for class ITextSceneNode
@@ -3487,7 +3493,7 @@ IMesh_getMeshBuffer = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)
 IMesh_getMeshBuffer2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IMesh_getMeshBuffer2', c_module))
 IMesh_getBoundingBox = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IMesh_getBoundingBox', c_module))
 IMesh_setBoundingBox = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IMesh_setBoundingBox', c_module))
-IMesh_setMaterialFlag = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('IMesh_setMaterialFlag', c_module))
+IMesh_setMaterialFlag = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('IMesh_setMaterialFlag', c_module))
 IMesh_setHardwareMappingHint = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('IMesh_setHardwareMappingHint', c_module))
 IMesh_setDirty = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IMesh_setDirty', c_module))
 
@@ -3521,7 +3527,7 @@ IAnimatedMesh_getMeshType = func_type(ctypes.c_int, ctypes.c_void_p)(('IAnimated
 
 # IAnimatedMeshMD2
 IAnimatedMeshMD2_getFrameLoop1 = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IAnimatedMeshMD2_getFrameLoop1', c_module))
-IAnimatedMeshMD2_getFrameLoop2 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IAnimatedMeshMD2_getFrameLoop2', c_module))
+IAnimatedMeshMD2_getFrameLoop2 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IAnimatedMeshMD2_getFrameLoop2', c_module))
 IAnimatedMeshMD2_getAnimationCount = func_type(ctypes.c_int, ctypes.c_void_p)(('IAnimatedMeshMD2_getAnimationCount', c_module))
 IAnimatedMeshMD2_getAnimationName = func_type(ctypes.c_char_p, ctypes.c_void_p, ctypes.c_int)(('IAnimatedMeshMD2_getAnimationName', c_module))
 
@@ -3542,31 +3548,31 @@ IAnimationEndCallBack_UserAnimationEndCallBack = func_type(ctypes.c_void_p, ctyp
 #~ IAnimatedMeshSceneNode_other_as_this = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IAnimatedMeshSceneNode_other_as_this', c_module))
 #~ IAnimatedMeshSceneNode_Destructor = func_type(None, ctypes.c_void_p)(('IAnimatedMeshSceneNode_Destructor', c_module))
 IAnimatedMeshSceneNode_setCurrentFrame = func_type(None, ctypes.c_void_p, ctypes.c_float)(('IAnimatedMeshSceneNode_setCurrentFrame', c_module))
-IAnimatedMeshSceneNode_setFrameLoop = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('IAnimatedMeshSceneNode_setFrameLoop', c_module))
+IAnimatedMeshSceneNode_setFrameLoop = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('IAnimatedMeshSceneNode_setFrameLoop', c_module))
 IAnimatedMeshSceneNode_setAnimationSpeed = func_type(None, ctypes.c_void_p, ctypes.c_float)(('IAnimatedMeshSceneNode_setAnimationSpeed', c_module))
 IAnimatedMeshSceneNode_getAnimationSpeed = func_type(ctypes.c_float, ctypes.c_void_p)(('IAnimatedMeshSceneNode_getAnimationSpeed', c_module))
-IAnimatedMeshSceneNode_addShadowVolumeSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte, ctypes.c_float)(('IAnimatedMeshSceneNode_addShadowVolumeSceneNode', c_module))
+IAnimatedMeshSceneNode_addShadowVolumeSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool, ctypes.c_float)(('IAnimatedMeshSceneNode_addShadowVolumeSceneNode', c_module))
 IAnimatedMeshSceneNode_getJointNode1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p)(('IAnimatedMeshSceneNode_getJointNode1', c_module))
 IAnimatedMeshSceneNode_getJointNode2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IAnimatedMeshSceneNode_getJointNode2', c_module))
 IAnimatedMeshSceneNode_getJointCount = func_type(ctypes.c_uint, ctypes.c_void_p)(('IAnimatedMeshSceneNode_getJointCount', c_module))
 # IAnimatedMeshSceneNode_getMS3DJointNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p)(('IAnimatedMeshSceneNode_getMS3DJointNode', c_module))
 # IAnimatedMeshSceneNode_getXJointNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p)(('IAnimatedMeshSceneNode_getXJointNode', c_module))
-IAnimatedMeshSceneNode_setMD2Animation1 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IAnimatedMeshSceneNode_setMD2Animation1', c_module))
-IAnimatedMeshSceneNode_setMD2Animation2 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_char_p)(('IAnimatedMeshSceneNode_setMD2Animation2', c_module))
+IAnimatedMeshSceneNode_setMD2Animation1 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_int)(('IAnimatedMeshSceneNode_setMD2Animation1', c_module))
+IAnimatedMeshSceneNode_setMD2Animation2 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_char_p)(('IAnimatedMeshSceneNode_setMD2Animation2', c_module))
 IAnimatedMeshSceneNode_getFrameNr = func_type(ctypes.c_float, ctypes.c_void_p)(('IAnimatedMeshSceneNode_getFrameNr', c_module))
 IAnimatedMeshSceneNode_getStartFrame = func_type(ctypes.c_int, ctypes.c_void_p)(('IAnimatedMeshSceneNode_getStartFrame', c_module))
 IAnimatedMeshSceneNode_getEndFrame = func_type(ctypes.c_int, ctypes.c_void_p)(('IAnimatedMeshSceneNode_getEndFrame', c_module))
-IAnimatedMeshSceneNode_setLoopMode = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IAnimatedMeshSceneNode_setLoopMode', c_module))
+IAnimatedMeshSceneNode_setLoopMode = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IAnimatedMeshSceneNode_setLoopMode', c_module))
 IAnimatedMeshSceneNode_setAnimationEndCallback = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IAnimatedMeshSceneNode_setAnimationEndCallback', c_module))
-IAnimatedMeshSceneNode_setReadOnlyMaterials = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IAnimatedMeshSceneNode_setReadOnlyMaterials', c_module))
-IAnimatedMeshSceneNode_isReadOnlyMaterials = func_type(ctypes.c_byte, ctypes.c_void_p)(('IAnimatedMeshSceneNode_isReadOnlyMaterials', c_module))
+IAnimatedMeshSceneNode_setReadOnlyMaterials = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IAnimatedMeshSceneNode_setReadOnlyMaterials', c_module))
+IAnimatedMeshSceneNode_isReadOnlyMaterials = func_type(ctypes.c_bool, ctypes.c_void_p)(('IAnimatedMeshSceneNode_isReadOnlyMaterials', c_module))
 IAnimatedMeshSceneNode_setMesh = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IAnimatedMeshSceneNode_setMesh', c_module))
 IAnimatedMeshSceneNode_getMesh = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IAnimatedMeshSceneNode_getMesh', c_module))
 IAnimatedMeshSceneNode_getMD3TagTransformation = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p)(('IAnimatedMeshSceneNode_getMD3TagTransformation', c_module))
 IAnimatedMeshSceneNode_setJointMode = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IAnimatedMeshSceneNode_setJointMode', c_module))
 IAnimatedMeshSceneNode_setTransitionTime = func_type(None, ctypes.c_void_p, ctypes.c_float)(('IAnimatedMeshSceneNode_setTransitionTime', c_module))
-IAnimatedMeshSceneNode_animateJoints = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IAnimatedMeshSceneNode_animateJoints', c_module))
-IAnimatedMeshSceneNode_setRenderFromIdentity = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IAnimatedMeshSceneNode_setRenderFromIdentity', c_module))
+IAnimatedMeshSceneNode_animateJoints = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IAnimatedMeshSceneNode_animateJoints', c_module))
+IAnimatedMeshSceneNode_setRenderFromIdentity = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IAnimatedMeshSceneNode_setRenderFromIdentity', c_module))
 IAnimatedMeshSceneNode_clone = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IAnimatedMeshSceneNode_clone', c_module))
 
 # functions for class IBillboardSceneNode
@@ -3588,19 +3594,19 @@ IBillboardTextSceneNode_setTextColor = func_type(None, ctypes.c_void_p, ctypes.c
 # functions for class ILightSceneNode
 ILightSceneNode_setLightData = func_type(None, ctypes.c_void_p, ctypes.POINTER(SLight))(('ILightSceneNode_setLightData', c_module))
 ILightSceneNode_getLightData = func_type(ctypes.POINTER(SLight), ctypes.c_void_p)(('ILightSceneNode_getLightData', c_module))
-ILightSceneNode_setVisible = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('ILightSceneNode_setVisible', c_module))
+ILightSceneNode_setVisible = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('ILightSceneNode_setVisible', c_module))
 ILightSceneNode_setRadius = func_type(None, ctypes.c_void_p, ctypes.c_float)(('ILightSceneNode_setRadius', c_module))
 ILightSceneNode_getRadius = func_type(ctypes.c_float, ctypes.c_void_p)(('ILightSceneNode_getRadius', c_module))
 ILightSceneNode_setLightType = func_type(None, ctypes.c_void_p, ctypes.c_int)(('ILightSceneNode_setLightType', c_module))
 ILightSceneNode_getLightType = func_type(ctypes.c_int, ctypes.c_void_p)(('ILightSceneNode_getLightType', c_module))
-ILightSceneNode_enableCastShadow = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('ILightSceneNode_enableCastShadow', c_module))
-ILightSceneNode_getCastShadow = func_type(ctypes.c_byte, ctypes.c_void_p)(('ILightSceneNode_getCastShadow', c_module))
+ILightSceneNode_enableCastShadow = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('ILightSceneNode_enableCastShadow', c_module))
+ILightSceneNode_getCastShadow = func_type(ctypes.c_bool, ctypes.c_void_p)(('ILightSceneNode_getCastShadow', c_module))
 
 # functions for class ICameraSceneNode
 ICameraSceneNode_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ICameraSceneNode_ctor', c_module))
 #~ ICameraSceneNode_Destructor = func_type(None, ctypes.c_void_p)(('ICameraSceneNode_Destructor', c_module))
 ICameraSceneNode_set_func_event = func_type(None, ctypes.c_void_p, OnEventFunc)(('ICameraSceneNode_set_func_event', c_module))
-ICameraSceneNode_setProjectionMatrix = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('ICameraSceneNode_setProjectionMatrix', c_module))
+ICameraSceneNode_setProjectionMatrix = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('ICameraSceneNode_setProjectionMatrix', c_module))
 ICameraSceneNode_getProjectionMatrix = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ICameraSceneNode_getProjectionMatrix', c_module))
 ICameraSceneNode_getViewMatrix = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ICameraSceneNode_getViewMatrix', c_module))
 ICameraSceneNode_setViewMatrixAffector = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ICameraSceneNode_setViewMatrixAffector', c_module))
@@ -3619,14 +3625,14 @@ ICameraSceneNode_setFarValue = func_type(None, ctypes.c_void_p, ctypes.c_float)(
 ICameraSceneNode_setAspectRatio = func_type(None, ctypes.c_void_p, ctypes.c_float)(('ICameraSceneNode_setAspectRatio', c_module))
 ICameraSceneNode_setFOV = func_type(None, ctypes.c_void_p, ctypes.c_float)(('ICameraSceneNode_setFOV', c_module))
 ICameraSceneNode_getViewFrustum = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ICameraSceneNode_getViewFrustum', c_module))
-ICameraSceneNode_setInputReceiverEnabled = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('ICameraSceneNode_setInputReceiverEnabled', c_module))
-ICameraSceneNode_isInputReceiverEnabled = func_type(ctypes.c_byte, ctypes.c_void_p)(('ICameraSceneNode_isInputReceiverEnabled', c_module))
-ICameraSceneNode_isOrthogonal = func_type(ctypes.c_byte, ctypes.c_void_p)(('ICameraSceneNode_isOrthogonal', c_module))
-ICameraSceneNode_bindTargetAndRotation = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('ICameraSceneNode_bindTargetAndRotation', c_module))
-ICameraSceneNode_getTargetAndRotationBinding = func_type(ctypes.c_byte, ctypes.c_void_p)(('ICameraSceneNode_getTargetAndRotationBinding', c_module))
+ICameraSceneNode_setInputReceiverEnabled = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('ICameraSceneNode_setInputReceiverEnabled', c_module))
+ICameraSceneNode_isInputReceiverEnabled = func_type(ctypes.c_bool, ctypes.c_void_p)(('ICameraSceneNode_isInputReceiverEnabled', c_module))
+ICameraSceneNode_isOrthogonal = func_type(ctypes.c_bool, ctypes.c_void_p)(('ICameraSceneNode_isOrthogonal', c_module))
+ICameraSceneNode_bindTargetAndRotation = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('ICameraSceneNode_bindTargetAndRotation', c_module))
+ICameraSceneNode_getTargetAndRotationBinding = func_type(ctypes.c_bool, ctypes.c_void_p)(('ICameraSceneNode_getTargetAndRotationBinding', c_module))
 
 # functions for class ICollisionCallback
-onCollisionFunc = func_type(ctypes.c_byte, ctypes.c_void_p) 
+onCollisionFunc = func_type(ctypes.c_bool, ctypes.c_void_p) 
 ICollisionCallback_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ICollisionCallback_ctor1', c_module))
 ICollisionCallback_ctor2 = func_type(ctypes.c_void_p, onCollisionFunc)(('ICollisionCallback_ctor2', c_module))
 #~ ICollisionCallback_Destructor = func_type(None, ctypes.c_void_p)(('ICollisionCallback_Destructor', c_module))
@@ -3636,15 +3642,15 @@ ICollisionCallback_set_func_animator = func_type(None, ctypes.c_void_p, onCollis
 IGeometryCreator_createCubeMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGeometryCreator_createCubeMesh', c_module))
 IGeometryCreator_createHillPlaneMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p, ctypes.c_void_p)(('IGeometryCreator_createHillPlaneMesh', c_module))
 IGeometryCreator_createPlaneMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGeometryCreator_createPlaneMesh', c_module))
-IGeometryCreator_createTerrainMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('IGeometryCreator_createTerrainMesh', c_module))
+IGeometryCreator_createTerrainMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('IGeometryCreator_createTerrainMesh', c_module))
 IGeometryCreator_createArrowMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_void_p)(('IGeometryCreator_createArrowMesh', c_module))
 IGeometryCreator_createSphereMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_uint, ctypes.c_uint)(('IGeometryCreator_createSphereMesh', c_module))
-IGeometryCreator_createCylinderMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_uint, ctypes.c_void_p, ctypes.c_byte, ctypes.c_float)(('IGeometryCreator_createCylinderMesh', c_module))
+IGeometryCreator_createCylinderMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_uint, ctypes.c_void_p, ctypes.c_bool, ctypes.c_float)(('IGeometryCreator_createCylinderMesh', c_module))
 IGeometryCreator_createConeMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('IGeometryCreator_createConeMesh', c_module))
 IGeometryCreator_createVolumeLightMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p)(('IGeometryCreator_createVolumeLightMesh', c_module))
 
 # functions for class IGUIFont
-IGUIFont_draw = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p)(('IGUIFont_draw', c_module))
+IGUIFont_draw = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_void_p)(('IGUIFont_draw', c_module))
 IGUIFont_getDimension = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p)(('IGUIFont_getDimension', c_module))
 IGUIFont_getCharacterFromPos = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_int)(('IGUIFont_getCharacterFromPos', c_module))
 IGUIFont_getType = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUIFont_getType', c_module))
@@ -3667,32 +3673,32 @@ IGUIListBox_clear = func_type(None, ctypes.c_void_p)(('IGUIListBox_clear', c_mod
 IGUIListBox_getSelected = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUIListBox_getSelected', c_module))
 IGUIListBox_setSelected1 = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IGUIListBox_setSelected1', c_module))
 IGUIListBox_setSelected2 = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p)(('IGUIListBox_setSelected2', c_module))
-IGUIListBox_setAutoScrollEnabled = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIListBox_setAutoScrollEnabled', c_module))
-IGUIListBox_isAutoScrollEnabled = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUIListBox_isAutoScrollEnabled', c_module))
+IGUIListBox_setAutoScrollEnabled = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIListBox_setAutoScrollEnabled', c_module))
+IGUIListBox_isAutoScrollEnabled = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIListBox_isAutoScrollEnabled', c_module))
 IGUIListBox_setItemOverrideColor1 = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p)(('IGUIListBox_setItemOverrideColor1', c_module))
 IGUIListBox_setItemOverrideColor2 = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_int, ctypes.c_void_p)(('IGUIListBox_setItemOverrideColor2', c_module))
 IGUIListBox_clearItemOverrideColor1 = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('IGUIListBox_clearItemOverrideColor1', c_module))
 IGUIListBox_clearItemOverrideColor2 = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_int)(('IGUIListBox_clearItemOverrideColor2', c_module))
-IGUIListBox_hasItemOverrideColor = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_uint, ctypes.c_int)(('IGUIListBox_hasItemOverrideColor', c_module))
+IGUIListBox_hasItemOverrideColor = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_uint, ctypes.c_int)(('IGUIListBox_hasItemOverrideColor', c_module))
 IGUIListBox_getItemOverrideColor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_int)(('IGUIListBox_getItemOverrideColor', c_module))
 IGUIListBox_getItemDefaultColor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IGUIListBox_getItemDefaultColor', c_module))
 IGUIListBox_setItem = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_wchar_p, ctypes.c_int)(('IGUIListBox_setItem', c_module))
 IGUIListBox_insertItem = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_uint, ctypes.c_wchar_p, ctypes.c_int)(('IGUIListBox_insertItem', c_module))
 IGUIListBox_swapItems = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint)(('IGUIListBox_swapItems', c_module))
 IGUIListBox_setItemHeight = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IGUIListBox_setItemHeight', c_module))
-IGUIListBox_setDrawBackground = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUIListBox_setDrawBackground', c_module))
+IGUIListBox_setDrawBackground = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUIListBox_setDrawBackground', c_module))
 
 #================= IGUITable
 IGUITable_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IGUITable_ctor', c_module))
 IGUITable_addColumn = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_int)(('IGUITable_addColumn', c_module))
 IGUITable_removeColumn = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('IGUITable_removeColumn', c_module))
 IGUITable_getColumnCount = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUITable_getColumnCount', c_module))
-IGUITable_setActiveColumn = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('IGUITable_setActiveColumn', c_module))
+IGUITable_setActiveColumn = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('IGUITable_setActiveColumn', c_module))
 IGUITable_getActiveColumn = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUITable_getActiveColumn', c_module))
 IGUITable_getActiveColumnOrdering = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUITable_getActiveColumnOrdering', c_module))
 IGUITable_setColumnWidth = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint)(('IGUITable_setColumnWidth', c_module))
-IGUITable_setResizableColumns = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IGUITable_setResizableColumns', c_module))
-IGUITable_hasResizableColumns = func_type(ctypes.c_byte, ctypes.c_void_p)(('IGUITable_hasResizableColumns', c_module))
+IGUITable_setResizableColumns = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUITable_setResizableColumns', c_module))
+IGUITable_hasResizableColumns = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUITable_hasResizableColumns', c_module))
 IGUITable_setColumnOrdering = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_int)(('IGUITable_setColumnOrdering', c_module))
 IGUITable_getSelected = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUITable_getSelected', c_module))
 IGUITable_setSelected = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IGUITable_setSelected', c_module))
@@ -3713,32 +3719,32 @@ IGUITable_setDrawFlags = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IGUITa
 IGUITable_getDrawFlags = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUITable_getDrawFlags', c_module))
 
 # functions for class ISceneCollisionManager
-ISceneCollisionManager_getCollisionPoint = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneCollisionManager_getCollisionPoint', c_module))
-ISceneCollisionManager_getCollisionResultPosition = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p)(('ISceneCollisionManager_getCollisionResultPosition', c_module))
+ISceneCollisionManager_getCollisionPoint = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneCollisionManager_getCollisionPoint', c_module))
+ISceneCollisionManager_getCollisionResultPosition = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p)(('ISceneCollisionManager_getCollisionResultPosition', c_module))
 ISceneCollisionManager_getRayFromScreenCoordinates = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneCollisionManager_getRayFromScreenCoordinates', c_module))
 ISceneCollisionManager_getScreenCoordinatesFrom3DPosition = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneCollisionManager_getScreenCoordinatesFrom3DPosition', c_module))
-ISceneCollisionManager_getSceneNodeFromScreenCoordinatesBB = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte, ctypes.c_void_p)(('ISceneCollisionManager_getSceneNodeFromScreenCoordinatesBB', c_module))
-ISceneCollisionManager_getSceneNodeFromRayBB = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte, ctypes.c_void_p)(('ISceneCollisionManager_getSceneNodeFromRayBB', c_module))
-ISceneCollisionManager_getSceneNodeFromCameraBB = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('ISceneCollisionManager_getSceneNodeFromCameraBB', c_module))
-ISceneCollisionManager_getSceneNodeAndCollisionPointFromRay = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_byte)(('ISceneCollisionManager_getSceneNodeAndCollisionPointFromRay', c_module))
+ISceneCollisionManager_getSceneNodeFromScreenCoordinatesBB = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool, ctypes.c_void_p)(('ISceneCollisionManager_getSceneNodeFromScreenCoordinatesBB', c_module))
+ISceneCollisionManager_getSceneNodeFromRayBB = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool, ctypes.c_void_p)(('ISceneCollisionManager_getSceneNodeFromRayBB', c_module))
+ISceneCollisionManager_getSceneNodeFromCameraBB = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('ISceneCollisionManager_getSceneNodeFromCameraBB', c_module))
+ISceneCollisionManager_getSceneNodeAndCollisionPointFromRay = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_bool)(('ISceneCollisionManager_getSceneNodeAndCollisionPointFromRay', c_module))
 
 # functions for class ISceneNodeAnimatorCollisionResponse
 #~ ISceneNodeAnimatorCollisionResponse_Destructor = func_type(None, ctypes.c_void_p)(('ISceneNodeAnimatorCollisionResponse_Destructor', c_module))
-ISceneNodeAnimatorCollisionResponse_isFalling = func_type(ctypes.c_byte, ctypes.c_void_p)(('ISceneNodeAnimatorCollisionResponse_isFalling', c_module))
+ISceneNodeAnimatorCollisionResponse_isFalling = func_type(ctypes.c_bool, ctypes.c_void_p)(('ISceneNodeAnimatorCollisionResponse_isFalling', c_module))
 ISceneNodeAnimatorCollisionResponse_setEllipsoidRadius = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimatorCollisionResponse_setEllipsoidRadius', c_module))
 ISceneNodeAnimatorCollisionResponse_getEllipsoidRadius = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimatorCollisionResponse_getEllipsoidRadius', c_module))
 ISceneNodeAnimatorCollisionResponse_setGravity = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimatorCollisionResponse_setGravity', c_module))
 ISceneNodeAnimatorCollisionResponse_getGravity = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimatorCollisionResponse_getGravity', c_module))
 ISceneNodeAnimatorCollisionResponse_jump = func_type(None, ctypes.c_void_p, ctypes.c_float)(('ISceneNodeAnimatorCollisionResponse_jump', c_module))
-ISceneNodeAnimatorCollisionResponse_setAnimateTarget = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('ISceneNodeAnimatorCollisionResponse_setAnimateTarget', c_module))
-ISceneNodeAnimatorCollisionResponse_getAnimateTarget = func_type(ctypes.c_byte, ctypes.c_void_p)(('ISceneNodeAnimatorCollisionResponse_getAnimateTarget', c_module))
+ISceneNodeAnimatorCollisionResponse_setAnimateTarget = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('ISceneNodeAnimatorCollisionResponse_setAnimateTarget', c_module))
+ISceneNodeAnimatorCollisionResponse_getAnimateTarget = func_type(ctypes.c_bool, ctypes.c_void_p)(('ISceneNodeAnimatorCollisionResponse_getAnimateTarget', c_module))
 ISceneNodeAnimatorCollisionResponse_setEllipsoidTranslation = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimatorCollisionResponse_setEllipsoidTranslation', c_module))
 ISceneNodeAnimatorCollisionResponse_getEllipsoidTranslation = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimatorCollisionResponse_getEllipsoidTranslation', c_module))
 ISceneNodeAnimatorCollisionResponse_setWorld = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimatorCollisionResponse_setWorld', c_module))
 ISceneNodeAnimatorCollisionResponse_getWorld = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimatorCollisionResponse_getWorld', c_module))
 ISceneNodeAnimatorCollisionResponse_setTargetNode = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimatorCollisionResponse_setTargetNode', c_module))
 ISceneNodeAnimatorCollisionResponse_getTargetNode = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimatorCollisionResponse_getTargetNode', c_module))
-ISceneNodeAnimatorCollisionResponse_collisionOccurred = func_type(ctypes.c_byte, ctypes.c_void_p)(('ISceneNodeAnimatorCollisionResponse_collisionOccurred', c_module))
+ISceneNodeAnimatorCollisionResponse_collisionOccurred = func_type(ctypes.c_bool, ctypes.c_void_p)(('ISceneNodeAnimatorCollisionResponse_collisionOccurred', c_module))
 ISceneNodeAnimatorCollisionResponse_getCollisionPoint = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimatorCollisionResponse_getCollisionPoint', c_module))
 ISceneNodeAnimatorCollisionResponse_getCollisionTriangle = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimatorCollisionResponse_getCollisionTriangle', c_module))
 ISceneNodeAnimatorCollisionResponse_getCollisionResultPosition = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeAnimatorCollisionResponse_getCollisionResultPosition', c_module))
@@ -3763,16 +3769,16 @@ ISceneNodeFactory_getCreateableSceneNodeTypeName2 = func_type(ctypes.c_char_p, c
 
 # functions for class IVideoDriver
 if IRRLICHT_VERSION < 170:
-	IVideoDriver_beginScene = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IVideoDriver_beginScene', c_module))
+	IVideoDriver_beginScene = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IVideoDriver_beginScene', c_module))
 else:
-	IVideoDriver_beginScene = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_beginScene', c_module))
-IVideoDriver_beginSceneDefault = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p)(('IVideoDriver_beginSceneDefault', c_module))
-IVideoDriver_endScene = func_type(ctypes.c_byte, ctypes.c_void_p)(('IVideoDriver_endScene', c_module))
-IVideoDriver_queryFeature = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IVideoDriver_queryFeature', c_module))
-IVideoDriver_disableFeature = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('IVideoDriver_disableFeature', c_module))
+	IVideoDriver_beginScene = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_beginScene', c_module))
+IVideoDriver_beginSceneDefault = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_void_p)(('IVideoDriver_beginSceneDefault', c_module))
+IVideoDriver_endScene = func_type(ctypes.c_bool, ctypes.c_void_p)(('IVideoDriver_endScene', c_module))
+IVideoDriver_queryFeature = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_int)(('IVideoDriver_queryFeature', c_module))
+IVideoDriver_disableFeature = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('IVideoDriver_disableFeature', c_module))
 if IRRLICHT_VERSION >= 180:
 	IVideoDriver_getDriverAttributes = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_getDriverAttributes', c_module))
-IVideoDriver_checkDriverReset = func_type(ctypes.c_byte, ctypes.c_void_p)(('IVideoDriver_checkDriverReset', c_module))
+IVideoDriver_checkDriverReset = func_type(ctypes.c_bool, ctypes.c_void_p)(('IVideoDriver_checkDriverReset', c_module))
 IVideoDriver_setTransform = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IVideoDriver_setTransform', c_module))
 IVideoDriver_getTransform = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IVideoDriver_getTransform', c_module))
 IVideoDriver_getImageLoaderCount = func_type(ctypes.c_uint, ctypes.c_void_p)(('IVideoDriver_getImageLoaderCount', c_module))
@@ -3796,17 +3802,17 @@ if IRRLICHT_VERSION >= 180:
 	IVideoDriver_addOcclusionQuery = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_addOcclusionQuery', c_module))
 	IVideoDriver_removeOcclusionQuery = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_removeOcclusionQuery', c_module))
 	IVideoDriver_removeAllOcclusionQueries = func_type(None, ctypes.c_void_p)(('IVideoDriver_removeAllOcclusionQueries', c_module))
-	IVideoDriver_runOcclusionQuery = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('IVideoDriver_runOcclusionQuery', c_module))
-	IVideoDriver_runAllOcclusionQueries = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IVideoDriver_runAllOcclusionQueries', c_module))
-	IVideoDriver_updateOcclusionQuery = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('IVideoDriver_updateOcclusionQuery', c_module))
-	IVideoDriver_updateAllOcclusionQueries = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IVideoDriver_updateAllOcclusionQueries', c_module))
+	IVideoDriver_runOcclusionQuery = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('IVideoDriver_runOcclusionQuery', c_module))
+	IVideoDriver_runAllOcclusionQueries = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IVideoDriver_runAllOcclusionQueries', c_module))
+	IVideoDriver_updateOcclusionQuery = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('IVideoDriver_updateOcclusionQuery', c_module))
+	IVideoDriver_updateAllOcclusionQueries = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IVideoDriver_updateAllOcclusionQueries', c_module))
 	IVideoDriver_getOcclusionQueryResult = func_type(ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_getOcclusionQueryResult', c_module))
-IVideoDriver_makeColorKeyTexture1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('IVideoDriver_makeColorKeyTexture1', c_module))
-IVideoDriver_makeColorKeyTexture2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('IVideoDriver_makeColorKeyTexture2', c_module))
+IVideoDriver_makeColorKeyTexture1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('IVideoDriver_makeColorKeyTexture1', c_module))
+IVideoDriver_makeColorKeyTexture2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('IVideoDriver_makeColorKeyTexture2', c_module))
 IVideoDriver_makeNormalMapTexture = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('IVideoDriver_makeNormalMapTexture', c_module))
-IVideoDriver_setRenderTarget1 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p)(('IVideoDriver_setRenderTarget1', c_module))
-IVideoDriver_setRenderTarget2 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p)(('IVideoDriver_setRenderTarget2', c_module))
-IVideoDriver_setRenderTarget3 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p)(('IVideoDriver_setRenderTarget3', c_module))
+IVideoDriver_setRenderTarget1 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_void_p)(('IVideoDriver_setRenderTarget1', c_module))
+IVideoDriver_setRenderTarget2 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool, ctypes.c_bool, ctypes.c_void_p)(('IVideoDriver_setRenderTarget2', c_module))
+IVideoDriver_setRenderTarget3 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_void_p)(('IVideoDriver_setRenderTarget3', c_module))
 IVideoDriver_setViewPort = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IVideoDriver_setViewPort', c_module))
 IVideoDriver_getViewPort = func_type(ctypes.c_int, ctypes.c_void_p)(('IVideoDriver_getViewPort', c_module))
 IVideoDriver_drawVertexPrimitiveList = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p, ctypes.c_uint, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('IVideoDriver_drawVertexPrimitiveList', c_module))
@@ -3821,10 +3827,10 @@ IVideoDriver_draw3DLine = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctyp
 IVideoDriver_draw3DTriangle = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_draw3DTriangle', c_module))
 IVideoDriver_draw3DBox = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_draw3DBox', c_module))
 IVideoDriver_draw2DImage1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_draw2DImage1', c_module))
-IVideoDriver_draw2DImage2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('IVideoDriver_draw2DImage2', c_module))
-IVideoDriver_draw2DImage3 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('IVideoDriver_draw2DImage3', c_module))
-IVideoDriver_draw2DImageBatch1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('IVideoDriver_draw2DImageBatch1', c_module))
-IVideoDriver_draw2DImageBatch2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('IVideoDriver_draw2DImageBatch2', c_module))
+IVideoDriver_draw2DImage2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('IVideoDriver_draw2DImage2', c_module))
+IVideoDriver_draw2DImage3 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('IVideoDriver_draw2DImage3', c_module))
+IVideoDriver_draw2DImageBatch1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('IVideoDriver_draw2DImageBatch1', c_module))
+IVideoDriver_draw2DImageBatch2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('IVideoDriver_draw2DImageBatch2', c_module))
 IVideoDriver_draw2DRectangle1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_draw2DRectangle1', c_module))
 IVideoDriver_draw2DRectangle2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_draw2DRectangle2', c_module))
 IVideoDriver_draw2DRectangleOutline = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_draw2DRectangleOutline', c_module))
@@ -3832,12 +3838,12 @@ IVideoDriver_draw2DLine = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctyp
 IVideoDriver_drawPixel = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p)(('IVideoDriver_drawPixel', c_module))
 IVideoDriver_draw2DPolygon = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p, ctypes.c_int)(('IVideoDriver_draw2DPolygon', c_module))
 if IRRLICHT_VERSION < 180:
-	IVideoDriver_drawStencilShadowVolume = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('IVideoDriver_drawStencilShadowVolume', c_module))
+	IVideoDriver_drawStencilShadowVolume = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('IVideoDriver_drawStencilShadowVolume', c_module))
 else:
-	IVideoDriver_drawStencilShadowVolume = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_uint)(('IVideoDriver_drawStencilShadowVolume', c_module))
-IVideoDriver_drawStencilShadow = func_type(None, ctypes.c_void_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_drawStencilShadow', c_module))
+	IVideoDriver_drawStencilShadowVolume = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_uint)(('IVideoDriver_drawStencilShadowVolume', c_module))
+IVideoDriver_drawStencilShadow = func_type(None, ctypes.c_void_p, ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_drawStencilShadow', c_module))
 IVideoDriver_drawMeshBuffer = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_drawMeshBuffer', c_module))
-IVideoDriver_setFog = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_byte, ctypes.c_byte)(('IVideoDriver_setFog', c_module))
+IVideoDriver_setFog = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_bool, ctypes.c_bool)(('IVideoDriver_setFog', c_module))
 IVideoDriver_getFog = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_getFog', c_module))
 IVideoDriver_getColorFormat = func_type(ctypes.c_int, ctypes.c_void_p)(('IVideoDriver_getColorFormat', c_module))
 IVideoDriver_getScreenSize = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_getScreenSize', c_module))
@@ -3849,18 +3855,18 @@ IVideoDriver_addDynamicLight = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c
 IVideoDriver_getMaximalDynamicLightAmount = func_type(ctypes.c_uint, ctypes.c_void_p)(('IVideoDriver_getMaximalDynamicLightAmount', c_module))
 IVideoDriver_getDynamicLightCount = func_type(ctypes.c_uint, ctypes.c_void_p)(('IVideoDriver_getDynamicLightCount', c_module))
 IVideoDriver_getDynamicLight = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IVideoDriver_getDynamicLight', c_module))
-IVideoDriver_turnLightOn = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IVideoDriver_turnLightOn', c_module))
+IVideoDriver_turnLightOn = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IVideoDriver_turnLightOn', c_module))
 IVideoDriver_getName = func_type(ctypes.c_wchar_p, ctypes.c_void_p)(('IVideoDriver_getName', c_module))
 IVideoDriver_addExternalImageLoader = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_addExternalImageLoader', c_module))
 IVideoDriver_addExternalImageWriter = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_addExternalImageWriter', c_module))
 IVideoDriver_getMaximalPrimitiveCount = func_type(ctypes.c_uint, ctypes.c_void_p)(('IVideoDriver_getMaximalPrimitiveCount', c_module))
-IVideoDriver_setTextureCreationFlag = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('IVideoDriver_setTextureCreationFlag', c_module))
-IVideoDriver_getTextureCreationFlag = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IVideoDriver_getTextureCreationFlag', c_module))
+IVideoDriver_setTextureCreationFlag = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('IVideoDriver_setTextureCreationFlag', c_module))
+IVideoDriver_getTextureCreationFlag = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_int)(('IVideoDriver_getTextureCreationFlag', c_module))
 IVideoDriver_createImageFromFile1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p)(('IVideoDriver_createImageFromFile1', c_module))
 IVideoDriver_createImageFromFile2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_createImageFromFile2', c_module))
-IVideoDriver_writeImageToFile1 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_uint)(('IVideoDriver_writeImageToFile1', c_module))
-IVideoDriver_writeImageToFile2 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IVideoDriver_writeImageToFile2', c_module))
-IVideoDriver_createImageFromData = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte)(('IVideoDriver_createImageFromData', c_module))
+IVideoDriver_writeImageToFile1 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_uint)(('IVideoDriver_writeImageToFile1', c_module))
+IVideoDriver_writeImageToFile2 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IVideoDriver_writeImageToFile2', c_module))
+IVideoDriver_createImageFromData = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool)(('IVideoDriver_createImageFromData', c_module))
 IVideoDriver_createImage1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IVideoDriver_createImage1', c_module))
 if IRRLICHT_VERSION < 180:
 	IVideoDriver_createImage2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IVideoDriver_createImage2', c_module))
@@ -3882,21 +3888,21 @@ IVideoDriver_getMeshManipulator = func_type(ctypes.c_void_p, ctypes.c_void_p)(('
 IVideoDriver_clearZBuffer = func_type(None, ctypes.c_void_p)(('IVideoDriver_clearZBuffer', c_module))
 IVideoDriver_createScreenShot = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_createScreenShot', c_module))
 IVideoDriver_findTexture = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_findTexture', c_module))
-IVideoDriver_setClipPlane = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p, ctypes.c_byte)(('IVideoDriver_setClipPlane', c_module))
-IVideoDriver_enableClipPlane = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_byte)(('IVideoDriver_enableClipPlane', c_module))
+IVideoDriver_setClipPlane = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p, ctypes.c_bool)(('IVideoDriver_setClipPlane', c_module))
+IVideoDriver_enableClipPlane = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_bool)(('IVideoDriver_enableClipPlane', c_module))
 IVideoDriver_setMinHardwareBufferVertexCount = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('IVideoDriver_setMinHardwareBufferVertexCount', c_module))
 IVideoDriver_getOverrideMaterial = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_getOverrideMaterial', c_module))
 IVideoDriver_getMaterial2D = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_getMaterial2D', c_module))
-IVideoDriver_enableMaterial2D = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IVideoDriver_enableMaterial2D', c_module))
+IVideoDriver_enableMaterial2D = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IVideoDriver_enableMaterial2D', c_module))
 IVideoDriver_getVendorInfo = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_getVendorInfo', c_module))
 IVideoDriver_setAmbientLight = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_setAmbientLight', c_module))
-IVideoDriver_setAllowZWriteOnTransparent = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IVideoDriver_setAllowZWriteOnTransparent', c_module))
+IVideoDriver_setAllowZWriteOnTransparent = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IVideoDriver_setAllowZWriteOnTransparent', c_module))
 IVideoDriver_getMaxTextureSize = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_getMaxTextureSize', c_module))
 if 'win' in platform:
 	IVideoDriver_GetHandle = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_GetHandle', c_module))
 else:
 	IVideoDriver_GetHandle = func_type(ctypes.c_ulong, ctypes.c_void_p)(('IVideoDriver_GetHandle', c_module))
-IVideoDriver_SetIcon = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('IVideoDriver_SetIcon', c_module))
+IVideoDriver_SetIcon = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('IVideoDriver_SetIcon', c_module))
 IVideoDriver_addAggSvgImageLoader = func_type(None, ctypes.c_void_p)(('IVideoDriver_addAggSvgImageLoader', c_module))
 
 # functions for class ISceneManager
@@ -3909,28 +3915,28 @@ ISceneManager_getFileSystem = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISce
 ISceneManager_addVolumeLightSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addVolumeLightSceneNode', c_module))
 ISceneManager_addCubeSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addCubeSceneNode', c_module))
 ISceneManager_addSphereSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addSphereSceneNode', c_module))
-ISceneManager_addAnimatedMeshSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('ISceneManager_addAnimatedMeshSceneNode', c_module))
+ISceneManager_addAnimatedMeshSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('ISceneManager_addAnimatedMeshSceneNode', c_module))
 ISceneManager_addAnimatedMeshSceneNode2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addAnimatedMeshSceneNode2', c_module))
-ISceneManager_addMeshSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('ISceneManager_addMeshSceneNode', c_module))
+ISceneManager_addMeshSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('ISceneManager_addMeshSceneNode', c_module))
 ISceneManager_addWaterSurfaceSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addWaterSurfaceSceneNode', c_module))
 if IRRLICHT_VERSION < 180:
-	ISceneManager_addOctTreeSceneNode1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('ISceneManager_addOctTreeSceneNode1', c_module))
-	ISceneManager_addOctTreeSceneNode2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('ISceneManager_addOctTreeSceneNode2', c_module))
+	ISceneManager_addOctTreeSceneNode1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_bool)(('ISceneManager_addOctTreeSceneNode1', c_module))
+	ISceneManager_addOctTreeSceneNode2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_bool)(('ISceneManager_addOctTreeSceneNode2', c_module))
 	ISceneManager_addCameraSceneNodeMaya = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_int)(('ISceneManager_addCameraSceneNodeMaya', c_module))
 	ISceneManager_createOctTreeTriangleSelector = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_createOctTreeTriangleSelector', c_module))
 else:
-	ISceneManager_addCameraSceneNodeMaya = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_int, ctypes.c_float, ctypes.c_byte)(('ISceneManager_addCameraSceneNodeMaya', c_module))
-ISceneManager_addOctreeSceneNode1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('ISceneManager_addOctreeSceneNode1', c_module))
-ISceneManager_addOctreeSceneNode2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('ISceneManager_addOctreeSceneNode2', c_module))
+	ISceneManager_addCameraSceneNodeMaya = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_int, ctypes.c_float, ctypes.c_bool)(('ISceneManager_addCameraSceneNodeMaya', c_module))
+ISceneManager_addOctreeSceneNode1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_bool)(('ISceneManager_addOctreeSceneNode1', c_module))
+ISceneManager_addOctreeSceneNode2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_bool)(('ISceneManager_addOctreeSceneNode2', c_module))
 ISceneManager_addCameraSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_addCameraSceneNode', c_module))
-ISceneManager_addCameraSceneNodeFPS = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte, ctypes.c_float, ctypes.c_byte)(('ISceneManager_addCameraSceneNodeFPS', c_module))
+ISceneManager_addCameraSceneNodeFPS = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool, ctypes.c_float, ctypes.c_bool)(('ISceneManager_addCameraSceneNodeFPS', c_module))
 ISceneManager_addLightSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_int)(('ISceneManager_addLightSceneNode', c_module))
 ISceneManager_addBillboardSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addBillboardSceneNode', c_module))
 ISceneManager_addSkyBoxSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_addSkyBoxSceneNode', c_module))
 ISceneManager_addSkyDomeSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_addSkyDomeSceneNode', c_module))
-ISceneManager_addParticleSystemSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addParticleSystemSceneNode', c_module))
-ISceneManager_addTerrainSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('ISceneManager_addTerrainSceneNode', c_module))
-ISceneManager_addTerrainSceneNode2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('ISceneManager_addTerrainSceneNode2', c_module))
+ISceneManager_addParticleSystemSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addParticleSystemSceneNode', c_module))
+ISceneManager_addTerrainSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_bool)(('ISceneManager_addTerrainSceneNode', c_module))
+ISceneManager_addTerrainSceneNode2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_bool)(('ISceneManager_addTerrainSceneNode2', c_module))
 ISceneManager_addQuake3SceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_addQuake3SceneNode', c_module))
 ISceneManager_addEmptySceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_addEmptySceneNode', c_module))
 ISceneManager_addDummyTransformationSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_addDummyTransformationSceneNode', c_module))
@@ -3954,8 +3960,8 @@ ISceneManager_registerNodeForRendering = func_type(ctypes.c_uint, ctypes.c_void_
 ISceneManager_drawAll = func_type(None, ctypes.c_void_p)(('ISceneManager_drawAll', c_module))
 ISceneManager_createRotationAnimator = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_createRotationAnimator', c_module))
 ISceneManager_createFlyCircleAnimator = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_float, ctypes.c_float)(('ISceneManager_createFlyCircleAnimator', c_module))
-ISceneManager_createFlyStraightAnimator = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_byte, ctypes.c_byte)(('ISceneManager_createFlyStraightAnimator', c_module))
-ISceneManager_createTextureAnimator = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('ISceneManager_createTextureAnimator', c_module))
+ISceneManager_createFlyStraightAnimator = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_bool, ctypes.c_bool)(('ISceneManager_createFlyStraightAnimator', c_module))
+ISceneManager_createTextureAnimator = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('ISceneManager_createTextureAnimator', c_module))
 ISceneManager_createDeleteAnimator = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('ISceneManager_createDeleteAnimator', c_module))
 ISceneManager_createCollisionResponseAnimator = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('ISceneManager_createCollisionResponseAnimator', c_module))
 ISceneManager_createFollowSplineAnimator = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_float, ctypes.c_float)(('ISceneManager_createFollowSplineAnimator', c_module))
@@ -3969,7 +3975,7 @@ ISceneManager_addExternalMeshLoader = func_type(None, ctypes.c_void_p, ctypes.c_
 ISceneManager_getSceneCollisionManager = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_getSceneCollisionManager', c_module))
 ISceneManager_getMeshManipulator = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_getMeshManipulator', c_module))
 ISceneManager_addToDeletionQueue = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addToDeletionQueue', c_module))
-ISceneManager_postEventFromUser = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_postEventFromUser', c_module))
+ISceneManager_postEventFromUser = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_postEventFromUser', c_module))
 ISceneManager_clear = func_type(None, ctypes.c_void_p)(('ISceneManager_clear', c_module))
 ISceneManager_getParameters = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_getParameters', c_module))
 ISceneManager_getSceneNodeRenderPass = func_type(ctypes.c_int, ctypes.c_void_p)(('ISceneManager_getSceneNodeRenderPass', c_module))
@@ -3984,78 +3990,78 @@ ISceneManager_getSceneNodeAnimatorFactory = func_type(ctypes.c_void_p, ctypes.c_
 ISceneManager_getSceneNodeTypeName = func_type(ctypes.c_char_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_getSceneNodeTypeName', c_module))
 ISceneManager_getAnimatorTypeName = func_type(ctypes.c_char_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_getAnimatorTypeName', c_module))
 ISceneManager_addSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p)(('ISceneManager_addSceneNode', c_module))
-ISceneManager_createNewSceneManager = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('ISceneManager_createNewSceneManager', c_module))
-ISceneManager_saveScene = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p)(('ISceneManager_saveScene', c_module))
-ISceneManager_saveScene2 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_saveScene2', c_module))
-ISceneManager_loadScene = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p)(('ISceneManager_loadScene', c_module))
-ISceneManager_loadScene2 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_loadScene2', c_module))
+ISceneManager_createNewSceneManager = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('ISceneManager_createNewSceneManager', c_module))
+ISceneManager_saveScene = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p)(('ISceneManager_saveScene', c_module))
+ISceneManager_saveScene2 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_saveScene2', c_module))
+ISceneManager_loadScene = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p)(('ISceneManager_loadScene', c_module))
+ISceneManager_loadScene2 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_loadScene2', c_module))
 ISceneManager_createMeshWriter = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_createMeshWriter', c_module))
 ISceneManager_createSkinnedMesh = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_createSkinnedMesh', c_module))
 ISceneManager_setAmbientLight = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_setAmbientLight', c_module))
 ISceneManager_getAmbientLight = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_getAmbientLight', c_module))
 ISceneManager_setLightManager = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_setLightManager', c_module))
 ISceneManager_getGeometryCreator = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_getGeometryCreator', c_module))
-ISceneManager_isCulled = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_isCulled', c_module))
+ISceneManager_isCulled = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_isCulled', c_module))
 
 # functions for class IGUIEnvironment
 IGUIEnvironment_drawAll = func_type(None, ctypes.c_void_p)(('IGUIEnvironment_drawAll', c_module))
-IGUIEnvironment_setFocus = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_setFocus', c_module))
+IGUIEnvironment_setFocus = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_setFocus', c_module))
 IGUIEnvironment_getFocus = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_getFocus', c_module))
-IGUIEnvironment_removeFocus = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_removeFocus', c_module))
-IGUIEnvironment_hasFocus = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_hasFocus', c_module))
+IGUIEnvironment_removeFocus = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_removeFocus', c_module))
+IGUIEnvironment_hasFocus = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_hasFocus', c_module))
 IGUIEnvironment_getVideoDriver = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_getVideoDriver', c_module))
 IGUIEnvironment_getFileSystem = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_getFileSystem', c_module))
 IGUIEnvironment_getOSOperator = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_getOSOperator', c_module))
 IGUIEnvironment_clear = func_type(None, ctypes.c_void_p)(('IGUIEnvironment_clear', c_module))
-IGUIEnvironment_postEventFromUser = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_postEventFromUser', c_module))
+IGUIEnvironment_postEventFromUser = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_postEventFromUser', c_module))
 IGUIEnvironment_setUserEventReceiver = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_setUserEventReceiver', c_module))
 IGUIEnvironment_getSkin = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_getSkin', c_module))
 IGUIEnvironment_setSkin = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_setSkin', c_module))
 IGUIEnvironment_createSkin = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_createSkin', c_module))
-IGUIEnvironment_createImageList = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('IGUIEnvironment_createImageList', c_module))
+IGUIEnvironment_createImageList = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('IGUIEnvironment_createImageList', c_module))
 IGUIEnvironment_getFont = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p)(('IGUIEnvironment_getFont', c_module))
 IGUIEnvironment_getBuiltInFont = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_getBuiltInFont', c_module))
 IGUIEnvironment_getSpriteBank = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p)(('IGUIEnvironment_getSpriteBank', c_module))
 IGUIEnvironment_addEmptySpriteBank = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p)(('IGUIEnvironment_addEmptySpriteBank', c_module))
 IGUIEnvironment_getRootGUIElement = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_getRootGUIElement', c_module))
 IGUIEnvironment_addButton = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_wchar_p, ctypes.c_wchar_p)(('IGUIEnvironment_addButton', c_module))
-IGUIEnvironment_addWindow = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addWindow', c_module))
+IGUIEnvironment_addWindow = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addWindow', c_module))
 IGUIEnvironment_addModalScreen = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_addModalScreen', c_module))
-IGUIEnvironment_addMessageBox = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_byte, ctypes.c_int, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addMessageBox', c_module))
-IGUIEnvironment_addScrollBar = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addScrollBar', c_module))
-IGUIEnvironment_addImage = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_int, ctypes.c_wchar_p)(('IGUIEnvironment_addImage', c_module))
+IGUIEnvironment_addMessageBox = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_bool, ctypes.c_int, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addMessageBox', c_module))
+IGUIEnvironment_addScrollBar = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addScrollBar', c_module))
+IGUIEnvironment_addImage = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_void_p, ctypes.c_int, ctypes.c_wchar_p)(('IGUIEnvironment_addImage', c_module))
 IGUIEnvironment_addImage2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_wchar_p)(('IGUIEnvironment_addImage2', c_module))
-IGUIEnvironment_addCheckBox = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_wchar_p)(('IGUIEnvironment_addCheckBox', c_module))
-IGUIEnvironment_addListBox = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('IGUIEnvironment_addListBox', c_module))
-IGUIEnvironment_addTreeView = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte, ctypes.c_byte, ctypes.c_byte)(('IGUIEnvironment_addTreeView', c_module))
+IGUIEnvironment_addCheckBox = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_wchar_p)(('IGUIEnvironment_addCheckBox', c_module))
+IGUIEnvironment_addListBox = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('IGUIEnvironment_addListBox', c_module))
+IGUIEnvironment_addTreeView = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool, ctypes.c_bool, ctypes.c_bool)(('IGUIEnvironment_addTreeView', c_module))
 IGUIEnvironment_addMeshViewer = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_wchar_p)(('IGUIEnvironment_addMeshViewer', c_module))
 if IRRLICHT_VERSION < 180:
-	IGUIEnvironment_addFileOpenDialog = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addFileOpenDialog', c_module))
+	IGUIEnvironment_addFileOpenDialog = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_bool, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addFileOpenDialog', c_module))
 else:
-	IGUIEnvironment_addFileOpenDialog = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte, fschar_t)(('IGUIEnvironment_addFileOpenDialog', c_module))
+	IGUIEnvironment_addFileOpenDialog = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_bool, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool, fschar_t)(('IGUIEnvironment_addFileOpenDialog', c_module))
 if BUILD_WITH_GUI_FILE_SELECTOR:
-	IGUIEnvironment_addFileSelectorDialog = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addFileSelectorDialog', c_module))
-IGUIEnvironment_addColorSelectDialog = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addColorSelectDialog', c_module))
-IGUIEnvironment_addStaticText = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('IGUIEnvironment_addStaticText', c_module))
-IGUIEnvironment_addEditBox = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addEditBox', c_module))
-IGUIEnvironment_addSpinBox = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addSpinBox', c_module))
+	IGUIEnvironment_addFileSelectorDialog = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_bool, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addFileSelectorDialog', c_module))
+IGUIEnvironment_addColorSelectDialog = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_bool, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addColorSelectDialog', c_module))
+IGUIEnvironment_addStaticText = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('IGUIEnvironment_addStaticText', c_module))
+IGUIEnvironment_addEditBox = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addEditBox', c_module))
+IGUIEnvironment_addSpinBox = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addSpinBox', c_module))
 IGUIEnvironment_addInOutFader = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addInOutFader', c_module))
-IGUIEnvironment_addTabControl = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte, ctypes.c_byte, ctypes.c_int)(('IGUIEnvironment_addTabControl', c_module))
+IGUIEnvironment_addTabControl = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_int)(('IGUIEnvironment_addTabControl', c_module))
 IGUIEnvironment_addTab = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addTab', c_module))
 IGUIEnvironment_addContextMenu = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addContextMenu', c_module))
 IGUIEnvironment_addMenu = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addMenu', c_module))
 IGUIEnvironment_addToolBar = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addToolBar', c_module))
 IGUIEnvironment_addComboBox = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IGUIEnvironment_addComboBox', c_module))
-IGUIEnvironment_addTable = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('IGUIEnvironment_addTable', c_module))
+IGUIEnvironment_addTable = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('IGUIEnvironment_addTable', c_module))
 IGUIEnvironment_getDefaultGUIElementFactory = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_getDefaultGUIElementFactory', c_module))
 IGUIEnvironment_registerGUIElementFactory = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_registerGUIElementFactory', c_module))
 IGUIEnvironment_getRegisteredGUIElementFactoryCount = func_type(ctypes.c_uint, ctypes.c_void_p)(('IGUIEnvironment_getRegisteredGUIElementFactoryCount', c_module))
 IGUIEnvironment_getGUIElementFactory = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IGUIEnvironment_getGUIElementFactory', c_module))
 IGUIEnvironment_addGUIElement = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p)(('IGUIEnvironment_addGUIElement', c_module))
-IGUIEnvironment_saveGUI = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p)(('IGUIEnvironment_saveGUI', c_module))
-IGUIEnvironment_saveGUI2 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_saveGUI2', c_module))
-IGUIEnvironment_loadGUI = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p)(('IGUIEnvironment_loadGUI', c_module))
-IGUIEnvironment_loadGUI2 = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_loadGUI2', c_module))
+IGUIEnvironment_saveGUI = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p)(('IGUIEnvironment_saveGUI', c_module))
+IGUIEnvironment_saveGUI2 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_saveGUI2', c_module))
+IGUIEnvironment_loadGUI = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p)(('IGUIEnvironment_loadGUI', c_module))
+IGUIEnvironment_loadGUI2 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_loadGUI2', c_module))
 IGUIEnvironment_serializeAttributes = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_serializeAttributes', c_module))
 IGUIEnvironment_deserializeAttributes = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_deserializeAttributes', c_module))
 IGUIEnvironment_writeGUIElement = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IGUIEnvironment_writeGUIElement', c_module))
@@ -4063,19 +4069,19 @@ IGUIEnvironment_readGUIElement = func_type(None, ctypes.c_void_p, ctypes.c_void_
 
 # functions for class IReadFile
 IReadFile_read = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IReadFile_read', c_module))
-IReadFile_seek = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IReadFile_seek', c_module))
+IReadFile_seek = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IReadFile_seek', c_module))
 IReadFile_getSize = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IReadFile_getSize', c_module))
 IReadFile_getPos = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IReadFile_getPos', c_module))
 IReadFile_getFileName = func_type(fschar_t, ctypes.c_void_p)(('IReadFile_getFileName', c_module))
 
 #================= IWriteFile
 IWriteFile_write = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IWriteFile_write', c_module))
-IWriteFile_seek = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_byte)(('IWriteFile_seek', c_module))
+IWriteFile_seek = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('IWriteFile_seek', c_module))
 IWriteFile_getPos = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IWriteFile_getPos', c_module))
 IWriteFile_getFileName = func_type(ctypes.c_char_p, ctypes.c_void_p)(('IWriteFile_getFileName', c_module))
 
 # functions for class IXMLReader
-IXMLReader_read = func_type(ctypes.c_byte, ctypes.c_void_p)(('IXMLReader_read', c_module))
+IXMLReader_read = func_type(ctypes.c_bool, ctypes.c_void_p)(('IXMLReader_read', c_module))
 IXMLReader_getNodeType = func_type(ctypes.c_int, ctypes.c_void_p)(('IXMLReader_getNodeType', c_module))
 IXMLReader_getAttributeCount = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IXMLReader_getAttributeCount', c_module))
 IXMLReader_getAttributeName = func_type(ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_int)(('IXMLReader_getAttributeName', c_module))
@@ -4088,12 +4094,12 @@ IXMLReader_getAttributeValueAsFloat1 = func_type(ctypes.c_float, ctypes.c_void_p
 IXMLReader_getAttributeValueAsFloat2 = func_type(ctypes.c_float, ctypes.c_void_p, ctypes.c_int)(('IXMLReader_getAttributeValueAsFloat2', c_module))
 IXMLReader_getNodeName = func_type(ctypes.c_wchar_p, ctypes.c_void_p)(('IXMLReader_getNodeName', c_module))
 IXMLReader_getNodeData = func_type(ctypes.c_wchar_p, ctypes.c_void_p)(('IXMLReader_getNodeData', c_module))
-IXMLReader_isEmptyElement = func_type(ctypes.c_byte, ctypes.c_void_p)(('IXMLReader_isEmptyElement', c_module))
+IXMLReader_isEmptyElement = func_type(ctypes.c_bool, ctypes.c_void_p)(('IXMLReader_isEmptyElement', c_module))
 IXMLReader_getSourceFormat = func_type(ctypes.c_int, ctypes.c_void_p)(('IXMLReader_getSourceFormat', c_module))
 IXMLReader_getParserFormat = func_type(ctypes.c_int, ctypes.c_void_p)(('IXMLReader_getParserFormat', c_module))
 
 # functions for class IXMLReaderUTF8
-IXMLReaderUTF8_read = func_type(ctypes.c_byte, ctypes.c_void_p)(('IXMLReaderUTF8_read', c_module))
+IXMLReaderUTF8_read = func_type(ctypes.c_bool, ctypes.c_void_p)(('IXMLReaderUTF8_read', c_module))
 IXMLReaderUTF8_getNodeType = func_type(ctypes.c_int, ctypes.c_void_p)(('IXMLReaderUTF8_getNodeType', c_module))
 IXMLReaderUTF8_getAttributeCount = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IXMLReaderUTF8_getAttributeCount', c_module))
 IXMLReaderUTF8_getAttributeName = func_type(ctypes.c_char_p, ctypes.c_void_p, ctypes.c_int)(('IXMLReaderUTF8_getAttributeName', c_module))
@@ -4106,15 +4112,15 @@ IXMLReaderUTF8_getAttributeValueAsFloat1 = func_type(ctypes.c_float, ctypes.c_vo
 IXMLReaderUTF8_getAttributeValueAsFloat2 = func_type(ctypes.c_float, ctypes.c_void_p, ctypes.c_int)(('IXMLReaderUTF8_getAttributeValueAsFloat2', c_module))
 IXMLReaderUTF8_getNodeName = func_type(ctypes.c_char_p, ctypes.c_void_p)(('IXMLReaderUTF8_getNodeName', c_module))
 IXMLReaderUTF8_getNodeData = func_type(ctypes.c_char_p, ctypes.c_void_p)(('IXMLReaderUTF8_getNodeData', c_module))
-IXMLReaderUTF8_isEmptyElement = func_type(ctypes.c_byte, ctypes.c_void_p)(('IXMLReaderUTF8_isEmptyElement', c_module))
+IXMLReaderUTF8_isEmptyElement = func_type(ctypes.c_bool, ctypes.c_void_p)(('IXMLReaderUTF8_isEmptyElement', c_module))
 IXMLReaderUTF8_getSourceFormat = func_type(ctypes.c_int, ctypes.c_void_p)(('IXMLReaderUTF8_getSourceFormat', c_module))
 IXMLReaderUTF8_getParserFormat = func_type(ctypes.c_int, ctypes.c_void_p)(('IXMLReaderUTF8_getParserFormat', c_module))
 
 #================= IXMLWriter
 #~ IXMLWriter_Destructor = func_type(None, ctypes.c_void_p)(('IXMLWriter_Destructor', c_module))
 IXMLWriter_writeXMLHeader = func_type(None, ctypes.c_void_p)(('IXMLWriter_writeXMLHeader', c_module))
-IXMLWriter_writeElement1 = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_byte, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_wchar_p)(('IXMLWriter_writeElement1', c_module))
-IXMLWriter_writeElement2 = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IXMLWriter_writeElement2', c_module))
+IXMLWriter_writeElement1 = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_bool, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_wchar_p)(('IXMLWriter_writeElement1', c_module))
+IXMLWriter_writeElement2 = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IXMLWriter_writeElement2', c_module))
 IXMLWriter_writeComment = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p)(('IXMLWriter_writeComment', c_module))
 IXMLWriter_writeClosingTag = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p)(('IXMLWriter_writeClosingTag', c_module))
 IXMLWriter_writeText = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p)(('IXMLWriter_writeText', c_module))
@@ -4127,21 +4133,21 @@ plane3df_ctor3 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctyp
 plane3df_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_ctor4', c_module))
 plane3df_ctor5 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('plane3df_ctor5', c_module))
 #~ plane3df_destructor = func_type(None, ctypes.c_void_p)(('plane3df_destructor', c_module))
-plane3df_operator_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_operator_eq', c_module))
-plane3df_operator_ne = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_operator_ne', c_module))
+plane3df_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_operator_eq', c_module))
+plane3df_operator_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_operator_ne', c_module))
 plane3df_setPlane = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_setPlane', c_module))
 plane3df_setPlane2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('plane3df_setPlane2', c_module))
 plane3df_setPlane3 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_setPlane3', c_module))
-plane3df_getIntersectionWithLine = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_getIntersectionWithLine', c_module))
+plane3df_getIntersectionWithLine = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_getIntersectionWithLine', c_module))
 plane3df_getKnownIntersectionWithLine = func_type(ctypes.c_float, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_getKnownIntersectionWithLine', c_module))
-plane3df_getIntersectionWithLimitedLine = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_getIntersectionWithLimitedLine', c_module))
+plane3df_getIntersectionWithLimitedLine = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_getIntersectionWithLimitedLine', c_module))
 plane3df_classifyPointRelation = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_classifyPointRelation', c_module))
 plane3df_recalculateD = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_recalculateD', c_module))
 plane3df_getMemberPoint = func_type(ctypes.c_void_p, ctypes.c_void_p)(('plane3df_getMemberPoint', c_module))
-plane3df_existsIntersection = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_existsIntersection', c_module))
-plane3df_getIntersectionWithPlane = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_getIntersectionWithPlane', c_module))
-plane3df_getIntersectionWithPlanes = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_getIntersectionWithPlanes', c_module))
-plane3df_isFrontFacing = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_isFrontFacing', c_module))
+plane3df_existsIntersection = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_existsIntersection', c_module))
+plane3df_getIntersectionWithPlane = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_getIntersectionWithPlane', c_module))
+plane3df_getIntersectionWithPlanes = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_getIntersectionWithPlanes', c_module))
+plane3df_isFrontFacing = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_isFrontFacing', c_module))
 plane3df_getDistanceTo = func_type(ctypes.c_float, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_getDistanceTo', c_module))
 plane3df_get_Normal = func_type(ctypes.c_void_p, ctypes.c_void_p)(('plane3df_get_Normal', c_module))
 plane3df_set_Normal = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_set_Normal', c_module))
@@ -4155,21 +4161,21 @@ plane3di_ctor3 = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c
 plane3di_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_ctor4', c_module))
 plane3di_ctor5 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('plane3di_ctor5', c_module))
 #~ plane3di_destructor = func_type(None, ctypes.c_void_p)(('plane3di_destructor', c_module))
-plane3di_operator_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_operator_eq', c_module))
-plane3di_operator_ne = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_operator_ne', c_module))
+plane3di_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_operator_eq', c_module))
+plane3di_operator_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_operator_ne', c_module))
 plane3di_setPlane = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_setPlane', c_module))
 plane3di_setPlane2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('plane3di_setPlane2', c_module))
 plane3di_setPlane3 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_setPlane3', c_module))
-plane3di_getIntersectionWithLine = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_getIntersectionWithLine', c_module))
+plane3di_getIntersectionWithLine = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_getIntersectionWithLine', c_module))
 plane3di_getKnownIntersectionWithLine = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_getKnownIntersectionWithLine', c_module))
-plane3di_getIntersectionWithLimitedLine = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_getIntersectionWithLimitedLine', c_module))
+plane3di_getIntersectionWithLimitedLine = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_getIntersectionWithLimitedLine', c_module))
 plane3di_classifyPointRelation = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_classifyPointRelation', c_module))
 plane3di_recalculateD = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_recalculateD', c_module))
 plane3di_getMemberPoint = func_type(ctypes.c_void_p, ctypes.c_void_p)(('plane3di_getMemberPoint', c_module))
-plane3di_existsIntersection = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_existsIntersection', c_module))
-plane3di_getIntersectionWithPlane = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_getIntersectionWithPlane', c_module))
-plane3di_getIntersectionWithPlanes = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_getIntersectionWithPlanes', c_module))
-plane3di_isFrontFacing = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_isFrontFacing', c_module))
+plane3di_existsIntersection = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_existsIntersection', c_module))
+plane3di_getIntersectionWithPlane = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_getIntersectionWithPlane', c_module))
+plane3di_getIntersectionWithPlanes = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_getIntersectionWithPlanes', c_module))
+plane3di_isFrontFacing = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_isFrontFacing', c_module))
 plane3di_getDistanceTo = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_getDistanceTo', c_module))
 plane3di_get_Normal = func_type(ctypes.c_void_p, ctypes.c_void_p)(('plane3di_get_Normal', c_module))
 plane3di_set_Normal = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_set_Normal', c_module))
@@ -4182,8 +4188,8 @@ quaternion_ctor2 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ct
 quaternion_ctor3 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('quaternion_ctor3', c_module))
 quaternion_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('quaternion_ctor4', c_module))
 quaternion_ctor5 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('quaternion_ctor5', c_module))
-quaternion_operator_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('quaternion_operator_eq', c_module))
-quaternion_operator_ne = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('quaternion_operator_ne', c_module))
+quaternion_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('quaternion_operator_eq', c_module))
+quaternion_operator_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('quaternion_operator_ne', c_module))
 quaternion_operator_set1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('quaternion_operator_set1', c_module))
 quaternion_operator_set2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('quaternion_operator_set2', c_module))
 quaternion_operator_add = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('quaternion_operator_add', c_module))
@@ -4197,7 +4203,7 @@ quaternion_set1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ct
 quaternion_set2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('quaternion_set2', c_module))
 quaternion_set3 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('quaternion_set3', c_module))
 quaternion_set4 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('quaternion_set4', c_module))
-quaternion_equals = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('quaternion_equals', c_module))
+quaternion_equals = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('quaternion_equals', c_module))
 quaternion_normalize = func_type(ctypes.c_void_p, ctypes.c_void_p)(('quaternion_normalize', c_module))
 quaternion_getMatrix1 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('quaternion_getMatrix1', c_module))
 quaternion_getMatrix2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('quaternion_getMatrix2', c_module))
@@ -4220,8 +4226,8 @@ quaternion_get_W = func_type(ctypes.c_float, ctypes.c_void_p)(('quaternion_get_W
 quaternion_set_W = func_type(None, ctypes.c_void_p, ctypes.c_float)(('quaternion_set_W', c_module))
 
 # functions for class ICursorControl
-ICursorControl_setVisible = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('ICursorControl_setVisible', c_module))
-ICursorControl_isVisible = func_type(ctypes.c_byte, ctypes.c_void_p)(('ICursorControl_isVisible', c_module))
+ICursorControl_setVisible = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('ICursorControl_setVisible', c_module))
+ICursorControl_isVisible = func_type(ctypes.c_bool, ctypes.c_void_p)(('ICursorControl_isVisible', c_module))
 ICursorControl_setPositionF = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ICursorControl_setPositionF', c_module))
 ICursorControl_setPositionF2 = func_type(None, ctypes.c_void_p, ctypes.c_float, ctypes.c_float)(('ICursorControl_setPositionF2', c_module))
 ICursorControl_setPositionI = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ICursorControl_setPositionI', c_module))
@@ -4243,8 +4249,8 @@ ILogger_log5 = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_int)(
 # functions for class IMeshSceneNode
 IMeshSceneNode_setMesh = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IMeshSceneNode_setMesh', c_module))
 IMeshSceneNode_getMesh = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IMeshSceneNode_getMesh', c_module))
-IMeshSceneNode_setReadOnlyMaterials = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IMeshSceneNode_setReadOnlyMaterials', c_module))
-IMeshSceneNode_isReadOnlyMaterials = func_type(ctypes.c_byte, ctypes.c_void_p)(('IMeshSceneNode_isReadOnlyMaterials', c_module))
+IMeshSceneNode_setReadOnlyMaterials = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IMeshSceneNode_setReadOnlyMaterials', c_module))
+IMeshSceneNode_isReadOnlyMaterials = func_type(ctypes.c_bool, ctypes.c_void_p)(('IMeshSceneNode_isReadOnlyMaterials', c_module))
 
 # functions for class IVideoModeList
 IVideoModeList_getVideoModeCount = func_type(ctypes.c_int, ctypes.c_void_p)(('IVideoModeList_getVideoModeCount', c_module))
@@ -4275,8 +4281,10 @@ if IRR_IMPROVE_UNICODE:
 else:
 	IOSOperator_copyToClipboard = func_type(None, ctypes.c_void_p, ctypes.c_char_p)(('IOSOperator_copyToClipboard', c_module))
 	IOSOperator_getTextFromClipboard = func_type(ctypes.c_char_p, ctypes.c_void_p)(('IOSOperator_getTextFromClipboard', c_module))
-IOSOperator_getProcessorSpeedMHz = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.POINTER(ctypes.c_uint))(('IOSOperator_getProcessorSpeedMHz', c_module))
-IOSOperator_getSystemMemory = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.POINTER(ctypes.c_uint), ctypes.POINTER(ctypes.c_uint))(('IOSOperator_getSystemMemory', c_module))
+#~ IOSOperator_getProcessorSpeedMHz = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.POINTER(ctypes.c_uint))(('IOSOperator_getProcessorSpeedMHz', c_module))
+#~ IOSOperator_getSystemMemory = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.POINTER(ctypes.c_uint), ctypes.POINTER(ctypes.c_uint))(('IOSOperator_getSystemMemory', c_module))
+IOSOperator_getProcessorSpeedMHz = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IOSOperator_getProcessorSpeedMHz', c_module))
+IOSOperator_getSystemMemory = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IOSOperator_getSystemMemory', c_module))
 
 #struct Q3LevelLoadParameter
 Q3LevelLoadParameter_ctor1 = func_type(ctypes.c_void_p)(('Q3LevelLoadParameter_ctor1', c_module))
@@ -4316,7 +4324,7 @@ Q3LevelLoadParameter_set_scriptDir = func_type(None, ctypes.c_void_p, ctypes.c_c
 Q3LevelLoadParameter_size = func_type(ctypes.c_uint, ctypes.c_void_p)(('Q3LevelLoadParameter_size', c_module))
 
 # IQ3LevelMesh
-IQ3LevelMesh_getShader1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_byte)(('IQ3LevelMesh_getShader1', c_module))
+IQ3LevelMesh_getShader1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_bool)(('IQ3LevelMesh_getShader1', c_module))
 IQ3LevelMesh_getShader2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IQ3LevelMesh_getShader2', c_module))
 IQ3LevelMesh_getEntityList = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IQ3LevelMesh_getEntityList', c_module))
 
@@ -4395,8 +4403,8 @@ SVariable_get_content = func_type(ctypes.c_char_p, ctypes.c_void_p)(('SVariable_
 SVariable_set_content = func_type(None, ctypes.c_void_p, ctypes.c_char_p)(('SVariable_set_content', c_module))
 SVariable_clear = func_type(None, ctypes.c_void_p)(('SVariable_clear', c_module))
 SVariable_isValid = func_type(ctypes.c_int, ctypes.c_void_p)(('SVariable_isValid', c_module))
-SVariable_operator_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('SVariable_operator_eq', c_module))
-SVariable_operator_lt = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('SVariable_operator_lt', c_module))
+SVariable_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('SVariable_operator_eq', c_module))
+SVariable_operator_lt = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('SVariable_operator_lt', c_module))
 
 #struct SVarGroup
 SVarGroup_ctor1 = func_type(ctypes.c_void_p)(('SVarGroup_ctor1', c_module))
@@ -4423,8 +4431,8 @@ IShader_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int)(('IShader_ctor2', c_mod
 IShader_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IShader_get_item', c_module))
 IShader_set_item = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IShader_set_item', c_module))
 IShader_operator_set = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IShader_operator_set', c_module))
-IShader_operator_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IShader_operator_eq', c_module))
-IShader_operator_lt = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IShader_operator_lt', c_module))
+IShader_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IShader_operator_eq', c_module))
+IShader_operator_lt = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IShader_operator_lt', c_module))
 IShader_getGroupSize = func_type(ctypes.c_uint, ctypes.c_void_p)(('IShader_getGroupSize', c_module))
 IShader_getGroup = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IShader_getGroup', c_module))
 IShader_get_ID = func_type(ctypes.c_int, ctypes.c_void_p)(('IShader_get_ID', c_module))
@@ -4442,12 +4450,12 @@ tQ3EntityList_push_back = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('tQ
 tQ3EntityList_push_front = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('tQ3EntityList_push_front', c_module))
 tQ3EntityList_insert = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('tQ3EntityList_insert', c_module))
 tQ3EntityList_clear = func_type(None, ctypes.c_void_p)(('tQ3EntityList_clear', c_module))
-tQ3EntityList_set_pointer = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_byte, ctypes.c_byte)(('tQ3EntityList_set_pointer', c_module))
-tQ3EntityList_set_free_when_destroyed = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('tQ3EntityList_set_free_when_destroyed', c_module))
+tQ3EntityList_set_pointer = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_bool, ctypes.c_bool)(('tQ3EntityList_set_pointer', c_module))
+tQ3EntityList_set_free_when_destroyed = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('tQ3EntityList_set_free_when_destroyed', c_module))
 tQ3EntityList_set_used = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('tQ3EntityList_set_used', c_module))
 tQ3EntityList_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('tQ3EntityList_get_item', c_module))
 tQ3EntityList_size = func_type(ctypes.c_uint, ctypes.c_void_p)(('tQ3EntityList_size', c_module))
-tQ3EntityList_empty = func_type(ctypes.c_byte, ctypes.c_void_p)(('tQ3EntityList_empty', c_module))
+tQ3EntityList_empty = func_type(ctypes.c_bool, ctypes.c_void_p)(('tQ3EntityList_empty', c_module))
 tQ3EntityList_sort = func_type(None, ctypes.c_void_p)(('tQ3EntityList_sort', c_module))
 tQ3EntityList_binary_search1 = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('tQ3EntityList_binary_search1', c_module))
 tQ3EntityList_binary_search2 = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('tQ3EntityList_binary_search2', c_module))
@@ -4456,25 +4464,45 @@ tQ3EntityList_linear_search = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_
 tQ3EntityList_linear_reverse_search = func_type(ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('tQ3EntityList_linear_reverse_search', c_module))
 tQ3EntityList_erase1 = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('tQ3EntityList_erase1', c_module))
 tQ3EntityList_erase2 = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_int)(('tQ3EntityList_erase2', c_module))
-tQ3EntityList_set_sorted = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('tQ3EntityList_set_sorted', c_module))
+tQ3EntityList_set_sorted = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('tQ3EntityList_set_sorted', c_module))
 tQ3EntityList_swap = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('tQ3EntityList_swap', c_module))
 
 # functions for class ITimer
-#~ ITimer_Destructor = func_type(None, ctypes.c_void_p)(('ITimer_Destructor', c_module))
 ITimer_getRealTime = func_type(ctypes.c_uint, ctypes.c_void_p)(('ITimer_getRealTime', c_module))
+if IRRLICHT_VERSION >= 180:
+	# EWeekday
+	EWD_SUNDAY = 0
+	EWD_MONDAY = 1
+	EWD_TUESDAY = 2
+	EWD_WEDNESDAY = 3
+	EWD_THURSDAY = 4
+	EWD_FRIDAY = 5
+	EWD_SATURDAY = 6
+	class RealTimeDate(ctypes.Structure):
+		_fields_ = [('Hour', ctypes.c_int),
+					('Minute', ctypes.c_int),
+					('Second', ctypes.c_int),
+					('Year', ctypes.c_int),
+					('Month', ctypes.c_int),
+					('Day', ctypes.c_int),
+					('Weekday', ctypes.c_int),
+					('Yearday', ctypes.c_uint),
+					('IsDST', ctypes.c_bool)
+					]
+	ITimer_getRealTimeAndDate = func_type(ctypes.POINTER(RealTimeDate), ctypes.c_void_p)(('ITimer_getRealTimeAndDate', c_module))
 ITimer_getTime = func_type(ctypes.c_uint, ctypes.c_void_p)(('ITimer_getTime', c_module))
 ITimer_setTime = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('ITimer_setTime', c_module))
 ITimer_stop = func_type(None, ctypes.c_void_p)(('ITimer_stop', c_module))
 ITimer_start = func_type(None, ctypes.c_void_p)(('ITimer_start', c_module))
 ITimer_setSpeed = func_type(None, ctypes.c_void_p, ctypes.c_float)(('ITimer_setSpeed', c_module))
 ITimer_getSpeed = func_type(ctypes.c_float, ctypes.c_void_p)(('ITimer_getSpeed', c_module))
-ITimer_isStopped = func_type(ctypes.c_byte, ctypes.c_void_p)(('ITimer_isStopped', c_module))
+ITimer_isStopped = func_type(ctypes.c_bool, ctypes.c_void_p)(('ITimer_isStopped', c_module))
 ITimer_tick = func_type(None, ctypes.c_void_p)(('ITimer_tick', c_module))
 
 #struct IRenderTarget
 if IRRLICHT_VERSION < 180:
-	IRenderTarget_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('IRenderTarget_ctor1', c_module))
-	IRenderTarget_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('IRenderTarget_ctor2', c_module))
+	IRenderTarget_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_bool)(('IRenderTarget_ctor1', c_module))
+	IRenderTarget_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_bool)(('IRenderTarget_ctor2', c_module))
 else:
 	IRenderTarget_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('IRenderTarget_ctor1', c_module))
 	IRenderTarget_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('IRenderTarget_ctor2', c_module))
@@ -4489,20 +4517,20 @@ IRenderTarget_set_BlendFuncSrc = func_type(None, ctypes.c_void_p, ctypes.c_int)(
 IRenderTarget_get_BlendFuncDst = func_type(ctypes.c_int, ctypes.c_void_p)(('IRenderTarget_get_BlendFuncDst', c_module))
 IRenderTarget_set_BlendFuncDst = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IRenderTarget_set_BlendFuncDst', c_module))
 if IRRLICHT_VERSION < 180:
-	IRenderTarget_get_BlendEnable = func_type(ctypes.c_byte, ctypes.c_void_p)(('IRenderTarget_get_BlendEnable', c_module))
-	IRenderTarget_set_BlendEnable = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IRenderTarget_set_BlendEnable', c_module))
+	IRenderTarget_get_BlendEnable = func_type(ctypes.c_bool, ctypes.c_void_p)(('IRenderTarget_get_BlendEnable', c_module))
+	IRenderTarget_set_BlendEnable = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IRenderTarget_set_BlendEnable', c_module))
 else:
 	IRenderTarget_get_BlendOp = func_type(ctypes.c_int, ctypes.c_void_p)(('IRenderTarget_get_BlendOp', c_module))
 	IRenderTarget_set_BlendOp = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IRenderTarget_set_BlendOp', c_module))
 
 # functions for class IrrlichtDevice
-IrrlichtDevice_createDevice = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_uint32, ctypes.c_byte, ctypes.c_byte, ctypes.c_byte, ctypes.c_void_p)(('IrrlichtDevice_createDevice', c_module))#, ((1, 'deviceType', EDT_SOFTWARE), (1, 'windowSize', dimension2du_dimension2du(640, 480)), (1, 'bits', 16), (1, 'fullscreen', False), (1, 'stencilbuffer', False), (1, 'vsync', False), (1, 'receiver', 0)))
-IrrlichtDevice_createDevice2 = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_uint32, ctypes.c_byte, ctypes.c_byte, ctypes.c_byte, ctypes.c_byte)(('IrrlichtDevice_createDevice2', c_module))#, ((1, 'deviceType', EDT_SOFTWARE), (1, 'windowSize', dimension2du_dimension2du(640, 480)), (1, 'bits', 16), (1, 'fullscreen', False), (1, 'stencilbuffer', False), (1, 'vsync', False), (1, 'create_receiver', False)))
+IrrlichtDevice_createDevice = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_uint32, ctypes.c_bool, ctypes.c_bool, ctypes.c_bool, ctypes.c_void_p)(('IrrlichtDevice_createDevice', c_module))#, ((1, 'deviceType', EDT_SOFTWARE), (1, 'windowSize', dimension2du_dimension2du(640, 480)), (1, 'bits', 16), (1, 'fullscreen', False), (1, 'stencilbuffer', False), (1, 'vsync', False), (1, 'receiver', 0)))
+IrrlichtDevice_createDevice2 = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_uint32, ctypes.c_bool, ctypes.c_bool, ctypes.c_bool, ctypes.c_bool)(('IrrlichtDevice_createDevice2', c_module))#, ((1, 'deviceType', EDT_SOFTWARE), (1, 'windowSize', dimension2du_dimension2du(640, 480)), (1, 'bits', 16), (1, 'fullscreen', False), (1, 'stencilbuffer', False), (1, 'vsync', False), (1, 'create_receiver', False)))
 #~ IrrlichtDevice_createDeviceEx = func_type(ctypes.c_void_p, ctypes.POINTER(SIrrlichtCreationParameters))(('IrrlichtDevice_createDeviceEx', c_module))
 IrrlichtDevice_createDeviceEx = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IrrlichtDevice_createDeviceEx', c_module))
-IrrlichtDevice_run = func_type(ctypes.c_byte, ctypes.c_void_p)(('IrrlichtDevice_run', c_module))
+IrrlichtDevice_run = func_type(ctypes.c_bool, ctypes.c_void_p)(('IrrlichtDevice_run', c_module))
 IrrlichtDevice_yield = func_type(None, ctypes.c_void_p)(('IrrlichtDevice_yield', c_module))
-IrrlichtDevice_sleep = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_byte)(('IrrlichtDevice_sleep', c_module))
+IrrlichtDevice_sleep = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_bool)(('IrrlichtDevice_sleep', c_module))
 IrrlichtDevice_getVideoDriver = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IrrlichtDevice_getVideoDriver', c_module))
 IrrlichtDevice_getFileSystem = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IrrlichtDevice_getFileSystem', c_module))
 IrrlichtDevice_getGUIEnvironment = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IrrlichtDevice_getGUIEnvironment', c_module))
@@ -4513,27 +4541,27 @@ IrrlichtDevice_getVideoModeList = func_type(ctypes.c_void_p, ctypes.c_void_p)(('
 IrrlichtDevice_getOSOperator = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IrrlichtDevice_getOSOperator', c_module))
 IrrlichtDevice_getTimer = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IrrlichtDevice_getTimer', c_module))
 IrrlichtDevice_setWindowCaption = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p)(('IrrlichtDevice_setWindowCaption', c_module))
-IrrlichtDevice_isWindowActive = func_type(ctypes.c_byte, ctypes.c_void_p)(('IrrlichtDevice_isWindowActive', c_module))
-IrrlichtDevice_isWindowFocused = func_type(ctypes.c_byte, ctypes.c_void_p)(('IrrlichtDevice_isWindowFocused', c_module))
-IrrlichtDevice_isWindowMinimized = func_type(ctypes.c_byte, ctypes.c_void_p)(('IrrlichtDevice_isWindowMinimized', c_module))
-IrrlichtDevice_isFullscreen = func_type(ctypes.c_byte, ctypes.c_void_p)(('IrrlichtDevice_isFullscreen', c_module))
+IrrlichtDevice_isWindowActive = func_type(ctypes.c_bool, ctypes.c_void_p)(('IrrlichtDevice_isWindowActive', c_module))
+IrrlichtDevice_isWindowFocused = func_type(ctypes.c_bool, ctypes.c_void_p)(('IrrlichtDevice_isWindowFocused', c_module))
+IrrlichtDevice_isWindowMinimized = func_type(ctypes.c_bool, ctypes.c_void_p)(('IrrlichtDevice_isWindowMinimized', c_module))
+IrrlichtDevice_isFullscreen = func_type(ctypes.c_bool, ctypes.c_void_p)(('IrrlichtDevice_isFullscreen', c_module))
 IrrlichtDevice_getColorFormat = func_type(ctypes.c_int, ctypes.c_void_p)(('IrrlichtDevice_getColorFormat', c_module))
 IrrlichtDevice_closeDevice = func_type(None, ctypes.c_void_p)(('IrrlichtDevice_closeDevice', c_module))
 IrrlichtDevice_getVersion = func_type(ctypes.c_char_p, ctypes.c_void_p)(('IrrlichtDevice_getVersion', c_module))
 IrrlichtDevice_setEventReceiver = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IrrlichtDevice_setEventReceiver', c_module))
 IrrlichtDevice_getEventReceiver = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IrrlichtDevice_getEventReceiver', c_module))
-IrrlichtDevice_postEventFromUser = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IrrlichtDevice_postEventFromUser', c_module))
-IrrlichtDevice_setInputReceivingSceneManager = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IrrlichtDevice_setInputReceivingSceneManager', c_module))
-IrrlichtDevice_setResizable = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('IrrlichtDevice_setResizable', c_module))
+IrrlichtDevice_postEventFromUser = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IrrlichtDevice_postEventFromUser', c_module))
+IrrlichtDevice_setInputReceivingSceneManager = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IrrlichtDevice_setInputReceivingSceneManager', c_module))
+IrrlichtDevice_setResizable = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IrrlichtDevice_setResizable', c_module))
 IrrlichtDevice_minimizeWindow = func_type(None, ctypes.c_void_p)(('IrrlichtDevice_minimizeWindow', c_module))
 IrrlichtDevice_maximizeWindow = func_type(None, ctypes.c_void_p)(('IrrlichtDevice_maximizeWindow', c_module))
 IrrlichtDevice_restoreWindow = func_type(None, ctypes.c_void_p)(('IrrlichtDevice_restoreWindow', c_module))
-#~ IrrlichtDevice_activateJoysticks = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.POINTER(SJoystickInfo))(('IrrlichtDevice_activateJoysticks', c_module))
-IrrlichtDevice_activateJoysticks = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('IrrlichtDevice_activateJoysticks', c_module))
-IrrlichtDevice_setGammaRamp = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('IrrlichtDevice_setGammaRamp', c_module))
-IrrlichtDevice_getGammaRamp = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('IrrlichtDevice_getGammaRamp', c_module))
+#~ IrrlichtDevice_activateJoysticks = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.POINTER(SJoystickInfo))(('IrrlichtDevice_activateJoysticks', c_module))
+IrrlichtDevice_activateJoysticks = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IrrlichtDevice_activateJoysticks', c_module))
+IrrlichtDevice_setGammaRamp = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('IrrlichtDevice_setGammaRamp', c_module))
+IrrlichtDevice_getGammaRamp = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('IrrlichtDevice_getGammaRamp', c_module))
 IrrlichtDevice_getType = func_type(ctypes.c_int, ctypes.c_void_p)(('IrrlichtDevice_getType', c_module))
-IrrlichtDevice_isDriverSupported = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('IrrlichtDevice_isDriverSupported', c_module))
+IrrlichtDevice_isDriverSupported = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_int)(('IrrlichtDevice_isDriverSupported', c_module))
 
 #struct SOverrideMaterial
 SOverrideMaterial_ctor = func_type(ctypes.c_void_p)(('SOverrideMaterial_ctor', c_module))
@@ -4544,8 +4572,8 @@ SOverrideMaterial_get_EnableFlags = func_type(ctypes.c_uint, ctypes.c_void_p)(('
 SOverrideMaterial_set_EnableFlags = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('SOverrideMaterial_set_EnableFlags', c_module))
 SOverrideMaterial_get_EnablePasses = func_type(ctypes.c_ushort, ctypes.c_void_p)(('SOverrideMaterial_get_EnablePasses', c_module))
 SOverrideMaterial_set_EnablePasses = func_type(None, ctypes.c_void_p, ctypes.c_ushort)(('SOverrideMaterial_set_EnablePasses', c_module))
-SOverrideMaterial_get_Enabled = func_type(ctypes.c_byte, ctypes.c_void_p)(('SOverrideMaterial_get_Enabled', c_module))
-SOverrideMaterial_set_Enabled = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SOverrideMaterial_set_Enabled', c_module))
+SOverrideMaterial_get_Enabled = func_type(ctypes.c_bool, ctypes.c_void_p)(('SOverrideMaterial_get_Enabled', c_module))
+SOverrideMaterial_set_Enabled = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SOverrideMaterial_set_Enabled', c_module))
 
 # functions for class SMaterial
 SMaterial_ctor1 = func_type(ctypes.c_void_p)(('SMaterial_ctor1', c_module))
@@ -4566,15 +4594,15 @@ SMaterial_get_ZBuffer = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMaterial_
 SMaterial_get_AntiAliasing = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMaterial_get_AntiAliasing', c_module))
 SMaterial_get_ColorMask = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMaterial_get_ColorMask', c_module))
 SMaterial_get_ColorMaterial = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMaterial_get_ColorMaterial', c_module))
-SMaterial_get_Wireframe = func_type(ctypes.c_byte, ctypes.c_void_p)(('SMaterial_get_Wireframe', c_module))
-SMaterial_get_PointCloud = func_type(ctypes.c_byte, ctypes.c_void_p)(('SMaterial_get_PointCloud', c_module))
-SMaterial_get_GouraudShading = func_type(ctypes.c_byte, ctypes.c_void_p)(('SMaterial_get_GouraudShading', c_module))
-SMaterial_get_Lighting = func_type(ctypes.c_byte, ctypes.c_void_p)(('SMaterial_get_Lighting', c_module))
-SMaterial_get_ZWriteEnable = func_type(ctypes.c_byte, ctypes.c_void_p)(('SMaterial_get_ZWriteEnable', c_module))
-SMaterial_get_BackfaceCulling = func_type(ctypes.c_byte, ctypes.c_void_p)(('SMaterial_get_BackfaceCulling', c_module))
-SMaterial_get_FrontfaceCulling = func_type(ctypes.c_byte, ctypes.c_void_p)(('SMaterial_get_FrontfaceCulling', c_module))
-SMaterial_get_FogEnable = func_type(ctypes.c_byte, ctypes.c_void_p)(('SMaterial_get_FogEnable', c_module))
-SMaterial_get_NormalizeNormals = func_type(ctypes.c_byte, ctypes.c_void_p)(('SMaterial_get_NormalizeNormals', c_module))
+SMaterial_get_Wireframe = func_type(ctypes.c_bool, ctypes.c_void_p)(('SMaterial_get_Wireframe', c_module))
+SMaterial_get_PointCloud = func_type(ctypes.c_bool, ctypes.c_void_p)(('SMaterial_get_PointCloud', c_module))
+SMaterial_get_GouraudShading = func_type(ctypes.c_bool, ctypes.c_void_p)(('SMaterial_get_GouraudShading', c_module))
+SMaterial_get_Lighting = func_type(ctypes.c_bool, ctypes.c_void_p)(('SMaterial_get_Lighting', c_module))
+SMaterial_get_ZWriteEnable = func_type(ctypes.c_bool, ctypes.c_void_p)(('SMaterial_get_ZWriteEnable', c_module))
+SMaterial_get_BackfaceCulling = func_type(ctypes.c_bool, ctypes.c_void_p)(('SMaterial_get_BackfaceCulling', c_module))
+SMaterial_get_FrontfaceCulling = func_type(ctypes.c_bool, ctypes.c_void_p)(('SMaterial_get_FrontfaceCulling', c_module))
+SMaterial_get_FogEnable = func_type(ctypes.c_bool, ctypes.c_void_p)(('SMaterial_get_FogEnable', c_module))
+SMaterial_get_NormalizeNormals = func_type(ctypes.c_bool, ctypes.c_void_p)(('SMaterial_get_NormalizeNormals', c_module))
 SMaterial_set_TextureLayer = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SMaterial_set_TextureLayer', c_module))
 SMaterial_set_MaterialType = func_type(None, ctypes.c_void_p, ctypes.c_int)(('SMaterial_set_MaterialType', c_module))
 SMaterial_set_AmbientColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SMaterial_set_AmbientColor', c_module))
@@ -4589,24 +4617,24 @@ SMaterial_set_ZBuffer = func_type(None, ctypes.c_void_p, ctypes.c_ubyte)(('SMate
 SMaterial_set_AntiAliasing = func_type(None, ctypes.c_void_p, ctypes.c_ubyte)(('SMaterial_set_AntiAliasing', c_module))
 SMaterial_set_ColorMask = func_type(None, ctypes.c_void_p, ctypes.c_ubyte)(('SMaterial_set_ColorMask', c_module))
 SMaterial_set_ColorMaterial = func_type(None, ctypes.c_void_p, ctypes.c_ubyte)(('SMaterial_set_ColorMaterial', c_module))
-SMaterial_set_Wireframe = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SMaterial_set_Wireframe', c_module))
-SMaterial_set_PointCloud = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SMaterial_set_PointCloud', c_module))
-SMaterial_set_GouraudShading = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SMaterial_set_GouraudShading', c_module))
-SMaterial_set_Lighting = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SMaterial_set_Lighting', c_module))
-SMaterial_set_ZWriteEnable = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SMaterial_set_ZWriteEnable', c_module))
-SMaterial_set_BackfaceCulling = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SMaterial_set_BackfaceCulling', c_module))
-SMaterial_set_FrontfaceCulling = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SMaterial_set_FrontfaceCulling', c_module))
-SMaterial_set_FogEnable = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SMaterial_set_FogEnable', c_module))
-SMaterial_set_NormalizeNormals = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SMaterial_set_NormalizeNormals', c_module))
+SMaterial_set_Wireframe = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SMaterial_set_Wireframe', c_module))
+SMaterial_set_PointCloud = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SMaterial_set_PointCloud', c_module))
+SMaterial_set_GouraudShading = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SMaterial_set_GouraudShading', c_module))
+SMaterial_set_Lighting = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SMaterial_set_Lighting', c_module))
+SMaterial_set_ZWriteEnable = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SMaterial_set_ZWriteEnable', c_module))
+SMaterial_set_BackfaceCulling = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SMaterial_set_BackfaceCulling', c_module))
+SMaterial_set_FrontfaceCulling = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SMaterial_set_FrontfaceCulling', c_module))
+SMaterial_set_FogEnable = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SMaterial_set_FogEnable', c_module))
+SMaterial_set_NormalizeNormals = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SMaterial_set_NormalizeNormals', c_module))
 SMaterial_getTextureMatrix = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('SMaterial_getTextureMatrix', c_module))
 SMaterial_setTextureMatrix = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p)(('SMaterial_setTextureMatrix', c_module))
 SMaterial_getTexture = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('SMaterial_getTexture', c_module))
 SMaterial_setTexture = func_type(None, ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p)(('SMaterial_setTexture', c_module))
-SMaterial_setFlag = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('SMaterial_setFlag', c_module))
-SMaterial_getFlag = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int)(('SMaterial_getFlag', c_module))
-SMaterial_operator_noteq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('SMaterial_operator_noteq', c_module))
-SMaterial_operator_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('SMaterial_operator_eq', c_module))
-SMaterial_isTransparent = func_type(ctypes.c_byte, ctypes.c_void_p)(('SMaterial_isTransparent', c_module))
+SMaterial_setFlag = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('SMaterial_setFlag', c_module))
+SMaterial_getFlag = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_int)(('SMaterial_getFlag', c_module))
+SMaterial_operator_noteq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('SMaterial_operator_noteq', c_module))
+SMaterial_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('SMaterial_operator_eq', c_module))
+SMaterial_isTransparent = func_type(ctypes.c_bool, ctypes.c_void_p)(('SMaterial_isTransparent', c_module))
 
 # functions for class SMaterialLayer
 SMaterialLayer_ctor1 = func_type(ctypes.c_void_p)(('SMaterialLayer_ctor1', c_module))
@@ -4619,18 +4647,18 @@ SMaterialLayer_set_TextureWrapU = func_type(None, ctypes.c_void_p, ctypes.c_void
 SMaterialLayer_get_TextureWrapU = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMaterialLayer_get_TextureWrapU', c_module))
 SMaterialLayer_set_TextureWrapV = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SMaterialLayer_set_TextureWrapV', c_module))
 SMaterialLayer_get_TextureWrapV = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMaterialLayer_get_TextureWrapV', c_module))
-SMaterialLayer_set_BilinearFilter = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SMaterialLayer_set_BilinearFilter', c_module))
-SMaterialLayer_get_BilinearFilter = func_type(ctypes.c_byte, ctypes.c_void_p)(('SMaterialLayer_get_BilinearFilter', c_module))
-SMaterialLayer_set_TrilinearFilter = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SMaterialLayer_set_TrilinearFilter', c_module))
-SMaterialLayer_get_TrilinearFilter = func_type(ctypes.c_byte, ctypes.c_void_p)(('SMaterialLayer_get_TrilinearFilter', c_module))
+SMaterialLayer_set_BilinearFilter = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SMaterialLayer_set_BilinearFilter', c_module))
+SMaterialLayer_get_BilinearFilter = func_type(ctypes.c_bool, ctypes.c_void_p)(('SMaterialLayer_get_BilinearFilter', c_module))
+SMaterialLayer_set_TrilinearFilter = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SMaterialLayer_set_TrilinearFilter', c_module))
+SMaterialLayer_get_TrilinearFilter = func_type(ctypes.c_bool, ctypes.c_void_p)(('SMaterialLayer_get_TrilinearFilter', c_module))
 SMaterialLayer_set_AnisotropicFilter = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SMaterialLayer_set_AnisotropicFilter', c_module))
 SMaterialLayer_get_AnisotropicFilter = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMaterialLayer_get_AnisotropicFilter', c_module))
 SMaterialLayer_set_LODBias = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SMaterialLayer_set_LODBias', c_module))
 SMaterialLayer_get_LODBias = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMaterialLayer_get_LODBias', c_module))
 SMaterialLayer_getTextureMatrix = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMaterialLayer_getTextureMatrix', c_module))
 SMaterialLayer_setTextureMatrix = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SMaterialLayer_setTextureMatrix', c_module))
-SMaterialLayer_operator_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('SMaterialLayer_operator_eq', c_module))
-SMaterialLayer_operator_noteq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('SMaterialLayer_operator_noteq', c_module))
+SMaterialLayer_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('SMaterialLayer_operator_eq', c_module))
+SMaterialLayer_operator_noteq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('SMaterialLayer_operator_noteq', c_module))
 
 #struct SMD3AnimationInfo
 SMD3AnimationInfo_ctor = func_type(ctypes.c_void_p)(('SMD3AnimationInfo_ctor', c_module))
@@ -4731,7 +4759,7 @@ SMD3QuaternionTag_ctor2 = func_type(ctypes.c_void_p, ctypes.c_char_p, ctypes.c_v
 SMD3QuaternionTag_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('SMD3QuaternionTag_ctor3', c_module))
 SMD3QuaternionTag_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMD3QuaternionTag_ctor4', c_module))
 SMD3QuaternionTag_setto = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SMD3QuaternionTag_setto', c_module))
-SMD3QuaternionTag_operator_eq = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p)(('SMD3QuaternionTag_operator_eq', c_module))
+SMD3QuaternionTag_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('SMD3QuaternionTag_operator_eq', c_module))
 SMD3QuaternionTag_operator_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('SMD3QuaternionTag_operator_set', c_module))
 SMD3QuaternionTag_get_Name = func_type(ctypes.c_char_p, ctypes.c_void_p)(('SMD3QuaternionTag_get_Name', c_module))
 SMD3QuaternionTag_set_Name = func_type(None, ctypes.c_void_p, ctypes.c_char_p)(('SMD3QuaternionTag_set_Name', c_module))
@@ -4775,7 +4803,7 @@ SMesh_getBoundingBox = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMesh_getBo
 SMesh_setBoundingBox = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SMesh_setBoundingBox', c_module))
 SMesh_recalculateBoundingBox = func_type(None, ctypes.c_void_p)(('SMesh_recalculateBoundingBox', c_module))
 SMesh_addMeshBuffer = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SMesh_addMeshBuffer', c_module))
-SMesh_setMaterialFlag = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_byte)(('SMesh_setMaterialFlag', c_module))
+SMesh_setMaterialFlag = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('SMesh_setMaterialFlag', c_module))
 SMesh_setHardwareMappingHint = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('SMesh_setHardwareMappingHint', c_module))
 SMesh_setDirty = func_type(None, ctypes.c_void_p, ctypes.c_int)(('SMesh_setDirty', c_module))
 SMesh_get_MeshBuffers = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMesh_get_MeshBuffers', c_module))
@@ -4816,24 +4844,24 @@ SIrrlichtCreationParameters_get_Bits = func_type(ctypes.c_void_p, ctypes.c_void_
 SIrrlichtCreationParameters_set_Bits = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SIrrlichtCreationParameters_set_Bits', c_module))
 SIrrlichtCreationParameters_get_ZBufferBits = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_ZBufferBits', c_module))
 SIrrlichtCreationParameters_set_ZBufferBits = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SIrrlichtCreationParameters_set_ZBufferBits', c_module))
-SIrrlichtCreationParameters_get_Fullscreen = func_type(ctypes.c_byte, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_Fullscreen', c_module))
-SIrrlichtCreationParameters_set_Fullscreen = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SIrrlichtCreationParameters_set_Fullscreen', c_module))
-SIrrlichtCreationParameters_get_Stencilbuffer = func_type(ctypes.c_byte, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_Stencilbuffer', c_module))
-SIrrlichtCreationParameters_set_Stencilbuffer = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SIrrlichtCreationParameters_set_Stencilbuffer', c_module))
-SIrrlichtCreationParameters_get_Vsync = func_type(ctypes.c_byte, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_Vsync', c_module))
-SIrrlichtCreationParameters_set_Vsync = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SIrrlichtCreationParameters_set_Vsync', c_module))
+SIrrlichtCreationParameters_get_Fullscreen = func_type(ctypes.c_bool, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_Fullscreen', c_module))
+SIrrlichtCreationParameters_set_Fullscreen = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SIrrlichtCreationParameters_set_Fullscreen', c_module))
+SIrrlichtCreationParameters_get_Stencilbuffer = func_type(ctypes.c_bool, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_Stencilbuffer', c_module))
+SIrrlichtCreationParameters_set_Stencilbuffer = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SIrrlichtCreationParameters_set_Stencilbuffer', c_module))
+SIrrlichtCreationParameters_get_Vsync = func_type(ctypes.c_bool, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_Vsync', c_module))
+SIrrlichtCreationParameters_set_Vsync = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SIrrlichtCreationParameters_set_Vsync', c_module))
 SIrrlichtCreationParameters_get_AntiAlias = func_type(ctypes.c_ubyte, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_AntiAlias', c_module))
 SIrrlichtCreationParameters_set_AntiAlias = func_type(None, ctypes.c_void_p, ctypes.c_ubyte)(('SIrrlichtCreationParameters_set_AntiAlias', c_module))
-SIrrlichtCreationParameters_get_WithAlphaChannel = func_type(ctypes.c_byte, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_WithAlphaChannel', c_module))
-SIrrlichtCreationParameters_set_WithAlphaChannel = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SIrrlichtCreationParameters_set_WithAlphaChannel', c_module))
-SIrrlichtCreationParameters_get_Doublebuffer = func_type(ctypes.c_byte, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_Doublebuffer', c_module))
-SIrrlichtCreationParameters_set_Doublebuffer = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SIrrlichtCreationParameters_set_Doublebuffer', c_module))
-SIrrlichtCreationParameters_get_IgnoreInput = func_type(ctypes.c_byte, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_IgnoreInput', c_module))
-SIrrlichtCreationParameters_set_IgnoreInput = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SIrrlichtCreationParameters_set_IgnoreInput', c_module))
-SIrrlichtCreationParameters_get_Stereobuffer = func_type(ctypes.c_byte, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_Stereobuffer', c_module))
-SIrrlichtCreationParameters_set_Stereobuffer = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SIrrlichtCreationParameters_set_Stereobuffer', c_module))
-SIrrlichtCreationParameters_get_HighPrecisionFPU = func_type(ctypes.c_byte, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_HighPrecisionFPU', c_module))
-SIrrlichtCreationParameters_set_HighPrecisionFPU = func_type(None, ctypes.c_void_p, ctypes.c_byte)(('SIrrlichtCreationParameters_set_HighPrecisionFPU', c_module))
+SIrrlichtCreationParameters_get_WithAlphaChannel = func_type(ctypes.c_bool, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_WithAlphaChannel', c_module))
+SIrrlichtCreationParameters_set_WithAlphaChannel = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SIrrlichtCreationParameters_set_WithAlphaChannel', c_module))
+SIrrlichtCreationParameters_get_Doublebuffer = func_type(ctypes.c_bool, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_Doublebuffer', c_module))
+SIrrlichtCreationParameters_set_Doublebuffer = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SIrrlichtCreationParameters_set_Doublebuffer', c_module))
+SIrrlichtCreationParameters_get_IgnoreInput = func_type(ctypes.c_bool, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_IgnoreInput', c_module))
+SIrrlichtCreationParameters_set_IgnoreInput = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SIrrlichtCreationParameters_set_IgnoreInput', c_module))
+SIrrlichtCreationParameters_get_Stereobuffer = func_type(ctypes.c_bool, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_Stereobuffer', c_module))
+SIrrlichtCreationParameters_set_Stereobuffer = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SIrrlichtCreationParameters_set_Stereobuffer', c_module))
+SIrrlichtCreationParameters_get_HighPrecisionFPU = func_type(ctypes.c_bool, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_HighPrecisionFPU', c_module))
+SIrrlichtCreationParameters_set_HighPrecisionFPU = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('SIrrlichtCreationParameters_set_HighPrecisionFPU', c_module))
 SIrrlichtCreationParameters_get_EventReceiver = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_EventReceiver', c_module))
 SIrrlichtCreationParameters_set_EventReceiver = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SIrrlichtCreationParameters_set_EventReceiver', c_module))
 SIrrlichtCreationParameters_get_WindowId = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SIrrlichtCreationParameters_get_WindowId', c_module))
@@ -4908,25 +4936,34 @@ SExposedVideoData_set_OpenGLLinux_X11Context = func_type(None, ctypes.c_void_p, 
 SExposedVideoData_set_OpenGLLinux_X11Window = func_type(None, ctypes.c_void_p, ctypes.c_ulong)(('SExposedVideoData_set_OpenGLLinux_X11Window', c_module))
 
 #================= I3DText
-BUILD_WITH_3D_TEXT = ctypes.c_byte.in_dll(c_module, 'BUILD_WITH_3D_TEXT').value
+BUILD_WITH_3D_TEXT = ctypes.c_bool.in_dll(c_module, 'BUILD_WITH_3D_TEXT').value
 if BUILD_WITH_3D_TEXT:
 	E_RCC_TYPE = 0
 	RCC_NO = 0#NOT USED RANDOM COLORS
 	RCC_AUTO = 1#USED RANDOM COLORS WITH AUTO CHANGES
 	RCC_CUSTOM = 2#USED RANDOM COLORS WITH CUSTOM CHANGES
+
 	E_ABSV_TYPE = 0
 	ABSV_INTERLEAVE = 0#INTERLEAVE Z VALUE FOR ONE PASS, RESULT IS CURVE
 	ABSV_INTERLEAVE_TWO_PASS = 1#RESULT IS TWO MIXED CURVE
-	ABSV_LINEAR = 2#ONE PASS Z=0, like flat text, but as 3d object
+	ABSV_LINEAR = 2#ONE PASS Z=0, LIKE FLAT TEXT, BUT AS 3D OBJECT
 	ABSV_LINEAR_TWO_PASS = 3#FIRST PASS Z=0, SECOND PASS Z=DEPTH
+	ABSV_PRIMITIVES = 4#VERTICES FOR DRAWING AS PRIMITIVES
+
+	E_DAF_TYPE = 0
+	DAF_NO = 0#NOT DRAW AS FIGURES
+	DAF_CUBE = 1#DRAW AS CUBES
+	DAF_SPHERE = 2#DRAW AS SPHERES
+	DAF_CYLINDER = 3#DRAW AS CYLINDERS
+	DAF_MIXED = 4#DRAW AS FIGURES WITH PRIMITIVES
 
 	IText3D_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IText3D_ctor', c_module))
-	IText3D_setText = func_type(ctypes.c_byte, ctypes.c_void_p, ctypes.c_wchar_p, fschar_t, ctypes.c_void_p, ctypes.c_uint, ctypes.c_float, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('IText3D_setText', c_module))
+	IText3D_setText = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_wchar_p, fschar_t, ctypes.c_uint, ctypes.c_float, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('IText3D_setText', c_module))
 	IText3D_get_color_random_type = func_type(ctypes.c_int, ctypes.c_void_p)(('IText3D_get_color_random_type', c_module))
 	IText3D_set_color_random_type = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IText3D_set_color_random_type', c_module))
-	IText3D_get_custom_color = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IText3D_get_custom_color', c_module))
-	IText3D_set_custom_color = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IText3D_set_custom_color', c_module))
-	IText3D_set_auto_custom_color = func_type(None, ctypes.c_void_p)(('IText3D_set_auto_custom_color', c_module))
+	IText3D_set_auto_emissive_color = func_type(None, ctypes.c_void_p)(('IText3D_set_auto_emissive_color', c_module))
+	IText3D_get_draw_as_figures = func_type(ctypes.c_int, ctypes.c_void_p)(('IText3D_get_draw_as_figures', c_module))
+	IText3D_set_draw_as_figures = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IText3D_set_draw_as_figures', c_module))
 
 
 # ============== Python classes
@@ -5347,7 +5384,7 @@ class SEvent(object):
 
 #~ class IEventReceiver(class_thread):
 class IEventReceiver:
-	set_virtual_method = func_type(ctypes.c_byte, ctypes.c_void_p, OnEventFunc, ctypes.c_int)(('set_virtual_method', c_module))
+	set_virtual_method = func_type(ctypes.c_bool, ctypes.c_void_p, OnEventFunc, ctypes.c_int)(('set_virtual_method', c_module))
 	def __init__(self, *args, **kwargs):
 		#~ class_thread.__init__(self)
 		#~ self.setDaemon(True)
@@ -5356,7 +5393,7 @@ class IEventReceiver:
 		self.delete_c_pointer = True
 		#~ self._SEvent = SEvent()
 		#~ self.POINTER_SEvent = ctypes.POINTER(type(self._SEvent))
-		#~ self.OnEventFunc = func_type(ctypes.c_byte, self.POINTER_SEvent)
+		#~ self.OnEventFunc = func_type(ctypes.c_bool, self.POINTER_SEvent)
 		self.callback = OnEventFunc(self.OnEvent)
 		if len(args) > 0:
 			self.c_pointer = IEventReceiver_ctor1(args[0])
@@ -12261,7 +12298,7 @@ class ILightSceneNode(ISceneNode):
 	def setLightData(self, light):
 		ILightSceneNode_setLightData(self.c_pointer, light)
 	def getLightData(self):
-		return ILightSceneNode_getLightData(self.c_pointer)
+		return ILightSceneNode_getLightData(self.c_pointer)[0]
 	def setVisible(self, isVisible):
 		ILightSceneNode_setVisible(self.c_pointer, isVisible)
 	def setRadius(self, radius):
@@ -12831,8 +12868,8 @@ class IVideoDriver(IReferenceCounted):
 		start = ctypes.c_float()
 		end = ctypes.c_float()
 		density = ctypes.c_float()
-		pixelFog = ctypes.c_byte()
-		rangeFog = ctypes.c_byte()
+		pixelFog = ctypes.c_bool()
+		rangeFog = ctypes.c_bool()
 		IVideoDriver_getFog(self.c_pointer, ctypes.byref(color), ctypes.byref(fogType), ctypes.byref(start), ctypes.byref(end), ctypes.byref(density), ctypes.byref(pixelFog), ctypes.byref(rangeFog))
 		return SColor(ctypes.pointer(color)), fogType.value, start.value, end.value, density.value, bool(pixelFog.value), bool(rangeFog.value)
 	def getColorFormat(self):
@@ -13925,8 +13962,16 @@ class IOSOperator(IReferenceCounted):
 		return IOSOperator_getTextFromClipboard(self.c_pointer)
 	def getProcessorSpeedMHz(self, MHz):
 		return IOSOperator_getProcessorSpeedMHz(self.c_pointer, MHz)
+	def getProcessorSpeedMHzAsTuple(self):
+		MHz = ctypes.c_uint()
+		result = IOSOperator_getProcessorSpeedMHz(self.c_pointer, ctypes.byref(MHz))
+		return result, MHz.value
 	def getSystemMemory(self, Total, Avail):
 		return IOSOperator_getSystemMemory(self.c_pointer, Total, Avail)
+	def getSystemMemoryAsTuple(self):
+		Total, Avail = ctypes.c_uint(), ctypes.c_uint()
+		result = IOSOperator_getSystemMemory(self.c_pointer, ctypes.byref(Total), ctypes.byref(Avail))
+		return result, Total.value, Avail.value
 
 class Q3LevelLoadParameter(object):
 	def __init__(self, *args, **kwargs):
@@ -14535,10 +14580,14 @@ class IQ3LevelMesh(IAnimatedMesh):
 class ITimer(IReferenceCounted):
 	def __init__(self, *args, **kwargs):
 		self.c_pointer = args[0]
-	#~ def Destructor(self):
-		#~ ITimer_Destructor(self.c_pointer)
 	def getRealTime(self):
 		return ITimer_getRealTime(self.c_pointer)
+	if IRRLICHT_VERSION >= 180:
+		def getRealTimeAndDate(self):
+			return ITimer_getRealTimeAndDate(self.c_pointer)[0]
+		def getRealTimeAndDateAsTuple(self):
+			rtd = ITimer_getRealTimeAndDate(self.c_pointer)[0]
+			return (rtd.Year, rtd.Month, rtd.Day, rtd.Hour, rtd.Minute, rtd.Second)
 	def getTime(self):
 		return ITimer_getTime(self.c_pointer)
 	def setTime(self, time):
@@ -14795,16 +14844,22 @@ if BUILD_WITH_IRR_SVG_AGG:
 				self.c_pointer = kwargs.pop('c_pointer', None)
 			else:
 				self.c_pointer = None
+		def __del__(self):
+			if self.c_pointer:
+				try:
+					delete_pointer(self.c_pointer)
+				except:
+					pass
 		def parse(self, fs, file_name = 'file.svg', content_unicode = True, alpha_value = 0, color_format = ECF_A8R8G8B8, stride = 4):
 			svg_cairo_image_parse(self.c_pointer, fs.c_pointer, file_name, content_unicode, alpha_value, color_format, stride)
 		def get_size(self):
 			return dimension2du(pointer = svg_agg_image_get_size(self.c_pointer))
 		def scale(self, value = 1.0):
 			svg_agg_image_scale(self.c_pointer, value)
-		def render(self):
-			return IImage(svg_agg_image_scale(self.c_pointer))
-		def get_texture(self):
-			return ITexture(svg_agg_image_get_texture(self.c_pointer))
+		def get_image(self, rendering = False):
+			return IImage(svg_agg_image_get_image(self.c_pointer, rendering))
+		def get_texture(self, rendering = False, adding = False):
+			return ITexture(svg_agg_image_get_texture(self.c_pointer, rendering, adding))
 		#~ def drop(self):
 			#~ return svg_agg_image_drop(self.c_pointer)
 
@@ -14853,21 +14908,21 @@ if BUILD_WITH_3D_TEXT:
 			if not isinstance(parent, ISceneNode):
 				parent = mgr.getRootSceneNode()
 			return IText3D_ctor(parent.c_pointer, mgr.c_pointer, id)
-		def setText(self, text, font_file_name = 0, color = SColor(255, 255, 255, 255), size = 10, depth = 50.0, primitive_type = EPT_LINE_LOOP, index_type = EIT_16BIT, color_random = RCC_NO, algorithm_build_vertices = ABSV_INTERLEAVE):
+		def setText(self, text, font_file_name = 0, size = 10, depth = 50.0, primitive_type = EPT_TRIANGLES, index_type = EIT_16BIT, color_random = RCC_NO, algorithm_build_vertices = ABSV_INTERLEAVE):
 			if not font_file_name:
 				from os import environ
 				font_file_name = environ['SYSTEMROOT']+'/Fonts/Arial.ttf'
-			return IText3D_setText(self.c_pointer, text, font_file_name, color.c_pointer, size, depth, primitive_type, index_type, color_random, algorithm_build_vertices)
+			return IText3D_setText(self.c_pointer, text, font_file_name, size, depth, primitive_type, index_type, color_random, algorithm_build_vertices)
 		def get_color_random_type(self):
 			return IText3D_get_color_random_type(self.c_pointer)
 		def set_color_random_type(self, new_value = RCC_NO):
 			IText3D_set_color_random_type(self.c_pointer, new_value)
-		def get_custom_color(self):
-			return SColor(IText3D_get_custom_color(self.c_pointer))
-		def set_custom_color(self, new_value = SColor(255, 255, 255, 255)):
-			IText3D_set_custom_color(self.c_pointer, new_value.c_pointer)
-		def set_auto_custom_color(self):
-			IText3D_set_auto_custom_color(self.c_pointer)
+		def set_auto_emissive_color(self):
+			IText3D_set_auto_emissive_color(self.c_pointer)
+		def get_draw_as_figures(self):
+			return IText3D_get_draw_as_figures(self.c_pointer)
+		def set_draw_as_figures(self, draw_as_figures = DAF_NO, material = SMaterial(0)):
+			IText3D_set_draw_as_figures(self.c_pointer, draw_as_figures, material.c_pointer)
 
 def createDevice(deviceType = EDT_SOFTWARE, windowSize = dimension2du(640,480), bits = 16, fullscreen = False, stencilbuffer = False, vsync = False, receiver = IEventReceiver(0)):
 	return IrrlichtDevice(deviceType, windowSize, bits, fullscreen, stencilbuffer, vsync, receiver)
@@ -14893,7 +14948,7 @@ if platform in ('windows', 'win32'):
 		SetClassLong(drv.GetHandle(), GCL_HICON, LoadIcon(GetModuleHandle(None), icon_id))
 
 	def IsGUIThread(bConvert = False):
-		IsGUIThread = ctypes.WINFUNCTYPE(ctypes.c_byte, ctypes.c_byte)(('IsGUIThread', ctypes.windll.user32))
+		IsGUIThread = ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.c_bool)(('IsGUIThread', ctypes.windll.user32))
 		return IsGUIThread(bConvert)
 
 	def GetWindow(hWnd, uCmd = 0):
@@ -14926,11 +14981,11 @@ if platform in ('windows', 'win32'):
 		return GetWindowRect(drv.GetHandle())
 
 	def MoveWindow(drv, x, y, nWidth, nHeight, bRepaint):
-		MoveWindow = ctypes.WINFUNCTYPE(ctypes.c_byte, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_byte)(('MoveWindow', ctypes.windll.user32))
+		MoveWindow = ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_bool)(('MoveWindow', ctypes.windll.user32))
 		return MoveWindow(drv.GetHandle(), x, y, nWidth, nHeight, bRepaint)
 
 	def SetWindowPos(drv, hWndInsertAfter, x, y, width, height, uFlags):
-		SetWindowPos = ctypes.WINFUNCTYPE(ctypes.c_byte, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_uint)(('SetWindowPos', ctypes.windll.user32))
+		SetWindowPos = ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_uint)(('SetWindowPos', ctypes.windll.user32))
 		return SetWindowPos(drv.GetHandle(), hWndInsertAfter, x, y, width, height, uFlags)
 
 	def RealChildWindowFromPoint(hwndParent, ptParentClientCoords):

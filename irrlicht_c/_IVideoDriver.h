@@ -54,7 +54,7 @@ IRRLICHT_C_API void IRenderTarget_set_BlendOp(IRenderTarget* pointer, E_BLEND_OP
 #endif
 
 
-//class IVideoDriver
+//class IVideoDriver : public virtual IReferenceCounted
 //#if (IRRLICHT_VERSION_MAJOR == 1) && (IRRLICHT_VERSION_MINOR > 6)
 IRRLICHT_C_API bool IVideoDriver_beginScene(IVideoDriver* pointer, bool backBuffer=true, bool zBuffer=true, const SColor& color=SColor(255,0,0,0), const SExposedVideoData& videoData=SExposedVideoData(), core::rect<s32>* sourceRect=0)
 {return pointer->beginScene(backBuffer, zBuffer, color, videoData, sourceRect);}
@@ -73,6 +73,12 @@ IRRLICHT_C_API bool IVideoDriver_queryFeature(IVideoDriver* pointer, E_VIDEO_DRI
 {return pointer->queryFeature(feature);}
 IRRLICHT_C_API void IVideoDriver_disableFeature(IVideoDriver* pointer, E_VIDEO_DRIVER_FEATURE feature, bool flag=true)
 {pointer->disableFeature(feature, flag);}
+
+#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR > 7)
+IRRLICHT_C_API const io::IAttributes* IVideoDriver_getDriverAttributes(IVideoDriver* pointer)
+{return &pointer->getDriverAttributes();}
+#endif
+
 IRRLICHT_C_API bool IVideoDriver_checkDriverReset(IVideoDriver* pointer)
 {return pointer->checkDriverReset();}
 IRRLICHT_C_API void IVideoDriver_setTransform(IVideoDriver* pointer, E_TRANSFORMATION_STATE state, const core::matrix4& mat)
@@ -117,15 +123,29 @@ IRRLICHT_C_API void IVideoDriver_removeHardwareBuffer(IVideoDriver* pointer, con
 {pointer->removeHardwareBuffer(mb);}
 IRRLICHT_C_API void IVideoDriver_removeAllHardwareBuffers(IVideoDriver* pointer)
 {pointer->removeAllHardwareBuffers();}
-IRRLICHT_C_API void IVideoDriver_makeColorKeyTexture(IVideoDriver* pointer, video::ITexture* texture, const SColor& color, bool zeroTexels = false)
+
+#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR > 7)
+IRRLICHT_C_API void IVideoDriver_addOcclusionQuery(IVideoDriver* pointer, scene::ISceneNode* node, const scene::IMesh* mesh = 0){pointer->addOcclusionQuery(node, mesh);}
+IRRLICHT_C_API void IVideoDriver_removeOcclusionQuery(IVideoDriver* pointer, scene::ISceneNode* node){pointer->removeOcclusionQuery(node);}
+IRRLICHT_C_API void IVideoDriver_removeAllOcclusionQueries(IVideoDriver* pointer){pointer->removeAllOcclusionQueries();}
+IRRLICHT_C_API void IVideoDriver_runOcclusionQuery(IVideoDriver* pointer, scene::ISceneNode* node, bool visible = false){pointer->runOcclusionQuery(node, visible);}
+IRRLICHT_C_API void IVideoDriver_runAllOcclusionQueries(IVideoDriver* pointer, bool visible = false){pointer->runAllOcclusionQueries(visible);}
+IRRLICHT_C_API void IVideoDriver_updateOcclusionQuery(IVideoDriver* pointer, scene::ISceneNode* node, bool block = true){pointer->updateOcclusionQuery(node, block);}
+IRRLICHT_C_API void IVideoDriver_updateAllOcclusionQueries(IVideoDriver* pointer, bool block = true){pointer->updateAllOcclusionQueries(block);}
+IRRLICHT_C_API u32 IVideoDriver_getOcclusionQueryResult(IVideoDriver* pointer, scene::ISceneNode* node){return pointer->getOcclusionQueryResult(node);}
+#endif
+
+IRRLICHT_C_API void IVideoDriver_makeColorKeyTexture1(IVideoDriver* pointer, video::ITexture* texture, const SColor& color, bool zeroTexels = false)
 {pointer->makeColorKeyTexture(texture, color, zeroTexels);}
 IRRLICHT_C_API void IVideoDriver_makeColorKeyTexture2(IVideoDriver* pointer, video::ITexture* texture, core::position2d<s32>* colorKeyPixelPos, bool zeroTexels = false)
 {pointer->makeColorKeyTexture(texture, *colorKeyPixelPos, zeroTexels);}
 IRRLICHT_C_API void IVideoDriver_makeNormalMapTexture(IVideoDriver* pointer, video::ITexture* texture, f32 amplitude=1.0f)
 {pointer->makeNormalMapTexture(texture, amplitude);}
-IRRLICHT_C_API bool IVideoDriver_setRenderTarget(IVideoDriver* pointer, video::ITexture* texture, bool clearBackBuffer=true, bool clearZBuffer = true, const SColor& color = SColor(0,0,0,0))
+IRRLICHT_C_API bool IVideoDriver_setRenderTarget1(IVideoDriver* pointer, video::ITexture* texture, bool clearBackBuffer=true, bool clearZBuffer = true, const SColor& color = SColor(0,0,0,0))
 {return pointer->setRenderTarget(texture, clearBackBuffer, clearZBuffer, color);}
 IRRLICHT_C_API bool IVideoDriver_setRenderTarget2(IVideoDriver* pointer, E_RENDER_TARGET target, bool clearTarget=true, bool clearZBuffer=true, const SColor& color = SColor(0,0,0,0))
+{return pointer->setRenderTarget(target, clearTarget, clearZBuffer, color);}
+IRRLICHT_C_API bool IVideoDriver_setRenderTarget3(IVideoDriver* pointer, const core::array<video::IRenderTarget>& target, bool clearTarget=true, bool clearZBuffer=true, const SColor& color = SColor(0,0,0,0))
 {return pointer->setRenderTarget(target, clearTarget, clearZBuffer, color);}
 IRRLICHT_C_API void IVideoDriver_setViewPort(IVideoDriver* pointer, const core::rect<s32>& area)
 {pointer->setViewPort(area);}
@@ -135,7 +155,7 @@ IRRLICHT_C_API void IVideoDriver_drawVertexPrimitiveList(IVideoDriver* pointer, 
 {pointer->drawVertexPrimitiveList(vertices, vertexCount, indexList, primCount, vType, pType, iType);}
 IRRLICHT_C_API void IVideoDriver_draw2DVertexPrimitiveList(IVideoDriver* pointer, const void* vertices, u32 vertexCount, const void* indexList, u32 primCount, E_VERTEX_TYPE vType=EVT_STANDARD, scene::E_PRIMITIVE_TYPE pType=scene::EPT_TRIANGLES, E_INDEX_TYPE iType=EIT_16BIT)
 {pointer->draw2DVertexPrimitiveList(vertices, vertexCount, indexList, primCount, vType, pType, iType);}
-IRRLICHT_C_API void IVideoDriver_drawIndexedTriangleList(IVideoDriver* pointer, const S3DVertex* vertices, u32 vertexCount, const u16* indexList, u32 triangleCount)
+IRRLICHT_C_API void IVideoDriver_drawIndexedTriangleList1(IVideoDriver* pointer, const S3DVertex* vertices, u32 vertexCount, const u16* indexList, u32 triangleCount)
 {pointer->drawIndexedTriangleList(vertices, vertexCount, indexList, triangleCount);}
 IRRLICHT_C_API void IVideoDriver_drawIndexedTriangleList2(IVideoDriver* pointer, const S3DVertex2TCoords* vertices, u32 vertexCount, const u16* indexList, u32 triangleCount)
 {pointer->drawIndexedTriangleList(vertices, vertexCount, indexList, triangleCount);}
@@ -143,28 +163,36 @@ IRRLICHT_C_API void IVideoDriver_drawIndexedTriangleList3(IVideoDriver* pointer,
 {pointer->drawIndexedTriangleList(vertices, vertexCount, indexList, triangleCount);}
 IRRLICHT_C_API void IVideoDriver_drawIndexedTriangleFan(IVideoDriver* pointer, const S3DVertex* vertices, u32 vertexCount, const u16* indexList, u32 triangleCount)
 {pointer->drawIndexedTriangleFan(vertices, vertexCount, indexList, triangleCount);}
-IRRLICHT_C_API void IVideoDriver_drawIndexedTriangleFan2(IVideoDriver* pointer, const S3DVertex2TCoords* vertices, u32 vertexCount, const u16* indexList, u32 triangleCount)
-{pointer->drawIndexedTriangleFan(vertices, vertexCount, indexList, triangleCount);}
+//IRRLICHT_C_API void IVideoDriver_drawIndexedTriangleFan1(IVideoDriver* pointer, const S3DVertex* vertices, u32 vertexCount, const u16* indexList, u32 triangleCount)
+//{pointer->drawIndexedTriangleFan(vertices, vertexCount, indexList, triangleCount);}
+//IRRLICHT_C_API void IVideoDriver_drawIndexedTriangleFan2(IVideoDriver* pointer, const S3DVertex2TCoords* vertices, u32 vertexCount, const u16* indexList, u32 triangleCount)
+//{pointer->drawIndexedTriangleFan(vertices, vertexCount, indexList, triangleCount);}
+//IRRLICHT_C_API void IVideoDriver_drawIndexedTriangleFan3(IVideoDriver* pointer, const S3DVertexTangents* vertices, u32 vertexCount, const u16* indexList, u32 triangleCount)
+//{pointer->drawIndexedTriangleFan(vertices, vertexCount, indexList, triangleCount);}
 IRRLICHT_C_API void IVideoDriver_draw3DLine(IVideoDriver* pointer, const core::vector3df& start, const core::vector3df& end, const SColor& color = SColor(255,255,255,255))
 {pointer->draw3DLine(start, end, color);}
 IRRLICHT_C_API void IVideoDriver_draw3DTriangle(IVideoDriver* pointer, const core::triangle3df& triangle, const SColor& color = SColor(255,255,255,255))
 {pointer->draw3DTriangle(triangle, color);}
 IRRLICHT_C_API void IVideoDriver_draw3DBox(IVideoDriver* pointer, const core::aabbox3d<f32>& box, const SColor& color = SColor(255,255,255,255))
 {pointer->draw3DBox(box, color);}
+
 IRRLICHT_C_API void IVideoDriver_draw2DImage1(IVideoDriver* pointer, const video::ITexture* texture, const core::position2d<s32>* destPos)
 {pointer->draw2DImage(texture, *destPos);}
 IRRLICHT_C_API void IVideoDriver_draw2DImage2(IVideoDriver* pointer, const video::ITexture* texture, const core::position2d<s32>* destPos, const core::rect<s32>* sourceRect, const core::rect<s32>* clipRect = 0, const SColor& color = SColor(255,255,255,255), bool useAlphaChannelOfTexture = false)
 {pointer->draw2DImage(texture, *destPos, *sourceRect, clipRect, color, useAlphaChannelOfTexture);}
 IRRLICHT_C_API void IVideoDriver_draw2DImage3(IVideoDriver* pointer, const video::ITexture* texture, const core::rect<s32>* destRect, const core::rect<s32>* sourceRect, const core::rect<s32>* clipRect = 0, const video::SColor* const colors = 0, bool useAlphaChannelOfTexture = false)
 {pointer->draw2DImage(texture, *destRect, *sourceRect, clipRect, colors, useAlphaChannelOfTexture);}
+
 IRRLICHT_C_API void IVideoDriver_draw2DImageBatch1(IVideoDriver* pointer, const video::ITexture* texture, const core::position2d<s32>* pos, const core::array< core::rect<s32> >* sourceRects, const core::array<s32>* indices, s32 kerningWidth = 0, const core::rect<s32>* clipRect = 0, const SColor& color = SColor(255,255,255,255), bool useAlphaChannelOfTexture = false)
 {pointer->draw2DImageBatch(texture, *pos, *sourceRects, *indices, kerningWidth, clipRect, color, useAlphaChannelOfTexture);}
 IRRLICHT_C_API void IVideoDriver_draw2DImageBatch2(IVideoDriver* pointer, const video::ITexture* texture, const core::array< core::position2d<s32> >* positions, const core::array< core::rect<s32> >* sourceRects, const core::rect<s32>* clipRect = 0, const SColor& color = SColor(255,255,255,255), bool useAlphaChannelOfTexture = false)
 {pointer->draw2DImageBatch(texture, *positions, *sourceRects, clipRect, color, useAlphaChannelOfTexture);}
+
 IRRLICHT_C_API void IVideoDriver_draw2DRectangle1(IVideoDriver* pointer, SColor* color, const core::rect<s32>* pos, const core::rect<s32>* clip =0)
 {pointer->draw2DRectangle(*color, *pos, clip);}
 IRRLICHT_C_API void IVideoDriver_draw2DRectangle2(IVideoDriver* pointer, const core::rect<s32>* pos, const SColor* colorLeftUp, const SColor* colorRightUp, const SColor* colorLeftDown, const SColor* colorRightDown, const core::rect<s32>* clip =0)
 {pointer->draw2DRectangle(*pos, *colorLeftUp, *colorRightUp, *colorLeftDown, *colorRightDown, clip);}
+
 IRRLICHT_C_API void IVideoDriver_draw2DRectangleOutline(IVideoDriver* pointer, const core::recti* pos, const SColor& color = SColor(255,255,255,255))
 {pointer->draw2DRectangleOutline(*pos, color);}
 IRRLICHT_C_API void IVideoDriver_draw2DLine(IVideoDriver* pointer, const core::position2d<s32>* start, const core::position2d<s32>* end, const SColor& color = SColor(255,255,255,255))
@@ -186,8 +214,12 @@ IRRLICHT_C_API void IVideoDriver_drawStencilShadow(IVideoDriver* pointer, bool c
 {pointer->drawStencilShadow(clearStencilBuffer, leftUpEdge, rightUpEdge, leftDownEdge, rightDownEdge);}
 IRRLICHT_C_API void IVideoDriver_drawMeshBuffer(IVideoDriver* pointer, const scene::IMeshBuffer* mb)
 {pointer->drawMeshBuffer(mb);}
+
 IRRLICHT_C_API void IVideoDriver_setFog(IVideoDriver* pointer, const SColor& color = SColor(0,255,255,255), E_FOG_TYPE fogType = EFT_FOG_LINEAR, f32 start = 50.0f, f32 end = 100.0f, f32 density = 0.01f, bool pixelFog = false, bool rangeFog = false)
 {pointer->setFog(color, fogType, start, end, density, pixelFog, rangeFog);}
+IRRLICHT_C_API void IVideoDriver_getFog(IVideoDriver* pointer, SColor& color, E_FOG_TYPE& fogType, f32& start, f32& end, f32& density, bool& pixelFog, bool& rangeFog)
+{pointer->getFog(color, fogType, start, end, density, pixelFog, rangeFog);}
+
 IRRLICHT_C_API ECOLOR_FORMAT IVideoDriver_getColorFormat(IVideoDriver* pointer)
 {return pointer->getColorFormat();}
 IRRLICHT_C_API const core::dimension2d<u32>& IVideoDriver_getScreenSize(IVideoDriver* pointer)
@@ -222,24 +254,29 @@ IRRLICHT_C_API void IVideoDriver_setTextureCreationFlag(IVideoDriver* pointer, E
 {pointer->setTextureCreationFlag(flag, enabled);}
 IRRLICHT_C_API bool IVideoDriver_getTextureCreationFlag(IVideoDriver* pointer, E_TEXTURE_CREATION_FLAG flag)
 {return pointer->getTextureCreationFlag(flag);}
+
 IRRLICHT_C_API IImage* IVideoDriver_createImageFromFile1(IVideoDriver* pointer, const fschar_t* filename)
 {return pointer->createImageFromFile(io::path(filename));}
 IRRLICHT_C_API IImage* IVideoDriver_createImageFromFile2(IVideoDriver* pointer, io::IReadFile* file)
 {return pointer->createImageFromFile(file);}
+
 IRRLICHT_C_API bool IVideoDriver_writeImageToFile1(IVideoDriver* pointer, IImage* image, const fschar_t* filename, u32 param = 0)
 {return pointer->writeImageToFile(image, io::path(filename), param);}
 IRRLICHT_C_API bool IVideoDriver_writeImageToFile2(IVideoDriver* pointer, IImage* image, io::IWriteFile* file, u32 param =0)
 {return pointer->writeImageToFile(image, file, param);}
+
 IRRLICHT_C_API IImage* IVideoDriver_createImageFromData(IVideoDriver* pointer, ECOLOR_FORMAT format, const core::dimension2d<u32>* size, void* data, bool ownForeignMemory = false, bool deleteMemory = true)
 {return pointer->createImageFromData(format, *size, data, ownForeignMemory, deleteMemory);}
+
 IRRLICHT_C_API IImage* IVideoDriver_createImage1(IVideoDriver* pointer, ECOLOR_FORMAT format, const core::dimension2d<u32>* size)
 {return pointer->createImage(format, *size);}
-#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR < 8)
-IRRLICHT_C_API IImage* IVideoDriver_createImage2(IVideoDriver* pointer, ECOLOR_FORMAT format, IImage *imageToCopy){return pointer->createImage(format, imageToCopy);}
-IRRLICHT_C_API IImage* IVideoDriver_createImage3(IVideoDriver* pointer, IImage* imageToCopy, const core::position2d<s32>* pos, const core::dimension2d<u32>* size){return pointer->createImage(imageToCopy, *pos, *size);}
-#endif
+IRRLICHT_C_API IImage* IVideoDriver_createImage2(IVideoDriver* pointer, ECOLOR_FORMAT format, IImage *imageToCopy)
+{return pointer->createImage(format, imageToCopy);}
+IRRLICHT_C_API IImage* IVideoDriver_createImage3(IVideoDriver* pointer, IImage* imageToCopy, const core::position2d<s32>* pos, const core::dimension2d<u32>* size)
+{return pointer->createImage(imageToCopy, *pos, *size);}
 IRRLICHT_C_API IImage* IVideoDriver_createImage4(IVideoDriver* pointer, ITexture* texture, const core::position2d<s32>* pos, const core::dimension2d<u32>* size)
 {return pointer->createImage(texture, *pos, *size);}
+
 IRRLICHT_C_API void IVideoDriver_OnResize(IVideoDriver* pointer, const core::dimension2d<u32>* size)
 {pointer->OnResize(*size);}
 IRRLICHT_C_API s32 IVideoDriver_addMaterialRenderer(IVideoDriver* pointer, IMaterialRenderer* renderer, const c8* name = 0)

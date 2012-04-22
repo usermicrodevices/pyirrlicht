@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Maxim Kolosov 2011-2012 pyirrlicht@gmail.com
+// http://pir.sourceforge.net
 // BSD license
 
 #define _CRT_SECURE_NO_WARNINGS
@@ -25,7 +25,11 @@ class svg_agg_image
 public:
 	svg_agg_image(IVideoDriver* video_driver, IFileSystem* fs, const irr::io::path& file_name = "tiger.svg", bool content_unicode = true, u32 alpha_value = 128, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, int stride = 4)
 	{
+		_image_ = 0;
+		_texture_ = 0;
 		_video_driver_ = video_driver;
+		if (_video_driver_)
+			_video_driver_->grab();
 		parse(fs, file_name, content_unicode, alpha_value, color_format, stride);
 	}
 	void parse(IFileSystem* fs, const irr::io::path& file_name = "tiger.svg", bool content_unicode = true, u32 alpha_value = 128, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, int stride = 4)
@@ -637,16 +641,19 @@ public:
 		image->unlock();
 		return image;
 	}
-	IImage* render()
+	//IImage* render()
+	void render()
 	{
-		u32 w = (u32)_width_;
-		if (_width_ > (double)w)
-			w++;
-		u32 h = (u32)_height_;
-		if (_height_ > (double)h)
-			h++;
-		unsigned char* data = new unsigned char[w*h*_stride_];
-		row_accessor<int8u> rbuf(data, (unsigned)w, (unsigned)h, (int)w * _stride_);
+		u32 width = (u32)_width_;
+		if (_width_ > (double)width)
+			width++;
+		u32 height = (u32)_height_;
+		if (_height_ > (double)height)
+			height++;
+		//unsigned char* data = new unsigned char[width*height*_stride_];
+		//row_accessor<int8u> rbuf(data, (unsigned)width, (unsigned)height, (int)width * _stride_);
+		array<agg::int8u> data(width*height*_stride_);
+		row_accessor<agg::int8u> rbuf((agg::int8u*)data.pointer(), (unsigned)width, (unsigned)height, (int)width * _stride_);
 
 		pixfmt_alpha_blend_rgba<blender_rgba32, row_accessor<int8u>, pixel32_type> pixf(rbuf);
 		agg::renderer_base< pixfmt_alpha_blend_rgba<blender_rgba32, row_accessor<int8u>, pixel32_type> > renb(pixf);
@@ -659,24 +666,13 @@ public:
 		_path_renderer_.render(ras, sl, ren, _trans_affine_, renb.clip_box(), _alpha_value_/255.0);
 		//_path_renderer_.render(ras, sl, ren, _trans_affine_, renb.clip_box(), 1.0);
 
-		return create_image_from_data(w, h, data);
-	}
-	ITexture* get_texture()
-	{
-		return _video_driver_->addTexture(_file_name_, render());
-	}
-	~svg_agg_image()
-	{
-		_video_driver_ = 0;
-	}
-	IImage* create_image_from_data(u32 width, u32 height, unsigned char* data)
-	{
-		IImage* _image_;
+		//IImage* image = create_image_from_data(width, height, data.const_pointer());
+		//return image;
 		if (_color_format_ == ECF_R8G8B8)
 		{
 			u32 ai = 0;
 			_image_ = _video_driver_->createImage(_color_format_, dimension2d<u32>(width, height));
-			unsigned char* irr_data = (unsigned char*)_image_->lock();
+			agg::int8u* irr_data = (agg::int8u*)_image_->lock();
 			for (u32 i = 0; i < _image_->getImageDataSizeInBytes(); i += 3)
 			{
 				irr_data[i] = data[ai];//r
@@ -687,10 +683,10 @@ public:
 			_image_->unlock();
 		}
 		else if (_color_format_ == ECF_A8R8G8B8)
-			//_image_ = _video_driver_->createImageFromData(_color_format_, dimension2d<u32>(width, height), data);
+			//_image_ = _video_driver_->createImageFromData(_color_format_, dimension2d<u32>(width, height), (void*)data, true, true);
 		{
 			_image_ = _video_driver_->createImage(_color_format_, dimension2d<u32>(width, height));
-			unsigned char* irr_data = (unsigned char*)_image_->lock();
+			agg::int8u* irr_data = (agg::int8u*)_image_->lock();
 			for (u32 i = 0; i < _image_->getImageDataSizeInBytes(); i += 4)
 			{
 				irr_data[i] = data[i+2];//b
@@ -701,9 +697,79 @@ public:
 			}
 			_image_->unlock();
 		}
-		delete data;
+		data.clear();
+	}
+	IImage* get_image(bool rendering = false)
+	{
+		if (rendering || !_image_)
+			render();
 		return _image_;
 	}
+	ITexture* get_texture(bool rendering = false, bool adding = false)
+	{
+		//return _video_driver_->addTexture(_file_name_, render());
+		if (!_image_)
+		{
+			render();
+			if (_texture_)
+				_video_driver_->removeTexture(_texture_);
+			_texture_ = _video_driver_->addTexture(_file_name_, _image_);
+		}
+		else
+		{
+			if (rendering)
+				render();
+			if (adding && _image_)
+			{
+				if (_texture_)
+					_video_driver_->removeTexture(_texture_);
+				_texture_ = _video_driver_->addTexture(_file_name_, _image_);
+			}
+		}
+		return _texture_;
+	}
+	~svg_agg_image()
+	{
+		_path_renderer_.remove_all();
+		if (_texture_)
+			_video_driver_->removeTexture(_texture_);
+		if (_image_)
+			_image_->drop();
+	}
+	//IImage* create_image_from_data(u32 width, u32 height, const unsigned char* data)
+	//{
+	//	//IImage* _image_;
+	//	if (_color_format_ == ECF_R8G8B8)
+	//	{
+	//		u32 ai = 0;
+	//		_image_ = _video_driver_->createImage(_color_format_, dimension2d<u32>(width, height));
+	//		unsigned char* irr_data = (unsigned char*)_image_->lock();
+	//		for (u32 i = 0; i < _image_->getImageDataSizeInBytes(); i += 3)
+	//		{
+	//			irr_data[i] = data[ai];//r
+	//			irr_data[i+1] = data[ai+1];//g
+	//			irr_data[i+2] = data[ai+2];//b
+	//			ai += 4;//agg rgba format is 32 bit
+	//		}
+	//		_image_->unlock();
+	//	}
+	//	else if (_color_format_ == ECF_A8R8G8B8)
+	//		//_image_ = _video_driver_->createImageFromData(_color_format_, dimension2d<u32>(width, height), (void*)data, true, true);
+	//	{
+	//		_image_ = _video_driver_->createImage(_color_format_, dimension2d<u32>(width, height));
+	//		unsigned char* irr_data = (unsigned char*)_image_->lock();
+	//		for (u32 i = 0; i < _image_->getImageDataSizeInBytes(); i += 4)
+	//		{
+	//			irr_data[i] = data[i+2];//b
+	//			irr_data[i+1] = data[i+1];//g
+	//			irr_data[i+2] = data[i];//r
+	//			irr_data[i+3] = data[i+3];//a
+	//			//irr_data[i+3] = _alpha_value_;//a
+	//		}
+	//		_image_->unlock();
+	//	}
+	//	return _image_;
+	//}
 	dimension2d<u32>* get_size()
 	{
 		u32 w = (u32)_width_;
@@ -728,6 +794,8 @@ private:
 	agg::svg::path_renderer _path_renderer_;
 	irr::io::path _file_name_;
 	IVideoDriver* _video_driver_;
+	IImage* _image_;
+	ITexture* _texture_;
 };
 
 
@@ -762,10 +830,12 @@ IRRLICHT_C_API dimension2d<u32>* svg_agg_image_get_size(svg_agg_image* pointer)
 {return pointer->get_size();}
 IRRLICHT_C_API void svg_agg_image_scale(svg_agg_image* pointer, double scale_value = 1.0)
 {pointer->scale(scale_value);}
-IRRLICHT_C_API IImage* svg_agg_image_render(svg_agg_image* pointer)
-{return pointer->render();}
-IRRLICHT_C_API ITexture* svg_agg_image_get_texture(svg_agg_image* pointer)
-{return pointer->get_texture();}
+//IRRLICHT_C_API IImage* svg_agg_image_render(svg_agg_image* pointer)
+//{return pointer->render();}
+IRRLICHT_C_API IImage* svg_agg_image_get_image(svg_agg_image* pointer, bool rendering = false)
+{return pointer->get_image(rendering);}
+IRRLICHT_C_API ITexture* svg_agg_image_get_texture(svg_agg_image* pointer, bool rendering = false, bool adding = false)
+{return pointer->get_texture(rendering, adding);}
 
 #ifdef __cplusplus
 }

@@ -255,9 +255,14 @@ IRRLICHT_C_API void ISceneNode_render(ISceneNode* pointer, void(IRRCALLCONV *fun
 IRRLICHT_C_API const c8* ISceneNode_getName(ISceneNode* pointer){return pointer->getName();}
 IRRLICHT_C_API void ISceneNode_setName(ISceneNode* pointer, const c8* name){pointer->setName(name);}
 IRRLICHT_C_API const aabbox3d<f32>* ISceneNode_getBoundingBox(ISceneNode* pointer){return &pointer->getBoundingBox();}
-IRRLICHT_C_API const aabbox3d<f32>* ISceneNode_getTransformedBoundingBox(ISceneNode* pointer){return &pointer->getTransformedBoundingBox();}
+IRRLICHT_C_API const aabbox3d<f32>* ISceneNode_getTransformedBoundingBox(ISceneNode* pointer)
+{
+	const aabbox3d<f32> box = pointer->getTransformedBoundingBox();
+	return new aabbox3d<f32>(box.MinEdge, box.MaxEdge);
+	//return &pointer->getTransformedBoundingBox();
+}
 IRRLICHT_C_API const matrix4* ISceneNode_getAbsoluteTransformation(ISceneNode* pointer){return &pointer->getAbsoluteTransformation();}
-IRRLICHT_C_API matrix4* ISceneNode_getRelativeTransformation(ISceneNode* pointer){return &pointer->getRelativeTransformation();}
+IRRLICHT_C_API matrix4* ISceneNode_getRelativeTransformation(ISceneNode* pointer){return new matrix4(pointer->getRelativeTransformation());}
 IRRLICHT_C_API bool ISceneNode_isVisible(ISceneNode* pointer){return pointer->isVisible();}
 IRRLICHT_C_API bool ISceneNode_isTrulyVisible(ISceneNode* pointer){return pointer->isTrulyVisible();}
 IRRLICHT_C_API void ISceneNode_setVisible(ISceneNode* pointer, bool isVisible){pointer->setVisible(isVisible);}

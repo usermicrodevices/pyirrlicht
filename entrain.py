@@ -1,4 +1,4 @@
-# Copyright(c) Max Kolosov 2012 maxkolosov@inbox.ru
+# Copyright(c) Max Kolosov 2012 vosolok2008@ya.ru
 # http://vosolok2008.narod.ru
 # BSD license
 
@@ -42,6 +42,7 @@ GUI_ID_VOICE_RATE = 0x10014
 GUI_ID_VOICE_PITCH = 0x10015
 GUI_ID_VOICE_TEST_BUTTON = 0x10016
 GUI_ID_VOICE_REPEAT = 0x10017
+GUI_ID_VOICE_ON_OFF = 0x10018
 
 app_name = os.path.basename(sys.argv[0].split('.')[0])
 
@@ -246,6 +247,8 @@ class UserIEventReceiver(IEventReceiver):
 					self.game.say(self.question)
 				elif menu_id == GUI_ID_VOICE_SPEED:
 					self.game.create_voice_speed_control()
+				elif menu_id == GUI_ID_VOICE_ON_OFF:
+					self.game.voise_on_off()
 				elif menu_id == GUI_ID_ABOUT:
 					self.game.guienv.addMessageBox(_('About'), _('English words trainer'))
 				elif menu_id == GUI_ID_HELP_CONTENT:
@@ -301,6 +304,7 @@ class game:
 		self.good_results = 0
 		self.bad_results = 0
 		#~ self.button_repeat_voice = None
+		self.voice_on = self.config.get_bool('voice_on', True)
 		self.font_size = self.config.get_int('font_size', 32)
 		self.font_file = self.replace_env_vars(self.config.get('font_file', '@SYSTEMROOT@/Fonts/arial.ttf'))
 		self.gui_font_size = self.config.get_int('gui_font_size', 24)
@@ -358,6 +362,12 @@ class game:
 	def sound_play(self):
 		if self.bass_handle:
 			self.sound_playing = pybass.BASS_ChannelPlay(self.bass_handle, False)
+
+	def voise_on_off(self):
+		self.voice_on = not self.voice_on
+		if self.menu_voice:
+			self.menu_voice.setItemChecked(self.menu_voice_on, self.voice_on)
+		self.config.set('voice_on', self.voice_on)
 
 	def sound_on_off(self):
 		if self.play_sound:
@@ -423,9 +433,10 @@ class game:
 			submenu.addItem(_('Results'), GUI_ID_RESULTS)
 			submenu.addItem(_('Movie'), GUI_ID_MOVIE)
 
-			submenu = self.menu.getSubMenu(2)
-			submenu.addItem(_('Repeat'), GUI_ID_VOICE_REPEAT)
-			submenu.addItem(_('Speed'), GUI_ID_VOICE_SPEED)
+			self.menu_voice = self.menu.getSubMenu(2)
+			self.menu_voice_on = self.menu_voice.addItem(_('On/Off'), GUI_ID_VOICE_ON_OFF, checked = self.voice_on)
+			self.menu_voice.addItem(_('Repeat'), GUI_ID_VOICE_REPEAT)
+			self.menu_voice.addItem(_('Speed'), GUI_ID_VOICE_SPEED)
 
 			self.menu_options = self.menu.getSubMenu(3)
 			self.menu_options.addItem(_('Start/stop log'), GUI_ID_LOG)
@@ -489,8 +500,13 @@ class game:
 							flag_drawed = True
 						if self.answer_exists:
 							self.answer_exists = False
-							tex.drop()
+							OSOperator = self.device.getOSOperator()
+							is_worked, total, avail1 = OSOperator.getSystemMemoryAsTuple()
+							self.driver.removeTexture(tex)
+							is_worked, total, avail2 = OSOperator.getSystemMemoryAsTuple()
 							tex, tex_size, i_event_receiver.question = self.create_texture_from_svg_file_name_container()
+							is_worked, total, avail3 = OSOperator.getSystemMemoryAsTuple()
+							print '=== cleared', avail1-avail2, 'new used', avail2-avail3
 							flag_say = True
 							flag_drawed = False
 						else:
@@ -520,7 +536,7 @@ class game:
 						self.guienv.drawAll()
 						self.driver.endScene()
 
-						if flag_say and flag_drawed:
+						if flag_say and flag_drawed and self.voice_on:
 							self.say(i_event_receiver.question)
 							flag_say = False
 
@@ -540,6 +556,8 @@ class game:
 			svg_file_name = self.svg_file_name_container[randint(0, svg_file_count - 1)]
 			#~ print('===', svg_file_name, os.path.basename(svg_file_name))
 			if os.path.isfile(svg_file_name):
+				OSOperator = self.device.getOSOperator()
+				is_worked, total, avail = OSOperator.getSystemMemoryAsTuple()
 				words = os.path.basename(svg_file_name).split('.svg')[0].split('.')[0].replace('_', ' ')
 				try:
 					s = svg_agg_image(self.driver, self.device.getFileSystem(), svg_file_name, True, 255, ECF_A8R8G8B8, 4)
@@ -556,7 +574,12 @@ class game:
 							s.scale(dx)
 						else:
 							s.scale(dy)
-					texture = s.get_texture()
+					is_worked, total, avail1 = OSOperator.getSystemMemoryAsTuple()
+					#~ texture = s.get_texture()
+					texture = self.driver.addTexture(svg_file_name, s.get_image())
+					del s
+					is_worked, total, avail2 = OSOperator.getSystemMemoryAsTuple()
+					print('=== use: parse %d, texture %d' % (avail-avail1, avail1-avail2))
 					texture_size = texture.getOriginalSize()
 					return texture, texture_size, words
 			else:

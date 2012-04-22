@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2011-2012 maxkolosov@inbox.ru
+// http://pir.sourceforge.net
 // BSD license
 
 #define _CRT_SECURE_NO_WARNINGS
@@ -57,6 +57,8 @@ public:
 	svg_cairo_image(IVideoDriver* video_driver, IFileSystem* fs, const irr::io::path& file_name = "tiger.svg", bool content_unicode = true, double alpha_value = 0.0, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, cairo_antialias_t antialias_type = CAIRO_ANTIALIAS_DEFAULT, double scale_x = 1.0, double scale_y = 1.0)
 	{
 		_video_driver_ = video_driver;
+		if (_video_driver_)
+			_video_driver_->grab();
 		parse(fs, file_name, content_unicode, alpha_value, color_format, antialias_type, scale_x, scale_y);
 	}
 	void parse(IFileSystem* fs, const irr::io::path& file_name = "tiger.svg", bool content_unicode = true, double alpha_value = 0.0, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, cairo_antialias_t antialias_type = CAIRO_ANTIALIAS_DEFAULT, double scale_x = 1.0, double scale_y = 1.0)
@@ -1240,6 +1242,8 @@ public:
 	}
 	~svg_cairo_image()
 	{
+		if (_video_driver_)
+			_video_driver_->grab();
 		_video_driver_ = 0;
 		cairo_pattern_destroy(_current_pattern_);
 		cairo_destroy(_cr_);
