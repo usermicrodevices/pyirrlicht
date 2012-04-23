@@ -3,7 +3,7 @@
 # BSD license
 
 __version__ = pyirrlicht_version = '1.1.0'
-__versionTime__ = '2012-04-22'
+__versionTime__ = '2012-04-23'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -3904,6 +3904,15 @@ else:
 	IVideoDriver_GetHandle = func_type(ctypes.c_ulong, ctypes.c_void_p)(('IVideoDriver_GetHandle', c_module))
 IVideoDriver_SetIcon = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('IVideoDriver_SetIcon', c_module))
 IVideoDriver_addAggSvgImageLoader = func_type(None, ctypes.c_void_p)(('IVideoDriver_addAggSvgImageLoader', c_module))
+# draw 2d primitives with simple coords as floating numbers
+IVideoDriver_draw2DRectangle_f1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('IVideoDriver_draw2DRectangle_f1', c_module))
+IVideoDriver_draw2DRectangle_f2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('IVideoDriver_draw2DRectangle_f2', c_module))
+IVideoDriver_draw2DRectangle_f3 = func_type(None, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_draw2DRectangle_f3', c_module))
+IVideoDriver_draw2DRectangle_f4 = func_type(None, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('IVideoDriver_draw2DRectangle_f4', c_module))
+IVideoDriver_draw2DRectangleOutline_f = func_type(None, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p)(('IVideoDriver_draw2DRectangleOutline_f', c_module))
+IVideoDriver_draw2DLine_f = func_type(None, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p)(('IVideoDriver_draw2DLine_f', c_module))
+IVideoDriver_drawPixel_f = func_type(None, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_void_p)(('IVideoDriver_drawPixel_f', c_module))
+IVideoDriver_draw2DPolygon_f = func_type(None, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_int)(('IVideoDriver_draw2DPolygon_f', c_module))
 
 # functions for class ISceneManager
 ISceneManager_getMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, fschar_t)(('ISceneManager_getMesh', c_module))
@@ -12841,14 +12850,30 @@ class IVideoDriver(IReferenceCounted):
 			else:
 				pos, colorLeftUp, colorRightUp, colorLeftDown, colorRightDown, clip = args
 			self.draw2DRectangle2(pos, colorLeftUp, colorRightUp, colorLeftDown, colorRightDown, clip)
+	def draw2DRectangle_f1(self, color, pos_x1, pos_y1, pos_x2, pos_y2):
+		IVideoDriver_draw2DRectangle_f1(self.c_pointer, color.c_pointer, pos_x1, pos_y1, pos_x2, pos_y2)
+	def draw2DRectangle_f2(self, color, pos_x1, pos_y1, pos_x2, pos_y2, clip_x1, clip_y1, clip_x2, clip_y2):
+		IVideoDriver_draw2DRectangle_f2(self.c_pointer, color.c_pointer, pos_x1, pos_y1, pos_x2, pos_y2, clip_x1, clip_y1, clip_x2, clip_y2)
+	def draw2DRectangle_f3(self, pos_x1, pos_y1, pos_x2, pos_y2, colorLeftUp, colorRightUp, colorLeftDown, colorRightDown):
+		IVideoDriver_draw2DRectangle_f3(self.c_pointer, pos_x1, pos_y1, pos_x2, pos_y2, colorLeftUp.c_pointer, colorRightUp.c_pointer, colorLeftDown.c_pointer, colorRightDown.c_pointer)
+	def draw2DRectangle_f4(self, pos_x1, pos_y1, pos_x2, pos_y2, colorLeftUp, colorRightUp, colorLeftDown, colorRightDown, clip_x1, clip_y1, clip_x2, clip_y2):
+		IVideoDriver_draw2DRectangle_f4(self.c_pointer, pos_x1, pos_y1, pos_x2, pos_y2, colorLeftUp.c_pointer, colorRightUp.c_pointer, colorLeftDown.c_pointer, colorRightDown.c_pointer, clip_x1, clip_y1, clip_x2, clip_y2)
 	def draw2DRectangleOutline(self, pos, color=SColor(255,255,255,255)):
 		IVideoDriver_draw2DRectangleOutline(self.c_pointer, pos.c_pointer, color.c_pointer)
+	def draw2DRectangleOutline_f(self, x1, y1, x2, y2, color = SColor(255,255,255,255)):
+		IVideoDriver_draw2DRectangleOutline_f(self.c_pointer, x1, y1, x2, y2, color.c_pointer)
 	def draw2DLine(self, start, end, color=SColor(255,255,255,255)):
 		IVideoDriver_draw2DLine(self.c_pointer, start.c_pointer, end.c_pointer, color.c_pointer)
+	def draw2DLine_f(self, start_x, start_y, end_x, end_y, color=SColor(255,255,255,255)):
+		IVideoDriver_draw2DLine_f(self.c_pointer, start_x, start_y, end_x, end_y, color.c_pointer)
 	def drawPixel(self, x, y, color):
 		IVideoDriver_drawPixel(self.c_pointer, x, y, color)
+	def drawPixel_f(self, x, y, color):
+		IVideoDriver_drawPixel_f(self.c_pointer, x, y, color.c_pointer)
 	def draw2DPolygon(self, center, radius, color=SColor(100,255,255,255), vertexCount=10):
 		IVideoDriver_draw2DPolygon(self.c_pointer, center.c_pointer, radius, color.c_pointer, vertexCount)
+	def draw2DPolygon_f(self, center_x, center_y, radius, color=SColor(100,255,255,255), vertexCount=10):
+		IVideoDriver_draw2DPolygon_f(self.c_pointer, center_x, center_y, radius, color.c_pointer, vertexCount)
 	if IRRLICHT_VERSION < 180:
 		def drawStencilShadowVolume(self, triangles, count, zfail = True):
 			IVideoDriver_drawStencilShadowVolume(self.c_pointer, triangles, count, zfail)

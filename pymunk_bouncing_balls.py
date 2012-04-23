@@ -32,9 +32,9 @@ if run_app:
 
 	screen_x, screen_y = 640, 480
 
-	def reverse_coords(p):
+	def reverse_y(y):
 		"""Small hack to convert pymunk to screen coordinates"""
-		return int(p.x), int(-p.y+screen_y)
+		return -y+screen_y
 
 	### Physics stuff
 	space = pm.Space()
@@ -74,31 +74,33 @@ if run_app:
 		color_line = SColor(255, 200, 200, 200)
 		color_ball = SColor(255, 0, 0, 255)
 		lastFPS = -1
+		update_physics = False
 		while device.run():
 			if device.isWindowActive():
-				### compute balls
-				ticks_to_next_ball = ticks_to_next_ball - 1
-				if ticks_to_next_ball <= 0:
-					ticks_to_next_ball = 100
-					mass = 10
-					radius = 25
-					inertia = pm.moment_for_circle(mass, 0, radius, (0,0))
-					body = pm.Body(mass, inertia)
-					x = random.randint(115,350)
-					body.position = x, 400
-					shape = pm.Circle(body, radius, (0,0))
-					shape.elasticity = 0.95
-					space.add(body, shape)
-					balls.append(shape)
+				if device.getTimer().getTime() > 30:
+					### compute balls
+					ticks_to_next_ball = ticks_to_next_ball - 1
+					if ticks_to_next_ball <= 0:
+						ticks_to_next_ball = 100
+						mass = 10
+						radius = 25
+						inertia = pm.moment_for_circle(mass, 0, radius, (0,0))
+						body = pm.Body(mass, inertia)
+						x = random.randint(115,350)
+						body.position = x, 400
+						shape = pm.Circle(body, radius, (0,0))
+						shape.elasticity = 0.95
+						space.add(body, shape)
+						balls.append(shape)
+					device.getTimer().setTime(0)
+					update_physics = True
 				### Draw stuff
 				if video_driver.beginScene(True, True, color_screen):
 					balls_to_remove = []
 					for ball in balls:
 						if ball.body.position.y < 200:
 							balls_to_remove.append(ball)
-						#~ video_driver.draw2DPolygon(recti(int(ball.body.position.x), int(ball.body.position.y), int(ball.body.position.x+ball.radius*2), int(ball.body.position.y+ball.radius*2)), ball.radius, color_ball)
-						x, y = reverse_coords(ball.body.position)
-						video_driver.draw2DPolygon(recti(x, y, x+int(ball.radius*2), y+int(ball.radius*2)), ball.radius, color_ball, 100)
+						video_driver.draw2DPolygon_f(ball.body.position.x, reverse_y(ball.body.position.y), ball.radius, color_ball, 100)
 					for ball in balls_to_remove:
 						space.remove(ball, ball.body)
 						balls.remove(ball)
@@ -106,19 +108,18 @@ if run_app:
 						body = line.body
 						pv1 = body.position + line.a.rotated(body.angle)
 						pv2 = body.position + line.b.rotated(body.angle)
-						#~ video_driver.draw2DLine(position2di(int(pv1.x), int(pv1.y)), position2di(int(pv2.x), int(pv2.y)), color_line)
-						x1, y1 = reverse_coords(pv1)
-						x2, y2 = reverse_coords(pv2)
-						video_driver.draw2DLine(position2di(x1, y1), position2di(x2, y2), color_line)
+						video_driver.draw2DLine_f(pv1.x, reverse_y(pv1.y), pv2.x, reverse_y(pv2.y), color_line)
 					#~ scene_manager.drawAll()
 					gui_environment.drawAll()
 					### Update physics
-					dt = 1.0/60.0
-					for x in range(1):
-						space.step(dt)
+					if update_physics:
+						dt = 1.0/60.0
+						for x in range(1):
+							space.step(dt)
+						update_physics = False
 					### END DRAWING
 					video_driver.endScene()
-				device.sleep(10)
+				device.sleep(1)
 				### FPS information
 				fps = video_driver.getFPS()
 				if lastFPS != fps:

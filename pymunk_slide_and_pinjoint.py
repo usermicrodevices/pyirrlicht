@@ -71,7 +71,7 @@ def main():
 		screen_x, screen_y = 640, 480
 		def reverse_coords(p):
 			"""Small hack to convert pymunk to pygame coordinates"""
-			return int(p.x), int(-p.y+screen_y)
+			return p.x, -p.y+screen_y
 
 		### pyIrrlicht block
 		import pyirrlicht as irr
@@ -115,23 +115,27 @@ def main():
 			lastFPS = -1
 			i_event_receiver = UserIEventReceiver()
 			device.setEventReceiver(i_event_receiver)
+			update_physics = False
 			while device.run():
 				if device.isWindowActive():
 					if i_event_receiver.IsKeyDown(irr.KEY_ESCAPE):
 						break
 
-					ticks_to_next_ball -= 1
-					if ticks_to_next_ball <= 0:
-						ticks_to_next_ball = 25
-						mass = 1
-						radius = 14
-						inertia = pm.moment_for_circle(mass, 0, radius, (0,0))
-						body = pm.Body(mass, inertia)
-						x = random.randint(120,380)
-						body.position = x, 550
-						shape = pm.Circle(body, radius, (0,0))
-						space.add(body, shape)
-						balls.append(shape)
+					if device.getTimer().getTime() > 30:
+						ticks_to_next_ball -= 1
+						if ticks_to_next_ball <= 0:
+							ticks_to_next_ball = 25
+							mass = 1
+							radius = 14
+							inertia = pm.moment_for_circle(mass, 0, radius, (0,0))
+							body = pm.Body(mass, inertia)
+							x = random.randint(120,380)
+							body.position = x, 550
+							shape = pm.Circle(body, radius, (0,0))
+							space.add(body, shape)
+							balls.append(shape)
+						device.getTimer().setTime(0)
+						update_physics = True
 
 					### Draw stuff
 					if video_driver.beginScene(True, True, color_screen):
@@ -141,8 +145,7 @@ def main():
 								balls_to_remove.append(ball)
 
 							x1, y1 = reverse_coords(ball.body.position)
-							#~ pygame.draw.circle(screen, THECOLORS["blue"], p, int(ball.radius), 2)
-							video_driver.draw2DPolygon(irr.recti(x1, y1, x1+int(ball.radius*2), y1+int(ball.radius*2)), int(ball.radius), color_blue)
+							video_driver.draw2DPolygon_f(x1, y1, ball.radius, color_blue)
 
 						for ball in balls_to_remove:
 							space.remove(ball, ball.body)
@@ -154,22 +157,24 @@ def main():
 							pv2 = body.position + line.b.rotated(body.angle)
 							x1, y1 = reverse_coords(pv1)
 							x2, y2 = reverse_coords(pv2)
-							video_driver.draw2DLine(irr.position2di(x1, y1), irr.position2di(x2, y2), color_lightgray)
+							video_driver.draw2DLine_f(x1, y1, x2, y2, color_lightgray)
 
 						### The rotation center of the L shape
 						x, y = reverse_coords(rot_center_body.position)
-						video_driver.draw2DPolygon(irr.recti(x, y, x+10, y+10), 5, color_red)
+						video_driver.draw2DPolygon_f(x, y, 5, color_red)
 						### The limits where it can move.
 						x, y = reverse_coords(rot_limit_body.position)
-						video_driver.draw2DPolygon(irr.recti(x, y, x+int(joint_limit*2), y+int(joint_limit*2)), joint_limit, color_green, 100)
+						video_driver.draw2DPolygon_f(x, y, joint_limit, color_green, 100)
 
 						gui_environment.drawAll()
 						video_driver.endScene()
 
 					### Update physics
-					dt = 1.0/50.0/10.0
-					for x in range(10):
-						space.step(dt)
+					if update_physics:
+						dt = 1.0/50.0/10.0
+						for x in range(10):
+							space.step(dt)
+						update_physics = False
 
 					device.sleep(1)
 

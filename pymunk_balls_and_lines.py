@@ -102,7 +102,7 @@ def main():
 						self.mouse_position.y = event.MouseInput.Y
 					elif event.MouseInput.EventType == irr.EMIE_LMOUSE_PRESSED_DOWN:
 						body = pm.Body(10, 100)
-						body.position = (event.MouseInput.X, event.MouseInput.Y)
+						body.position = (event.MouseInput.X, flipy(event.MouseInput.Y))
 						shape = pm.Circle(body, 10, (0,0))
 						shape.friction = 0.5
 						shape.collision_type = COLLTYPE_BALL
@@ -114,7 +114,6 @@ def main():
 					elif event.MouseInput.EventType == irr.EMIE_RMOUSE_LEFT_UP: 
 						if line_point1 is not None:
 							line_point2 = Vec2d(event.MouseInput.X, flipy(event.MouseInput.Y))
-							#~ print('%s %s' % (repr(line_point1), repr(line_point2)))
 							body = pm.Body()
 							shape= pm.Segment(body, line_point1, line_point2, 0.0)
 							shape.friction = 0.99
@@ -186,23 +185,20 @@ def main():
 							r = ball.radius
 							v = ball.body.position
 							rot = ball.body.rotation_vector
-							x1, y1 = int(v.x), int(flipy(v.y))
-							x2, y2 = (Vec2d(rot.x, -rot.y) * r * 0.9 + (x1, y1)).int_tuple
-							video_driver.draw2DPolygon(irr.recti(x1, y1, x1+int(r*2), y1+int(r*2)), int(r), color_blue, 100)
-							video_driver.draw2DLine(irr.position2di(x1, y1), irr.position2di(x2, y2), color_red)
+							x1, y1 = v.x, flipy(v.y)
+							#~ x2, y2 = (Vec2d(rot.x, -rot.y) * r * 0.9 + (x1, y1)).int_tuple
+							end = (Vec2d(rot.x, -rot.y) * r * 0.9 + (x1, y1))
+							video_driver.draw2DPolygon_f(x1, y1, r, color_blue, 100)
+							video_driver.draw2DLine_f(x1, y1, end.x, end.y, color_red)
 
 						if line_point1 is not None:
-							x1, y1 = int(line_point1.x), int(flipy(line_point1.y))
-							x2, y2 = int(mouse_pos.x), int(flipy(mouse_pos.y))
-							video_driver.draw2DLine(irr.position2di(x1, y1), irr.position2di(x2, y2), color_black)
+							video_driver.draw2DLine_f(line_point1.x, flipy(line_point1.y), mouse_pos.x, flipy(mouse_pos.y), color_black)
 
 						for line in static_lines:
 							body = line.body
 							pv1 = body.position + line.a.rotated(body.angle)
 							pv2 = body.position + line.b.rotated(body.angle)
-							x1, y1 = int(pv1.x), int(flipy(pv1.y))
-							x2, y2 = int(pv2.x), int(flipy(pv2.y))
-							video_driver.draw2DLine(irr.position2di(x1, y1), irr.position2di(x2, y2), color_lightgray)
+							video_driver.draw2DLine_f(pv1.x, flipy(pv1.y), pv2.x, flipy(pv2.y), color_lightgray)
 
 						gui_environment.drawAll()
 						video_driver.endScene()

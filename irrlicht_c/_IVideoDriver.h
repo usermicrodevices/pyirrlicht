@@ -369,6 +369,24 @@ IRRLICHT_C_API void IVideoDriver_SetIcon(IVideoDriver* pointer, int icon_id = 32
 //#else
 #endif
 }
+// floating point analogs for 2d drawing
+IRRLICHT_C_API void IVideoDriver_draw2DRectangle_f1(IVideoDriver* pointer, SColor* color, f32 pos_x1, f32 pos_y1, f32 pos_x2, f32 pos_y2)
+{pointer->draw2DRectangle(*color, core::rect<s32>(pos_x1, pos_y1, pos_x2, pos_y2));}
+IRRLICHT_C_API void IVideoDriver_draw2DRectangle_f2(IVideoDriver* pointer, SColor* color, f32 pos_x1, f32 pos_y1, f32 pos_x2, f32 pos_y2, f32 clip_x1, f32 clip_y1, f32 clip_x2, f32 clip_y2)
+{pointer->draw2DRectangle(*color, core::rect<s32>(pos_x1, pos_y1, pos_x2, pos_y2), &core::rect<s32>(clip_x1, clip_y1, clip_x2, clip_y2));}
+IRRLICHT_C_API void IVideoDriver_draw2DRectangle_f3(IVideoDriver* pointer, f32 pos_x1, f32 pos_y1, f32 pos_x2, f32 pos_y2, const SColor* colorLeftUp, const SColor* colorRightUp, const SColor* colorLeftDown, const SColor* colorRightDown)
+{pointer->draw2DRectangle(core::rect<s32>(pos_x1, pos_y1, pos_x2, pos_y2), *colorLeftUp, *colorRightUp, *colorLeftDown, *colorRightDown);}
+IRRLICHT_C_API void IVideoDriver_draw2DRectangle_f4(IVideoDriver* pointer, f32 pos_x1, f32 pos_y1, f32 pos_x2, f32 pos_y2, const SColor* colorLeftUp, const SColor* colorRightUp, const SColor* colorLeftDown, const SColor* colorRightDown, f32 clip_x1, f32 clip_y1, f32 clip_x2, f32 clip_y2)
+{pointer->draw2DRectangle(core::rect<s32>(pos_x1, pos_y1, pos_x2, pos_y2), *colorLeftUp, *colorRightUp, *colorLeftDown, *colorRightDown, &core::rect<s32>(clip_x1, clip_y1, clip_x2, clip_y2));}
+
+IRRLICHT_C_API void IVideoDriver_draw2DRectangleOutline_f(IVideoDriver* pointer, f32 x1, f32 y1, f32 x2, f32 y2, const SColor& color = SColor(255,255,255,255))
+{pointer->draw2DRectangleOutline(recti(x1, y1, x2, y2), color);}
+IRRLICHT_C_API void IVideoDriver_draw2DLine_f(IVideoDriver* pointer, f32 start_x, f32 start_y, f32 end_x, f32 end_y, const SColor& color = SColor(255,255,255,255))
+{pointer->draw2DLine(core::position2d<s32>(start_x, start_y), core::position2d<s32>(end_x, end_y), color);}
+IRRLICHT_C_API void IVideoDriver_drawPixel_f(IVideoDriver* pointer, f32 x, f32 y, const SColor* color)
+{pointer->drawPixel(x, y, *color);}
+IRRLICHT_C_API void IVideoDriver_draw2DPolygon_f(IVideoDriver* pointer, f32 center_x, f32 center_y, f32 radius, const SColor& color = SColor(100,255,255,255), s32 vertexCount = 10)
+{pointer->draw2DPolygon(core::position2d<s32>(center_x, center_y), radius, color, vertexCount);}
 
 #ifdef __cplusplus
 }
