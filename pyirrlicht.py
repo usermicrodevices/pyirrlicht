@@ -1,9 +1,9 @@
-# Copyright(c) Max Kolosov 2010 - 2012 pyirrlicht@gmail.com
+# Copyright(c) Maxim Kolosov 2010 - 2012 pyirrlicht@gmail.com
 # http://pir.sourceforge.net
 # BSD license
 
 __version__ = pyirrlicht_version = '1.1.0'
-__versionTime__ = '2012-04-23'
+__versionTime__ = '2012-04-25'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -3913,6 +3913,9 @@ IVideoDriver_draw2DRectangleOutline_f = func_type(None, ctypes.c_void_p, ctypes.
 IVideoDriver_draw2DLine_f = func_type(None, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p)(('IVideoDriver_draw2DLine_f', c_module))
 IVideoDriver_drawPixel_f = func_type(None, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_void_p)(('IVideoDriver_drawPixel_f', c_module))
 IVideoDriver_draw2DPolygon_f = func_type(None, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_int)(('IVideoDriver_draw2DPolygon_f', c_module))
+# extended draw 2d lines
+IVideoDriver_draw2DLineW = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IVideoDriver_draw2DLineW', c_module))
+IVideoDriver_draw2DLineWf = func_type(None, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_int)(('IVideoDriver_draw2DLineWf', c_module))
 
 # functions for class ISceneManager
 ISceneManager_getMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, fschar_t)(('ISceneManager_getMesh', c_module))
@@ -12866,6 +12869,10 @@ class IVideoDriver(IReferenceCounted):
 		IVideoDriver_draw2DLine(self.c_pointer, start.c_pointer, end.c_pointer, color.c_pointer)
 	def draw2DLine_f(self, start_x, start_y, end_x, end_y, color=SColor(255,255,255,255)):
 		IVideoDriver_draw2DLine_f(self.c_pointer, start_x, start_y, end_x, end_y, color.c_pointer)
+	def draw2DLineW(self, start, end, color=SColor(255,255,255,255), width = 0):
+		IVideoDriver_draw2DLineW(self.c_pointer, start.c_pointer, end.c_pointer, color.c_pointer, width)
+	def draw2DLineWf(self, start_x, start_y, end_x, end_y, color=SColor(255,255,255,255), width = 0):
+		IVideoDriver_draw2DLineWf(self.c_pointer, start_x, start_y, end_x, end_y, color.c_pointer, width)
 	def drawPixel(self, x, y, color):
 		IVideoDriver_drawPixel(self.c_pointer, x, y, color)
 	def drawPixel_f(self, x, y, color):

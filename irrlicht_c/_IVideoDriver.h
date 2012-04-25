@@ -388,6 +388,48 @@ IRRLICHT_C_API void IVideoDriver_drawPixel_f(IVideoDriver* pointer, f32 x, f32 y
 IRRLICHT_C_API void IVideoDriver_draw2DPolygon_f(IVideoDriver* pointer, f32 center_x, f32 center_y, f32 radius, const SColor& color = SColor(100,255,255,255), s32 vertexCount = 10)
 {pointer->draw2DPolygon(core::position2d<s32>(center_x, center_y), radius, color, vertexCount);}
 
+IRRLICHT_C_API void IVideoDriver_draw2DLineW(IVideoDriver* pointer, const core::position2d<s32>* start, const core::position2d<s32>* end, const SColor& color = SColor(255,255,255,255), s32 width = 0)
+{
+	if (width < 2)
+		pointer->draw2DLine(*start, *end, color);
+	else
+	{
+		if (width%2)//3>
+		{
+			s32 count = (width-1)/2;
+			for(s32 i = -count; i <= count; i++)
+				pointer->draw2DLine(core::position2d<s32>(start->X+i, start->Y+i), core::position2d<s32>(end->X+i, end->Y+i), color);
+		}
+		else//2>
+		{
+			s32 count = width/2;
+			for(s32 i = -count; i < count; i++)
+				pointer->draw2DLine(core::position2d<s32>(start->X+i, start->Y+i), core::position2d<s32>(end->X+i, end->Y+i), color);
+		}
+	}
+}
+
+IRRLICHT_C_API void IVideoDriver_draw2DLineWf(IVideoDriver* pointer, f32 x1, f32 y1, f32 x2, f32 y2, const SColor& color = SColor(255,255,255,255), s32 width = 0)
+{
+	if (width < 2)
+		pointer->draw2DLine(core::position2d<s32>(x1, y1), core::position2d<s32>(x2, y2), color);
+	else
+	{
+		if (width%2)//3>
+		{
+			s32 count = (width-1)/2;
+			for(s32 i = -count; i <= count; i++)
+				pointer->draw2DLine(core::position2d<s32>(x1+i, y1+i), core::position2d<s32>(x2+i, y2+i), color);
+		}
+		else//2>
+		{
+			s32 count = width/2;
+			for(s32 i = -count; i < count; i++)
+				pointer->draw2DLine(core::position2d<s32>(x1+i, y1+i), core::position2d<s32>(x2+i, y2+i), color);
+		}
+	}
+}
+
 #ifdef __cplusplus
 }
 #endif
