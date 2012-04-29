@@ -1,4 +1,4 @@
-// Copyright(c) Max Kolosov 2011-2012 maxkolosov@inbox.ru
+// Copyright(c) Maxim Kolosov 2011-2012 pyirrlicht@gmail.com
 // http://pir.sourceforge.net
 // BSD license
 
@@ -56,6 +56,7 @@ class svg_cairo_image
 public:
 	svg_cairo_image(IVideoDriver* video_driver, IFileSystem* fs, const irr::io::path& file_name = "tiger.svg", bool content_unicode = true, double alpha_value = 0.0, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, cairo_antialias_t antialias_type = CAIRO_ANTIALIAS_DEFAULT, double scale_x = 1.0, double scale_y = 1.0)
 	{
+		_cairo_version_ = cairo_version();
 		_video_driver_ = video_driver;
 		if (_video_driver_)
 			_video_driver_->grab();
@@ -70,8 +71,8 @@ public:
 		_color_format_ = color_format;
 		_use_alpha_ = use_alpha();
 		_current_pattern_ = cairo_pattern_create_rgba(0, 0, 0, _alpha_value_);
-		_cf_.r = _cf_.g = _cf_.b = _cf_.a = 0.0; _cf_.f = false, _cf_.rule = CAIRO_FILL_RULE_WINDING;
-		_cs_.r = _cs_.g = _cs_.b = _cs_.a = 0.0; _cs_.f = false; _cs_.width = 1.0;
+		_cf_.r = _cf_.g = _cf_.b = _cf_.a = 1.0; _cf_.f = false, _cf_.rule = CAIRO_FILL_RULE_WINDING;
+		_cs_.r = _cs_.g = _cs_.b = _cs_.a = 1.0; _cs_.f = false; _cs_.width = 1.0;
 		IXMLReader* xml_reader;
 		if (content_unicode)
 			xml_reader = fs->createXMLReader(_file_name_);
@@ -159,6 +160,8 @@ public:
 								cairo_paint(_cr_);
 							}
 							parse_fill_rule(xml_reader->getAttributeValueSafe(L"clip-rule"));
+							//cairo_surface_flush(_surface_);
+							//printf("=== cairo_surface_flush FIRST\n");
 							///////////////////TEST/////////////////////////
 							//if (_use_alpha_)
 							//	cairo_set_source_rgba(_cr_, 0.8, 0.0, 0.0, _alpha_value_);
@@ -227,7 +230,7 @@ public:
 								//printf("== %g, %g, %g, %g\n", min_x, min_y, w1, h1);
 								paint();
 								cairo_restore(_cr_);
-								//printf("===\n%s\n===\n", cairo_status_to_string(cairo_status(_cr_)));
+								//printf("=== CAIRO_STATUS: %s\n", cairo_status_to_string(cairo_status(_cr_)));
 							}
 						}
 						else if (_wcsnicmp(node_name, L"rect", 4) == 0)
@@ -351,6 +354,7 @@ public:
 							//_current_pattern_ = cairo_pop_group(_cr_);
 							//cairo_pop_group_to_source(_cr_);
 							cairo_restore(_cr_);
+							//cairo_surface_flush(_surface_);
 							//open_g = false;
 							//wprintf(L"=== G tag CLOSE %s\n", xml_reader->getAttributeValue(L"id"));
 							//close_gtag(gtags);
@@ -401,7 +405,9 @@ public:
 			//for (int i = 0; i < gradients.size(); i++)
 			//	wprintf(L"=== gradient id = %s, xlink:href = %s\n", gradients[i].id(), gradients[i].xlink_href());
 			//cairo_surface_flush(_surface_);
+			//printf("=== cairo_surface_flush LAST\n");
 			//cairo_surface_finish(_surface_); /* data will go out of scope */
+			//printf("=== cairo_surface_finish\n");
 			//cairo_surface_write_to_png(_surface_, (_file_name_.trim("svg") + "png").c_str());
 			/////////////////////////////START TEST///////////////////////////////
 			////cairo_surface_t* surface = cairo_image_surface_create(color_format_to_cairo(_color_format_), 400, 150);
@@ -747,14 +753,20 @@ public:
 			{
 				if (list_attr[0].equals_substring_ignore_case(stringw("matrix")))
 				{
+					//wprintf(L"--- transform matrix= %s\n", list_attr[1].c_str());
 					core::array<double> args = string_split_d(list_attr[1].c_str(), 6);
 					cairo_matrix_t m = {args[0], args[1], args[2], args[3], args[4], args[5]};
+					//cairo_matrix_t* m = new cairo_matrix_t();
+					//cairo_matrix_init(m, args[0], args[1], args[2], args[3], args[4], args[5]);
 					cairo_transform(_cr_, &m);
+					//delete m;
+					args.clear();
 				}
 				else if (list_attr[0].equals_substring_ignore_case(stringw("translate")))
 				{
 					core::array<double> args = string_split_d(list_attr[1].c_str(), 2);
 					cairo_translate(_cr_, args[0], args[1]);
+					args.clear();
 				}
 				else if (_wcsnicmp(list_attr[0].c_str(), L"rotate", 6) == 0)
 				{
@@ -767,6 +779,7 @@ public:
 						cairo_rotate(_cr_, M_PI / args[0]);
 						cairo_translate(_cr_, args[1], args[2]);
 					}
+					args.clear();
 				}
 				else if (_wcsnicmp(list_attr[0].c_str(), L"scale", 5) == 0)
 				{
@@ -774,6 +787,7 @@ public:
 					if (args[1] == 0.0)
 						args[1] = args[0];
 					cairo_scale(_cr_, args[0], args[1]);
+					args.clear();
 				}
 				else if (_wcsnicmp(list_attr[0].c_str(), L"skewX", 5) == 0)
 				{
@@ -910,6 +924,9 @@ public:
 			switch(cmd)
 			{
 				case L'M': case L'm':
+					// FIXED FOR SOME FILES CAIRO_STATUS_NO_CURRENT_POINT
+					cairo_move_to(_cr_, 0.0, 0.0);
+					//////////////////////////////
 					cmds[i].trim("Mm ").split(arg, L"-, ", 3, true, true);
 					if (arg.size() > 1)
 					{
@@ -1147,10 +1164,34 @@ public:
 		if (_cf_.f)
 		{
 			//printf("===fill (%g, %g, %g, %g)\n", _cf_.r, _cf_.g, _cf_.b, _cf_.a);
-			if (_cf_.a)
+			//_current_pattern_= cairo_pop_group(_cr_);
+			//if (_cf_.a < 1.0)
+			//{
+			//	cairo_pattern_t* p = cairo_pattern_create_rgba(_cf_.r, _cf_.g, _cf_.b, _cf_.a);
+			//	cairo_set_source(_cr_, p);
+			//	cairo_pattern_destroy(p);
+			//}
+			//else
+			//{
+			//	cairo_pattern_t* p = cairo_pattern_create_rgb(_cf_.r, _cf_.g, _cf_.b);
+			//	cairo_set_source(_cr_, p);
+			//	cairo_pattern_destroy(p);
+			//}
+			/////////////////////////
+			// ERROR AFTER VERSION 1.11.0, 1.10.2 WORK NORMAL
+			// START WITH 1.11.0 ALPHA VALUE MUST BE 1.0
+			// FIX ME IF KNOW AS
+			//printf("=== cairo version = %d\n", _cairo_version_);
+			if (_cairo_version_ > 11000)
+			{
+				if (_cf_.a != 1.0)
+					_cf_.a = 1.0;
+			}
+			/////////////////////////
+			if (_cf_.a < 1.0)
 			{
 				cairo_set_source_rgba(_cr_, _cf_.r, _cf_.g, _cf_.b, _cf_.a);
-				_cf_.a = 0.0;
+				_cf_.a = 1.0;
 			}
 			else
 				cairo_set_source_rgb(_cr_, _cf_.r, _cf_.g, _cf_.b);
@@ -1163,10 +1204,10 @@ public:
 		if (_cs_.f)
 		{
 			//printf("===stroke (%g, %g, %g, %g) width %g\n", _cs_.r, _cs_.g, _cs_.b, _cs_.a, _cs_.width);
-			if (_cs_.a)
+			if (_cs_.a < 1.0)
 			{
 				cairo_set_source_rgba(_cr_, _cs_.r, _cs_.g, _cs_.b, _cs_.a);
-				_cs_.a = 0.0;
+				_cs_.a = 1.0;
 			}
 			else
 				cairo_set_source_rgb(_cr_, _cs_.r, _cs_.g, _cs_.b);
@@ -1186,11 +1227,12 @@ public:
 			}
 			cairo_stroke(_cr_);
 			//cairo_stroke_preserve(_cr_);
+			_cs_.f = false;
 		}
 		//cairo_restore(_cr_);
 		//cairo_pop_group_to_source(_cr_);
-		_cf_.f = false;
-		_cs_.f = false;
+		if (_cf_.f)
+			_cf_.f = false;
 	}
 	void scale(double scale_x = 1.0, double scale_y = 1.0)
 	{
@@ -1201,7 +1243,7 @@ public:
 			cairo_format_t cairo_format_color = color_format_to_cairo(_color_format_);
 			cairo_surface_t* surface = cairo_image_surface_create_for_data(cairo_image_surface_get_data(_surface_), cairo_format_color, _width_, _height_, cairo_format_stride_for_width(cairo_format_color, (int)_width_));
 			cairo_scale(_cr_, _scale_x_, _scale_y_);
-			cairo_set_source_surface(_cr_, surface, 1 , 1);
+			cairo_set_source_surface(_cr_, surface, 0.0, 0.0);
 			cairo_pattern_set_filter(cairo_get_source(_cr_), CAIRO_FILTER_NEAREST);
 			cairo_paint(_cr_);
 			cairo_surface_finish(surface);
@@ -1217,9 +1259,10 @@ public:
 		u32 height = (u32)(_height_ * _scale_y_);
 		if (_height_ > (double)height)
 			height++;
+		unsigned char* data = cairo_image_surface_get_data(_surface_);
 		if (_color_format_ == ECF_R8G8B8)
 		{
-			unsigned char* data = cairo_image_surface_get_data(_surface_);
+			//unsigned char* data = cairo_image_surface_get_data(_surface_);
 			u32 ci = 0;
 			image = _video_driver_->createImage(_color_format_, dimension2d<u32>(width, height));
 			unsigned char* irr_data = (unsigned char*)image->lock();
@@ -1251,6 +1294,7 @@ public:
 	}
 
 private:
+	int _cairo_version_;
 	bool _use_alpha_;
 	double _alpha_value_, _width_, _height_, _scale_x_, _scale_y_;
 	container_fill _cf_;
