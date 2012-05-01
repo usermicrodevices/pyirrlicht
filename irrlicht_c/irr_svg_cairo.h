@@ -93,7 +93,6 @@ public:
 				{
 				case io::EXN_ELEMENT:
 					{
-					wchar_t symbol_percent = L'%';
 					const wchar_t* node_name = xml_reader->getNodeName();
 					current_node_name = stringw(node_name);
 					attr_count = xml_reader->getAttributeCount();
@@ -101,6 +100,8 @@ public:
 					{
 						if (_wcsnicmp(node_name, L"svg", 3) == 0)//Compare characters of two strings without regard to case
 						{
+							const wchar_t symbol_percent = L'%';
+							const wchar_t* string_pt = L"pt";
 							const wchar_t* viewBox = xml_reader->getAttributeValue(L"viewBox");
 							if (viewBox)
 							{
@@ -116,6 +117,8 @@ public:
 									if (list_attr.size() > 2)
 										_width_ = _wtof(list_attr[2].c_str()) * _wtof(width) / 100;
 								}
+								else if (stringw(width).trim().find(string_pt) > -1)
+									_width_ = _wtof(width) * 1.25;//points to pixels
 								else
 									_width_ = xml_reader->getAttributeValueAsFloat(L"width");
 							}
@@ -127,6 +130,8 @@ public:
 									if (list_attr.size() > 3)
 										_height_ = _wtof(list_attr[3].c_str()) * _wtof(height) / 100;
 								}
+								else if (stringw(height).trim().find(string_pt) > -1)
+									_height_ = _wtof(height) * 1.25;//points to pixels
 								else
 									_height_ = xml_reader->getAttributeValueAsFloat(L"height");
 							}
@@ -1180,9 +1185,9 @@ public:
 			/////////////////////////
 			// ERROR AFTER VERSION 1.11.0, 1.10.2 WORK NORMAL
 			// START WITH 1.11.0 ALPHA VALUE MUST BE 1.0
-			// FIX ME IF KNOW AS
+			// FIX ME IF YOU KNOW AS
 			//printf("=== cairo version = %d\n", _cairo_version_);
-			if (_cairo_version_ > 11000)
+			if (_cairo_version_ > 11099)
 			{
 				if (_cf_.a != 1.0)
 					_cf_.a = 1.0;
@@ -1249,6 +1254,26 @@ public:
 			cairo_surface_finish(surface);
 			cairo_surface_destroy(surface);
 		}
+	}
+	double get_width(){return _width_;}
+	u32 get_width_u32()
+	{
+		u32 result = (u32)_width_;
+		if (_width_ > (double)result)
+			result++;
+		return result;
+	}
+	double get_height(){return _height_;}
+	u32 get_height_u32()
+	{
+		u32 result = (u32)_height_;
+		if (_height_ > (double)result)
+			result++;
+		return result;
+	}
+	vector2d<u32> get_size()
+	{
+		return vector2d<u32>(get_width_u32(), get_height_u32());
 	}
 	IImage* get_image()
 	{
@@ -1326,6 +1351,15 @@ IRRLICHT_C_API IImage* svg_cairo_image_get_image(svg_cairo_image* pointer)
 {return pointer->get_image();}
 IRRLICHT_C_API ITexture* svg_cairo_image_get_texture(svg_cairo_image* pointer)
 {return pointer->get_texture();}
+
+IRRLICHT_C_API double svg_cairo_image_get_width(svg_cairo_image* pointer)
+{return pointer->get_width();}
+IRRLICHT_C_API u32 svg_cairo_image_get_width_u32(svg_cairo_image* pointer)
+{return pointer->get_width_u32();}
+IRRLICHT_C_API double svg_cairo_image_get_height(svg_cairo_image* pointer)
+{return pointer->get_height();}
+IRRLICHT_C_API u32 svg_cairo_image_get_height_u32(svg_cairo_image* pointer)
+{return pointer->get_height_u32();}
 
 
 IRRLICHT_C_API int tool_cairo_version(){return cairo_version();}
