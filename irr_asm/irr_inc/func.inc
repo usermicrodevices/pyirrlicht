@@ -1,6 +1,13 @@
 ; Created by using d2incA
 
 import irrlicht_c,\
+       BUILD_WITH_3D_TEXT,'BUILD_WITH_3D_TEXT',\
+       BUILD_WITH_AGG,'BUILD_WITH_AGG',\
+       BUILD_WITH_CHAR_CONVERSION_FUNCTIONS,'BUILD_WITH_CHAR_CONVERSION_FUNCTIONS',\
+       BUILD_WITH_GUI_FILE_SELECTOR,'BUILD_WITH_GUI_FILE_SELECTOR',\
+       BUILD_WITH_IRR_SVG_AGG,'BUILD_WITH_IRR_SVG_AGG',\
+       BUILD_WITH_IRR_SVG_CAIRO,'BUILD_WITH_IRR_SVG_CAIRO',\
+       BUILD_WITH_STREAM_FUNCTIONS,'BUILD_WITH_STREAM_FUNCTIONS',\
        CDynamicMeshBuffer_ctor,'CDynamicMeshBuffer_ctor',\
        CDynamicMeshBuffer_getBoundingBox,'CDynamicMeshBuffer_getBoundingBox',\
        CDynamicMeshBuffer_getIndexBuffer,'CDynamicMeshBuffer_getIndexBuffer',\
@@ -12,6 +19,15 @@ import irrlicht_c,\
        CDynamicMeshBuffer_setIndexBuffer,'CDynamicMeshBuffer_setIndexBuffer',\
        CDynamicMeshBuffer_setMaterial,'CDynamicMeshBuffer_setMaterial',\
        CDynamicMeshBuffer_setVertexBuffer,'CDynamicMeshBuffer_setVertexBuffer',\
+       CGUIFileSelector_addFileFilter,'CGUIFileSelector_addFileFilter',\
+       CGUIFileSelector_ctor,'CGUIFileSelector_ctor',\
+       CGUIFileSelector_getDialogType,'CGUIFileSelector_getDialogType',\
+       CGUIFileSelector_getDirectoryName,'CGUIFileSelector_getDirectoryName',\
+       CGUIFileSelector_getFileFilter,'CGUIFileSelector_getFileFilter',\
+       CGUIFileSelector_getFileName,'CGUIFileSelector_getFileName',\
+       CGUIFileSelector_setCustomDirectoryIcon,'CGUIFileSelector_setCustomDirectoryIcon',\
+       CGUIFileSelector_setCustomFileIcon,'CGUIFileSelector_setCustomFileIcon',\
+       CGUIFileSelector_setDirectoryChoosable,'CGUIFileSelector_setDirectoryChoosable',\
        CGUITTFont_as_IGUIFont,'CGUITTFont_as_IGUIFont',\
        CGUITTFont_createTTFont,'CGUITTFont_createTTFont',\
        CGUITTFont_ctor,'CGUITTFont_ctor',\
@@ -94,10 +110,8 @@ import irrlicht_c,\
        IAnimatedMeshSceneNode_getJointNode1,'IAnimatedMeshSceneNode_getJointNode1',\
        IAnimatedMeshSceneNode_getJointNode2,'IAnimatedMeshSceneNode_getJointNode2',\
        IAnimatedMeshSceneNode_getMD3TagTransformation,'IAnimatedMeshSceneNode_getMD3TagTransformation',\
-       IAnimatedMeshSceneNode_getMS3DJointNode,'IAnimatedMeshSceneNode_getMS3DJointNode',\
        IAnimatedMeshSceneNode_getMesh,'IAnimatedMeshSceneNode_getMesh',\
        IAnimatedMeshSceneNode_getStartFrame,'IAnimatedMeshSceneNode_getStartFrame',\
-       IAnimatedMeshSceneNode_getXJointNode,'IAnimatedMeshSceneNode_getXJointNode',\
        IAnimatedMeshSceneNode_isReadOnlyMaterials,'IAnimatedMeshSceneNode_isReadOnlyMaterials',\
        IAnimatedMeshSceneNode_setAnimationEndCallback,'IAnimatedMeshSceneNode_setAnimationEndCallback',\
        IAnimatedMeshSceneNode_setAnimationSpeed,'IAnimatedMeshSceneNode_setAnimationSpeed',\
@@ -271,7 +285,6 @@ import irrlicht_c,\
        IBoneSceneNode_ctor,'IBoneSceneNode_ctor',\
        IBoneSceneNode_getAnimationMode,'IBoneSceneNode_getAnimationMode',\
        IBoneSceneNode_getBoneIndex,'IBoneSceneNode_getBoneIndex',\
-       IBoneSceneNode_getBoneName,'IBoneSceneNode_getBoneName',\
        IBoneSceneNode_getBoundingBox,'IBoneSceneNode_getBoundingBox',\
        IBoneSceneNode_getSkinningSpace,'IBoneSceneNode_getSkinningSpace',\
        IBoneSceneNode_get_positionHint,'IBoneSceneNode_get_positionHint',\
@@ -376,9 +389,6 @@ import irrlicht_c,\
        IFileList_sort,'IFileList_sort',\
        IFileSystem_addArchiveLoader,'IFileSystem_addArchiveLoader',\
        IFileSystem_addFileArchive,'IFileSystem_addFileArchive',\
-       IFileSystem_addFolderFileArchive,'IFileSystem_addFolderFileArchive',\
-       IFileSystem_addPakFileArchive,'IFileSystem_addPakFileArchive',\
-       IFileSystem_addZipFileArchive,'IFileSystem_addZipFileArchive',\
        IFileSystem_changeWorkingDirectoryTo,'IFileSystem_changeWorkingDirectoryTo',\
        IFileSystem_createAndOpenFile,'IFileSystem_createAndOpenFile',\
        IFileSystem_createAndWriteFile,'IFileSystem_createAndWriteFile',\
@@ -558,6 +568,7 @@ import irrlicht_c,\
        IGUIEnvironment_addEditBox,'IGUIEnvironment_addEditBox',\
        IGUIEnvironment_addEmptySpriteBank,'IGUIEnvironment_addEmptySpriteBank',\
        IGUIEnvironment_addFileOpenDialog,'IGUIEnvironment_addFileOpenDialog',\
+       IGUIEnvironment_addFileSelectorDialog,'IGUIEnvironment_addFileSelectorDialog',\
        IGUIEnvironment_addGUIElement,'IGUIEnvironment_addGUIElement',\
        IGUIEnvironment_addImage,'IGUIEnvironment_addImage',\
        IGUIEnvironment_addImage2,'IGUIEnvironment_addImage2',\
@@ -790,7 +801,6 @@ import irrlicht_c,\
        IGUIToolBar_ctor,'IGUIToolBar_ctor',\
        IGUITreeViewNode_addChildBack,'IGUITreeViewNode_addChildBack',\
        IGUITreeViewNode_addChildFront,'IGUITreeViewNode_addChildFront',\
-       IGUITreeViewNode_clearChilds,'IGUITreeViewNode_clearChilds',\
        IGUITreeViewNode_deleteChild,'IGUITreeViewNode_deleteChild',\
        IGUITreeViewNode_getChildCount,'IGUITreeViewNode_getChildCount',\
        IGUITreeViewNode_getData,'IGUITreeViewNode_getData',\
@@ -809,7 +819,6 @@ import irrlicht_c,\
        IGUITreeViewNode_getSelected,'IGUITreeViewNode_getSelected',\
        IGUITreeViewNode_getSelectedImageIndex,'IGUITreeViewNode_getSelectedImageIndex',\
        IGUITreeViewNode_getText,'IGUITreeViewNode_getText',\
-       IGUITreeViewNode_hasChilds,'IGUITreeViewNode_hasChilds',\
        IGUITreeViewNode_insertChildAfter,'IGUITreeViewNode_insertChildAfter',\
        IGUITreeViewNode_insertChildBefore,'IGUITreeViewNode_insertChildBefore',\
        IGUITreeViewNode_isRoot,'IGUITreeViewNode_isRoot',\
@@ -974,14 +983,12 @@ import irrlicht_c,\
        IMeshManipulator_recalculateTangents,'IMeshManipulator_recalculateTangents',\
        IMeshManipulator_scale1,'IMeshManipulator_scale1',\
        IMeshManipulator_scale2,'IMeshManipulator_scale2',\
-       IMeshManipulator_scaleMesh,'IMeshManipulator_scaleMesh',\
        IMeshManipulator_scaleTCoords1,'IMeshManipulator_scaleTCoords1',\
        IMeshManipulator_scaleTCoords2,'IMeshManipulator_scaleTCoords2',\
        IMeshManipulator_setVertexColorAlpha,'IMeshManipulator_setVertexColorAlpha',\
        IMeshManipulator_setVertexColors,'IMeshManipulator_setVertexColors',\
        IMeshManipulator_transform1,'IMeshManipulator_transform1',\
        IMeshManipulator_transform2,'IMeshManipulator_transform2',\
-       IMeshManipulator_transformMesh,'IMeshManipulator_transformMesh',\
        IMeshSceneNode_getMesh,'IMeshSceneNode_getMesh',\
        IMeshSceneNode_isReadOnlyMaterials,'IMeshSceneNode_isReadOnlyMaterials',\
        IMeshSceneNode_setMesh,'IMeshSceneNode_setMesh',\
@@ -998,6 +1005,7 @@ import irrlicht_c,\
        IMetaTriangleSelector_removeAllTriangleSelectors,'IMetaTriangleSelector_removeAllTriangleSelectors',\
        IMetaTriangleSelector_removeTriangleSelector,'IMetaTriangleSelector_removeTriangleSelector',\
        IOSOperator_copyToClipboard,'IOSOperator_copyToClipboard',\
+       IOSOperator_getOperatingSystemVersion,'IOSOperator_getOperatingSystemVersion',\
        IOSOperator_getOperationSystemVersion,'IOSOperator_getOperationSystemVersion',\
        IOSOperator_getProcessorSpeedMHz,'IOSOperator_getProcessorSpeedMHz',\
        IOSOperator_getSystemMemory,'IOSOperator_getSystemMemory',\
@@ -1131,15 +1139,15 @@ import irrlicht_c,\
        IReferenceCounted_is_null,'IReferenceCounted_is_null',\
        IRenderTarget_ctor1,'IRenderTarget_ctor1',\
        IRenderTarget_ctor2,'IRenderTarget_ctor2',\
-       IRenderTarget_get_BlendEnable,'IRenderTarget_get_BlendEnable',\
        IRenderTarget_get_BlendFuncDst,'IRenderTarget_get_BlendFuncDst',\
        IRenderTarget_get_BlendFuncSrc,'IRenderTarget_get_BlendFuncSrc',\
+       IRenderTarget_get_BlendOp,'IRenderTarget_get_BlendOp',\
        IRenderTarget_get_ColorMask,'IRenderTarget_get_ColorMask',\
        IRenderTarget_get_RenderTexture,'IRenderTarget_get_RenderTexture',\
        IRenderTarget_get_TargetType,'IRenderTarget_get_TargetType',\
-       IRenderTarget_set_BlendEnable,'IRenderTarget_set_BlendEnable',\
        IRenderTarget_set_BlendFuncDst,'IRenderTarget_set_BlendFuncDst',\
        IRenderTarget_set_BlendFuncSrc,'IRenderTarget_set_BlendFuncSrc',\
+       IRenderTarget_set_BlendOp,'IRenderTarget_set_BlendOp',\
        IRenderTarget_set_ColorMask,'IRenderTarget_set_ColorMask',\
        IRenderTarget_set_RenderTexture,'IRenderTarget_set_RenderTexture',\
        IRenderTarget_set_TargetType,'IRenderTarget_set_TargetType',\
@@ -1167,9 +1175,7 @@ import irrlicht_c,\
        ISceneManager_addHillPlaneMesh,'ISceneManager_addHillPlaneMesh',\
        ISceneManager_addLightSceneNode,'ISceneManager_addLightSceneNode',\
        ISceneManager_addMeshSceneNode,'ISceneManager_addMeshSceneNode',\
-       ISceneManager_addOctTreeSceneNode,'ISceneManager_addOctTreeSceneNode',\
-       ISceneManager_addOctTreeSceneNode2,'ISceneManager_addOctTreeSceneNode2',\
-       ISceneManager_addOctreeSceneNode,'ISceneManager_addOctreeSceneNode',\
+       ISceneManager_addOctreeSceneNode1,'ISceneManager_addOctreeSceneNode1',\
        ISceneManager_addOctreeSceneNode2,'ISceneManager_addOctreeSceneNode2',\
        ISceneManager_addParticleSystemSceneNode,'ISceneManager_addParticleSystemSceneNode',\
        ISceneManager_addQuake3SceneNode,'ISceneManager_addQuake3SceneNode',\
@@ -1195,7 +1201,6 @@ import irrlicht_c,\
        ISceneManager_createMeshWriter,'ISceneManager_createMeshWriter',\
        ISceneManager_createMetaTriangleSelector,'ISceneManager_createMetaTriangleSelector',\
        ISceneManager_createNewSceneManager,'ISceneManager_createNewSceneManager',\
-       ISceneManager_createOctTreeTriangleSelector,'ISceneManager_createOctTreeTriangleSelector',\
        ISceneManager_createOctreeTriangleSelector,'ISceneManager_createOctreeTriangleSelector',\
        ISceneManager_createRotationAnimator,'ISceneManager_createRotationAnimator',\
        ISceneManager_createSkinnedMesh,'ISceneManager_createSkinnedMesh',\
@@ -1373,6 +1378,13 @@ import irrlicht_c,\
        IShader_set_VarGroup,'IShader_set_VarGroup',\
        IShader_set_item,'IShader_set_item',\
        IShader_set_name,'IShader_set_name',\
+       IText3D_ctor,'IText3D_ctor',\
+       IText3D_get_color_random_type,'IText3D_get_color_random_type',\
+       IText3D_get_draw_as_figures,'IText3D_get_draw_as_figures',\
+       IText3D_setText,'IText3D_setText',\
+       IText3D_set_auto_emissive_color,'IText3D_set_auto_emissive_color',\
+       IText3D_set_color_random_type,'IText3D_set_color_random_type',\
+       IText3D_set_draw_as_figures,'IText3D_set_draw_as_figures',\
        ITextSceneNode_setText,'ITextSceneNode_setText',\
        ITextSceneNode_setTextColor,'ITextSceneNode_setTextColor',\
        ITexture_getColorFormat,'ITexture_getColorFormat',\
@@ -1388,6 +1400,7 @@ import irrlicht_c,\
        ITexture_regenerateMipMapLevels,'ITexture_regenerateMipMapLevels',\
        ITexture_unlock,'ITexture_unlock',\
        ITimer_getRealTime,'ITimer_getRealTime',\
+       ITimer_getRealTimeAndDate,'ITimer_getRealTimeAndDate',\
        ITimer_getSpeed,'ITimer_getSpeed',\
        ITimer_getTime,'ITimer_getTime',\
        ITimer_isStopped,'ITimer_isStopped',\
@@ -1409,6 +1422,7 @@ import irrlicht_c,\
        IVideoDriver_addExternalImageLoader,'IVideoDriver_addExternalImageLoader',\
        IVideoDriver_addExternalImageWriter,'IVideoDriver_addExternalImageWriter',\
        IVideoDriver_addMaterialRenderer,'IVideoDriver_addMaterialRenderer',\
+       IVideoDriver_addOcclusionQuery,'IVideoDriver_addOcclusionQuery',\
        IVideoDriver_addRenderTargetTexture,'IVideoDriver_addRenderTargetTexture',\
        IVideoDriver_addTexture1,'IVideoDriver_addTexture1',\
        IVideoDriver_addTexture2,'IVideoDriver_addTexture2',\
@@ -1433,21 +1447,29 @@ import irrlicht_c,\
        IVideoDriver_draw2DImageBatch1,'IVideoDriver_draw2DImageBatch1',\
        IVideoDriver_draw2DImageBatch2,'IVideoDriver_draw2DImageBatch2',\
        IVideoDriver_draw2DLine,'IVideoDriver_draw2DLine',\
+       IVideoDriver_draw2DLineWf,'IVideoDriver_draw2DLineWf',\
+       IVideoDriver_draw2DLine_f,'IVideoDriver_draw2DLine_f',\
        IVideoDriver_draw2DPolygon,'IVideoDriver_draw2DPolygon',\
+       IVideoDriver_draw2DPolygon_f,'IVideoDriver_draw2DPolygon_f',\
        IVideoDriver_draw2DRectangle1,'IVideoDriver_draw2DRectangle1',\
        IVideoDriver_draw2DRectangle2,'IVideoDriver_draw2DRectangle2',\
        IVideoDriver_draw2DRectangleOutline,'IVideoDriver_draw2DRectangleOutline',\
+       IVideoDriver_draw2DRectangleOutline_f,'IVideoDriver_draw2DRectangleOutline_f',\
+       IVideoDriver_draw2DRectangle_f1,'IVideoDriver_draw2DRectangle_f1',\
+       IVideoDriver_draw2DRectangle_f2,'IVideoDriver_draw2DRectangle_f2',\
+       IVideoDriver_draw2DRectangle_f3,'IVideoDriver_draw2DRectangle_f3',\
+       IVideoDriver_draw2DRectangle_f4,'IVideoDriver_draw2DRectangle_f4',\
        IVideoDriver_draw2DVertexPrimitiveList,'IVideoDriver_draw2DVertexPrimitiveList',\
        IVideoDriver_draw3DBox,'IVideoDriver_draw3DBox',\
        IVideoDriver_draw3DLine,'IVideoDriver_draw3DLine',\
        IVideoDriver_draw3DTriangle,'IVideoDriver_draw3DTriangle',\
        IVideoDriver_drawIndexedTriangleFan,'IVideoDriver_drawIndexedTriangleFan',\
-       IVideoDriver_drawIndexedTriangleFan2,'IVideoDriver_drawIndexedTriangleFan2',\
-       IVideoDriver_drawIndexedTriangleList,'IVideoDriver_drawIndexedTriangleList',\
+       IVideoDriver_drawIndexedTriangleList1,'IVideoDriver_drawIndexedTriangleList1',\
        IVideoDriver_drawIndexedTriangleList2,'IVideoDriver_drawIndexedTriangleList2',\
        IVideoDriver_drawIndexedTriangleList3,'IVideoDriver_drawIndexedTriangleList3',\
        IVideoDriver_drawMeshBuffer,'IVideoDriver_drawMeshBuffer',\
        IVideoDriver_drawPixel,'IVideoDriver_drawPixel',\
+       IVideoDriver_drawPixel_f,'IVideoDriver_drawPixel_f',\
        IVideoDriver_drawStencilShadow,'IVideoDriver_drawStencilShadow',\
        IVideoDriver_drawStencilShadowVolume,'IVideoDriver_drawStencilShadowVolume',\
        IVideoDriver_drawVertexPrimitiveList,'IVideoDriver_drawVertexPrimitiveList',\
@@ -1458,11 +1480,13 @@ import irrlicht_c,\
        IVideoDriver_findTexture,'IVideoDriver_findTexture',\
        IVideoDriver_getColorFormat,'IVideoDriver_getColorFormat',\
        IVideoDriver_getCurrentRenderTargetSize,'IVideoDriver_getCurrentRenderTargetSize',\
+       IVideoDriver_getDriverAttributes,'IVideoDriver_getDriverAttributes',\
        IVideoDriver_getDriverType,'IVideoDriver_getDriverType',\
        IVideoDriver_getDynamicLight,'IVideoDriver_getDynamicLight',\
        IVideoDriver_getDynamicLightCount,'IVideoDriver_getDynamicLightCount',\
        IVideoDriver_getExposedVideoData,'IVideoDriver_getExposedVideoData',\
        IVideoDriver_getFPS,'IVideoDriver_getFPS',\
+       IVideoDriver_getFog,'IVideoDriver_getFog',\
        IVideoDriver_getGPUProgrammingServices,'IVideoDriver_getGPUProgrammingServices',\
        IVideoDriver_getImageLoader,'IVideoDriver_getImageLoader',\
        IVideoDriver_getImageLoaderCount,'IVideoDriver_getImageLoaderCount',\
@@ -1477,6 +1501,7 @@ import irrlicht_c,\
        IVideoDriver_getMaximalPrimitiveCount,'IVideoDriver_getMaximalPrimitiveCount',\
        IVideoDriver_getMeshManipulator,'IVideoDriver_getMeshManipulator',\
        IVideoDriver_getName,'IVideoDriver_getName',\
+       IVideoDriver_getOcclusionQueryResult,'IVideoDriver_getOcclusionQueryResult',\
        IVideoDriver_getOverrideMaterial,'IVideoDriver_getOverrideMaterial',\
        IVideoDriver_getPrimitiveCountDrawn,'IVideoDriver_getPrimitiveCountDrawn',\
        IVideoDriver_getScreenSize,'IVideoDriver_getScreenSize',\
@@ -1488,15 +1513,19 @@ import irrlicht_c,\
        IVideoDriver_getTransform,'IVideoDriver_getTransform',\
        IVideoDriver_getVendorInfo,'IVideoDriver_getVendorInfo',\
        IVideoDriver_getViewPort,'IVideoDriver_getViewPort',\
-       IVideoDriver_makeColorKeyTexture,'IVideoDriver_makeColorKeyTexture',\
+       IVideoDriver_makeColorKeyTexture1,'IVideoDriver_makeColorKeyTexture1',\
        IVideoDriver_makeColorKeyTexture2,'IVideoDriver_makeColorKeyTexture2',\
        IVideoDriver_makeNormalMapTexture,'IVideoDriver_makeNormalMapTexture',\
        IVideoDriver_queryFeature,'IVideoDriver_queryFeature',\
        IVideoDriver_removeAllHardwareBuffers,'IVideoDriver_removeAllHardwareBuffers',\
+       IVideoDriver_removeAllOcclusionQueries,'IVideoDriver_removeAllOcclusionQueries',\
        IVideoDriver_removeAllTextures,'IVideoDriver_removeAllTextures',\
        IVideoDriver_removeHardwareBuffer,'IVideoDriver_removeHardwareBuffer',\
+       IVideoDriver_removeOcclusionQuery,'IVideoDriver_removeOcclusionQuery',\
        IVideoDriver_removeTexture,'IVideoDriver_removeTexture',\
        IVideoDriver_renameTexture,'IVideoDriver_renameTexture',\
+       IVideoDriver_runAllOcclusionQueries,'IVideoDriver_runAllOcclusionQueries',\
+       IVideoDriver_runOcclusionQuery,'IVideoDriver_runOcclusionQuery',\
        IVideoDriver_setAllowZWriteOnTransparent,'IVideoDriver_setAllowZWriteOnTransparent',\
        IVideoDriver_setAmbientLight,'IVideoDriver_setAmbientLight',\
        IVideoDriver_setClipPlane,'IVideoDriver_setClipPlane',\
@@ -1504,12 +1533,15 @@ import irrlicht_c,\
        IVideoDriver_setMaterial,'IVideoDriver_setMaterial',\
        IVideoDriver_setMaterialRendererName,'IVideoDriver_setMaterialRendererName',\
        IVideoDriver_setMinHardwareBufferVertexCount,'IVideoDriver_setMinHardwareBufferVertexCount',\
-       IVideoDriver_setRenderTarget,'IVideoDriver_setRenderTarget',\
+       IVideoDriver_setRenderTarget1,'IVideoDriver_setRenderTarget1',\
        IVideoDriver_setRenderTarget2,'IVideoDriver_setRenderTarget2',\
+       IVideoDriver_setRenderTarget3,'IVideoDriver_setRenderTarget3',\
        IVideoDriver_setTextureCreationFlag,'IVideoDriver_setTextureCreationFlag',\
        IVideoDriver_setTransform,'IVideoDriver_setTransform',\
        IVideoDriver_setViewPort,'IVideoDriver_setViewPort',\
        IVideoDriver_turnLightOn,'IVideoDriver_turnLightOn',\
+       IVideoDriver_updateAllOcclusionQueries,'IVideoDriver_updateAllOcclusionQueries',\
+       IVideoDriver_updateOcclusionQuery,'IVideoDriver_updateOcclusionQuery',\
        IVideoDriver_writeImageToFile1,'IVideoDriver_writeImageToFile1',\
        IVideoDriver_writeImageToFile2,'IVideoDriver_writeImageToFile2',\
        IVideoModeList_getDesktopDepth,'IVideoModeList_getDesktopDepth',\
@@ -1662,10 +1694,29 @@ import irrlicht_c,\
        Q3LevelLoadParameter_set_swapLump,'Q3LevelLoadParameter_set_swapLump',\
        Q3LevelLoadParameter_set_verbose,'Q3LevelLoadParameter_set_verbose',\
        Q3LevelLoadParameter_size,'Q3LevelLoadParameter_size',\
+       S3DVertex2TCoords_ctor1,'S3DVertex2TCoords_ctor1',\
+       S3DVertex2TCoords_ctor2,'S3DVertex2TCoords_ctor2',\
+       S3DVertex2TCoords_ctor3,'S3DVertex2TCoords_ctor3',\
+       S3DVertex2TCoords_ctor4,'S3DVertex2TCoords_ctor4',\
+       S3DVertex2TCoords_ctor5,'S3DVertex2TCoords_ctor5',\
+       S3DVertex2TCoords_ctor6,'S3DVertex2TCoords_ctor6',\
+       S3DVertex2TCoords_ctor7,'S3DVertex2TCoords_ctor7',\
+       S3DVertex2TCoords_ctor8,'S3DVertex2TCoords_ctor8',\
+       S3DVertex2TCoords_get_TCoords2,'S3DVertex2TCoords_get_TCoords2',\
+       S3DVertex2TCoords_set_TCoords2,'S3DVertex2TCoords_set_TCoords2',\
+       S3DVertexTangents_ctor1,'S3DVertexTangents_ctor1',\
+       S3DVertexTangents_ctor2,'S3DVertexTangents_ctor2',\
+       S3DVertexTangents_ctor3,'S3DVertexTangents_ctor3',\
+       S3DVertexTangents_ctor4,'S3DVertexTangents_ctor4',\
+       S3DVertexTangents_get_Binormal,'S3DVertexTangents_get_Binormal',\
+       S3DVertexTangents_get_Tangent,'S3DVertexTangents_get_Tangent',\
+       S3DVertexTangents_set_Binormal,'S3DVertexTangents_set_Binormal',\
+       S3DVertexTangents_set_Tangent,'S3DVertexTangents_set_Tangent',\
        S3DVertex_ctor1,'S3DVertex_ctor1',\
        S3DVertex_ctor2,'S3DVertex_ctor2',\
        S3DVertex_ctor3,'S3DVertex_ctor3',\
        S3DVertex_eq,'S3DVertex_eq',\
+       S3DVertex_getInterpolated,'S3DVertex_getInterpolated',\
        S3DVertex_getType,'S3DVertex_getType',\
        S3DVertex_get_Color,'S3DVertex_get_Color',\
        S3DVertex_get_Normal,'S3DVertex_get_Normal',\
@@ -2244,6 +2295,10 @@ import irrlicht_c,\
        _ESNT_UNKNOWN,'_ESNT_UNKNOWN',\
        _ESNT_VOLUME_LIGHT,'_ESNT_VOLUME_LIGHT',\
        _ESNT_WATER_SURFACE,'_ESNT_WATER_SURFACE',\
+       _IRRLICHT_VERSION,'_IRRLICHT_VERSION',\
+       _IRRLICHT_VERSION_MAJOR,'_IRRLICHT_VERSION_MAJOR',\
+       _IRRLICHT_VERSION_MINOR,'_IRRLICHT_VERSION_MINOR',\
+       _IRRLICHT_VERSION_REVISION,'_IRRLICHT_VERSION_REVISION',\
        _MATERIAL_MAX_TEXTURES,'_MATERIAL_MAX_TEXTURES',\
        aabbox3df_addInternalBox,'aabbox3df_addInternalBox',\
        aabbox3df_addInternalPoint1,'aabbox3df_addInternalPoint1',\
@@ -2309,6 +2364,7 @@ import irrlicht_c,\
        agg_svg_ITexture,'agg_svg_ITexture',\
        agg_svg_loader_ctor,'agg_svg_loader_ctor',\
        agg_svg_path,'agg_svg_path',\
+       agg_svg_path_from_string,'agg_svg_path_from_string',\
        arraySJoystickInfo_allocated_size,'arraySJoystickInfo_allocated_size',\
        arraySJoystickInfo_ctor,'arraySJoystickInfo_ctor',\
        arraySJoystickInfo_get_item,'arraySJoystickInfo_get_item',\
@@ -2748,6 +2804,12 @@ import irrlicht_c,\
        rects32array_sort,'rects32array_sort',\
        rects32array_swap,'rects32array_swap',\
        set_virtual_method,'set_virtual_method',\
+       svg_agg_image_ctor1,'svg_agg_image_ctor1',\
+       svg_agg_image_get_image,'svg_agg_image_get_image',\
+       svg_agg_image_get_size,'svg_agg_image_get_size',\
+       svg_agg_image_get_texture,'svg_agg_image_get_texture',\
+       svg_agg_image_parse,'svg_agg_image_parse',\
+       svg_agg_image_scale,'svg_agg_image_scale',\
        svg_viewer_ctor,'svg_viewer_ctor',\
        svg_viewer_get_texture,'svg_viewer_get_texture',\
        svg_viewer_scale,'svg_viewer_scale',\
@@ -2775,10 +2837,19 @@ import irrlicht_c,\
        tQ3EntityList_size,'tQ3EntityList_size',\
        tQ3EntityList_sort,'tQ3EntityList_sort',\
        tQ3EntityList_swap,'tQ3EntityList_swap',\
+       tool_char_to_wchar,'tool_char_to_wchar',\
+       tool_close_stream,'tool_close_stream',\
+       tool_close_streams,'tool_close_streams',\
        tool_getAsFloat,'tool_getAsFloat',\
        tool_getAsVector3df,'tool_getAsVector3df',\
        tool_getTextures,'tool_getTextures',\
+       tool_getVertexPitchFromType,'tool_getVertexPitchFromType',\
+       tool_get_stderr,'tool_get_stderr',\
+       tool_get_stdin,'tool_get_stdin',\
+       tool_get_stdout,'tool_get_stdout',\
        tool_randrange,'tool_randrange',\
+       tool_redirect_stderr_to_file,'tool_redirect_stderr_to_file',\
+       tool_redirect_stdout_to_file,'tool_redirect_stdout_to_file',\
        tool_texture_from_svg,'tool_texture_from_svg',\
        tool_texture_from_test_vectors,'tool_texture_from_test_vectors',\
        tool_texture_generator,'tool_texture_generator',\
