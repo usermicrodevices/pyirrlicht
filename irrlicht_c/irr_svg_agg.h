@@ -4,20 +4,35 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
+#define _COMPILE_SVG_AGG_EXPORTS_
+
 #include "agg_scanline_p.h"
 #include "agg_basics.h"
 #include "agg_rendering_buffer.h"
 #include "agg_rasterizer_scanline_aa.h"
 #include "agg_renderer_scanline.h"
 #include "agg_pixfmt_rgba.h"
-#include "..\..\agg-2.5\examples\svg_viewer\agg_svg_parser.h"
+//#include "..\..\agg-2.5\examples\svg_viewer\agg_svg_parser.h"
 #include "named_colors_agg.h"
+#include "..\..\agg-2.5\examples\svg_viewer\agg_svg_path_renderer.h"
+//#include "agg_trans_affine.h"
+
+using namespace irr;
+using namespace core;
+using namespace io;
+using namespace video;
 
 using namespace agg;
+using namespace svg;
 
 inline int __cdecl cmp_color_agg(const void* p1, const void* p2)
 {
 	return wcscmp(((agg_named_color*)p1)->name, ((agg_named_color*)p2)->name);
+}
+
+inline stringw trim_left(const stringw value, s32 length = 0)
+{
+	return value.subString(length, value.size() - length);
 }
 
 class svg_agg_image
@@ -28,8 +43,8 @@ public:
 		_image_ = 0;
 		_texture_ = 0;
 		_video_driver_ = video_driver;
-		if (_video_driver_)
-			_video_driver_->grab();
+		//if (_video_driver_)
+		//	_video_driver_->grab();
 		parse(fs, file_name, content_unicode, alpha_value, color_format, stride);
 	}
 	void parse(IFileSystem* fs, const irr::io::path& file_name = "tiger.svg", bool content_unicode = true, u32 alpha_value = 128, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, int stride = 4)
@@ -46,6 +61,7 @@ public:
 			xml_reader = dynamic_cast<IXMLReader*>(fs->createXMLReaderUTF8(file_name));
 		if (xml_reader)
 		{
+			EXML_NODE node_type = EXN_NONE;
 			//bool flag_start_linear_gradient = false;
 			u32 gradients_count = 0;
 			unsigned int attr_count = 0;
@@ -54,17 +70,46 @@ public:
 			//_path_renderer_.remove_all();
 			while (xml_reader->read())
 			{
-				switch (xml_reader->getNodeType())
+				const wchar_t* node_name = xml_reader->getNodeName();
+				if (!node_name)
+					continue;
+				else if (!wcslen(node_name))
+					continue;
+				else if (_wcsnicmp(node_name, L"cc:", 3) == 0)
+					continue;
+				else if (_wcsnicmp(node_name, L"dc:", 3) == 0)
+					continue;
+				else if (_wcsnicmp(node_name, L"rdf:", 4) == 0)
+					continue;
+				else if (_wcsnicmp(node_name, L"metadata", 8) == 0)
+					continue;
+				else if (_wcsnicmp(node_name, L"sodipodi:", 9) == 0)
+					continue;
+				else if (_wcsnicmp(node_name, L"image/svg+xml", 11) == 0)
+					continue;
+				else if (xml_reader->getNodeType() == EXN_TEXT && _wcsnicmp(node_name, L"text", 4) != 0)
+					continue;
+				else if (xml_reader->getNodeType() == EXN_COMMENT)
+					continue;
+				else if (xml_reader->getNodeType() == EXN_CDATA)
+					continue;
+				else if (xml_reader->getNodeType() == EXN_UNKNOWN)
+					continue;
+				else if (xml_reader->getNodeType() == EXN_NONE)
+					continue;
+				node_type = xml_reader->getNodeType();
+				//wprintf(L"=== node name = %s, id = %s, node type = %d\n", node_name, xml_reader->getAttributeValue(L"id"), node_type);
+				switch (node_type)
 				{
 				case io::EXN_ELEMENT:
 					{
-					const wchar_t* node_name = xml_reader->getNodeName();
 					attr_count = xml_reader->getAttributeCount();
 					if (attr_count)
 					{
 						if (_wcsnicmp(node_name, L"svg", 3) == 0)//Compare characters of two strings without regard to case
 						{
-							wchar_t symbol_percent = L'%';
+							const wchar_t symbol_percent = L'%';
+							const wchar_t* string_pt = L"pt";
 							const wchar_t* viewBox = xml_reader->getAttributeValue(L"viewBox");
 							if (viewBox)
 							{
@@ -80,6 +125,8 @@ public:
 									if (list_attr.size() > 2)
 										_width_ = _wtof(list_attr[2].c_str()) * _wtof(width) / 100;
 								}
+								else if (stringw(width).trim().find(string_pt) > -1)
+									_width_ = _wtof(width) * 1.25;//points to pixels
 								else
 									_width_ = (double)xml_reader->getAttributeValueAsFloat(L"width");
 							}
@@ -91,6 +138,8 @@ public:
 									if (list_attr.size() > 3)
 										_height_ = _wtof(list_attr[3].c_str()) * _wtof(height) / 100;
 								}
+								else if (stringw(height).trim().find(string_pt) > -1)
+									_height_ = _wtof(height) * 1.25;//points to pixels
 								else
 									_height_ = (double)xml_reader->getAttributeValueAsFloat(L"height");
 							}
@@ -111,7 +160,9 @@ public:
 							if (node_name[0] == L'g')
 							{
 								_path_renderer_.push_attr();
+								//wprintf(L"=== g style = %s\n", xml_reader->getAttributeValue(L"style"));
 								parse_style(xml_reader->getAttributeValue(L"style"));
+								//wprintf(L"=== g transform = %s\n", xml_reader->getAttributeValue(L"transform"));
 								parse_transform(xml_reader->getAttributeValue(L"transform"));
 							}
 						}
@@ -122,29 +173,16 @@ public:
 							{
 								_path_renderer_.begin_path();
 								parse_style(xml_reader->getAttributeValue(L"style"));
+								//wprintf(L"=== path style = %s\n", xml_reader->getAttributeValue(L"style"));
 								parse_attributes(xml_reader);
+								//printf("=== path parse_attributes\n");
+								//parse_transform(xml_reader->getAttributeValueSafe(L"transform"));
 								parse_transform(xml_reader->getAttributeValue(L"transform"));
+								//wprintf(L"=== path transform = %s\n", xml_reader->getAttributeValueSafe(L"transform"));
 								parse_path(d);
 								_path_renderer_.end_path();
+								//printf("=== END path\n");
 							}
-							//if (d)
-							//{
-							//	size_t converted_chars;
-							//	size_t len_string = wcslen(d) + 1;
-							//	char* attr_value = (char*)calloc(len_string, sizeof(char));
-							//	errno_t err = wcstombs_s(&converted_chars, attr_value, len_string, d, _TRUNCATE);
-							//	if (attr_value && err == 0)
-							//	{
-							//		_path_renderer_.begin_path();
-							//		parse_style(xml_reader->getAttributeValue(L"style"));
-							//		parse_transform(xml_reader->getAttributeValue(L"transform"));
-							//		agg::svg::path_tokenizer tokenizer;
-							//		tokenizer.set_path_str(attr_value);
-							//		_path_renderer_.parse_path(tokenizer);
-							//		_path_renderer_.end_path();
-							//	} 
-							//	free(attr_value);
-							//}
 						}
 						else if (_wcsnicmp(node_name, L"rect", 4) == 0)
 						{
@@ -247,16 +285,16 @@ public:
 					}
 				case io::EXN_ELEMENT_END:
 					{
-					const wchar_t* node_name = xml_reader->getNodeName();
-					if (_wcsnicmp(node_name, L"svg", 3) == 0)
-						_path_renderer_.pop_attr();
-					else if (wcslen(node_name) == 1)
+					if (wcslen(node_name) == 1)
 					{
 						if (node_name[0] == L'g')
 							_path_renderer_.pop_attr();
 					}
+					else if (_wcsnicmp(node_name, L"svg", 3) == 0)
+						_path_renderer_.pop_attr();
 					//else if (_wcsnicmp(node_name, L"linearGradient", 14) == 0)
 					//	flag_start_linear_gradient = false;
+					//wprintf(L"--- EXN_ELEMENT_END name = %s\n", node_name);
 					break;
 					}
 				case io::EXN_TEXT:
@@ -434,75 +472,111 @@ public:
 			if (list_attr[i].equalsn(L"fill:", 5))
 			{
 				if (list_attr[i].equalsn(L"fill:#", 6))
-					parse_fill(list_attr[i].trim("fill"));
+					parse_fill(trim_left(list_attr[i], 4));
 				else
-					parse_fill(list_attr[i].trim("fill:"));
+					parse_fill(trim_left(list_attr[i], 5));
 			}
 			else if (list_attr[i].equalsn(L"fill-opacity:", 13))
-				_path_renderer_.fill_opacity(_wtof(list_attr[i].trim("fill-opacity:").c_str()));
+				_path_renderer_.fill_opacity(_wtof(trim_left(list_attr[i], 13).c_str()));
 			else if (list_attr[i].equalsn(L"fill-rule:", 10))
-				parse_fill_rule(list_attr[i].trim(L"fill-rule:").c_str());
+				parse_fill_rule(trim_left(list_attr[i], 10).c_str());
 			else if (list_attr[i].equalsn(L"stroke:", 7))
 			{
 				if (list_attr[i].equalsn(L"stroke:#", 8))
-					parse_stroke(list_attr[i].trim("stroke"));
+					parse_stroke(trim_left(list_attr[i], 6));
 				else
-					parse_stroke(list_attr[i].trim("stroke:"));
+					parse_stroke(trim_left(list_attr[i], 7));
 			}
 			else if (list_attr[i].equalsn(L"stroke-width:", 13))
-				_path_renderer_.stroke_width(_wtof(list_attr[i].trim("stroke-width:").c_str()));
+				_path_renderer_.stroke_width(_wtof(trim_left(list_attr[i], 13).c_str()));
 			else if (list_attr[i].equalsn(L"stroke-linecap:", 15))
-				parse_linecap(list_attr[i].trim("stroke-linecap:"));
+				parse_linecap(trim_left(list_attr[i], 15));
 			else if (list_attr[i].equalsn(L"stroke-linejoin:", 16))
-				parse_linejoin(list_attr[i].trim("stroke-linejoin:"));
+				parse_linejoin(trim_left(list_attr[i], 16));
 			else if (list_attr[i].equalsn(L"stroke-miterlimit:", 18))
-				_path_renderer_.miter_limit(_wtof(list_attr[i].trim("stroke-miterlimit:").c_str()));
+				_path_renderer_.miter_limit(_wtof(trim_left(list_attr[i], 18).c_str()));
 			else if (list_attr[i].equalsn(L"stroke-opacity:", 15))
-				_path_renderer_.stroke_opacity(_wtof(list_attr[i].trim("stroke-opacity:").c_str()));
+				_path_renderer_.stroke_opacity(_wtof(trim_left(list_attr[i], 15).c_str()));
 		}
 		list_attr.clear();
 	}
 	void parse_transform(const wchar_t* value)
 	{
-		core::array<core::stringw> list_attr;
-		core::stringw(value).trim(core::stringw(")")).split(list_attr, L"(");
-		if (list_attr.size())
+		if (value)
 		{
-			if (list_attr[0].equals_substring_ignore_case(stringw("matrix")))
+			core::array<core::stringw> list_attr;
+			core::stringw(value).trim(core::stringw(")")).split(list_attr, L"(");
+			if (list_attr.size())
 			{
-				core::array<double> args = string_split_d(list_attr[1].c_str(), 6);
-				_path_renderer_.transform().premultiply(trans_affine(args[0], args[1], args[2], args[3], args[4], args[5]));
-			}
-			else if (list_attr[0].equals_substring_ignore_case(stringw("translate")))
-			{
-				core::array<double> args = string_split_d(list_attr[1].c_str(), 2);
-				_path_renderer_.transform().premultiply(trans_affine_translation(args[0], args[1]));
-			}
-			else if (_wcsnicmp(list_attr[0].c_str(), L"rotate", 6) == 0)
-			{
-				core::array<double> args = string_split_d(list_attr[1].c_str(), 3);
-				if (args[1] == 0.0 && args[2] == 0.0)
-					_path_renderer_.transform().premultiply(trans_affine_rotation(deg2rad(args[0])));
-				else
+				if (list_attr[0].equals_substring_ignore_case(stringw("matrix")))
 				{
-					trans_affine t = trans_affine_translation(-args[1], -args[2]);
-					t *= trans_affine_rotation(deg2rad(args[0]));
-					t *= trans_affine_translation(args[1], args[2]);
-					_path_renderer_.transform().premultiply(t);
+					core::array<core::stringw> s;
+					list_attr[1].split(s, L",");
+					if (s.size() > 5)
+						_path_renderer_.transform().premultiply(trans_affine(_wtof(s[0].c_str()), _wtof(s[1].c_str()), _wtof(s[2].c_str()), _wtof(s[3].c_str()), _wtof(s[4].c_str()), _wtof(s[5].c_str())));
+					s.clear();
 				}
+				else if (list_attr[0].equals_substring_ignore_case(stringw("translate")))
+				{
+					core::array<core::stringw> s;
+					list_attr[1].split(s, L",");
+					if (s.size() > 1)
+						_path_renderer_.transform().premultiply(trans_affine_translation(_wtof(s[0].c_str()), _wtof(s[1].c_str())));
+					s.clear();
+				}
+				else if (_wcsnicmp(list_attr[0].c_str(), L"rotate", 6) == 0)
+				{
+					core::array<core::stringw> s;
+					list_attr[1].split(s, L",");
+					if (s.size())
+					{
+						double angle = 0.0, x = 0.0, y = 0.0;
+						if (s.size() == 1)
+							angle = _wtof(s[0].c_str());
+						else if (s.size() > 2)
+						{
+							angle = _wtof(s[0].c_str());
+							x = _wtof(s[1].c_str());
+							y = _wtof(s[2].c_str());
+						}
+						s.clear();
+						if (x == 0.0 && y == 0.0)
+							_path_renderer_.transform().premultiply(trans_affine_rotation(deg2rad(angle)));
+						else
+						{
+							trans_affine t = trans_affine_translation(-x, -y);
+							t *= trans_affine_rotation(deg2rad(angle));
+							t *= trans_affine_translation(x, y);
+							_path_renderer_.transform().premultiply(t);
+						}
+					}
+				}
+				else if (_wcsnicmp(list_attr[0].c_str(), L"scale", 5) == 0)
+				{
+					core::array<core::stringw> s;
+					list_attr[1].split(s, L",");
+					if (s.size())
+					{
+						double x = 0.0, y = 0.0;
+						if (s.size() == 1)
+							x = _wtof(s[0].c_str());
+						else if (s.size() > 1)
+						{
+							x = _wtof(s[0].c_str());
+							y = _wtof(s[1].c_str());
+						}
+						s.clear();
+						if (y == 0.0)
+							y = x;
+						_path_renderer_.transform().premultiply(trans_affine_scaling(x, y));
+					}
+				}
+				else if (_wcsnicmp(list_attr[0].c_str(), L"skewX", 5) == 0)
+					_path_renderer_.transform().premultiply(trans_affine_skewing(deg2rad(_wtof(list_attr[1].c_str())), 0.0));
+				else if (_wcsnicmp(list_attr[0].c_str(), L"skewY", 5) == 0)
+					_path_renderer_.transform().premultiply(trans_affine_skewing(0.0, deg2rad(_wtof(list_attr[1].c_str()))));
+				list_attr.clear();
 			}
-			else if (_wcsnicmp(list_attr[0].c_str(), L"scale", 5) == 0)
-			{
-				core::array<double> args = string_split_d(list_attr[1].c_str(), 2);
-				if (args[1] == 0.0)
-					args[1] = args[0];
-				_path_renderer_.transform().premultiply(trans_affine_scaling(args[0], args[1]));
-			}
-			else if (_wcsnicmp(list_attr[0].c_str(), L"skewX", 5) == 0)
-				_path_renderer_.transform().premultiply(trans_affine_skewing(deg2rad(_wtof(list_attr[1].c_str())), 0.0));
-			else if (_wcsnicmp(list_attr[0].c_str(), L"skewY", 5) == 0)
-				_path_renderer_.transform().premultiply(trans_affine_skewing(0.0, deg2rad(_wtof(list_attr[1].c_str()))));
-			list_attr.clear();
 		}
 	}
 	void parse_path(const wchar_t* d)
@@ -641,7 +715,6 @@ public:
 		image->unlock();
 		return image;
 	}
-	//IImage* render()
 	void render()
 	{
 		u32 width = (u32)_width_;
@@ -666,8 +739,6 @@ public:
 		_path_renderer_.render(ras, sl, ren, _trans_affine_, renb.clip_box(), _alpha_value_/255.0);
 		//_path_renderer_.render(ras, sl, ren, _trans_affine_, renb.clip_box(), 1.0);
 
-		//IImage* image = create_image_from_data(width, height, data.const_pointer());
-		//return image;
 		if (_color_format_ == ECF_R8G8B8)
 		{
 			u32 ai = 0;
@@ -707,7 +778,6 @@ public:
 	}
 	ITexture* get_texture(bool rendering = false, bool adding = false)
 	{
-		//return _video_driver_->addTexture(_file_name_, render());
 		if (!_image_)
 		{
 			render();
@@ -728,6 +798,26 @@ public:
 		}
 		return _texture_;
 	}
+	double get_width(){return _width_;}
+	u32 get_width_u32()
+	{
+		u32 result = (u32)_width_;
+		if (_width_ > (double)result)
+			result++;
+		return result;
+	}
+	double get_height(){return _height_;}
+	u32 get_height_u32()
+	{
+		u32 result = (u32)_height_;
+		if (_height_ > (double)result)
+			result++;
+		return result;
+	}
+	vector2d<u32> get_size()
+	{
+		return vector2d<u32>(get_width_u32(), get_height_u32());
+	}
 	~svg_agg_image()
 	{
 		_path_renderer_.remove_all();
@@ -735,50 +825,8 @@ public:
 			_video_driver_->removeTexture(_texture_);
 		if (_image_)
 			_image_->drop();
-	}
-	//IImage* create_image_from_data(u32 width, u32 height, const unsigned char* data)
-	//{
-	//	//IImage* _image_;
-	//	if (_color_format_ == ECF_R8G8B8)
-	//	{
-	//		u32 ai = 0;
-	//		_image_ = _video_driver_->createImage(_color_format_, dimension2d<u32>(width, height));
-	//		unsigned char* irr_data = (unsigned char*)_image_->lock();
-	//		for (u32 i = 0; i < _image_->getImageDataSizeInBytes(); i += 3)
-	//		{
-	//			irr_data[i] = data[ai];//r
-	//			irr_data[i+1] = data[ai+1];//g
-	//			irr_data[i+2] = data[ai+2];//b
-	//			ai += 4;//agg rgba format is 32 bit
-	//		}
-	//		_image_->unlock();
-	//	}
-	//	else if (_color_format_ == ECF_A8R8G8B8)
-	//		//_image_ = _video_driver_->createImageFromData(_color_format_, dimension2d<u32>(width, height), (void*)data, true, true);
-	//	{
-	//		_image_ = _video_driver_->createImage(_color_format_, dimension2d<u32>(width, height));
-	//		unsigned char* irr_data = (unsigned char*)_image_->lock();
-	//		for (u32 i = 0; i < _image_->getImageDataSizeInBytes(); i += 4)
-	//		{
-	//			irr_data[i] = data[i+2];//b
-	//			irr_data[i+1] = data[i+1];//g
-	//			irr_data[i+2] = data[i];//r
-	//			irr_data[i+3] = data[i+3];//a
-	//			//irr_data[i+3] = _alpha_value_;//a
-	//		}
-	//		_image_->unlock();
-	//	}
-	//	return _image_;
-	//}
-	dimension2d<u32>* get_size()
-	{
-		u32 w = (u32)_width_;
-		if (_width_ > (double)w)
-			w++;
-		u32 h = (u32)_height_;
-		if (_height_ > (double)h)
-			h++;
-		return new dimension2d<u32>(w, h);
+		//if (_video_driver_)
+		//	_video_driver_->drop();
 	}
 
 private:
@@ -799,6 +847,7 @@ private:
 };
 
 
+#ifdef _COMPILE_SVG_AGG_EXPORTS_
 
 #ifdef __cplusplus
 extern "C" {
@@ -806,37 +855,48 @@ extern "C" {
 
 IRRLICHT_C_API svg_agg_image* svg_agg_image_ctor1(IVideoDriver* video_driver, IFileSystem* fs, const fschar_t* file_name = "tiger.svg", bool content_unicode = true, u32 alpha_value = 128, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, int stride = 4)
 {
-#ifdef _MSC_VER
-	try
-	{
-		return new svg_agg_image(video_driver, fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, stride);
-	}
-	catch(...)
-	{
-#if defined(_IRR_WCHAR_FILESYSTEM)
-		wprintf(L"ERROR parse file %s\n", file_name);
-#else
-		printf("ERROR parse file %s\n", file_name);
-#endif
-		throw;
-	}
-#else
+//#ifdef _MSC_VER
+//	try
+//	{
+//		return new svg_agg_image(video_driver, fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, stride);
+//	}
+//	catch(...)
+//	{
+//#if defined(_IRR_WCHAR_FILESYSTEM)
+//		wprintf(L"ERROR parse file %s\n", file_name);
+//		throw;
+//#else
+//		//printf("ERROR parse file %s\n", file_name);
+//		throw exception("ERROR parse file %s\n", file_name);
+//#endif
+//		return 0;
+//	}
+//#else
 	return new svg_agg_image(video_driver, fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, stride);
-#endif
+//#endif
 }
 IRRLICHT_C_API void svg_agg_image_parse(svg_agg_image* pointer, IFileSystem* fs, const fschar_t* file_name = "tiger.svg", bool content_unicode = true, u32 alpha_value = 128, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, int stride = 4)
 {pointer->parse(fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, stride);}
-IRRLICHT_C_API dimension2d<u32>* svg_agg_image_get_size(svg_agg_image* pointer)
-{return pointer->get_size();}
+//IRRLICHT_C_API vector2d<u32>* svg_agg_image_get_size(svg_agg_image* pointer)
+//{return pointer->get_size();}
 IRRLICHT_C_API void svg_agg_image_scale(svg_agg_image* pointer, double scale_value = 1.0)
 {pointer->scale(scale_value);}
-//IRRLICHT_C_API IImage* svg_agg_image_render(svg_agg_image* pointer)
-//{return pointer->render();}
 IRRLICHT_C_API IImage* svg_agg_image_get_image(svg_agg_image* pointer, bool rendering = false)
 {return pointer->get_image(rendering);}
 IRRLICHT_C_API ITexture* svg_agg_image_get_texture(svg_agg_image* pointer, bool rendering = false, bool adding = false)
 {return pointer->get_texture(rendering, adding);}
 
+IRRLICHT_C_API double svg_agg_image_get_width(svg_agg_image* pointer)
+{return pointer->get_width();}
+IRRLICHT_C_API u32 svg_agg_image_get_width_u32(svg_agg_image* pointer)
+{return pointer->get_width_u32();}
+IRRLICHT_C_API double svg_agg_image_get_height(svg_agg_image* pointer)
+{return pointer->get_height();}
+IRRLICHT_C_API u32 svg_agg_image_get_height_u32(svg_agg_image* pointer)
+{return pointer->get_height_u32();}
+
 #ifdef __cplusplus
 }
-#endif
+#endif //__cplusplus
+
+#endif //_COMPILE_SVG_AGG_EXPORTS_

@@ -4,6 +4,8 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
+#define _COMPILE_SVG_CAIRO_EXPORTS_
+
 
 #include "named_colors_cairo.h"
 #include "cairo.h"
@@ -48,6 +50,11 @@ struct container_style
 inline int __cdecl cmp_color_cairo(const void* p1, const void* p2)
 {
 	return wcscmp(((cairo_named_color*)p1)->name, ((cairo_named_color*)p2)->name);
+}
+
+inline stringw trim_left(const stringw value, s32 length = 0)
+{
+	return value.subString(length, value.size() - length);
 }
 
 
@@ -626,7 +633,6 @@ public:
 	}
 	void parse_style(const wchar_t* value)
 	{
-		//wprintf(L"--- style = %s\n", value);
 		core::array<core::stringw> list_attr;
 		core::stringw v(value);
 		//_cs_.f = false;
@@ -637,23 +643,23 @@ public:
 			for (int i = 0; i < list_attr.size(); i++)
 			{
 				if (list_attr[i].equalsn(L"fill:", 5))
-					parse_fill(list_attr[i].trim("fill:"));
+					parse_fill(trim_left(list_attr[i], 5));
 				else if (list_attr[i].equalsn(L"fill-rule:", 10))
-					parse_fill_rule(list_attr[i].trim(L"fill-rule:").c_str());
+					parse_fill_rule(trim_left(list_attr[i], 10).c_str());
 				else if (list_attr[i].equalsn(L"fill-opacity:", 13))
-					_cf_.a = _wtof(list_attr[i].trim(L"fill-opacity:").c_str());
+					_cf_.a = _wtof(trim_left(list_attr[i], 13).c_str());
 				else if (list_attr[i].equalsn(L"stroke:", 7))
-					parse_stroke(list_attr[i].trim("stroke:"));
+					parse_stroke(trim_left(list_attr[i], 7));
 				else if (list_attr[i].equalsn(L"stroke-opacity:", 15))
-					_cs_.a = _wtof(list_attr[i].trim(L"stroke-opacity:").c_str());
+					_cs_.a = _wtof(trim_left(list_attr[i], 15).c_str());
 				else if (list_attr[i].equalsn(L"stroke-width:", 13))
-					_cs_.width = _wtof(list_attr[i].trim(L"stroke-width:").c_str());
+					_cs_.width = _wtof(trim_left(list_attr[i], 13).c_str());
 				else if (list_attr[i].equalsn(L"stroke-miterlimit:", 18))
-					_cs_.miterlimit = _wtof(list_attr[i].trim(L"stroke-miterlimit:").c_str());
+					_cs_.miterlimit = _wtof(trim_left(list_attr[i], 18).c_str());
 				else if (list_attr[i].equalsn(L"stroke-linecap:", 15))
-					parse_linecap(list_attr[i].trim(L"stroke-linecap:"));
+					parse_linecap(trim_left(list_attr[i], 15));
 				else if (list_attr[i].equalsn(L"stroke-linejoin:", 16))
-					parse_linejoin(list_attr[i].trim(L"stroke-linejoin:"));
+					parse_linejoin(trim_left(list_attr[i], 16));
 			}
 			list_attr.clear();
 		}
@@ -705,23 +711,23 @@ public:
 			for (int i = 0; i < list_attr.size(); i++)
 			{
 				if (list_attr[i].equalsn(L"fill:", 5))
-					css_parse_fill(list_attr[i].trim("fill:"), css_style);
+					css_parse_fill(trim_left(list_attr[i], 5), css_style);
 				else if (list_attr[i].equalsn(L"fill-rule:", 10))
-					css_parse_fill_rule(list_attr[i].trim(L"fill-rule:").c_str(), css_style);
+					css_parse_fill_rule(trim_left(list_attr[i], 10).c_str(), css_style);
 				else if (list_attr[i].equalsn(L"fill-opacity:", 13))
-					css_style.a = _wtof(list_attr[i].trim(L"fill-opacity:").c_str());
+					css_style.a = _wtof(trim_left(list_attr[i], 13).c_str());
 				else if (list_attr[i].equalsn(L"stroke:", 7))
-					css_parse_stroke(list_attr[i].trim("stroke:"), css_style);
+					css_parse_stroke(trim_left(list_attr[i], 7), css_style);
 				else if (list_attr[i].equalsn(L"stroke-opacity:", 15))
-					css_style.a = _wtof(list_attr[i].trim(L"stroke-opacity:").c_str());
+					css_style.a = _wtof(trim_left(list_attr[i], 15).c_str());
 				else if (list_attr[i].equalsn(L"stroke-width:", 13))
-					css_style.width = _wtof(list_attr[i].trim(L"stroke-width:").c_str());
+					css_style.width = _wtof(trim_left(list_attr[i], 13).c_str());
 				else if (list_attr[i].equalsn(L"stroke-miterlimit:", 18))
-					css_style.miterlimit = _wtof(list_attr[i].trim(L"stroke-miterlimit:").c_str());
+					css_style.miterlimit = _wtof(trim_left(list_attr[i], 18).c_str());
 				else if (list_attr[i].equalsn(L"stroke-linecap:", 15))
-					css_parse_linecap(list_attr[i].trim(L"stroke-linecap:"), css_style);
+					css_parse_linecap(trim_left(list_attr[i], 15), css_style);
 				else if (list_attr[i].equalsn(L"stroke-linejoin:", 16))
-					css_parse_linejoin(list_attr[i].trim(L"stroke-linejoin:"), css_style);
+					css_parse_linejoin(trim_left(list_attr[i], 16), css_style);
 			}
 			list_attr.clear();
 		}
@@ -1337,6 +1343,8 @@ private:
 
 
 
+#ifdef _COMPILE_SVG_CAIRO_EXPORTS_
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -1367,4 +1375,6 @@ IRRLICHT_C_API const char* tool_cairo_version_string(){return cairo_version_stri
 
 #ifdef __cplusplus
 }
-#endif
+#endif //__cplusplus
+
+#endif //_COMPILE_SVG_CAIRO_EXPORTS_
