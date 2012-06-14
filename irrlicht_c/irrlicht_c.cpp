@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Maxim Kolosov 2010-2012 pyirrlicht@gmail.com
+// http://pir.sourceforge.net
 // BSD license
 #include "irrlicht_c.h"
 
@@ -19,7 +19,7 @@
 #endif//_IRR_WINDOWS_
 #endif//_COMPILE_WITH_2DTTFONT_
 
-#ifdef _COMPILE_WITH_AGG_ || _COMPILE_WITH_IRR_SVG_AGG_
+#ifdef _COMPILE_WITH_AGG_// || _COMPILE_WITH_IRR_SVG_AGG_
 #ifdef _IRR_WINDOWS_
 #ifdef _DEBUG
 #pragma comment(lib, "libexpatMT_D.lib")

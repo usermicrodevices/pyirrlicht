@@ -49,7 +49,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="&quot;..\irrlicht-1.8.0.alpha\include&quot;;&quot;..\freetype-2.3.12\include&quot;;&quot;..\agg-2.5\include&quot;;&quot;..\expat-2.0.1\lib&quot;;&quot;..\cairo-1.11.2\src&quot;"
+				AdditionalIncludeDirectories="&quot;..\irrlicht-1.8.0.alpha\include&quot;;&quot;..\freetype-2.3.12\include&quot;;&quot;..\agg-2.5\include&quot;;&quot;..\expat-2.0.1\lib&quot;;&quot;..\cairo-1.12.0\src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;XML_STATIC;_COMPILE_WITH_2DTTFONT_;CAIRO_WIN32_STATIC_BUILD"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -80,7 +80,7 @@
 				Version="1.0"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;..\irrlicht-1.8.0.alpha\lib\Win32-visualStudio&quot;;&quot;..\irrlicht-1.8.0.alpha\lib\Win64-visualStudio&quot;;&quot;..\freetype-2.3.12\objs\win32\vc2008&quot;;&quot;..\expat-2.0.1\win32\bin\Release&quot;;&quot;..\pixman-0.24.0\pixman\release&quot;;&quot;..\cairo-1.11.2\src\release&quot;"
+				AdditionalLibraryDirectories="&quot;..\irrlicht-1.8.0.alpha\lib\Win32-visualStudio&quot;;&quot;..\irrlicht-1.8.0.alpha\lib\Win64-visualStudio&quot;;&quot;..\freetype-2.3.12\objs\win32\vc2008&quot;;&quot;..\expat-2.0.1\win32\bin\Release&quot;;&quot;..\pixman-0.24.0\pixman\release&quot;;&quot;..\cairo-1.12.0\src\release&quot;"
 				IgnoreDefaultLibraryNames=""
 				ProgramDatabaseFile=".\Release/irrlicht_c.pdb"
 				RandomizedBaseAddress="1"
@@ -145,8 +145,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\irrlicht-1.8.0.alpha\include&quot;;&quot;..\freetype-2.3.12\include&quot;;&quot;..\agg-2.5\include&quot;;&quot;..\expat-2.0.1\lib&quot;;&quot;..\cairo-1.11.2\src&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;XML_STATIC;CAIRO_WIN32_STATIC_BUILD"
+				AdditionalIncludeDirectories="&quot;..\irrlicht-1.8.0.alpha\include&quot;;&quot;..\freetype-2.3.12\include&quot;;&quot;..\agg-2.5\include&quot;;&quot;..\expat-2.0.1\lib&quot;;&quot;..\cairo-1.12.0\src&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;XML_STATIC;_COMPILE_WITH_2DTTFONT_;CAIRO_WIN32_STATIC_BUILD"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -174,11 +174,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="irrlicht.lib"
+				AdditionalDependencies="irrlicht_static.lib"
 				OutputFile=".\Debug/irrlicht_c.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;..\irrlicht-1.8.0.alpha\lib\Win32-visualStudio&quot;;&quot;..\irrlicht-1.8.0.alpha\lib\Win64-visualStudio&quot;;&quot;..\freetype-2.3.12\objs\win32\vc2008&quot;;&quot;..\expat-2.0.1\win32\bin\Debug&quot;;..\pixman\Debug;..\cairo_lib\Debug"
+				AdditionalLibraryDirectories="&quot;..\irrlicht-1.8.0.alpha\lib\Win32-visualStudio&quot;;&quot;..\irrlicht-1.8.0.alpha\lib\Win64-visualStudio&quot;;&quot;..\freetype-2.3.12\objs\win32\vc2008&quot;;&quot;..\expat-2.0.1\win32\bin\Debug&quot;;&quot;..\pixman-0.24.0\pixman\release&quot;;&quot;..\cairo-1.12.0\src\release&quot;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/irrlicht_c.pdb"
 				RandomizedBaseAddress="1"
@@ -244,7 +244,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="&quot;..\irrlicht-1.8.0.alpha\include&quot;;&quot;..\freetype-2.3.12\include&quot;;&quot;..\agg-2.5\include&quot;;&quot;..\expat-2.0.1\lib&quot;;&quot;..\cairo-1.11.2\src&quot;"
+				AdditionalIncludeDirectories="&quot;..\irrlicht-1.8.0.alpha\include&quot;;&quot;..\freetype-2.3.12\include&quot;;&quot;..\agg-2.5\include&quot;;&quot;..\expat-2.0.1\lib&quot;;&quot;..\cairo-1.12.0\src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;XML_STATIC"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -727,7 +727,31 @@
 				RelativePath="..\agg-2.5\examples\svg_viewer\agg_svg_parser.cpp"
 				>
 				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release_test|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release_Irrlicht_173|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -751,7 +775,23 @@
 				RelativePath="..\agg-2.5\examples\svg_viewer\agg_svg_path_tokenizer.cpp"
 				>
 				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="Release_test|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release_Irrlicht_173|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -875,6 +915,10 @@
 			Name="Resource Files"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
+			<File
+				RelativePath=".\irrlicht_c.rc"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

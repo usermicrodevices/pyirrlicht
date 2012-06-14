@@ -1,4 +1,4 @@
-// Copyright(c) Max Kolosov 2010-2012 maxkolosov@inbox.ru
+// Copyright(c) Maxim Kolosov 2010-2012 pyirrlicht@gmail.com
 // http://pir.sourceforge.net
 // BSD license
 
@@ -6,7 +6,7 @@
 
 #define _IRR_STATIC_LIB_
 
-//#define _COMPILE_WITH_2DTTFONT_
+#define _COMPILE_WITH_2DTTFONT_
 
 #define _COMPILE_WITH_3D_TEXT_
 
@@ -14,15 +14,15 @@
 
 #define _COMPILE_WITH_GUI_FILE_SELECTOR_
 
-#define _COMPILE_WITH_AGG_
+//#define _COMPILE_WITH_AGG_
 
 #define _COMPILE_WITH_IRR_SVG_AGG_
 
 //#define _COMPILE_WITH_IRR_SVG_CAIRO_
 
-#define _COMPILE_WITH_CHAR_CONVERSION_FUNCTIONS_//usefull for Blitz3D wrapper
+//#define _COMPILE_WITH_CHAR_CONVERSION_FUNCTIONS_//usefull for Blitz3D wrapper
 
-#define _COMPILE_WITH_STREAM_FUNCTIONS_
+//#define _COMPILE_WITH_STREAM_FUNCTIONS_
 
 #ifdef _MSC_VER
 #define DEBUG_EVENTS
@@ -239,6 +239,12 @@ IRRLICHT_C_API unsigned char _IRRLICHT_VERSION = IRRLICHT_VERSION_MAJOR*100 + IR
 IRRLICHT_C_API bool BUILD_WITH_3D_TEXT = true;
 #else
 IRRLICHT_C_API bool BUILD_WITH_3D_TEXT = false;
+#endif
+
+#ifdef _COMPILE_WITH_GRID_SCENE_NODE_
+IRRLICHT_C_API bool BUILD_WITH_GRID_SCENE_NODE = true;
+#else
+IRRLICHT_C_API bool BUILD_WITH_GRID_SCENE_NODE = false;
 #endif
 
 #ifdef _COMPILE_WITH_AGG_

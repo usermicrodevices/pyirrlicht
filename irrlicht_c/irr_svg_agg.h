@@ -328,6 +328,10 @@ public:
 			//	wprintf(L"=== gradient id = %s, xlink:href = %s\n", gradients[i].id(), gradients[i].xlink_href());
 			//_path_renderer_.arrange_orientations();
 			_path_renderer_.bounding_rect(&_min_x_, &_min_y_, &_width_, &_height_);
+			if (_width_ < 0)
+				_width_ *= -1;
+			if (_height_ < 0)
+				_height_ *= -1;
 		}
 		else
 			printf("svg_agg_image: ERROR create IXMLReader from file = %s\n", _file_name_.c_str());
@@ -376,6 +380,8 @@ public:
 	{
 		if (value.equalsn(L"none", 4))
 			_path_renderer_.fill_none();
+		else if (value.equalsn(L"url(#", 5))
+			_path_renderer_.fill(agg::rgba8(128, 128, 128, 255));//temporary plug, must be replaced with correct code
 		else if (value.equalsn(L"#", 1))
 		{
 			value[0] = L'x';
@@ -401,6 +407,8 @@ public:
 	{
 		if (value.equalsn(L"none", 4))
 			_path_renderer_.stroke_none();
+		else if (value.equalsn(L"url(#", 5))
+			_path_renderer_.stroke(agg::rgba8(128, 128, 128, 255));//temporary plug, must be replaced with correct code
 		else if (value.equalsn(L"#", 1))
 		{
 			value[0] = L'x';
@@ -821,8 +829,11 @@ public:
 	~svg_agg_image()
 	{
 		_path_renderer_.remove_all();
-		if (_texture_)
-			_video_driver_->removeTexture(_texture_);
+		//if (_texture_ && _texture_->getReferenceCount())
+		//{
+		//	if (_video_driver_ && _video_driver_->getReferenceCount())
+		//		_video_driver_->removeTexture(_texture_);
+		//}
 		if (_image_)
 			_image_->drop();
 		//if (_video_driver_)
