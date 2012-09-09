@@ -2,8 +2,8 @@
 # http://pir.sourceforge.net
 # BSD license
 
-__version__ = pyirrlicht_version = '1.1.0'
-__versionTime__ = '2012-04-25'
+__version__ = pyirrlicht_version = '1.1.1'
+__versionTime__ = '2012-09-09'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -1376,12 +1376,16 @@ BUILD_WITH_IRR_SVG_AGG = ctypes.c_bool.in_dll(c_module, 'BUILD_WITH_IRR_SVG_AGG'
 if BUILD_WITH_IRR_SVG_AGG:
 	svg_agg_image_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_bool, ctypes.c_uint, ctypes.c_int, ctypes.c_int)(('svg_agg_image_ctor1', c_module))
 	svg_agg_image_parse = func_type(None, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_bool, ctypes.c_uint, ctypes.c_int, ctypes.c_int)(('svg_agg_image_parse', c_module))
-	svg_agg_image_get_size = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_get_size', c_module))
+	#~ svg_agg_image_get_size = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_get_size', c_module))
 	svg_agg_image_scale = func_type(None, ctypes.c_void_p, ctypes.c_double)(('svg_agg_image_scale', c_module))
 	#~ svg_agg_image_render = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_render', c_module))
 	svg_agg_image_get_image = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('svg_agg_image_get_image', c_module))
 	svg_agg_image_get_texture = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool)(('svg_agg_image_get_texture', c_module))
 	#~ svg_agg_image_drop = func_type(ctypes.c_bool, ctypes.c_void_p)(('svg_agg_image_drop', c_module))
+	svg_agg_image_get_width = func_type(ctypes.c_double, ctypes.c_void_p)(('svg_agg_image_get_width', c_module))
+	svg_agg_image_get_width_u32 = func_type(ctypes.c_uint, ctypes.c_void_p)(('svg_agg_image_get_width_u32', c_module))
+	svg_agg_image_get_height = func_type(ctypes.c_double, ctypes.c_void_p)(('svg_agg_image_get_height', c_module))
+	svg_agg_image_get_height_u32 = func_type(ctypes.c_uint, ctypes.c_void_p)(('svg_agg_image_get_height_u32', c_module))
 
 # svg_cairo_image
 BUILD_WITH_IRR_SVG_CAIRO = ctypes.c_bool.in_dll(c_module, 'BUILD_WITH_IRR_SVG_CAIRO').value
@@ -1399,6 +1403,10 @@ if BUILD_WITH_IRR_SVG_CAIRO:
 	svg_cairo_image_scale = func_type(None, ctypes.c_void_p, ctypes.c_double, ctypes.c_double)(('svg_cairo_image_scale', c_module))
 	svg_cairo_image_get_image = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_cairo_image_get_image', c_module))
 	svg_cairo_image_get_texture = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_cairo_image_get_texture', c_module))
+	svg_cairo_image_get_width = func_type(ctypes.c_double, ctypes.c_void_p)(('svg_cairo_image_get_width', c_module))
+	svg_cairo_image_get_width_u32 = func_type(ctypes.c_uint, ctypes.c_void_p)(('svg_cairo_image_get_width_u32', c_module))
+	svg_cairo_image_get_height = func_type(ctypes.c_double, ctypes.c_void_p)(('svg_cairo_image_get_height', c_module))
+	svg_cairo_image_get_height_u32 = func_type(ctypes.c_uint, ctypes.c_void_p)(('svg_cairo_image_get_height_u32', c_module))
 
 # MainLoop main loop helper example
 MainLoop_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_bool)(('MainLoop_ctor', c_module))
@@ -1462,31 +1470,33 @@ arraySJoystickInfo_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes
 #~ arraySJoystickInfo_get_item = func_type(ctypes.POINTER(SJoystickInfo), ctypes.c_void_p, ctypes.c_uint)(('arraySJoystickInfo_get_item', c_module))
 
 # functions for class CGridSceneNode
-CGridSceneNode_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p, ctypes.c_bool)(('CGridSceneNode_ctor', c_module))
-CGridSceneNode_clone = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_clone', c_module))
-CGridSceneNode_OnRegisterSceneNode = func_type(None, ctypes.c_void_p)(('CGridSceneNode_OnRegisterSceneNode', c_module))
-CGridSceneNode_render = func_type(None, ctypes.c_void_p)(('CGridSceneNode_render', c_module))
-CGridSceneNode_getBoundingBox = func_type(ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_getBoundingBox', c_module))
-CGridSceneNode_getMaterialCount = func_type(ctypes.c_uint, ctypes.c_void_p)(('CGridSceneNode_getMaterialCount', c_module))
-CGridSceneNode_getMaterial = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('CGridSceneNode_getMaterial', c_module))
-CGridSceneNode_RegenerateGrid = func_type(None, ctypes.c_void_p)(('CGridSceneNode_RegenerateGrid', c_module))
-CGridSceneNode_GetSpacing = func_type(ctypes.c_uint, ctypes.c_void_p)(('CGridSceneNode_GetSpacing', c_module))
-CGridSceneNode_GetSize = func_type(ctypes.c_uint, ctypes.c_void_p)(('CGridSceneNode_GetSize', c_module))
-CGridSceneNode_GetGridColor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_GetGridColor', c_module))
-CGridSceneNode_GetAccentlineOffset = func_type(ctypes.c_uint, ctypes.c_void_p)(('CGridSceneNode_GetAccentlineOffset', c_module))
-CGridSceneNode_GetAccentlineColor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_GetAccentlineColor', c_module))
-CGridSceneNode_AreAxisLineActive = func_type(ctypes.c_bool, ctypes.c_void_p)(('CGridSceneNode_AreAxisLineActive', c_module))
-CGridSceneNode_GetAxisLineXColor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_GetAxisLineXColor', c_module))
-CGridSceneNode_GetAxisLineZColor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_GetAxisLineZColor', c_module))
-CGridSceneNode_SetSpacing = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('CGridSceneNode_SetSpacing', c_module))
-CGridSceneNode_SetSize = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('CGridSceneNode_SetSize', c_module))
-CGridSceneNode_SetGridColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_SetGridColor', c_module))
-CGridSceneNode_SetAccentlineOffset = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('CGridSceneNode_SetAccentlineOffset', c_module))
-CGridSceneNode_SetAccentlineColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_SetAccentlineColor', c_module))
-CGridSceneNode_SetAxisLineActive = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('CGridSceneNode_SetAxisLineActive', c_module))
-CGridSceneNode_SetAxisLineXColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_SetAxisLineXColor', c_module))
-CGridSceneNode_SetAxisLineZColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_SetAxisLineZColor', c_module))
-CGridSceneNode_SetMaterial = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_SetMaterial', c_module))
+BUILD_WITH_GRID_SCENE_NODE = ctypes.c_bool.in_dll(c_module, 'BUILD_WITH_GRID_SCENE_NODE').value
+if BUILD_WITH_GRID_SCENE_NODE:
+	CGridSceneNode_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p, ctypes.c_bool)(('CGridSceneNode_ctor', c_module))
+	CGridSceneNode_clone = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_clone', c_module))
+	CGridSceneNode_OnRegisterSceneNode = func_type(None, ctypes.c_void_p)(('CGridSceneNode_OnRegisterSceneNode', c_module))
+	CGridSceneNode_render = func_type(None, ctypes.c_void_p)(('CGridSceneNode_render', c_module))
+	CGridSceneNode_getBoundingBox = func_type(ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_getBoundingBox', c_module))
+	CGridSceneNode_getMaterialCount = func_type(ctypes.c_uint, ctypes.c_void_p)(('CGridSceneNode_getMaterialCount', c_module))
+	CGridSceneNode_getMaterial = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('CGridSceneNode_getMaterial', c_module))
+	CGridSceneNode_RegenerateGrid = func_type(None, ctypes.c_void_p)(('CGridSceneNode_RegenerateGrid', c_module))
+	CGridSceneNode_GetSpacing = func_type(ctypes.c_uint, ctypes.c_void_p)(('CGridSceneNode_GetSpacing', c_module))
+	CGridSceneNode_GetSize = func_type(ctypes.c_uint, ctypes.c_void_p)(('CGridSceneNode_GetSize', c_module))
+	CGridSceneNode_GetGridColor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_GetGridColor', c_module))
+	CGridSceneNode_GetAccentlineOffset = func_type(ctypes.c_uint, ctypes.c_void_p)(('CGridSceneNode_GetAccentlineOffset', c_module))
+	CGridSceneNode_GetAccentlineColor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_GetAccentlineColor', c_module))
+	CGridSceneNode_AreAxisLineActive = func_type(ctypes.c_bool, ctypes.c_void_p)(('CGridSceneNode_AreAxisLineActive', c_module))
+	CGridSceneNode_GetAxisLineXColor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_GetAxisLineXColor', c_module))
+	CGridSceneNode_GetAxisLineZColor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_GetAxisLineZColor', c_module))
+	CGridSceneNode_SetSpacing = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('CGridSceneNode_SetSpacing', c_module))
+	CGridSceneNode_SetSize = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('CGridSceneNode_SetSize', c_module))
+	CGridSceneNode_SetGridColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_SetGridColor', c_module))
+	CGridSceneNode_SetAccentlineOffset = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('CGridSceneNode_SetAccentlineOffset', c_module))
+	CGridSceneNode_SetAccentlineColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_SetAccentlineColor', c_module))
+	CGridSceneNode_SetAxisLineActive = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('CGridSceneNode_SetAxisLineActive', c_module))
+	CGridSceneNode_SetAxisLineXColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_SetAxisLineXColor', c_module))
+	CGridSceneNode_SetAxisLineZColor = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_SetAxisLineZColor', c_module))
+	CGridSceneNode_SetMaterial = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_SetMaterial', c_module))
 
 #class CGUIFileSelector : public IGUIFileOpenDialog
 BUILD_WITH_GUI_FILE_SELECTOR = ctypes.c_bool.in_dll(c_module, 'BUILD_WITH_GUI_FILE_SELECTOR').value
@@ -4968,6 +4978,9 @@ if BUILD_WITH_3D_TEXT:
 	DAF_SPHERE = 2#DRAW AS SPHERES
 	DAF_CYLINDER = 3#DRAW AS CYLINDERS
 	DAF_MIXED = 4#DRAW AS FIGURES WITH PRIMITIVES
+
+	IText3DSimple_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IText3DSimple_ctor', c_module))
+	IText3DSimple_setText = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_wchar_p, fschar_t, ctypes.c_uint, ctypes.c_float, ctypes.c_int, ctypes.c_int)(('IText3DSimple_setText', c_module))
 
 	IText3D_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IText3D_ctor', c_module))
 	IText3D_setText = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_wchar_p, fschar_t, ctypes.c_uint, ctypes.c_float, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('IText3D_setText', c_module))
@@ -12200,63 +12213,64 @@ class IParticleSystemSceneNode(ISceneNode):
 	def createRotationAffector(self, speed = vector3df(5.0,5.0,5.0), pivotPoint = vector3df(0.0,0.0,0.0)):
 		return IParticleRotationAffector(IParticleSystemSceneNode_createRotationAffector(self.c_pointer, speed.c_pointer, pivotPoint.c_pointer))
 
-class CGridSceneNode(ISceneNode):
-	def __init__(self, *args, **kwargs):
-		self.c_pointer = None
-		if len(args) == 1:
-			self.c_pointer = args[0]
-		elif len(args) > 1 or len(kwargs) > 1:
-			self.c_pointer = self.Constructor(*args, **kwargs)
-	def Constructor(self, parent, smgr, id = -1, spacing = 8, size = 1024, gridcolor = SColor(255,128,128,128), accentlineoffset = 8, accentgridcolor = SColor(255,192,192,192), axislinestate = False):
-		return CGridSceneNode_ctor(parent.c_pointer, smgr.c_pointer, id, spacing, size, gridcolor.c_pointer, accentlineoffset, accentgridcolor.c_pointer, axislinestate)
-	def clone(self, newParent = 0, newSceneManager = 0):
-		return CGridSceneNode(CGridSceneNode_clone(self.c_pointer, newParent, newSceneManager))
-	def OnRegisterSceneNode(self):
-		CGridSceneNode_OnRegisterSceneNode(self.c_pointer)
-	def render(self):
-		CGridSceneNode_render(self.c_pointer)
-	def getBoundingBox(self):
-		return aabbox3df(CGridSceneNode_getBoundingBox(self.c_pointer))
-	def getMaterialCount(self):
-		return CGridSceneNode_getMaterialCount(self.c_pointer)
-	def getMaterial(self, i):
-		return SMaterial(CGridSceneNode_getMaterial(self.c_pointer, i))
-	def RegenerateGrid(self):
-		CGridSceneNode_RegenerateGrid(self.c_pointer)
-	def GetSpacing(self):
-		return CGridSceneNode_GetSpacing(self.c_pointer)
-	def GetSize(self):
-		return CGridSceneNode_GetSize(self.c_pointer)
-	def GetGridColor(self):
-		return SColor(CGridSceneNode_GetGridColor(self.c_pointer))
-	def GetAccentlineOffset(self):
-		return CGridSceneNode_GetAccentlineOffset(self.c_pointer)
-	def GetAccentlineColor(self):
-		return SColor(CGridSceneNode_GetAccentlineColor(self.c_pointer))
-	def AreAxisLineActive(self):
-		return CGridSceneNode_AreAxisLineActive(self.c_pointer)
-	def GetAxisLineXColor(self):
-		return SColor(CGridSceneNode_GetAxisLineXColor(self.c_pointer))
-	def GetAxisLineZColor(self):
-		return SColor(CGridSceneNode_GetAxisLineZColor(self.c_pointer))
-	def SetSpacing(self, newspacing):
-		CGridSceneNode_SetSpacing(self.c_pointer, newspacing)
-	def SetSize(self, newsize):
-		CGridSceneNode_SetSize(self.c_pointer, newsize)
-	def SetGridColor(self, newcolor):
-		CGridSceneNode_SetGridColor(self.c_pointer, newcolor.c_pointer)
-	def SetAccentlineOffset(self, newoffset):
-		CGridSceneNode_SetAccentlineOffset(self.c_pointer, newoffset)
-	def SetAccentlineColor(self, newcolor):
-		CGridSceneNode_SetAccentlineColor(self.c_pointer, newcolor.c_pointer)
-	def SetAxisLineActive(self, active):
-		CGridSceneNode_SetAxisLineActive(self.c_pointer, active)
-	def SetAxisLineXColor(self, XLine):
-		CGridSceneNode_SetAxisLineXColor(self.c_pointer, XLine.c_pointer)
-	def SetAxisLineZColor(self, ZLine):
-		CGridSceneNode_SetAxisLineZColor(self.c_pointer, ZLine.c_pointer)
-	def SetMaterial(self, newMaterial):
-		CGridSceneNode_SetMaterial(self.c_pointer, newMaterial.c_pointer)
+if BUILD_WITH_GRID_SCENE_NODE:
+	class CGridSceneNode(ISceneNode):
+		def __init__(self, *args, **kwargs):
+			self.c_pointer = None
+			if len(args) == 1:
+				self.c_pointer = args[0]
+			elif len(args) > 1 or len(kwargs) > 1:
+				self.c_pointer = self.Constructor(*args, **kwargs)
+		def Constructor(self, parent, smgr, id = -1, spacing = 8, size = 1024, gridcolor = SColor(255,128,128,128), accentlineoffset = 8, accentgridcolor = SColor(255,192,192,192), axislinestate = False):
+			return CGridSceneNode_ctor(parent.c_pointer, smgr.c_pointer, id, spacing, size, gridcolor.c_pointer, accentlineoffset, accentgridcolor.c_pointer, axislinestate)
+		def clone(self, newParent = 0, newSceneManager = 0):
+			return CGridSceneNode(CGridSceneNode_clone(self.c_pointer, newParent, newSceneManager))
+		def OnRegisterSceneNode(self):
+			CGridSceneNode_OnRegisterSceneNode(self.c_pointer)
+		def render(self):
+			CGridSceneNode_render(self.c_pointer)
+		def getBoundingBox(self):
+			return aabbox3df(CGridSceneNode_getBoundingBox(self.c_pointer))
+		def getMaterialCount(self):
+			return CGridSceneNode_getMaterialCount(self.c_pointer)
+		def getMaterial(self, i):
+			return SMaterial(CGridSceneNode_getMaterial(self.c_pointer, i))
+		def RegenerateGrid(self):
+			CGridSceneNode_RegenerateGrid(self.c_pointer)
+		def GetSpacing(self):
+			return CGridSceneNode_GetSpacing(self.c_pointer)
+		def GetSize(self):
+			return CGridSceneNode_GetSize(self.c_pointer)
+		def GetGridColor(self):
+			return SColor(CGridSceneNode_GetGridColor(self.c_pointer))
+		def GetAccentlineOffset(self):
+			return CGridSceneNode_GetAccentlineOffset(self.c_pointer)
+		def GetAccentlineColor(self):
+			return SColor(CGridSceneNode_GetAccentlineColor(self.c_pointer))
+		def AreAxisLineActive(self):
+			return CGridSceneNode_AreAxisLineActive(self.c_pointer)
+		def GetAxisLineXColor(self):
+			return SColor(CGridSceneNode_GetAxisLineXColor(self.c_pointer))
+		def GetAxisLineZColor(self):
+			return SColor(CGridSceneNode_GetAxisLineZColor(self.c_pointer))
+		def SetSpacing(self, newspacing):
+			CGridSceneNode_SetSpacing(self.c_pointer, newspacing)
+		def SetSize(self, newsize):
+			CGridSceneNode_SetSize(self.c_pointer, newsize)
+		def SetGridColor(self, newcolor):
+			CGridSceneNode_SetGridColor(self.c_pointer, newcolor.c_pointer)
+		def SetAccentlineOffset(self, newoffset):
+			CGridSceneNode_SetAccentlineOffset(self.c_pointer, newoffset)
+		def SetAccentlineColor(self, newcolor):
+			CGridSceneNode_SetAccentlineColor(self.c_pointer, newcolor.c_pointer)
+		def SetAxisLineActive(self, active):
+			CGridSceneNode_SetAxisLineActive(self.c_pointer, active)
+		def SetAxisLineXColor(self, XLine):
+			CGridSceneNode_SetAxisLineXColor(self.c_pointer, XLine.c_pointer)
+		def SetAxisLineZColor(self, ZLine):
+			CGridSceneNode_SetAxisLineZColor(self.c_pointer, ZLine.c_pointer)
+		def SetMaterial(self, newMaterial):
+			CGridSceneNode_SetMaterial(self.c_pointer, newMaterial.c_pointer)
 
 class IMeshSceneNode(ISceneNode):
 	def __init__(self, *args, **kwargs):
@@ -12709,7 +12723,7 @@ class IVideoDriver(IReferenceCounted):
 	def addTexture2(self, name, image, mipmapData = None):
 		return ITexture(IVideoDriver_addTexture2(self.c_pointer, name, image.c_pointer, mipmapData))
 	def addRenderTargetTexture(self, size, name = "rt", format = ECF_UNKNOWN):
-		return ITexture(IVideoDriver_addRenderTargetTexture(self.c_pointer, size, name, format))
+		return ITexture(IVideoDriver_addRenderTargetTexture(self.c_pointer, size.c_pointer, name, format))
 	def removeTexture(self, texture):
 		IVideoDriver_removeTexture(self.c_pointer, texture.c_pointer)
 	def removeAllTextures(self):
@@ -14884,8 +14898,6 @@ if BUILD_WITH_IRR_SVG_AGG:
 					pass
 		def parse(self, fs, file_name = 'file.svg', content_unicode = True, alpha_value = 0, color_format = ECF_A8R8G8B8, stride = 4):
 			svg_cairo_image_parse(self.c_pointer, fs.c_pointer, file_name, content_unicode, alpha_value, color_format, stride)
-		def get_size(self):
-			return dimension2du(pointer = svg_agg_image_get_size(self.c_pointer))
 		def scale(self, value = 1.0):
 			svg_agg_image_scale(self.c_pointer, value)
 		def get_image(self, rendering = False):
@@ -14894,6 +14906,20 @@ if BUILD_WITH_IRR_SVG_AGG:
 			return ITexture(svg_agg_image_get_texture(self.c_pointer, rendering, adding))
 		#~ def drop(self):
 			#~ return svg_agg_image_drop(self.c_pointer)
+		def get_width(self):
+			return svg_agg_image_get_width(self.c_pointer)
+		width = property(get_width)
+		def get_width_u32(self):
+			return svg_agg_image_get_width_u32(self.c_pointer)
+		width_u32 = property(get_width_u32)
+		def get_height(self):
+			return svg_agg_image_get_height(self.c_pointer)
+		height = property(get_height)
+		def get_height_u32(self):
+			return svg_agg_image_get_height_u32(self.c_pointer)
+		height_u32 = property(get_height_u32)
+		def get_size(self):
+			return vector2du(self.get_width_u32(), self.get_height_u32())
 
 if BUILD_WITH_IRR_SVG_CAIRO:
 	class svg_cairo_image(object):
@@ -14931,8 +14957,35 @@ if BUILD_WITH_IRR_SVG_CAIRO:
 			return IImage(svg_cairo_image_get_image(self.c_pointer))
 		def get_texture(self):
 			return ITexture(svg_cairo_image_get_texture(self.c_pointer))
+		def get_width(self):
+			return svg_cairo_image_get_width(self.c_pointer)
+		width = property(get_width)
+		def get_width_u32(self):
+			return svg_cairo_image_get_width_u32(self.c_pointer)
+		width_u32 = property(get_width_u32)
+		def get_height(self):
+			return svg_cairo_image_get_height(self.c_pointer)
+		height = property(get_height)
+		def get_height_u32(self):
+			return svg_cairo_image_get_height_u32(self.c_pointer)
+		height_u32 = property(get_height_u32)
+		def get_size(self):
+			return vector2du(self.get_width_u32(), self.get_height_u32())
 
 if BUILD_WITH_3D_TEXT:
+	class Text3DSimple(ISceneNode):
+		def __init__(self, *args, **kwargs):
+			self.c_pointer = self.ctor(*args, **kwargs)
+		def ctor(self, parent, mgr, id = -1):
+			if not isinstance(parent, ISceneNode):
+				parent = mgr.getRootSceneNode()
+			return IText3DSimple_ctor(parent.c_pointer, mgr.c_pointer, id)
+		def setText(self, text, font_file_name = 0, size = 10, depth = 50.0, primitive_type = EPT_TRIANGLES, index_type = EIT_16BIT):
+			if not font_file_name:
+				from os import environ
+				font_file_name = environ['SYSTEMROOT']+'/Fonts/Arial.ttf'
+			return IText3DSimple_setText(self.c_pointer, text, font_file_name, size, depth, primitive_type, index_type)
+
 	class IText3D(ISceneNode):
 		def __init__(self, *args, **kwargs):
 			self.c_pointer = self.ctor(*args, **kwargs)
