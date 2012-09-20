@@ -309,6 +309,7 @@ class game:
 		self.font_file = self.replace_env_vars(self.config.get('font_file', '@SYSTEMROOT@/Fonts/arial.ttf'))
 		self.gui_font_size = self.config.get_int('gui_font_size', 24)
 		self.gui_font_file = self.replace_env_vars(self.config.get('gui_font_file', '@SYSTEMROOT@/Fonts/arial.ttf'))
+		self.svg_image = None
 
 	def __del__(self):
 		if self.device:
@@ -396,14 +397,14 @@ class game:
 		if self.device:
 			self.device.setWindowCaption(_(app_name))
 			self.device.setResizable(True)
-			self.driver = self.device.getVideoDriver()
+			self.video_driver = self.device.getVideoDriver()
 			#~ self.scene_manager = self.device.getSceneManager()
 			self.guienv = self.device.getGUIEnvironment()
 
 			if is_frozen():
-				self.driver.SetIcon(1)
+				self.video_driver.SetIcon(1)
 			else:
-				self.driver.SetIcon()
+				self.video_driver.SetIcon()
 
 			self.gui_font = CGUITTFont(self.guienv, self.gui_font_file, self.gui_font_size)
 			self.skin = self.guienv.getSkin()
@@ -458,7 +459,8 @@ class game:
 			self.cursor_control = self.device.getCursorControl()
 			#~ self.cursor_control.setVisible(False)
 
-			scolor = SColor(255,100,100,140)
+			scolor = SColor(255, 100, 100, 140)
+			color_white = SColor(0, 255, 255, 255)
 
 			i_event_receiver = UserIEventReceiver()
 			i_event_receiver.game = self
@@ -487,26 +489,28 @@ class game:
 			flag_say = True
 			flag_drawed = True
 
+			screen_size = vector2du(self.video_driver.getScreenSize())
 			while self.device.run():
 				if self.device.isWindowActive():
 					if i_event_receiver.IsKeyDown(KEY_ESCAPE):
 						break
-					if self.driver.beginScene(True, True, scolor):
-						screen_size = self.driver.getScreenSize()
-						#~ self.button_repeat_voice.setRelativePosition(position2di(screen_size.Width - 100, self.menu_height))
+					if self.video_driver.beginScene(True, True, scolor):
+						if screen_size != self.video_driver.getScreenSize():
+							screen_size = vector2du(self.video_driver.getScreenSize())
+							svg_file_name = tex.getName()
+							self.video_driver.removeTexture(tex)
+							tex = self.create_texture_from_svg_image(svg_file_name)
+							tex_size = tex.getOriginalSize()
+						#~ self.button_repeat_voice.setRelativePosition(position2di(screen_size.X - 100, self.menu_height))
 						#~ self.scene_manager.drawAll()
 						if tex:
-							self.driver.draw2DImage(tex, position2di(int((screen_size.Width - tex_size.Width) / 2), int((screen_size.Height - tex_size.Height + self.menu_height) / 2)), recti(0,0,int(tex_size.X),int(tex_size.Y)), 0, scolor, True)
+							self.video_driver.draw2DImage(tex, position2di(int((screen_size.X - tex_size.X) / 2), int((screen_size.Y - tex_size.Y + self.menu_height) / 2)), recti(0,0,int(tex_size.X),int(tex_size.Y)), useAlphaChannelOfTexture = True)
+							#~ self.video_driver.draw2DImage2(tex, position2di(int((screen_size.X - tex_size.X) / 2), int((screen_size.Y - tex_size.Y + self.menu_height) / 2)), recti(0,0,int(tex_size.X),int(tex_size.Y)), useAlphaChannelOfTexture = True)
 							flag_drawed = True
 						if self.answer_exists:
 							self.answer_exists = False
-							OSOperator = self.device.getOSOperator()
-							is_worked, total, avail1 = OSOperator.getSystemMemoryAsTuple()
-							self.driver.removeTexture(tex)
-							is_worked, total, avail2 = OSOperator.getSystemMemoryAsTuple()
+							self.video_driver.removeTexture(tex)
 							tex, tex_size, i_event_receiver.question = self.create_texture_from_svg_file_name_container()
-							is_worked, total, avail3 = OSOperator.getSystemMemoryAsTuple()
-							print '=== cleared', avail1-avail2, 'new used', avail2-avail3
 							flag_say = True
 							flag_drawed = False
 						else:
@@ -527,14 +531,14 @@ class game:
 								if i_event_receiver.question == i_event_receiver.answer:
 									self.good_results += 1
 							#~ self.font.draw(_('Please enter answer or press "Enter"'), question_pos2, question_color2)
-							self.font.draw(i_event_receiver.answer, recti(10, screen_size.Height - self.font_size, 0, 0), answer_color2)
-							self.driver.draw2DRectangle(scolor_2drectangle, recti(screen_size.Width / 2, screen_size.Height - self.font_size, screen_size.Width / 2 + self.font_size * 3, screen_size.Height))
-							self.font.draw(str(self.good_results), recti(screen_size.Width / 2, screen_size.Height - self.font_size, 0, 0), answer_color2)
-							self.driver.draw2DRectangle(scolor_2drectangle, recti(screen_size.Width - self.font_size * 2, screen_size.Height - self.font_size, screen_size.Width, screen_size.Height))
-							self.font.draw(str(self.bad_results), recti(screen_size.Width - self.font_size * 2, screen_size.Height - self.font_size, 0, 0), question_color1)
+							self.font.draw(i_event_receiver.answer, recti(10, screen_size.Y - self.font_size, 0, 0), answer_color2)
+							self.video_driver.draw2DRectangle(scolor_2drectangle, recti(screen_size.X / 2, screen_size.Y - self.font_size, screen_size.X / 2 + self.font_size * 3, screen_size.Y))
+							self.font.draw(str(self.good_results), recti(screen_size.X / 2, screen_size.Y - self.font_size, 0, 0), answer_color2)
+							self.video_driver.draw2DRectangle(scolor_2drectangle, recti(screen_size.X - self.font_size * 2, screen_size.Y - self.font_size, screen_size.X, screen_size.Y))
+							self.font.draw(str(self.bad_results), recti(screen_size.X - self.font_size * 2, screen_size.Y - self.font_size, 0, 0), question_color1)
 
 						self.guienv.drawAll()
-						self.driver.endScene()
+						self.video_driver.endScene()
 
 						if flag_say and flag_drawed and self.voice_on:
 							self.say(i_event_receiver.question)
@@ -554,40 +558,39 @@ class game:
 		svg_file_count = len(self.svg_file_name_container)
 		if svg_file_count:
 			svg_file_name = self.svg_file_name_container[randint(0, svg_file_count - 1)]
-			#~ print('===', svg_file_name, os.path.basename(svg_file_name))
 			if os.path.isfile(svg_file_name):
-				OSOperator = self.device.getOSOperator()
-				is_worked, total, avail = OSOperator.getSystemMemoryAsTuple()
 				words = os.path.basename(svg_file_name).split('.svg')[0].split('.')[0].replace('_', ' ')
 				try:
-					s = svg_agg_image(self.driver, self.device.getFileSystem(), svg_file_name, True, 255, ECF_A8R8G8B8, 4)
+					if self.svg_image:
+						self.svg_image.parse(self.device.getFileSystem(), svg_file_name)
+					else:
+						self.svg_image = svg_agg_image(self.video_driver, self.device.getFileSystem(), svg_file_name)
 				except:
-					print('=== NOT VALID TEXTURE', svg_file_name)
-					return generate_texture(self.driver, ECF_A8R8G8B8), dimension2du(2, 2), words
+					print('=== NOT VALID TEXTURE %s' % svg_file_name)
+					return generate_texture(self.video_driver, ECF_A8R8G8B8), dimension2du(2, 2), words
 				else:
-					screen_size = self.driver.getScreenSize()
-					svg_size = s.get_size()
-					dx = float(screen_size.X) / float(svg_size.X)
-					dy = float((screen_size.Y - self.menu_height)) / float(svg_size.Y)
-					if dx > 0.1 or dy > 0.1:
-						if dx <= dy:
-							s.scale(dx)
-						else:
-							s.scale(dy)
-					is_worked, total, avail1 = OSOperator.getSystemMemoryAsTuple()
-					#~ texture = s.get_texture()
-					texture = self.driver.addTexture(svg_file_name, s.get_image())
-					del s
-					is_worked, total, avail2 = OSOperator.getSystemMemoryAsTuple()
-					print('=== use: parse %d, texture %d' % (avail-avail1, avail1-avail2))
+					texture = self.create_texture_from_svg_image(svg_file_name)
 					texture_size = texture.getOriginalSize()
 					return texture, texture_size, words
 			else:
-				print('=== NOT EXISTS FILE', svg_file_name)
+				print('=== NOT EXISTS FILE %s' % svg_file_name)
 				return None, dimension2du(100, 100), ''
 		else:
 			print('=== NOT EXISTS TEXTURES')
 			return None, dimension2du(100, 100), ''
+
+	def create_texture_from_svg_image(self, svg_file_name = ''):
+		if self.svg_image:
+			screen_size = self.video_driver.getScreenSize()
+			svg_size = self.svg_image.get_size()
+			dx = float(screen_size.X) / float(svg_size.X)
+			dy = float((screen_size.Y - self.menu_height)) / float(svg_size.Y)
+			if dx > 0.1 or dy > 0.1:
+				if dx <= dy:
+					self.svg_image.scale_rateably(dx)
+				else:
+					self.svg_image.scale_rateably(dy)
+			return self.video_driver.addTexture(svg_file_name, self.svg_image.get_image(True))
 
 	def say(self, word = ''):
 		if pyespeak and word:
@@ -600,7 +603,7 @@ class game:
 		if pyespeak:
 			pyespeak.espeak_Terminate()
 		if self.device:
-			s = self.driver.getScreenSize()
+			s = self.video_driver.getScreenSize()
 			self.device.closeDevice()
 			self.device = None
 			if s.Width < 320:

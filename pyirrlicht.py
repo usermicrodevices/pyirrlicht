@@ -2,8 +2,8 @@
 # http://pir.sourceforge.net
 # BSD license
 
-__version__ = pyirrlicht_version = '1.1.1'
-__versionTime__ = '2012-09-09'
+__version__ = pyirrlicht_version = '1.1.2'
+__versionTime__ = '2012-09-20'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -1376,12 +1376,13 @@ BUILD_WITH_IRR_SVG_AGG = ctypes.c_bool.in_dll(c_module, 'BUILD_WITH_IRR_SVG_AGG'
 if BUILD_WITH_IRR_SVG_AGG:
 	svg_agg_image_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_bool, ctypes.c_uint, ctypes.c_int, ctypes.c_int)(('svg_agg_image_ctor1', c_module))
 	svg_agg_image_parse = func_type(None, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_bool, ctypes.c_uint, ctypes.c_int, ctypes.c_int)(('svg_agg_image_parse', c_module))
-	#~ svg_agg_image_get_size = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_get_size', c_module))
-	svg_agg_image_scale = func_type(None, ctypes.c_void_p, ctypes.c_double)(('svg_agg_image_scale', c_module))
+	svg_agg_image_scale = func_type(None, ctypes.c_void_p, ctypes.c_double, ctypes.c_double)(('svg_agg_image_scale', c_module))
+	svg_agg_image_scale_rateably = func_type(None, ctypes.c_void_p, ctypes.c_double)(('svg_agg_image_scale_rateably', c_module))
 	#~ svg_agg_image_render = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_render', c_module))
 	svg_agg_image_get_image = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('svg_agg_image_get_image', c_module))
 	svg_agg_image_get_texture = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool)(('svg_agg_image_get_texture', c_module))
 	#~ svg_agg_image_drop = func_type(ctypes.c_bool, ctypes.c_void_p)(('svg_agg_image_drop', c_module))
+	#~ svg_agg_image_get_size = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_get_size', c_module))
 	svg_agg_image_get_width = func_type(ctypes.c_double, ctypes.c_void_p)(('svg_agg_image_get_width', c_module))
 	svg_agg_image_get_width_u32 = func_type(ctypes.c_uint, ctypes.c_void_p)(('svg_agg_image_get_width_u32', c_module))
 	svg_agg_image_get_height = func_type(ctypes.c_double, ctypes.c_void_p)(('svg_agg_image_get_height', c_module))
@@ -3491,7 +3492,7 @@ ITexture_hasMipMaps = func_type(ctypes.c_bool, ctypes.c_void_p)(('ITexture_hasMi
 ITexture_hasAlpha = func_type(ctypes.c_bool, ctypes.c_void_p)(('ITexture_hasAlpha', c_module))
 ITexture_regenerateMipMapLevels = func_type(None, ctypes.c_void_p)(('ITexture_regenerateMipMapLevels', c_module))
 ITexture_isRenderTarget = func_type(ctypes.c_bool, ctypes.c_void_p)(('ITexture_isRenderTarget', c_module))
-ITexture_getName = func_type(ctypes.c_char_p, ctypes.c_void_p)(('ITexture_getName', c_module))
+ITexture_getName = func_type(fschar_t, ctypes.c_void_p)(('ITexture_getName', c_module))
 
 # functions for class ITextSceneNode
 ITextSceneNode_setText = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p)(('ITextSceneNode_setText', c_module))
@@ -12806,12 +12807,12 @@ class IVideoDriver(IReferenceCounted):
 	def draw2DImage1(self, texture, destPos):
 		'ITexture, position2di'
 		IVideoDriver_draw2DImage1(self.c_pointer, texture.c_pointer, destPos.c_pointer)
-	def draw2DImage2(self, texture, destPos, sourceRect, clipRect = recti(0), color=SColor(255,255,255,255), useAlphaChannelOfTexture=False):
+	def draw2DImage2(self, texture, destPos, sourceRect, clipRect = recti(0), color = SColor(255,255,255,255), useAlphaChannelOfTexture = False):
 		'ITexture, position2di, recti, recti, SColor, bool'
 		IVideoDriver_draw2DImage2(self.c_pointer, texture.c_pointer, destPos.c_pointer, sourceRect.c_pointer, clipRect.c_pointer, color.c_pointer, useAlphaChannelOfTexture)
-	def draw2DImage3(self, texture, destRect, sourceRect, clipRect =0, colors=0, useAlphaChannelOfTexture=False):
+	def draw2DImage3(self, texture, destRect, sourceRect, clipRect = recti(0), colors = 0, useAlphaChannelOfTexture = False):
 		'ITexture, position2di, recti, recti, SColor* array(4), bool'
-		IVideoDriver_draw2DImage3(self.c_pointer, texture.c_pointer, destRec.c_pointer, sourceRect.c_pointer, clipRect.c_pointer, colors, useAlphaChannelOfTexture)
+		IVideoDriver_draw2DImage3(self.c_pointer, texture.c_pointer, destRect.c_pointer, sourceRect.c_pointer, clipRect.c_pointer, colors, useAlphaChannelOfTexture)
 	def draw2DImage(self, *args, **kwargs):
 		if len(args) == 2:
 			self.draw2DImage1(*args)
@@ -14847,6 +14848,18 @@ class MainLoop:
 		MainLoop_stop(self.c_pointer)
 
 if BUILD_WITH_AGG:
+	def svg_path_renderer_from_file(file_name = 'tiger.svg'):
+		return agg_svg_path(file_name)
+
+	def svg_path_renderer_from_string(buf = ''):
+		return agg_svg_path_from_string(buf)
+
+	def svg_IImage(path_renderer, video_driver, scale_value = 1.0, rotate_value = 0.0, expand_value = 0.0, color_format = ECF_A8R8G8B8, alpha_value = 0, stride_value = 4):
+		return IImage(agg_svg_IImage(path_renderer, video_driver.c_pointer, scale_value, rotate_value, expand_value, color_format, alpha_value, stride_value))
+
+	def svg_ITexture(path_renderer, video_driver, texture_name = '', scale_value = 1.0, rotate_value = 0.0, expand_value = 0.0, color_format = ECF_A8R8G8B8, alpha_value = 0, stride_value = 4):
+		return ITexture(agg_svg_ITexture(path_renderer, video_driver.c_pointer, texture_name, scale_value, rotate_value, expand_value, color_format, alpha_value, stride_value))
+
 	class svg_viewer(object):
 		def __init__(self, *args, **kwargs):
 			self.c_pointer = svg_viewer_ctor()
@@ -14897,9 +14910,11 @@ if BUILD_WITH_IRR_SVG_AGG:
 				except:
 					pass
 		def parse(self, fs, file_name = 'file.svg', content_unicode = True, alpha_value = 0, color_format = ECF_A8R8G8B8, stride = 4):
-			svg_cairo_image_parse(self.c_pointer, fs.c_pointer, file_name, content_unicode, alpha_value, color_format, stride)
-		def scale(self, value = 1.0):
-			svg_agg_image_scale(self.c_pointer, value)
+			svg_agg_image_parse(self.c_pointer, fs.c_pointer, file_name, content_unicode, alpha_value, color_format, stride)
+		def scale(self, x = 1.0, y = 1.0):
+			svg_agg_image_scale(self.c_pointer, x, y)
+		def scale_rateably(self, value = 1.0):
+			svg_agg_image_scale_rateably(self.c_pointer, value)
 		def get_image(self, rendering = False):
 			return IImage(svg_agg_image_get_image(self.c_pointer, rendering))
 		def get_texture(self, rendering = False, adding = False):
@@ -15127,18 +15142,6 @@ def texture_from_svg(video_driver, file_name = 'tiger.svg', image_format = ECF_A
 
 def texture_from_test_vectors(video_driver, image_format = ECF_A8R8G8B8, image_size = dimension2du(640, 480), texture_name = 'texture_01', alpha_value = 0):
 	return ITexture(tool_texture_from_test_vectors(video_driver.c_pointer, image_format, image_size.c_pointer, texture_name, alpha_value))
-
-def svg_path_renderer_from_file(file_name = 'tiger.svg'):
-	return agg_svg_path(file_name)
-
-def svg_path_renderer_from_string(buf = ''):
-	return agg_svg_path_from_string(buf)
-
-def svg_IImage(path_renderer, video_driver, scale_value = 1.0, rotate_value = 0.0, expand_value = 0.0, color_format = ECF_A8R8G8B8, alpha_value = 0, stride_value = 4):
-	return IImage(agg_svg_IImage(path_renderer, video_driver.c_pointer, scale_value, rotate_value, expand_value, color_format, alpha_value, stride_value))
-
-def svg_ITexture(path_renderer, video_driver, texture_name = '', scale_value = 1.0, rotate_value = 0.0, expand_value = 0.0, color_format = ECF_A8R8G8B8, alpha_value = 0, stride_value = 4):
-	return ITexture(agg_svg_ITexture(path_renderer, video_driver.c_pointer, texture_name, scale_value, rotate_value, expand_value, color_format, alpha_value, stride_value))
 
 def _getAsVector3df(string, pos):
 	p = ctypes.c_uint(pos)

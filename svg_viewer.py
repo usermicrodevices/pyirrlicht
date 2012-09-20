@@ -144,11 +144,18 @@ class UserIEventReceiver(IEventReceiver):
 		event = SEvent(event_pointer)
 		if event.EventType is EET_MOUSE_INPUT_EVENT:
 			if event.MouseInput.EventType is EMIE_MOUSE_WHEEL:
-				if self.app.scale > 0.1:
-					self.app.scale = self.app.scale + event.MouseInput.Wheel/10
-					self.app.create_texture()
+				if self.app.scale_absolute > 0.1:
+					self.app.scale_absolute += event.MouseInput.Wheel/10
+					if self.app.scale_absolute > 0.1:
+						if event.MouseInput.Wheel > 0:
+							self.app.scale_relative = 1.1
+						else:
+							self.app.scale_relative = 0.9
+						self.app.create_texture(True)
+					else:
+						self.app.scale_absolute += 0.1
 				else:
-					self.app.scale = self.app.scale + 0.1
+					self.app.scale_absolute += 0.1
 		elif event.EventType is EET_GUI_EVENT:
 			gui_event_type = event.GUIEvent.EventType
 			if gui_event_type in (EGET_MESSAGEBOX_YES, EGET_MESSAGEBOX_NO, EGET_MESSAGEBOX_OK, EGET_MESSAGEBOX_CANCEL):
@@ -211,12 +218,14 @@ class app:
 		self.device = createDeviceEx(p)
 		self.menu_device_types = {}
 		self.help_dialog = None
-		self.scale = 1.0
-		self.path_renderer = None
+		self.scale_absolute = 1.0
+		self.scale_relative = 1.0
+		self.svg_image = None
 		self.i_texture = None
 		self.texture_name = ''
 		self.i_texture_size = dimension2du()
 		self.texture_rect = recti(0,0,10,10)
+		self.debug = False
 
 	def __del__(self):
 		if self.device:
@@ -233,32 +242,35 @@ class app:
 		self.config.save()
 		self.show_warning()
 
-	def create_texture(self):
-		if self.path_renderer:
+	def create_texture(self, scaling = False):
+		if self.svg_image:
+			if self.debug:
+				is_worked, total, avail1 = self.device.getOSOperator().getSystemMemoryAsTuple()
 			if self.i_texture:
 				self.video_driver.removeTexture(self.i_texture)
-			#~ image = svg_IImage(self.path_renderer, self.video_driver, self.scale, rotate_value = 0.0, color_format = ECF_A8R8G8B8, stride_value = 1)
-			#~ self.i_texture = self.video_driver.addTexture(self.texture_name, image)
-			#~ image.drop()
-			#~ del image
-			self.i_texture = svg_ITexture(self.path_renderer, self.video_driver, self.texture_name, self.scale, rotate_value = 0.0, color_format = ECF_A8R8G8B8, stride_value = 4)
+				#~ self.i_texture.drop()
+			if self.debug:
+				is_worked, total, avail2 = self.device.getOSOperator().getSystemMemoryAsTuple()
+			if scaling:
+				self.svg_image.scale_rateably(self.scale_relative)
+			#~ self.i_texture = self.svg_image.get_texture(True, True)#BUG: NOT CLEAR MEMORY (TODO item)
+			self.i_texture = self.video_driver.addTexture(self.texture_name, self.svg_image.get_image(True))
+			if self.debug:
+				is_worked, total, avail3 = self.device.getOSOperator().getSystemMemoryAsTuple()
+				print('memory: cleared %d, new used %d, total %d' % (avail1-avail2, avail2-avail3, total))
 			if self.i_texture:
 				self.i_texture_size = self.i_texture.getOriginalSize()
-			self.texture_rect = recti(0,0,self.i_texture_size.X,self.i_texture_size.Y)
-			#~ if self.scale > 0:
-				#~ self.texture_rect.addInternalPoint(self.i_texture_size.X,self.i_texture_size.Y)
-			#~ print('+++getTextureCount', self.video_driver.getTextureCount())
+			self.texture_rect = recti(0, 0, self.i_texture_size.X, self.i_texture_size.Y)
 
 	def open_file(self, file_name):
-		try:
-			self.path_renderer = svg_path_renderer_from_file(file_name)
-		except:
-			if 'win' in platform:
-				raise ctypes.WinError()
-			print('ERROR svg_path_renderer_from_file %s' % file_name)
+		if self.svg_image:
+			self.svg_image.parse(self.device.getFileSystem(), file_name)
 		else:
+			self.svg_image = svg_agg_image(self.video_driver, self.device.getFileSystem(), file_name, True, 0, ECF_A8R8G8B8, 4)
+		if self.svg_image:
 			self.texture_name = file_name
-			self.scale = 1.0
+			self.scale_absolute = 1.0
+			self.scale_relative = 1.0
 			self.create_texture()
 			self.guienv.addMessageBox(_('Warning'), _('Scrolling mouse for scale image.'))
 
@@ -338,11 +350,11 @@ class app:
 						#~ texture = self.video_driver.getTexture(self.texture_name)
 						#~ texture = self.video_driver.getTextureByIndex(1)
 						if self.i_texture:
-						#~ if texture:
-							#~ screen_size = self.video_driver.getScreenSize()
-							x, y = cursor_control.getPosition().get_XY()
-							self.video_driver.draw2DImage(self.i_texture, position2di(int(x-self.i_texture_size.X/2),int(y-self.i_texture_size.Y/2)), self.texture_rect, 0, img_scolor, True)
-							#~ self.video_driver.draw2DImage(texture, position2di(int(x-self.i_texture_size.X/2),int(y-self.i_texture_size.Y/2)), self.texture_rect, 0, img_scolor, True)
+							if self.i_texture.hasAlpha():
+								#~ screen_size = self.video_driver.getScreenSize()
+								x, y = cursor_control.getPosition().get_XY()
+								self.video_driver.draw2DImage(self.i_texture, position2di(int(x-self.i_texture_size.X/2),int(y-self.i_texture_size.Y/2)), self.texture_rect, 0, img_scolor, True)
+								#~ self.video_driver.draw2DImage(texture, position2di(int(x-self.i_texture_size.X/2),int(y-self.i_texture_size.Y/2)), self.texture_rect, 0, img_scolor, True)
 						self.guienv.drawAll()
 						self.video_driver.endScene()
 					self.device.sleep(10)

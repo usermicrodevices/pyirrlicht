@@ -1,6 +1,6 @@
-import sys
-sys.stdout.close()
-sys.stdout = open("irr_log.txt", "w")
+#~ import sys
+#~ sys.stdout.close()
+#~ sys.stdout = open("irr_log.txt", "w")
 
 from pyirrlicht import *
 
@@ -18,36 +18,32 @@ def test():
 	p.WithAlphaChannel = True
 	device = createDeviceEx(p)
 	if device:
-		try:
-			video_driver = device.getVideoDriver()
-		except Exception, e:
-			print (e)
+		video_driver = device.getVideoDriver()
 		device.setResizable(True)
 		color = SColor(255,100,100,140)
 		#~ svg_file_name = 'tiger.svg'
-		svg_file_name = 'cartoon_tiger.svg'
-		#~ svg_file_name = 'bee.svg'
-		s = svg_agg_image(video_driver, device.getFileSystem(), svg_file_name, True, 255, ECF_A8R8G8B8, 4)
-		#~ s.scale(2.2)
+		#~ svg_file_name = 'cartoon_tiger.svg'
+		svg_file_name = 'bee.svg'
+		s = svg_agg_image(video_driver, device.getFileSystem(), svg_file_name, True, 0, ECF_A8R8G8B8, 4)
+		s.scale_rateably(2.2)
 		tex = s.get_texture()
 		if tex:
 			tex_size = tex.getOriginalSize()
-			#~ print('tex_size', tex_size)
 			try:
 				rect = GetIrrWindowRect(video_driver)
-				MoveWindow(video_driver, rect.left, rect.top, tex_size.X, tex_size.Y, True)
+				MoveWindow(video_driver, rect.left, rect.top, tex_size.X, tex_size.Y + 20, True)
 			except:
 				print('GetIrrWindowRect and MoveWindow only for windows platform.')
 			while device.run():
 				if device.isWindowActive():
 					if video_driver.beginScene(True, True, color):
-						video_driver.draw2DImage(tex, position2di(0,0), recti(0,0,int(tex_size.X),int(tex_size.Y)), 0, color, True)
+						video_driver.draw2DImage(tex, position2di(0,0), recti(0,0,int(tex_size.X),int(tex_size.Y)), useAlphaChannelOfTexture = True)
 						video_driver.endScene()
 					device.sleep(50)
 				else:
 					device._yield()
 		else:
-			print('ERROR CREATE TEXTURE FROM', svg_file_name)
+			print('ERROR CREATE TEXTURE FROM %s' % svg_file_name)
 		device.closeDevice()
 		device.drop()
 	else:

@@ -11,6 +11,7 @@
 #include "agg_rendering_buffer.h"
 #include "agg_rasterizer_scanline_aa.h"
 #include "agg_renderer_scanline.h"
+//#include "agg_pixfmt_rgb.h"
 #include "agg_pixfmt_rgba.h"
 //#include "..\..\agg-2.5\examples\svg_viewer\agg_svg_parser.h"
 #include "named_colors_agg.h"
@@ -30,10 +31,10 @@ inline int __cdecl cmp_color_agg(const void* p1, const void* p2)
 	return wcscmp(((agg_named_color*)p1)->name, ((agg_named_color*)p2)->name);
 }
 
-inline stringw trim_left(const stringw value, s32 length = 0)
-{
-	return value.subString(length, value.size() - length);
-}
+//inline stringw trim_left(const stringw value, s32 length = 0)
+//{
+//	return value.subString(length, value.size() - length);
+//}
 
 class svg_agg_image
 {
@@ -67,7 +68,8 @@ public:
 			unsigned int attr_count = 0;
 			core::array<core::stringw> list_attr;
 			//core::array<gradient> gradients;
-			//_path_renderer_.remove_all();
+			_path_renderer_.remove_all();
+			_trans_affine_.reset();
 			while (xml_reader->read())
 			{
 				const wchar_t* node_name = xml_reader->getNodeName();
@@ -689,7 +691,20 @@ public:
 		if (!cmds.empty())
 			cmds.clear();
 	}
-	void scale(double scale_value = 1.0)
+	void scale(double x = 1.0, double y = 1.0)
+	{
+		_scale_x_ = x;
+		if (_scale_x_ < 0.0)
+			_scale_x_ = 1.0;
+		_width_ *= _scale_x_;
+		_scale_y_ = y;
+		if (_scale_y_ < 0.0)
+			_scale_y_ = 1.0;
+		_height_ *= _scale_y_;
+		if (_scale_x_ > 0.0 || _scale_y_ > 0.0)
+			_trans_affine_ *= agg::trans_affine_scaling(_scale_x_, _scale_y_);
+	}
+	void scale_rateably(double scale_value = 1.0)
 	{
 		_scale_ = scale_value;
 		if (_scale_ < 0.0)
@@ -699,30 +714,30 @@ public:
 		if (_scale_ > 0.0)
 			_trans_affine_ *= agg::trans_affine_scaling(_scale_);
 	}
-	IImage* render_old()
-	{
-		u32 w = (u32)_width_;
-		if (_width_ > (double)w)
-			w++;
-		u32 h = (u32)_height_;
-		if (_height_ > (double)h)
-			h++;
-		const dimension2d<u32>& image_size = dimension2d<u32>(w, h);
-		IImage* image = _video_driver_->createImage(_color_format_, image_size);
-		row_accessor<int8u> rbuf((int8u*)image->lock(), (unsigned)image_size.Width, (unsigned)image_size.Height, (int)image_size.Width * _stride_);
+	//IImage* render_old()
+	//{
+	//	u32 w = (u32)_width_;
+	//	if (_width_ > (double)w)
+	//		w++;
+	//	u32 h = (u32)_height_;
+	//	if (_height_ > (double)h)
+	//		h++;
+	//	const dimension2d<u32>& image_size = dimension2d<u32>(w, h);
+	//	IImage* image = _video_driver_->createImage(_color_format_, image_size);
+	//	row_accessor<int8u> rbuf((int8u*)image->lock(), (unsigned)image_size.Width, (unsigned)image_size.Height, (int)image_size.Width * _stride_);
 
-		pixfmt_alpha_blend_rgba<blender_bgra32, row_accessor<int8u>, pixel32_type> pixf(rbuf);
-		agg::renderer_base< pixfmt_alpha_blend_rgba<blender_bgra32, row_accessor<int8u>, pixel32_type> > renb(pixf);
-		agg::renderer_scanline_aa_solid<agg::renderer_base<pixfmt_alpha_blend_rgba<blender_bgra32, row_accessor<int8u>, pixel32_type> > > ren(renb);
+	//	pixfmt_alpha_blend_rgba<blender_bgra32, row_accessor<int8u>, pixel32_type> pixf(rbuf);
+	//	agg::renderer_base< pixfmt_alpha_blend_rgba<blender_bgra32, row_accessor<int8u>, pixel32_type> > renb(pixf);
+	//	agg::renderer_scanline_aa_solid<agg::renderer_base<pixfmt_alpha_blend_rgba<blender_bgra32, row_accessor<int8u>, pixel32_type> > > ren(renb);
 
-		renb.clear(rgba8(255, 255, 255, _alpha_value_));
-		agg::rasterizer_scanline_aa<> ras;
-		agg::scanline32_p8 sl;
-		agg::render_scanlines(ras, sl, ren);
-		_path_renderer_.render(ras, sl, ren, _trans_affine_, renb.clip_box(), _alpha_value_/255.0);
-		image->unlock();
-		return image;
-	}
+	//	renb.clear(rgba8(255, 255, 255, _alpha_value_));
+	//	agg::rasterizer_scanline_aa<> ras;
+	//	agg::scanline32_p8 sl;
+	//	agg::render_scanlines(ras, sl, ren);
+	//	_path_renderer_.render(ras, sl, ren, _trans_affine_, renb.clip_box(), _alpha_value_/255.0);
+	//	image->unlock();
+	//	return image;
+	//}
 	void render()
 	{
 		u32 width = (u32)_width_;
@@ -743,9 +758,9 @@ public:
 		renb.clear(rgba8(255, 255, 255, _alpha_value_));
 		agg::rasterizer_scanline_aa<> ras;
 		agg::scanline32_p8 sl;
+		//ren.color(agg::rgba8(255, 255, 255, _alpha_value_));
 		//agg::render_scanlines(ras, sl, ren);
-		_path_renderer_.render(ras, sl, ren, _trans_affine_, renb.clip_box(), _alpha_value_/255.0);
-		//_path_renderer_.render(ras, sl, ren, _trans_affine_, renb.clip_box(), 1.0);
+		_path_renderer_.render(ras, sl, ren, _trans_affine_, renb.clip_box());//, _alpha_value_/255.0);
 
 		if (_color_format_ == ECF_R8G8B8)
 		{
@@ -762,7 +777,7 @@ public:
 			_image_->unlock();
 		}
 		else if (_color_format_ == ECF_A8R8G8B8)
-			//_image_ = _video_driver_->createImageFromData(_color_format_, dimension2d<u32>(width, height), (void*)data, true, true);
+		//	_image_ = _video_driver_->createImageFromData(_color_format_, dimension2d<u32>(width, height), (void*)rbuf.buf());
 		{
 			_image_ = _video_driver_->createImage(_color_format_, dimension2d<u32>(width, height));
 			agg::int8u* irr_data = (agg::int8u*)_image_->lock();
@@ -772,7 +787,10 @@ public:
 				irr_data[i+1] = data[i+1];//g
 				irr_data[i+2] = data[i];//r
 				irr_data[i+3] = data[i+3];//a
-				//irr_data[i+3] = _alpha_value_;//a
+				//if(irr_data[i] == 255 && irr_data[i+1] == 255 && irr_data[i+2] == 255)
+				//	irr_data[i+3] = _alpha_value_;
+				//else
+				//	irr_data[i+3] = data[i+3];
 			}
 			_image_->unlock();
 		}
@@ -780,8 +798,17 @@ public:
 	}
 	IImage* get_image(bool rendering = false)
 	{
-		if (rendering || !_image_)
+		if (rendering)
+		{
+			if (_image_)
+				_image_->drop();
 			render();
+		}
+		else
+		{
+			if (!_image_)
+				render();
+		}
 		return _image_;
 	}
 	ITexture* get_texture(bool rendering = false, bool adding = false)
@@ -847,7 +874,7 @@ private:
 	double _min_y_;
 	double _width_;
 	double _height_;
-	double _scale_;
+	double _scale_, _scale_x_, _scale_y_;
 	video::ECOLOR_FORMAT _color_format_;
 	agg::trans_affine _trans_affine_;
 	agg::svg::path_renderer _path_renderer_;
@@ -888,15 +915,19 @@ IRRLICHT_C_API svg_agg_image* svg_agg_image_ctor1(IVideoDriver* video_driver, IF
 }
 IRRLICHT_C_API void svg_agg_image_parse(svg_agg_image* pointer, IFileSystem* fs, const fschar_t* file_name = "tiger.svg", bool content_unicode = true, u32 alpha_value = 128, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, int stride = 4)
 {pointer->parse(fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, stride);}
-//IRRLICHT_C_API vector2d<u32>* svg_agg_image_get_size(svg_agg_image* pointer)
-//{return pointer->get_size();}
-IRRLICHT_C_API void svg_agg_image_scale(svg_agg_image* pointer, double scale_value = 1.0)
-{pointer->scale(scale_value);}
+
+IRRLICHT_C_API void svg_agg_image_scale(svg_agg_image* pointer, double x = 1.0, double y = 1.0)
+{pointer->scale(x, y);}
+IRRLICHT_C_API void svg_agg_image_scale_rateably(svg_agg_image* pointer, double scale_value = 1.0)
+{pointer->scale_rateably(scale_value);}
+
 IRRLICHT_C_API IImage* svg_agg_image_get_image(svg_agg_image* pointer, bool rendering = false)
 {return pointer->get_image(rendering);}
 IRRLICHT_C_API ITexture* svg_agg_image_get_texture(svg_agg_image* pointer, bool rendering = false, bool adding = false)
 {return pointer->get_texture(rendering, adding);}
 
+//IRRLICHT_C_API vector2d<u32>* svg_agg_image_get_size(svg_agg_image* pointer)
+//{return pointer->get_size();}
 IRRLICHT_C_API double svg_agg_image_get_width(svg_agg_image* pointer)
 {return pointer->get_width();}
 IRRLICHT_C_API u32 svg_agg_image_get_width_u32(svg_agg_image* pointer)

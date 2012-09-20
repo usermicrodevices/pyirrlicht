@@ -23,7 +23,11 @@ IRRLICHT_C_API bool ITexture_hasMipMaps(ITexture* pointer){return pointer->hasMi
 IRRLICHT_C_API bool ITexture_hasAlpha(ITexture* pointer){return pointer->hasAlpha();}
 IRRLICHT_C_API void ITexture_regenerateMipMapLevels(ITexture* pointer){pointer->regenerateMipMapLevels();}
 IRRLICHT_C_API bool ITexture_isRenderTarget(ITexture* pointer){return pointer->isRenderTarget();}
-IRRLICHT_C_API const io::path& ITexture_getName(ITexture* pointer){return (const io::path&)pointer->getName();}
+#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR < 7)
+IRRLICHT_C_API const fschar_t* ITexture_getName(ITexture* pointer){return pointer->getName().c_str();}
+#else
+IRRLICHT_C_API const fschar_t* ITexture_getName(ITexture* pointer){return pointer->getName().getPath().c_str();}
+#endif
 
 #ifdef __cplusplus
 }
