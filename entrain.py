@@ -296,7 +296,7 @@ class game:
 		self.device_parameters = SIrrlichtCreationParameters()
 		self.device_parameters.DriverType = self.config.get_int('driver_type', EDT_SOFTWARE)
 		self.device_parameters.WindowSize = dimension2du(self.config.get_int('window_width', 640), self.config.get_int('window_height', 480))
-		self.device_parameters.AntiAlias = True
+		self.device_parameters.AntiAlias = 4
 		self.device_parameters.WithAlphaChannel = True
 		self.device = createDeviceEx(self.device_parameters)
 		self.menu_driver_types = {}
@@ -504,8 +504,8 @@ class game:
 						#~ self.button_repeat_voice.setRelativePosition(position2di(screen_size.X - 100, self.menu_height))
 						#~ self.scene_manager.drawAll()
 						if tex:
-							self.video_driver.draw2DImage(tex, position2di(int((screen_size.X - tex_size.X) / 2), int((screen_size.Y - tex_size.Y + self.menu_height) / 2)), recti(0,0,int(tex_size.X),int(tex_size.Y)), useAlphaChannelOfTexture = True)
-							#~ self.video_driver.draw2DImage2(tex, position2di(int((screen_size.X - tex_size.X) / 2), int((screen_size.Y - tex_size.Y + self.menu_height) / 2)), recti(0,0,int(tex_size.X),int(tex_size.Y)), useAlphaChannelOfTexture = True)
+							#~ self.video_driver.draw2DImage(tex, position2di(int((screen_size.X - tex_size.X) / 2), int((screen_size.Y - tex_size.Y + self.menu_height) / 2)), recti(0,0,int(tex_size.X),int(tex_size.Y)), 0, scolor, True)
+							self.video_driver.draw2DImage2(tex, position2di(int((screen_size.X - tex_size.X) / 2), int((screen_size.Y - tex_size.Y + self.menu_height) / 2)), recti(0, 0, int(tex_size.X), int(tex_size.Y)), useAlphaChannelOfTexture = True)
 							flag_drawed = True
 						if self.answer_exists:
 							self.answer_exists = False
@@ -550,6 +550,7 @@ class game:
 				if i_event_receiver.answer == i_event_receiver.question:
 					self.answer_exists = True
 					i_event_receiver.answer = ''
+			i_event_receiver.game = None
 			self.stop()
 		else:
 			print ('++++ ERROR Irrlicht createDevice')
