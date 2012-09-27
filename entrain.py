@@ -293,11 +293,16 @@ class game:
 				pyespeak.espeak_SetVoiceByName('default')
 				pyespeak.espeak_SetParameter(pyespeak.espeakRATE, self.voice_rate, 0)
 				pyespeak.espeak_SetParameter(pyespeak.espeakPITCH, self.voice_pitch, 0)
+		default_driver_type = EDT_SOFTWARE
+		if 'win' in sys.platform:
+			default_driver_type = EDT_DIRECT3D9
+		elif 'linux' in sys.platform:
+			default_driver_type = EDT_OPENGL
 		self.device_parameters = SIrrlichtCreationParameters()
-		self.device_parameters.DriverType = self.config.get_int('driver_type', EDT_SOFTWARE)
+		self.device_parameters.DriverType = self.config.get_int('driver_type', default_driver_type)
 		self.device_parameters.WindowSize = dimension2du(self.config.get_int('window_width', 640), self.config.get_int('window_height', 480))
-		self.device_parameters.AntiAlias = 4
-		self.device_parameters.WithAlphaChannel = True
+		self.device_parameters.AntiAlias = self.config.get_int('anti_alias', 2)
+		self.device_parameters.WithAlphaChannel = self.config.get_bool('with_alpha_channel', True)
 		self.device = createDeviceEx(self.device_parameters)
 		self.menu_driver_types = {}
 		self.help_dialog = None
@@ -488,6 +493,11 @@ class game:
 			tex, tex_size, i_event_receiver.question = self.create_texture_from_svg_file_name_container()
 			flag_say = True
 			flag_drawed = True
+			animation_flag = False
+			animation_scale = 0.9
+			animation_time = 3000
+			animation_time_step = 50
+			animation_scale_step = 0.01
 
 			screen_size = vector2du(self.video_driver.getScreenSize())
 			while self.device.run():
@@ -503,11 +513,16 @@ class game:
 							tex_size = tex.getOriginalSize()
 						#~ self.button_repeat_voice.setRelativePosition(position2di(screen_size.X - 100, self.menu_height))
 						#~ self.scene_manager.drawAll()
+						if animation_flag and self.device.getTimer().getTime()/animation_time_step%2:
+							svg_file_name = tex.getName()
+							self.video_driver.removeTexture(tex)
+							tex = self.create_texture_from_svg_image(svg_file_name, animation_scale)
+							tex_size = tex.getOriginalSize()
+							animation_scale -= animation_scale_step
 						if tex:
-							#~ self.video_driver.draw2DImage(tex, position2di(int((screen_size.X - tex_size.X) / 2), int((screen_size.Y - tex_size.Y + self.menu_height) / 2)), recti(0,0,int(tex_size.X),int(tex_size.Y)), 0, scolor, True)
 							self.video_driver.draw2DImage2(tex, position2di(int((screen_size.X - tex_size.X) / 2), int((screen_size.Y - tex_size.Y + self.menu_height) / 2)), recti(0, 0, int(tex_size.X), int(tex_size.Y)), useAlphaChannelOfTexture = True)
 							flag_drawed = True
-						if self.answer_exists:
+						if self.answer_exists and not animation_flag:
 							self.answer_exists = False
 							self.video_driver.removeTexture(tex)
 							tex, tex_size, i_event_receiver.question = self.create_texture_from_svg_file_name_container()
@@ -528,8 +543,10 @@ class game:
 										else:
 											self.font.draw('X', recti(10 + i * self.font_size, answer_height_pos, 0, 0), question_color1)
 									i = i + 1
-								if i_event_receiver.question == i_event_receiver.answer:
+								if i_event_receiver.question == i_event_receiver.answer and not animation_flag:
 									self.good_results += 1
+									self.device.getTimer().setTime(0)
+									animation_flag = True
 							#~ self.font.draw(_('Please enter answer or press "Enter"'), question_pos2, question_color2)
 							self.font.draw(i_event_receiver.answer, recti(10, screen_size.Y - self.font_size, 0, 0), answer_color2)
 							self.video_driver.draw2DRectangle(scolor_2drectangle, recti(screen_size.X / 2, screen_size.Y - self.font_size, screen_size.X / 2 + self.font_size * 3, screen_size.Y))
@@ -549,6 +566,10 @@ class game:
 					self.device._yield()
 				if i_event_receiver.answer == i_event_receiver.question:
 					self.answer_exists = True
+				if animation_flag and self.device.getTimer().getTime() > animation_time:
+					animation_flag = False
+					animation_scale = 0.9
+					self.device.getTimer().setTime(0)
 					i_event_receiver.answer = ''
 			i_event_receiver.game = None
 			self.stop()
@@ -580,7 +601,7 @@ class game:
 			print('=== NOT EXISTS TEXTURES')
 			return None, dimension2du(100, 100), ''
 
-	def create_texture_from_svg_image(self, svg_file_name = ''):
+	def create_texture_from_svg_image(self, svg_file_name = '', scale = 1.0):
 		if self.svg_image:
 			screen_size = self.video_driver.getScreenSize()
 			svg_size = self.svg_image.get_size()
@@ -588,9 +609,9 @@ class game:
 			dy = float((screen_size.Y - self.menu_height)) / float(svg_size.Y)
 			if dx > 0.1 or dy > 0.1:
 				if dx <= dy:
-					self.svg_image.scale_rateably(dx)
+					self.svg_image.scale_rateably(dx * scale)
 				else:
-					self.svg_image.scale_rateably(dy)
+					self.svg_image.scale_rateably(dy * scale)
 			return self.video_driver.addTexture(svg_file_name, self.svg_image.get_image(True))
 
 	def say(self, word = ''):
