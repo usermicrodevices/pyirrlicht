@@ -3,10 +3,13 @@
 
 wchar_t* wchar_concat_char(wchar_t* w_text1, const char* text2)
 {
+	wchar_t* result = 0;
 	size_t size_text2 = strlen(text2);
 	wchar_t* w_text2 = (wchar_t*)malloc(size_text2);
 	mbstowcs(w_text2, text2, size_text2);
-	return wcsncat(w_text1, w_text2, size_text2);
+	result = wcsncat(w_text1, w_text2, size_text2);
+	free(w_text2);
+	return result;
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)

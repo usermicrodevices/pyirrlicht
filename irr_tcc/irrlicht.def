@@ -1,0 +1,5 @@
+LIBRARY irrlicht.dll
+
+EXPORTS
+createDevice
+createDeviceEx

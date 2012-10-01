@@ -122,23 +122,19 @@ typedef struct
 void* createDevice(E_DRIVER_TYPE deviceType, const dimension2du* windowSize, u32 bits, bool fullscreen, bool stencilbuffer, bool vsync, void* receiver);
 void* createDeviceEx(const SIrrlichtCreationParameters* parameters);
 
-int WINAPI WinMain(
-	HINSTANCE hInstance,
-	HINSTANCE hPrevInstance,
-	LPSTR     lpCmdLine,
-	int       nCmdShow)
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	SColor color;
-	color.color = 0x0000FF;
+	//~ SColor color;
+	//~ color.color = 0x0000FF;
 	dimension2du windowSize;
 	windowSize.Width = 320;
 	windowSize.Height = 240;
 	void* device = createDevice(EDT_SOFTWARE, &windowSize, 16, false, false, false, NULL);
 	int* vptr_device = *(int**)device;
 	//~ asm volatile ("movl %0, %%ecx;" : : "a" (device));
-	//~ printf("Irrlicht version %s\n", ((const c8*(*)())vptr_device[19])());
-	void* video_driver = ((void*(*)())vptr_device[3])();
-	MessageBox(0, ((const c8*(*)())vptr_device[19])(), "Irrlicht version", MB_ICONINFORMATION);
+	//~ printf("Irrlicht version %s\n", ((const c8*(*)())vptr_device[22])());
+	MessageBox(0, ((const c8*(*)())vptr_device[22])(), "Irrlicht version", MB_ICONINFORMATION);
+	//~ void* video_driver = ((void*(*)())vptr_device[3])();
 	//~ int* vptr_video_driver = *(int**)video_driver;
 	//~ asm volatile ("movl %0, %%ecx;" : : "a" (video_driver));
 	//~ void* scene_manager = ((void*(*)())vptr_device[6])();
@@ -148,7 +144,9 @@ int WINAPI WinMain(
 		//~ ((bool(*)())vptr_video_driver[0])(true, true, color);
 		//~ ((void(*)())vptr_scene_manager[45])();
 		//~ ((bool(*)())vptr_video_driver[1])();
+		//~ ((void(*)())vptr_device[1])();//yield
+		//~ ((void(*)())vptr_device[2])(100, false);//sleep
 	//~ }
-	//~ ((void(*)())vptr_device[18])();
+	//~ ((void(*)())vptr_device[21])();
 	return 0;
 }

@@ -1,3 +1,3 @@
-@tcc\tcc.exe virtual.c irrlicht.def -o ../virtual.exe
-
+@\tcc\tcc.exe virtual.c irrlicht.def
+@virtual.exe
 @PAUSE

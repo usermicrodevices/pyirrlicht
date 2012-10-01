@@ -1,3 +1,3 @@
-@tcc\tiny_impdef.exe ..\Irrlicht.dll
+@\tcc\tiny_impdef.exe irrlicht.dll
 
 @PAUSE
