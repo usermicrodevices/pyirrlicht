@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings version="1.0">
+	<category name="irrlicht_test.h" />
+	<category name="irrlicht_test.c" />
+</settings>
