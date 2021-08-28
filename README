@@ -5,12 +5,8 @@ If you have any questions or suggestions, just send a email to the author of the
 
 If you have any questions or suggestions concerning pyirrlicht, send a email to the lead Developer, Max Kolosov (maxkolosov (at) inbox.ru).	
 
-Project home pages:
-http://pir.sourceforge.net or http://code.google.com/p/pyirrlicht or http://vosolok2008.narod.ru
-
-SVN is:
-http://svn.emforge.net/svnroot/pyirrlicht/ or http://code.google.com/p/pyirrlicht/source
-
+New Project home pages:
+https://github.com/usermicrodevices/pyirrlicht
 
 Thanks to:
 Python,
@@ -41,14 +37,11 @@ Very many thanks for Dr.Bill
 Also thanks for testing Sir.Hans from Irrlicht forum.
 
 If you needed more stable and more powerfull Irrlicht-Python wraper, see nested irrlicht_swig and this is more dependent from Python versions.
-Ready windows pyd files for different Python versions download from http://vosolok2008.narod.ru.
-
 
 FreeBASIC object oriented library see to h2bi.py and "irr_fb" directory.
 thinBasic examples see from "thinBasic" directory.
 
 Also accessible FASM and TinyCC usage, look "irr_asm" and "irr_tcc" directory.
-
 
 Some files:
 h2ctypes.py (C++ -> py helper generator),
