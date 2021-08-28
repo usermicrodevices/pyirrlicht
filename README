@@ -1,4 +1,5 @@
-pyirrlicht - is a ctypes Python module for the Irrlicht Engine SDK (https://irrlicht.sourceforge.io). See 'HelloWorld.py' for an example of a Python script accessing and controlling Irrlicht, simple end game for win32 http://vosolok2008.narod.ru/Randomizer.zip. dll is compiled with static version Irrlicht and not require ext libs. Vector fonts is supported. Partial support SVG image files.
+pyirrlicht - is a ctypes Python module for the Irrlicht Engine SDK (https://irrlicht.sourceforge.io).
+See 'HelloWorld.py' for an example of a Python script accessing and controlling Irrlicht. Vector fonts is supported. Partial support SVG image files.
 
 The Irrlicht Engine is intended to be an easy-to-use 3d engine.
 If you have any questions or suggestions, just send a email to the author of the engine, Nikolaus Gebhardt (niko (at) irrlicht3d.org).
