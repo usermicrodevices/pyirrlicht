@@ -6,7 +6,7 @@ Home-page: http://pir.sourceforge.net
 Author: Maxim Kolosov
 Author-email: pyirrlicht@gmail.com
 License: BSD
-Download-URL: http://vosolok2008.narod.ru/pyirrlicht.zip
+Download-URL: https://github.com/usermicrodevices/pyirrlicht
 Description: The Irrlicht Engine is intended to be an easy-to-use 3d engine for games and graphics or any visual desktop applications. This project also have few additional nested projects: FreeBASIC object oriented library, SWIG wraper, FASM (flat assembler), TinyCC and thinBasic usage examples. Partial SVG support via AGG library.
 Keywords: game,2d,3d,opengl,directx,irrlicht,play,media,visual,gui,interface,ctypes,swig,svg
 Platform: ALL
