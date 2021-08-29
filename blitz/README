@@ -5,8 +5,6 @@ many thanks him.
 Programming by Maxim Kolosov.
 
 This based on irrlicht_c library from pyirrlicht project
-http://pir.sourceforge.net
-http://code.google.com/p/pyirrlicht
 
 Blitz3D work only with stdcall calling convention,
 so irrlicht_c must be build respectively.
