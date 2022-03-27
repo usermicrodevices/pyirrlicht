@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 //class IImage : public virtual IReferenceCounted
@@ -17,7 +17,7 @@ IRRLICHT_C_API u32 IImage_getBitsPerPixel(IImage* pointer){return pointer->getBi
 IRRLICHT_C_API u32 IImage_getBytesPerPixel(IImage* pointer){return pointer->getBytesPerPixel();}
 IRRLICHT_C_API u32 IImage_getImageDataSizeInBytes(IImage* pointer){return pointer->getImageDataSizeInBytes();}
 IRRLICHT_C_API u32 IImage_getImageDataSizeInPixels(IImage* pointer){return pointer->getImageDataSizeInPixels();}
-IRRLICHT_C_API SColor* IImage_getPixel(IImage* pointer, u32 x, u32 y){return &pointer->getPixel(x, y);}
+IRRLICHT_C_API const SColor& IImage_getPixel(IImage* pointer, u32 x, u32 y){return pointer->getPixel(x, y);}
 IRRLICHT_C_API void IImage_setPixel(IImage* pointer, u32 x, u32 y, const SColor &color, bool blend = false){pointer->setPixel(x, y, color, blend);}
 IRRLICHT_C_API ECOLOR_FORMAT IImage_getColorFormat(IImage* pointer){return pointer->getColorFormat();}
 IRRLICHT_C_API u32 IImage_getRedMask(IImage* pointer){return pointer->getRedMask();}

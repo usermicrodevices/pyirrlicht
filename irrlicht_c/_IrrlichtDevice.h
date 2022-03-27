@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -7,17 +7,16 @@ extern "C" {
 #endif
 
 //================= IrrlichtDevice
-//IRRLICHT_C_API IrrlichtDevice* IrrlichtDevice_createDevice(E_DRIVER_TYPE deviceType = video::EDT_SOFTWARE, const core::dimension2d<u32>& windowSize = (core::dimension2d<u32>(640,480)), u32 bits = 16, bool fullscreen = false, bool stencilbuffer = false, bool vsync = false, void* receiver = 0)
 IRRLICHT_C_API IrrlichtDevice* IrrlichtDevice_createDevice(E_DRIVER_TYPE deviceType = video::EDT_SOFTWARE, const core::dimension2d<u32>& windowSize = (core::dimension2d<u32>(640,480)), u32 bits = 16, bool fullscreen = false, bool stencilbuffer = false, bool vsync = false, IEventReceiver* receiver = 0)
 {
-	//return createDevice(deviceType, windowSize, bits, fullscreen, stencilbuffer, vsync, (IEventReceiver*)receiver);
 	return createDevice(deviceType, windowSize, bits, fullscreen, stencilbuffer, vsync, receiver);
 }
 IRRLICHT_C_API IrrlichtDevice* IrrlichtDevice_createDevice2(E_DRIVER_TYPE deviceType = video::EDT_SOFTWARE, const core::dimension2d<u32>& windowSize = (core::dimension2d<u32>(640,480)), u32 bits = 16, bool fullscreen = false, bool stencilbuffer = false, bool vsync = false, bool create_receiver = false)
 {
 	if (create_receiver)
 	{
-		return createDevice(deviceType, windowSize, bits, fullscreen, stencilbuffer, vsync, new UserEventReceiver());
+		IEventReceiver* r;
+		return createDevice(deviceType, windowSize, bits, fullscreen, stencilbuffer, vsync, r);
 	}
 	else
 	{
@@ -34,10 +33,8 @@ IRRLICHT_C_API bool IrrlichtDevice_run(IrrlichtDevice* pointer)
 		return pointer->run();
 #ifdef _MSC_VER
 	}
-	//__except(filter(GetExceptionCode(), GetExceptionInformation()))
 	__except(filter(_exception_code(), (struct _EXCEPTION_POINTERS *)_exception_info(), "IrrlichtDevice->run()"))
 	{
-		//puts("IrrlichtDevice->run() - ERROR EXECUTION");
 		return false;
 	}
 #endif
@@ -74,14 +71,6 @@ IRRLICHT_C_API bool IrrlichtDevice_setGammaRamp(IrrlichtDevice* pointer, f32 red
 IRRLICHT_C_API bool IrrlichtDevice_getGammaRamp(IrrlichtDevice* pointer, f32 &red, f32 &green, f32 &blue, f32 &brightness, f32 &contrast){return pointer->getGammaRamp(red, green, blue, brightness, contrast);}
 IRRLICHT_C_API E_DEVICE_TYPE IrrlichtDevice_getType(IrrlichtDevice* pointer){return pointer->getType();}
 IRRLICHT_C_API bool IrrlichtDevice_isDriverSupported(IrrlichtDevice* pointer, video::E_DRIVER_TYPE driver){return pointer->isDriverSupported(driver);}
-
-//IRRLICHT_C_API void IrrlichtDevice_SetIcon(IrrlichtDevice* pointer, int icon_id = 32512, bool big_icon = false)//ICON_SMALL,ICON_BIG
-//{
-//#ifdef _MSC_VER
-//#include <Windows.h>
-//	SendMessage(HWND(pointer->getVideoDriver()->getExposedVideoData().OpenGLWin32.HWnd), WM_SETICON, big_icon, (LPARAM)LoadIcon(GetModuleHandle(NULL), (LPCTSTR)icon_id));
-//#endif
-//}
 
 #ifdef __cplusplus
 }

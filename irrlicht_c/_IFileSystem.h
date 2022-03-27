@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -71,7 +71,7 @@ IRRLICHT_C_API const fschar_t* IFileSystem_getFileBasename(IFileSystem* pointer,
 {return pointer->getFileBasename(path(filename), keepExtension).c_str();}
 
 IRRLICHT_C_API const fschar_t* IFileSystem_flattenFilename(IFileSystem* pointer, const fschar_t* directory, const fschar_t* root = default_root)
-{return pointer->flattenFilename(*const_cast<path*>(&path(directory)), path(root)).c_str();}
+{path p(directory); return pointer->flattenFilename(p, path(root)).c_str();}
 
 IRRLICHT_C_API IFileList* IFileSystem_createFileList(IFileSystem* pointer)
 {return pointer->createFileList();}

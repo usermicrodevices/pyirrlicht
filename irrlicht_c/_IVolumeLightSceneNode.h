@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -44,11 +44,11 @@ IRRLICHT_C_API void IVolumeLightSceneNode_setFootColor(IVolumeLightSceneNode* po
 IRRLICHT_C_API void IVolumeLightSceneNode_setTailColor(IVolumeLightSceneNode* pointer, const video::SColor* inColour)
 {pointer->setTailColor(*inColour);}
 
-IRRLICHT_C_API video::SColor* IVolumeLightSceneNode_getFootColor(IVolumeLightSceneNode* pointer)
-{return &pointer->getFootColor();}
+IRRLICHT_C_API const video::SColor& IVolumeLightSceneNode_getFootColor(IVolumeLightSceneNode* pointer)
+{return pointer->getFootColor();}
 
-IRRLICHT_C_API video::SColor* IVolumeLightSceneNode_getTailColor(IVolumeLightSceneNode* pointer)
-{return &pointer->getTailColor();}
+IRRLICHT_C_API const video::SColor& IVolumeLightSceneNode_getTailColor(IVolumeLightSceneNode* pointer)
+{return pointer->getTailColor();}
 
 #ifdef __cplusplus
 }

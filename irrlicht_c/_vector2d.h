@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -12,28 +12,28 @@ IRRLICHT_C_API vector2df* vector2df_ctor2(f32 n=0.0f){return new vector2df(n);}
 IRRLICHT_C_API vector2df* vector2df_ctor3(const vector2df& other){return new vector2df(other);}
 IRRLICHT_C_API vector2df* vector2df_ctor4(const dimension2df& other){return new vector2df(other);}
 // operators
-IRRLICHT_C_API vector2df* vector2df_operator_sub(vector2df* pointer){return &pointer->operator-();}
+IRRLICHT_C_API const vector2df& vector2df_operator_sub(vector2df* pointer){return pointer->operator-();}
 IRRLICHT_C_API vector2df& vector2df_operator_set_other(vector2df* pointer, const vector2df& other){return pointer->operator=(other);}
 IRRLICHT_C_API vector2df& vector2df_operator_set_dimension2d(vector2df* pointer, const dimension2df& other){return pointer->operator=(other);}
-IRRLICHT_C_API vector2df* vector2df_operator_add_other(vector2df* pointer, const vector2df& other){return &pointer->operator+(other);}
-IRRLICHT_C_API vector2df* vector2df_operator_add_dimension2d(vector2df* pointer, const dimension2df& other){return &pointer->operator+(other);}
+IRRLICHT_C_API const vector2df& vector2df_operator_add_other(vector2df* pointer, const vector2df& other){return pointer->operator+(other);}
+IRRLICHT_C_API const vector2df& vector2df_operator_add_dimension2d(vector2df* pointer, const dimension2df& other){return pointer->operator+(other);}
 IRRLICHT_C_API vector2df& vector2df_operator_set_add_other(vector2df* pointer, const vector2df& other){return pointer->operator+=(other);}
-IRRLICHT_C_API vector2df* vector2df_operator_add_value(vector2df* pointer, const f32 v){return &pointer->operator+(v);}
+IRRLICHT_C_API const vector2df& vector2df_operator_add_value(vector2df* pointer, const f32 v){return pointer->operator+(v);}
 IRRLICHT_C_API vector2df& vector2df_operator_set_add_value(vector2df* pointer, const f32 v){return pointer->operator+=(v);}
 IRRLICHT_C_API vector2df& vector2df_operator_set_add_dimension2d(vector2df* pointer, const dimension2df& other){return pointer->operator+=(other);}
-IRRLICHT_C_API vector2df* vector2df_operator_sub_other(vector2df* pointer, const vector2df& other){return &pointer->operator-(other);}
-IRRLICHT_C_API vector2df* vector2df_operator_sub_dimension2d(vector2df* pointer, const dimension2df& other){return &pointer->operator-(other);}
+IRRLICHT_C_API const vector2df& vector2df_operator_sub_other(vector2df* pointer, const vector2df& other){return pointer->operator-(other);}
+IRRLICHT_C_API const vector2df& vector2df_operator_sub_dimension2d(vector2df* pointer, const dimension2df& other){return pointer->operator-(other);}
 IRRLICHT_C_API vector2df& vector2df_operator_set_sub_other(vector2df* pointer, const vector2df& other){return pointer->operator-=(other);}
-IRRLICHT_C_API vector2df* vector2df_operator_sub_value(vector2df* pointer, const f32 v){return &pointer->operator-(v);}
+IRRLICHT_C_API const vector2df& vector2df_operator_sub_value(vector2df* pointer, const f32 v){return pointer->operator-(v);}
 IRRLICHT_C_API vector2df& vector2df_operator_set_sub_value(vector2df* pointer, const f32 v){return pointer->operator-=(v);}
 IRRLICHT_C_API vector2df& vector2df_operator_set_sub_dimension2d(vector2df* pointer, const dimension2df& other){return pointer->operator-=(other);}
-IRRLICHT_C_API vector2df* vector2df_operator_mult_other(vector2df* pointer, const vector2df& other){return &pointer->operator*(other);}
+IRRLICHT_C_API const vector2df& vector2df_operator_mult_other(vector2df* pointer, const vector2df& other){return pointer->operator*(other);}
 IRRLICHT_C_API vector2df& vector2df_operator_set_mult_other(vector2df* pointer, const vector2df& other){return pointer->operator*=(other);}
-IRRLICHT_C_API vector2df* vector2df_operator_mult_value(vector2df* pointer, const f32 v){return &pointer->operator*(v);}
+IRRLICHT_C_API const vector2df& vector2df_operator_mult_value(vector2df* pointer, const f32 v){return pointer->operator*(v);}
 IRRLICHT_C_API vector2df& vector2df_operator_set_mult_value(vector2df* pointer, const f32 v){return pointer->operator*=(v);}
-IRRLICHT_C_API vector2df* vector2df_operator_div_other(vector2df* pointer, const vector2df& other){return &pointer->operator/(other);}
+IRRLICHT_C_API const vector2df& vector2df_operator_div_other(vector2df* pointer, const vector2df& other){return pointer->operator/(other);}
 IRRLICHT_C_API vector2df& vector2df_operator_set_div_other(vector2df* pointer, const vector2df& other){return pointer->operator/=(other);}
-IRRLICHT_C_API vector2df* vector2df_operator_div_value(vector2df* pointer, const f32 v){return &pointer->operator/(v);}
+IRRLICHT_C_API const vector2df& vector2df_operator_div_value(vector2df* pointer, const f32 v){return pointer->operator/(v);}
 IRRLICHT_C_API vector2df& vector2df_operator_set_div_value(vector2df* pointer, const f32 v){return pointer->operator/=(v);}
 IRRLICHT_C_API bool vector2df_operator_le(vector2df* pointer, const vector2df& other){return pointer->operator<=(other);}
 IRRLICHT_C_API bool vector2df_operator_ge(vector2df* pointer, const vector2df& other){return pointer->operator>=(other);}
@@ -56,8 +56,8 @@ IRRLICHT_C_API f64 vector2df_getAngleTrig(vector2df* pointer){return pointer->ge
 IRRLICHT_C_API f64 vector2df_getAngle(vector2df* pointer){return pointer->getAngle();}
 IRRLICHT_C_API f64 vector2df_getAngleWith(vector2df* pointer, const vector2df& b){return pointer->getAngleWith(b);}
 IRRLICHT_C_API bool vector2df_isBetweenPoints(vector2df* pointer, const vector2df& begin, const vector2df& end){return pointer->isBetweenPoints(begin, end);}
-IRRLICHT_C_API vector2df* vector2df_getInterpolated(vector2df* pointer, const vector2df& other, f32 d){return &pointer->getInterpolated(other, d);}
-IRRLICHT_C_API vector2df* vector2df_getInterpolated_quadratic(vector2df* pointer, const vector2df& v2, const vector2df& v3, f32 d){return &pointer->getInterpolated_quadratic(v2, v3, d);}
+IRRLICHT_C_API const vector2df& vector2df_getInterpolated(vector2df* pointer, const vector2df& other, f32 d){return pointer->getInterpolated(other, d);}
+IRRLICHT_C_API const vector2df& vector2df_getInterpolated_quadratic(vector2df* pointer, const vector2df& v2, const vector2df& v3, f32 d){return pointer->getInterpolated_quadratic(v2, v3, d);}
 IRRLICHT_C_API vector2df& vector2df_interpolate(vector2df* pointer, const vector2df& a, const vector2df& b, f32 d){return pointer->interpolate(a, b, d);}
 IRRLICHT_C_API f32 vector2df_get_X(vector2df* pointer){return pointer->X;}
 IRRLICHT_C_API void vector2df_set_X(vector2df* pointer, f32 value){pointer->X = value;}
@@ -70,28 +70,28 @@ IRRLICHT_C_API vector2di* vector2di_ctor2(s32 n=0){return new vector2di(n);}
 IRRLICHT_C_API vector2di* vector2di_ctor3(const vector2di& other){return new vector2di(other);}
 IRRLICHT_C_API vector2di* vector2di_ctor4(const dimension2di& other){return new vector2di(other);}
 // operators
-IRRLICHT_C_API vector2di* vector2di_operator_sub(vector2di* pointer){return &pointer->operator-();}
+IRRLICHT_C_API const vector2di& vector2di_operator_sub(vector2di* pointer){return pointer->operator-();}
 IRRLICHT_C_API vector2di& vector2di_operator_set_other(vector2di* pointer, const vector2di& other){return pointer->operator=(other);}
 IRRLICHT_C_API vector2di& vector2di_operator_set_dimension2d(vector2di* pointer, const dimension2di& other){return pointer->operator=(other);}
-IRRLICHT_C_API vector2di* vector2di_operator_add_other(vector2di* pointer, const vector2di& other){return &pointer->operator+(other);}
-IRRLICHT_C_API vector2di* vector2di_operator_add_dimension2d(vector2di* pointer, const dimension2di& other){return &pointer->operator+(other);}
+IRRLICHT_C_API const vector2di& vector2di_operator_add_other(vector2di* pointer, const vector2di& other){return pointer->operator+(other);}
+IRRLICHT_C_API const vector2di& vector2di_operator_add_dimension2d(vector2di* pointer, const dimension2di& other){return pointer->operator+(other);}
 IRRLICHT_C_API vector2di& vector2di_operator_set_add_other(vector2di* pointer, const vector2di& other){return pointer->operator+=(other);}
-IRRLICHT_C_API vector2di* vector2di_operator_add_value(vector2di* pointer, const s32 v){return &pointer->operator+(v);}
+IRRLICHT_C_API const vector2di& vector2di_operator_add_value(vector2di* pointer, const s32 v){return pointer->operator+(v);}
 IRRLICHT_C_API vector2di& vector2di_operator_set_add_value(vector2di* pointer, const s32 v){return pointer->operator+=(v);}
 IRRLICHT_C_API vector2di& vector2di_operator_set_add_dimension2d(vector2di* pointer, const dimension2di& other){return pointer->operator+=(other);}
-IRRLICHT_C_API vector2di* vector2di_operator_sub_other(vector2di* pointer, const vector2di& other){return &pointer->operator-(other);}
-IRRLICHT_C_API vector2di* vector2di_operator_sub_dimension2d(vector2di* pointer, const dimension2di& other){return &pointer->operator-(other);}
+IRRLICHT_C_API const vector2di& vector2di_operator_sub_other(vector2di* pointer, const vector2di& other){return pointer->operator-(other);}
+IRRLICHT_C_API const vector2di& vector2di_operator_sub_dimension2d(vector2di* pointer, const dimension2di& other){return pointer->operator-(other);}
 IRRLICHT_C_API vector2di& vector2di_operator_set_sub_other(vector2di* pointer, const vector2di& other){return pointer->operator-=(other);}
-IRRLICHT_C_API vector2di* vector2di_operator_sub_value(vector2di* pointer, const s32 v){return &pointer->operator-(v);}
+IRRLICHT_C_API const vector2di& vector2di_operator_sub_value(vector2di* pointer, const s32 v){return pointer->operator-(v);}
 IRRLICHT_C_API vector2di& vector2di_operator_set_sub_value(vector2di* pointer, const s32 v){return pointer->operator-=(v);}
 IRRLICHT_C_API vector2di& vector2di_operator_set_sub_dimension2d(vector2di* pointer, const dimension2di& other){return pointer->operator-=(other);}
-IRRLICHT_C_API vector2di* vector2di_operator_mult_other(vector2di* pointer, const vector2di& other){return &pointer->operator*(other);}
+IRRLICHT_C_API const vector2di& vector2di_operator_mult_other(vector2di* pointer, const vector2di& other){return pointer->operator*(other);}
 IRRLICHT_C_API vector2di& vector2di_operator_set_mult_other(vector2di* pointer, const vector2di& other){return pointer->operator*=(other);}
-IRRLICHT_C_API vector2di* vector2di_operator_mult_value(vector2di* pointer, const s32 v){return &pointer->operator*(v);}
+IRRLICHT_C_API const vector2di& vector2di_operator_mult_value(vector2di* pointer, const s32 v){return pointer->operator*(v);}
 IRRLICHT_C_API vector2di& vector2di_operator_set_mult_value(vector2di* pointer, const s32 v){return pointer->operator*=(v);}
-IRRLICHT_C_API vector2di* vector2di_operator_div_other(vector2di* pointer, const vector2di& other){return &pointer->operator/(other);}
+IRRLICHT_C_API const vector2di& vector2di_operator_div_other(vector2di* pointer, const vector2di& other){return pointer->operator/(other);}
 IRRLICHT_C_API vector2di& vector2di_operator_set_div_other(vector2di* pointer, const vector2di& other){return pointer->operator/=(other);}
-IRRLICHT_C_API vector2di* vector2di_operator_div_value(vector2di* pointer, const s32 v){return &pointer->operator/(v);}
+IRRLICHT_C_API const vector2di& vector2di_operator_div_value(vector2di* pointer, const s32 v){return pointer->operator/(v);}
 IRRLICHT_C_API vector2di& vector2di_operator_set_div_value(vector2di* pointer, const s32 v){return pointer->operator/=(v);}
 IRRLICHT_C_API bool vector2di_operator_le(vector2di* pointer, const vector2di& other){return pointer->operator<=(other);}
 IRRLICHT_C_API bool vector2di_operator_ge(vector2di* pointer, const vector2di& other){return pointer->operator>=(other);}
@@ -119,8 +119,8 @@ IRRLICHT_C_API f64 vector2di_getAngleWith(vector2di* pointer, const vector2di& b
 //IRRLICHT_C_API s32 vector2di_getAngleWith(vector2di* pointer, const vector2di& b){return (s32)pointer->getAngleWith(b);}
 //#endif
 IRRLICHT_C_API bool vector2di_isBetweenPoints(vector2di* pointer, const vector2di& begin, const vector2di& end){return pointer->isBetweenPoints(begin, end);}
-IRRLICHT_C_API vector2di* vector2di_getInterpolated(vector2di* pointer, const vector2di& other, s32 d){return &pointer->getInterpolated(other, d);}
-IRRLICHT_C_API vector2di* vector2di_getInterpolated_quadratic(vector2di* pointer, const vector2di& v2, const vector2di& v3, s32 d){return &pointer->getInterpolated_quadratic(v2, v3, d);}
+IRRLICHT_C_API const vector2di& vector2di_getInterpolated(vector2di* pointer, const vector2di& other, s32 d){return pointer->getInterpolated(other, d);}
+IRRLICHT_C_API const vector2di& vector2di_getInterpolated_quadratic(vector2di* pointer, const vector2di& v2, const vector2di& v3, s32 d){return pointer->getInterpolated_quadratic(v2, v3, d);}
 IRRLICHT_C_API vector2di& vector2di_interpolate(vector2di* pointer, const vector2di& a, const vector2di& b, s32 d){return pointer->interpolate(a, b, d);}
 IRRLICHT_C_API s32 vector2di_get_X(vector2di* pointer){return pointer->X;}
 IRRLICHT_C_API void vector2di_set_X(vector2di* pointer, s32 value){pointer->X = value;}

@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -17,12 +17,12 @@ IRRLICHT_C_API void IGUITab_setBackgroundColor(IGUITab* pointer, video::SColor* 
 {pointer->setBackgroundColor(*c);}
 IRRLICHT_C_API bool IGUITab_isDrawingBackground(IGUITab* pointer)
 {return pointer->isDrawingBackground();}
-IRRLICHT_C_API SColor* IGUITab_getBackgroundColor(IGUITab* pointer)
-{return &pointer->getBackgroundColor();}
+IRRLICHT_C_API const SColor& IGUITab_getBackgroundColor(IGUITab* pointer)
+{return pointer->getBackgroundColor();}
 IRRLICHT_C_API void IGUITab_setTextColor(IGUITab* pointer, video::SColor* c)
 {pointer->setTextColor(*c);}
-IRRLICHT_C_API SColor* IGUITab_getTextColor(IGUITab* pointer)
-{return &pointer->getTextColor();}
+IRRLICHT_C_API const SColor& IGUITab_getTextColor(IGUITab* pointer)
+{return pointer->getTextColor();}
 
 //================= IGUITabControl
 IRRLICHT_C_API IGUITabControl* IGUITabControl_ctor(IGUIEnvironment* environment, IGUIElement* parent, s32 id, core::rect<s32> rectangle)
@@ -35,7 +35,7 @@ IRRLICHT_C_API IGUITab* IGUITabControl_getTab(IGUITabControl* pointer, s32 idx)
 {return pointer->getTab(idx);}
 IRRLICHT_C_API bool IGUITabControl_setActiveTab1(IGUITabControl* pointer, s32 idx)
 {return pointer->setActiveTab(idx);}
-IRRLICHT_C_API bool IGUITabControl_setActiveTab2(IGUITabControl* pointer, IGUIElement *tab)
+IRRLICHT_C_API bool IGUITabControl_setActiveTab2(IGUITabControl* pointer, IGUITab* tab)
 {return pointer->setActiveTab(tab);}
 IRRLICHT_C_API s32 IGUITabControl_getActiveTab(IGUITabControl* pointer)
 {return pointer->getActiveTab();}

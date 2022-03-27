@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 //class IGUIWindow : public IGUIElement
@@ -19,7 +19,7 @@ IRRLICHT_C_API void IGUIWindow_setDrawBackground(IGUIWindow* pointer, bool draw)
 IRRLICHT_C_API bool IGUIWindow_getDrawBackground(IGUIWindow* pointer){return pointer->getDrawBackground();}
 IRRLICHT_C_API void IGUIWindow_setDrawTitlebar(IGUIWindow* pointer, bool draw){pointer->setDrawTitlebar(draw);}
 IRRLICHT_C_API bool IGUIWindow_getDrawTitlebar(IGUIWindow* pointer){return pointer->getDrawTitlebar();}
-IRRLICHT_C_API core::rect<s32>* IGUIWindow_getClientRect(IGUIWindow* pointer){return &pointer->getClientRect();}
+IRRLICHT_C_API const core::rect<s32>& IGUIWindow_getClientRect(IGUIWindow* pointer){return pointer->getClientRect();}
 
 #ifdef __cplusplus
 }

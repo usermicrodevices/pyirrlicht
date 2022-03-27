@@ -325,8 +325,8 @@ IRRLICHT_C_API void IVideoDriver_setAmbientLight(IVideoDriver* pointer, const SC
 {pointer->setAmbientLight(*color);}
 IRRLICHT_C_API void IVideoDriver_setAllowZWriteOnTransparent(IVideoDriver* pointer, bool flag)
 {pointer->setAllowZWriteOnTransparent(flag);}
-IRRLICHT_C_API dimension2du* IVideoDriver_getMaxTextureSize(IVideoDriver* pointer)
-{return &pointer->getMaxTextureSize();}
+IRRLICHT_C_API const dimension2du& IVideoDriver_getMaxTextureSize(IVideoDriver* pointer)
+{return pointer->getMaxTextureSize();}
 
 #ifdef _MSC_VER
 IRRLICHT_C_API void* IVideoDriver_GetHandle(IVideoDriver* pointer)
@@ -372,12 +372,12 @@ IRRLICHT_C_API void IVideoDriver_SetIcon(IVideoDriver* pointer, int icon_id = 32
 // floating point analogs for 2d drawing
 IRRLICHT_C_API void IVideoDriver_draw2DRectangle_f1(IVideoDriver* pointer, SColor* color, f32 pos_x1, f32 pos_y1, f32 pos_x2, f32 pos_y2)
 {pointer->draw2DRectangle(*color, core::rect<s32>(pos_x1, pos_y1, pos_x2, pos_y2));}
-IRRLICHT_C_API void IVideoDriver_draw2DRectangle_f2(IVideoDriver* pointer, SColor* color, f32 pos_x1, f32 pos_y1, f32 pos_x2, f32 pos_y2, f32 clip_x1, f32 clip_y1, f32 clip_x2, f32 clip_y2)
-{pointer->draw2DRectangle(*color, core::rect<s32>(pos_x1, pos_y1, pos_x2, pos_y2), &core::rect<s32>(clip_x1, clip_y1, clip_x2, clip_y2));}
+IRRLICHT_C_API void IVideoDriver_draw2DRectangle_f2(IVideoDriver* pointer, const SColor& color, f32 pos_x1, f32 pos_y1, f32 pos_x2, f32 pos_y2, f32 clip_x1, f32 clip_y1, f32 clip_x2, f32 clip_y2)
+{core::rect<s32> clip(clip_x1, clip_y1, clip_x2, clip_y2); pointer->draw2DRectangle(color, core::rect<s32>(pos_x1, pos_y1, pos_x2, pos_y2), &clip);}
 IRRLICHT_C_API void IVideoDriver_draw2DRectangle_f3(IVideoDriver* pointer, f32 pos_x1, f32 pos_y1, f32 pos_x2, f32 pos_y2, const SColor* colorLeftUp, const SColor* colorRightUp, const SColor* colorLeftDown, const SColor* colorRightDown)
 {pointer->draw2DRectangle(core::rect<s32>(pos_x1, pos_y1, pos_x2, pos_y2), *colorLeftUp, *colorRightUp, *colorLeftDown, *colorRightDown);}
 IRRLICHT_C_API void IVideoDriver_draw2DRectangle_f4(IVideoDriver* pointer, f32 pos_x1, f32 pos_y1, f32 pos_x2, f32 pos_y2, const SColor* colorLeftUp, const SColor* colorRightUp, const SColor* colorLeftDown, const SColor* colorRightDown, f32 clip_x1, f32 clip_y1, f32 clip_x2, f32 clip_y2)
-{pointer->draw2DRectangle(core::rect<s32>(pos_x1, pos_y1, pos_x2, pos_y2), *colorLeftUp, *colorRightUp, *colorLeftDown, *colorRightDown, &core::rect<s32>(clip_x1, clip_y1, clip_x2, clip_y2));}
+{core::rect<s32> clip(clip_x1, clip_y1, clip_x2, clip_y2); pointer->draw2DRectangle(core::rect<s32>(pos_x1, pos_y1, pos_x2, pos_y2), *colorLeftUp, *colorRightUp, *colorLeftDown, *colorRightDown, &clip);}
 
 IRRLICHT_C_API void IVideoDriver_draw2DRectangleOutline_f(IVideoDriver* pointer, f32 x1, f32 y1, f32 x2, f32 y2, const SColor& color = SColor(255,255,255,255))
 {pointer->draw2DRectangleOutline(recti(x1, y1, x2, y2), color);}

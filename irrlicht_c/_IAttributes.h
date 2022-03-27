@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -164,10 +164,10 @@ IRRLICHT_C_API void IAttributes_getAttributeAsBinaryData1(IAttributes* pointer, 
 IRRLICHT_C_API void IAttributes_getAttributeAsBinaryData2(IAttributes* pointer, s32 index, void* outData, s32 maxSizeInBytes)
 {pointer->getAttributeAsBinaryData(index, outData, maxSizeInBytes);}
 
-IRRLICHT_C_API core::array<core::stringw>* IAttributes_getAttributeAsArray1(IAttributes* pointer, const c8* attributeName)
-{return &pointer->getAttributeAsArray(attributeName);}
-IRRLICHT_C_API core::array<core::stringw>* IAttributes_getAttributeAsArray2(IAttributes* pointer, s32 index)
-{return &pointer->getAttributeAsArray(index);}
+IRRLICHT_C_API const core::array<core::stringw>& IAttributes_getAttributeAsArray1(IAttributes* pointer, const c8* attributeName)
+{return pointer->getAttributeAsArray(attributeName);}
+IRRLICHT_C_API const core::array<core::stringw>& IAttributes_getAttributeAsArray2(IAttributes* pointer, s32 index)
+{return pointer->getAttributeAsArray(index);}
 
 IRRLICHT_C_API void IAttributes_addBool(IAttributes* pointer, const c8* attributeName, bool value)
 {pointer->addBool(attributeName, value);}
@@ -199,99 +199,99 @@ IRRLICHT_C_API void IAttributes_getAttributeEnumerationLiteralsOfEnumeration2(IA
 IRRLICHT_C_API void IAttributes_addColor(IAttributes* pointer, const c8* attributeName, video::SColor value)
 {pointer->addColor(attributeName, value);}
 
-IRRLICHT_C_API video::SColor* IAttributes_getAttributeAsColor1(IAttributes* pointer, const c8* attributeName)
-{return &pointer->getAttributeAsColor(attributeName);}
-IRRLICHT_C_API video::SColor* IAttributes_getAttributeAsColor2(IAttributes* pointer, s32 index)
-{return &pointer->getAttributeAsColor(index);}
+IRRLICHT_C_API const video::SColor& IAttributes_getAttributeAsColor1(IAttributes* pointer, const c8* attributeName)
+{return pointer->getAttributeAsColor(attributeName);}
+IRRLICHT_C_API const video::SColor& IAttributes_getAttributeAsColor2(IAttributes* pointer, s32 index)
+{return pointer->getAttributeAsColor(index);}
 
 IRRLICHT_C_API void IAttributes_addColorf(IAttributes* pointer, const c8* attributeName, video::SColorf value)
 {pointer->addColorf(attributeName, value);}
 
-IRRLICHT_C_API video::SColorf* IAttributes_getAttributeAsColorf1(IAttributes* pointer, const c8* attributeName)
-{return &pointer->getAttributeAsColorf(attributeName);}
-IRRLICHT_C_API video::SColorf* IAttributes_getAttributeAsColorf2(IAttributes* pointer, s32 index)
-{return &pointer->getAttributeAsColorf(index);}
+IRRLICHT_C_API const video::SColorf& IAttributes_getAttributeAsColorf1(IAttributes* pointer, const c8* attributeName)
+{return pointer->getAttributeAsColorf(attributeName);}
+IRRLICHT_C_API const video::SColorf& IAttributes_getAttributeAsColorf2(IAttributes* pointer, s32 index)
+{return pointer->getAttributeAsColorf(index);}
 
 IRRLICHT_C_API void IAttributes_addVector3d(IAttributes* pointer, const c8* attributeName, core::vector3df value)
 {pointer->addVector3d(attributeName, value);}
 
-IRRLICHT_C_API core::vector3df* IAttributes_getAttributeAsVector3d1(IAttributes* pointer, const c8* attributeName)
-{return &pointer->getAttributeAsVector3d(attributeName);}
-IRRLICHT_C_API core::vector3df* IAttributes_getAttributeAsVector3d2(IAttributes* pointer, s32 index)
-{return &pointer->getAttributeAsVector3d(index);}
+IRRLICHT_C_API const core::vector3df& IAttributes_getAttributeAsVector3d1(IAttributes* pointer, const c8* attributeName)
+{return pointer->getAttributeAsVector3d(attributeName);}
+IRRLICHT_C_API const core::vector3df& IAttributes_getAttributeAsVector3d2(IAttributes* pointer, s32 index)
+{return pointer->getAttributeAsVector3d(index);}
 
 IRRLICHT_C_API void IAttributes_addPosition2d(IAttributes* pointer, const c8* attributeName, core::position2di value)
 {pointer->addPosition2d(attributeName, value);}
 
-IRRLICHT_C_API core::position2di* IAttributes_getAttributeAsPosition2d1(IAttributes* pointer, const c8* attributeName)
-{return &pointer->getAttributeAsPosition2d(attributeName);}
-IRRLICHT_C_API core::position2di* IAttributes_getAttributeAsPosition2d2(IAttributes* pointer, s32 index)
-{return &pointer->getAttributeAsPosition2d(index);}
+IRRLICHT_C_API const core::position2di& IAttributes_getAttributeAsPosition2d1(IAttributes* pointer, const c8* attributeName)
+{return pointer->getAttributeAsPosition2d(attributeName);}
+IRRLICHT_C_API const core::position2di& IAttributes_getAttributeAsPosition2d2(IAttributes* pointer, s32 index)
+{return pointer->getAttributeAsPosition2d(index);}
 
 IRRLICHT_C_API void IAttributes_addRect(IAttributes* pointer, const c8* attributeName, core::rect<s32> value)
 {pointer->addRect(attributeName, value);}
 
-IRRLICHT_C_API core::rect<s32>* IAttributes_getAttributeAsRect1(IAttributes* pointer, const c8* attributeName)
-{return &pointer->getAttributeAsRect(attributeName);}
-IRRLICHT_C_API core::rect<s32>* IAttributes_getAttributeAsRect2(IAttributes* pointer, s32 index)
-{return &pointer->getAttributeAsRect(index);}
+IRRLICHT_C_API const core::rect<s32>& IAttributes_getAttributeAsRect1(IAttributes* pointer, const c8* attributeName)
+{return pointer->getAttributeAsRect(attributeName);}
+IRRLICHT_C_API const core::rect<s32>& IAttributes_getAttributeAsRect2(IAttributes* pointer, s32 index)
+{return pointer->getAttributeAsRect(index);}
 
 
 IRRLICHT_C_API void IAttributes_addMatrix(IAttributes* pointer, const c8* attributeName, const core::matrix4& v)
 {pointer->addMatrix(attributeName, v);}
 
-IRRLICHT_C_API core::matrix4* IAttributes_getAttributeAsMatrix1(IAttributes* pointer, const c8* attributeName)
-{return &pointer->getAttributeAsMatrix(attributeName);}
-IRRLICHT_C_API core::matrix4* IAttributes_getAttributeAsMatrix2(IAttributes* pointer, s32 index)
-{return &pointer->getAttributeAsMatrix(index);}
+IRRLICHT_C_API const core::matrix4& IAttributes_getAttributeAsMatrix1(IAttributes* pointer, const c8* attributeName)
+{return pointer->getAttributeAsMatrix(attributeName);}
+IRRLICHT_C_API const core::matrix4& IAttributes_getAttributeAsMatrix2(IAttributes* pointer, s32 index)
+{return pointer->getAttributeAsMatrix(index);}
 
 IRRLICHT_C_API void IAttributes_addQuaternion(IAttributes* pointer, const c8* attributeName, core::quaternion v)
 {pointer->addQuaternion(attributeName, v);}
 
-IRRLICHT_C_API core::quaternion* IAttributes_getAttributeAsQuaternion1(IAttributes* pointer, const c8* attributeName)
-{return &pointer->getAttributeAsQuaternion(attributeName);}
-IRRLICHT_C_API core::quaternion* IAttributes_getAttributeAsQuaternion2(IAttributes* pointer, s32 index)
-{return &pointer->getAttributeAsQuaternion(index);}
+IRRLICHT_C_API const core::quaternion& IAttributes_getAttributeAsQuaternion1(IAttributes* pointer, const c8* attributeName)
+{return pointer->getAttributeAsQuaternion(attributeName);}
+IRRLICHT_C_API const core::quaternion& IAttributes_getAttributeAsQuaternion2(IAttributes* pointer, s32 index)
+{return pointer->getAttributeAsQuaternion(index);}
 
 IRRLICHT_C_API void IAttributes_addBox3d(IAttributes* pointer, const c8* attributeName, core::aabbox3df v)
 {pointer->addBox3d(attributeName, v);}
 
-IRRLICHT_C_API core::aabbox3df* IAttributes_getAttributeAsBox3d1(IAttributes* pointer, const c8* attributeName)
-{return &pointer->getAttributeAsBox3d(attributeName);}
-IRRLICHT_C_API core::aabbox3df* IAttributes_getAttributeAsBox3d2(IAttributes* pointer, s32 index)
-{return &pointer->getAttributeAsBox3d(index);}
+IRRLICHT_C_API const core::aabbox3df& IAttributes_getAttributeAsBox3d1(IAttributes* pointer, const c8* attributeName)
+{return pointer->getAttributeAsBox3d(attributeName);}
+IRRLICHT_C_API const core::aabbox3df& IAttributes_getAttributeAsBox3d2(IAttributes* pointer, s32 index)
+{return pointer->getAttributeAsBox3d(index);}
 
 IRRLICHT_C_API void IAttributes_addPlane3d(IAttributes* pointer, const c8* attributeName, core::plane3df v)
 {pointer->addPlane3d(attributeName, v);}
 
-IRRLICHT_C_API core::plane3df* IAttributes_getAttributeAsPlane3d1(IAttributes* pointer, const c8* attributeName)
-{return &pointer->getAttributeAsPlane3d(attributeName);}
-IRRLICHT_C_API core::plane3df* IAttributes_getAttributeAsPlane3d2(IAttributes* pointer, s32 index)
-{return &pointer->getAttributeAsPlane3d(index);}
+IRRLICHT_C_API const core::plane3df& IAttributes_getAttributeAsPlane3d1(IAttributes* pointer, const c8* attributeName)
+{return pointer->getAttributeAsPlane3d(attributeName);}
+IRRLICHT_C_API const core::plane3df& IAttributes_getAttributeAsPlane3d2(IAttributes* pointer, s32 index)
+{return pointer->getAttributeAsPlane3d(index);}
 
 IRRLICHT_C_API void IAttributes_addTriangle3d(IAttributes* pointer, const c8* attributeName, core::triangle3df v)
 {pointer->addTriangle3d(attributeName, v);}
 
-IRRLICHT_C_API core::triangle3df* IAttributes_getAttributeAsTriangle3d1(IAttributes* pointer, const c8* attributeName)
-{return &pointer->getAttributeAsTriangle3d(attributeName);}
-IRRLICHT_C_API core::triangle3df* IAttributes_getAttributeAsTriangle3d2(IAttributes* pointer, s32 index)
-{return &pointer->getAttributeAsTriangle3d(index);}
+IRRLICHT_C_API const core::triangle3df& IAttributes_getAttributeAsTriangle3d1(IAttributes* pointer, const c8* attributeName)
+{return pointer->getAttributeAsTriangle3d(attributeName);}
+IRRLICHT_C_API const core::triangle3df& IAttributes_getAttributeAsTriangle3d2(IAttributes* pointer, s32 index)
+{return pointer->getAttributeAsTriangle3d(index);}
 
 IRRLICHT_C_API void IAttributes_addLine2d(IAttributes* pointer, const c8* attributeName, core::line2df v)
 {pointer->addLine2d(attributeName, v);}
 
-IRRLICHT_C_API core::line2df* IAttributes_getAttributeAsLine2d1(IAttributes* pointer, const c8* attributeName)
-{return &pointer->getAttributeAsLine2d(attributeName);}
-IRRLICHT_C_API core::line2df* IAttributes_getAttributeAsLine2d2(IAttributes* pointer, s32 index)
-{return &pointer->getAttributeAsLine2d(index);}
+IRRLICHT_C_API const core::line2df& IAttributes_getAttributeAsLine2d1(IAttributes* pointer, const c8* attributeName)
+{return pointer->getAttributeAsLine2d(attributeName);}
+IRRLICHT_C_API const core::line2df& IAttributes_getAttributeAsLine2d2(IAttributes* pointer, s32 index)
+{return pointer->getAttributeAsLine2d(index);}
 
 IRRLICHT_C_API void IAttributes_addLine3d(IAttributes* pointer, const c8* attributeName, core::line3df v)
 {pointer->addLine3d(attributeName, v);}
 
-IRRLICHT_C_API core::line3df* IAttributes_getAttributeAsLine3d1(IAttributes* pointer, const c8* attributeName)
-{return &pointer->getAttributeAsLine3d(attributeName);}
-IRRLICHT_C_API core::line3df* IAttributes_getAttributeAsLine3d2(IAttributes* pointer, s32 index)
-{return &pointer->getAttributeAsLine3d(index);}
+IRRLICHT_C_API const core::line3df& IAttributes_getAttributeAsLine3d1(IAttributes* pointer, const c8* attributeName)
+{return pointer->getAttributeAsLine3d(attributeName);}
+IRRLICHT_C_API const core::line3df& IAttributes_getAttributeAsLine3d2(IAttributes* pointer, s32 index)
+{return pointer->getAttributeAsLine3d(index);}
 
 IRRLICHT_C_API void IAttributes_addTexture(IAttributes* pointer, const c8* attributeName, video::ITexture* texture)
 {pointer->addTexture(attributeName, texture);}

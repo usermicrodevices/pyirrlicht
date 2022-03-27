@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -64,11 +64,11 @@ IRRLICHT_C_API void IGUIListBox_clearItemOverrideColor2(IGUIListBox* pointer, u3
 IRRLICHT_C_API bool IGUIListBox_hasItemOverrideColor(IGUIListBox* pointer, u32 index, EGUI_LISTBOX_COLOR colorType)
 {return pointer->hasItemOverrideColor(index, colorType);}
 
-IRRLICHT_C_API video::SColor* IGUIListBox_getItemOverrideColor(IGUIListBox* pointer, u32 index, EGUI_LISTBOX_COLOR colorType)
-{return &pointer->getItemOverrideColor(index, colorType);}
+IRRLICHT_C_API const video::SColor& IGUIListBox_getItemOverrideColor(IGUIListBox* pointer, u32 index, EGUI_LISTBOX_COLOR colorType)
+{return pointer->getItemOverrideColor(index, colorType);}
 
-IRRLICHT_C_API video::SColor* IGUIListBox_getItemDefaultColor(IGUIListBox* pointer, EGUI_LISTBOX_COLOR colorType)
-{return &pointer->getItemDefaultColor(colorType);}
+IRRLICHT_C_API const video::SColor& IGUIListBox_getItemDefaultColor(IGUIListBox* pointer, EGUI_LISTBOX_COLOR colorType)
+{return pointer->getItemDefaultColor(colorType);}
 
 IRRLICHT_C_API void IGUIListBox_setItem(IGUIListBox* pointer, u32 index, const wchar_t* text, s32 icon)
 {pointer->setItem(index, text, icon);}

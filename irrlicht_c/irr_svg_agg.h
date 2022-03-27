@@ -1,22 +1,23 @@
-// Copyright(c) Maxim Kolosov 2011-2012 pyirrlicht@gmail.com
-// http://pir.sourceforge.net
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #define _CRT_SECURE_NO_WARNINGS
 
 #define _COMPILE_SVG_AGG_EXPORTS_
 
-#include "agg_scanline_p.h"
-#include "agg_basics.h"
-#include "agg_rendering_buffer.h"
-#include "agg_rasterizer_scanline_aa.h"
-#include "agg_renderer_scanline.h"
-//#include "agg_pixfmt_rgb.h"
-#include "agg_pixfmt_rgba.h"
-//#include "..\..\agg-2.5\examples\svg_viewer\agg_svg_parser.h"
+#include "../../agg/include/agg_scanline_p.h"
+#include "../../agg/include/agg_basics.h"
+#include "../../agg/include/agg_rendering_buffer.h"
+#include "../../agg/include/agg_rasterizer_scanline_aa.h"
+#include "../../agg/include/agg_renderer_scanline.h"
+//#include "../../agg/include/agg_pixfmt_rgb.h"
+#include "../../agg/include/agg_pixfmt_rgba.h"
+//#include "../../agg/examples/svg_viewer/agg_svg_parser.h"
+#include "../../agg/examples/svg_viewer/agg_svg_path_renderer.h"
+//#include "../../agg/include/agg_trans_affine.h"
+
 #include "named_colors_agg.h"
-#include "..\..\agg-2.5\examples\svg_viewer\agg_svg_path_renderer.h"
-//#include "agg_trans_affine.h"
 
 using namespace irr;
 using namespace core;

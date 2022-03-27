@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2012 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -101,8 +101,8 @@ IRRLICHT_C_API void ISceneManager_setActiveCamera(ISceneManager* pointer, ICamer
 {pointer->setActiveCamera(camera);}
 IRRLICHT_C_API void ISceneManager_setShadowColor(ISceneManager* pointer, SColor* color)
 {pointer->setShadowColor(*color);}
-IRRLICHT_C_API const SColor* ISceneManager_getShadowColor(ISceneManager* pointer)
-{return &pointer->getShadowColor();}
+IRRLICHT_C_API const SColor& ISceneManager_getShadowColor(ISceneManager* pointer)
+{return pointer->getShadowColor();}
 IRRLICHT_C_API u32 ISceneManager_registerNodeForRendering(ISceneManager* pointer, ISceneNode* node, E_SCENE_NODE_RENDER_PASS pass = ESNRP_AUTOMATIC)
 {return pointer->registerNodeForRendering(node, pass);}
 IRRLICHT_C_API void ISceneManager_drawAll(ISceneManager* pointer)

@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 // ffi calling convention
@@ -10,7 +10,7 @@
 class UserEventReceiver : public IEventReceiver
 {
 public:
-	UserEventReceiver(bool(IRRCALLCONV *func)(const SEvent&) = false)
+	UserEventReceiver(bool(IRRCALLCONV *func)(const SEvent&))
 	{
 		func_event = func;
 	}

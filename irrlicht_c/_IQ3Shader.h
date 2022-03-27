@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -10,7 +10,7 @@ extern "C" {
 IRRLICHT_C_API Q3LevelLoadParameter* Q3LevelLoadParameter_ctor1(){return new Q3LevelLoadParameter();}
 IRRLICHT_C_API Q3LevelLoadParameter* Q3LevelLoadParameter_ctor2(int length = 1){Q3LevelLoadParameter* pointer; pointer = new Q3LevelLoadParameter[length]; return pointer;}
 
-IRRLICHT_C_API Q3LevelLoadParameter* Q3LevelLoadParameter_get_item(Q3LevelLoadParameter* pointer, int index = 0){return &pointer[index];}
+IRRLICHT_C_API const Q3LevelLoadParameter& Q3LevelLoadParameter_get_item(Q3LevelLoadParameter* pointer, int index = 0){return pointer[index];}
 IRRLICHT_C_API void Q3LevelLoadParameter_set_item(Q3LevelLoadParameter* pointer, Q3LevelLoadParameter* item, int index = 0){pointer[index] = *item;}
 
 IRRLICHT_C_API video::E_MATERIAL_TYPE Q3LevelLoadParameter_get_defaultLightMapMaterial(Q3LevelLoadParameter* pointer){return pointer->defaultLightMapMaterial;}
@@ -63,9 +63,8 @@ IRRLICHT_C_API unsigned int Q3LevelLoadParameter_size(Q3LevelLoadParameter* poin
 
 //struct SBlendFunc
 IRRLICHT_C_API SBlendFunc* SBlendFunc_ctor(video::E_MODULATE_FUNC mod){return new SBlendFunc(mod);}
-//IRRLICHT_C_API SBlendFunc* SBlendFunc_ctor2(int length = 1){SBlendFunc* pointer; pointer = new SBlendFunc[length]; return pointer;}
 
-IRRLICHT_C_API SBlendFunc* SBlendFunc_get_item(SBlendFunc* pointer, int index = 0){return &pointer[index];}
+IRRLICHT_C_API const SBlendFunc& SBlendFunc_get_item(SBlendFunc* pointer, int index = 0){return pointer[index];}
 IRRLICHT_C_API void SBlendFunc_set_item(SBlendFunc* pointer, SBlendFunc* item, int index = 0){pointer[index] = *item;}
 
 IRRLICHT_C_API video::E_MATERIAL_TYPE SBlendFunc_get_type(SBlendFunc* pointer){return pointer->type;}
@@ -85,7 +84,7 @@ IRRLICHT_C_API void SBlendFunc_set_isTransparent(SBlendFunc* pointer, u32 value)
 IRRLICHT_C_API Noiser* Noiser_ctor1(){return new Noiser();}
 IRRLICHT_C_API Noiser* Noiser_ctor2(int length = 1){Noiser* pointer; pointer = new Noiser[length]; return pointer;}
 
-IRRLICHT_C_API Noiser* Noiser_get_item(Noiser* pointer, int index = 0){return &pointer[index];}
+IRRLICHT_C_API const Noiser& Noiser_get_item(Noiser* pointer, int index = 0){return pointer[index];}
 IRRLICHT_C_API void Noiser_set_item(Noiser* pointer, Noiser* item, int index = 0){pointer[index] = *item;}
 
 IRRLICHT_C_API f32 Noiser_get(Noiser* pointer){return pointer->get();}
@@ -95,7 +94,7 @@ IRRLICHT_C_API f32 Noiser_get(Noiser* pointer){return pointer->get();}
 IRRLICHT_C_API SModifierFunction* SModifierFunction_ctor1(){return new SModifierFunction();}
 IRRLICHT_C_API SModifierFunction* SModifierFunction_ctor2(int length = 1){SModifierFunction* pointer; pointer = new SModifierFunction[length]; return pointer;}
 
-IRRLICHT_C_API SModifierFunction* SModifierFunction_get_item(SModifierFunction* pointer, int index = 0){return &pointer[index];}
+IRRLICHT_C_API const SModifierFunction& SModifierFunction_get_item(SModifierFunction* pointer, int index = 0){return pointer[index];}
 IRRLICHT_C_API void SModifierFunction_set_item(SModifierFunction* pointer, SModifierFunction* item, int index = 0){pointer[index] = *item;}
 
 IRRLICHT_C_API eQ3ModifierFunction SModifierFunction_get_masterfunc0(SModifierFunction* pointer){return pointer->masterfunc0;}
@@ -149,7 +148,7 @@ IRRLICHT_C_API const f32 SModifierFunction_evaluate(SModifierFunction* pointer, 
 IRRLICHT_C_API SVariable* SVariable_ctor(const c8* n, const c8* c = 0){return new SVariable(n, c);}
 //IRRLICHT_C_API SVariable* SVariable_ctor2(int length = 1){SVariable* pointer; pointer = new SVariable[length]; return pointer;}
 
-IRRLICHT_C_API SVariable* SVariable_get_item(SVariable* pointer, int index = 0){return &pointer[index];}
+IRRLICHT_C_API const SVariable& SVariable_get_item(SVariable* pointer, int index = 0){return pointer[index];}
 IRRLICHT_C_API void SVariable_set_item(SVariable* pointer, SVariable* item, int index = 0){pointer[index] = *item;}
 
 IRRLICHT_C_API const c8* SVariable_get_name(SVariable* pointer){return pointer->name.c_str();}
@@ -168,14 +167,14 @@ IRRLICHT_C_API const bool SVariable_operator_lt(SVariable* pointer, const SVaria
 IRRLICHT_C_API SVarGroup* SVarGroup_ctor1(){return new SVarGroup();}
 IRRLICHT_C_API SVarGroup* SVarGroup_ctor2(int length = 1){SVarGroup* pointer; pointer = new SVarGroup[length]; return pointer;}
 
-IRRLICHT_C_API SVarGroup* SVarGroup_get_item(SVarGroup* pointer, int index = 0){return &pointer[index];}
+IRRLICHT_C_API const SVarGroup& SVarGroup_get_item(SVarGroup* pointer, int index = 0){return pointer[index];}
 IRRLICHT_C_API void SVarGroup_set_item(SVarGroup* pointer, SVarGroup* item, int index = 0){pointer[index] = *item;}
 
 IRRLICHT_C_API const u32 SVarGroup_isDefined(SVarGroup* pointer, const c8* name, const c8* content = 0){return pointer->isDefined(name, content);}
 IRRLICHT_C_API const c8* SVarGroup_get(SVarGroup* pointer, const c8* name){return pointer->get(name).c_str();}
 IRRLICHT_C_API void SVarGroup_set(SVarGroup* pointer, const c8* name, const c8* content = 0){return pointer->set(name, content);}
 
-IRRLICHT_C_API core::array<SVariable>* SVarGroup_get_Variable(SVarGroup* pointer){return &pointer->Variable;}
+IRRLICHT_C_API const core::array<SVariable>& SVarGroup_get_Variable(SVarGroup* pointer){return pointer->Variable;}
 IRRLICHT_C_API void SVarGroup_set_Variable(SVarGroup* pointer, core::array<SVariable>* value){pointer->Variable = *value;}
 
 
@@ -184,10 +183,10 @@ IRRLICHT_C_API void SVarGroup_set_Variable(SVarGroup* pointer, core::array<SVari
 IRRLICHT_C_API SVarGroupList* SVarGroupList_ctor1(){return new SVarGroupList();}
 IRRLICHT_C_API SVarGroupList* SVarGroupList_ctor2(int length = 1){SVarGroupList* pointer; pointer = new SVarGroupList[length]; return pointer;}
 
-IRRLICHT_C_API SVarGroupList* SVarGroupList_get_item(SVarGroupList* pointer, int index = 0){return &pointer[index];}
+IRRLICHT_C_API const SVarGroupList& SVarGroupList_get_item(SVarGroupList* pointer, int index = 0){return pointer[index];}
 IRRLICHT_C_API void SVarGroupList_set_item(SVarGroupList* pointer, SVarGroupList* item, int index = 0){pointer[index] = *item;}
 
-IRRLICHT_C_API core::array<SVarGroup>* SVarGroupList_get_VariableGroup(SVarGroupList* pointer){return &pointer->VariableGroup;}
+IRRLICHT_C_API const core::array<SVarGroup>& SVarGroupList_get_VariableGroup(SVarGroupList* pointer){return pointer->VariableGroup;}
 IRRLICHT_C_API void SVarGroupList_set_VariableGroup(SVarGroupList* pointer, core::array<SVarGroup>* value){pointer->VariableGroup = *value;}
 
 
@@ -195,7 +194,7 @@ IRRLICHT_C_API void SVarGroupList_set_VariableGroup(SVarGroupList* pointer, core
 IRRLICHT_C_API IShader* IShader_ctor1(){return new IShader();}
 IRRLICHT_C_API IShader* IShader_ctor2(int length = 1){IShader* pointer; pointer = new IShader[length]; return pointer;}
 
-IRRLICHT_C_API IShader* IShader_get_item(IShader* pointer, int index = 0){return &pointer[index];}
+IRRLICHT_C_API const IShader& IShader_get_item(IShader* pointer, int index = 0){return pointer[index];}
 IRRLICHT_C_API void IShader_set_item(IShader* pointer, IShader* item, int index = 0){pointer[index] = *item;}
 
 IRRLICHT_C_API void IShader_operator_set(IShader* pointer, const IShader* other){pointer->operator=(*other);}
@@ -221,7 +220,7 @@ IRRLICHT_C_API void tQ3EntityList_clear(tQ3EntityList* pointer){pointer->clear()
 IRRLICHT_C_API void tQ3EntityList_set_pointer(tQ3EntityList* pointer, IEntity* newPointer, u32 size, bool _is_sorted=false, bool _free_when_destroyed=true){pointer->set_pointer(newPointer, size, _is_sorted, _free_when_destroyed);}
 IRRLICHT_C_API void tQ3EntityList_set_free_when_destroyed(tQ3EntityList* pointer, bool f){pointer->set_free_when_destroyed(f);}
 IRRLICHT_C_API void tQ3EntityList_set_used(tQ3EntityList* pointer, u32 usedNow){pointer->set_used(usedNow);}
-IRRLICHT_C_API IEntity* tQ3EntityList_get_item(tQ3EntityList* pointer, u32 index){return &pointer->operator[](index);}
+IRRLICHT_C_API const IEntity& tQ3EntityList_get_item(tQ3EntityList* pointer, u32 index){return pointer->operator[](index);}
 IRRLICHT_C_API u32 tQ3EntityList_size(tQ3EntityList* pointer){return pointer->size();}
 IRRLICHT_C_API bool tQ3EntityList_empty(tQ3EntityList* pointer){return pointer->empty();}
 IRRLICHT_C_API void tQ3EntityList_sort(tQ3EntityList* pointer){pointer->sort();}
@@ -236,14 +235,8 @@ IRRLICHT_C_API void tQ3EntityList_set_sorted(tQ3EntityList* pointer, bool _is_so
 IRRLICHT_C_API void tQ3EntityList_swap(tQ3EntityList* pointer, tQ3EntityList* other){pointer->swap(*other);}
 
 //tools
-IRRLICHT_C_API core::vector3df* tool_getAsVector3df(const c8* string, u32& pos){return &getAsVector3df(core::stringc(string), pos);}
+IRRLICHT_C_API const core::vector3df& tool_getAsVector3df(const c8* string, u32& pos){return getAsVector3df(core::stringc(string), pos);}
 IRRLICHT_C_API f32 tool_getAsFloat(const c8* string, u32& pos){return getAsFloat(core::stringc(string), pos);}
-//IRRLICHT_C_API tTexArray* tool_getTextures(const c8* name, u32& startPos, io::IFileSystem* fileSystem, video::IVideoDriver* driver)
-//{
-//	tTexArray* textures = new tTexArray();
-//	getTextures(*textures, core::stringc(name), startPos, fileSystem, driver);
-//	return textures;
-//}
 IRRLICHT_C_API void tool_getTextures(tTexArray* textures, const c8* name, u32& startPos, io::IFileSystem* fileSystem, video::IVideoDriver* driver){getTextures(*textures, core::stringc(name), startPos, fileSystem, driver);}
 
 #ifdef __cplusplus

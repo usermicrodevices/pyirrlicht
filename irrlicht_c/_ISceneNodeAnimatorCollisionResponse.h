@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -9,7 +9,7 @@ extern "C" {
 class UserCollisionCallback : public ICollisionCallback
 {
 public:
-	UserCollisionCallback(bool(IRRCALLCONV *func)(const ISceneNodeAnimatorCollisionResponse* animator) = false)
+	UserCollisionCallback(bool(IRRCALLCONV *func)(const ISceneNodeAnimatorCollisionResponse* animator))
 	{
 		func_animator = func;
 	}

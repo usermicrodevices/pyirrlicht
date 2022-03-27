@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 class UserAnimationEndCallBack : public IAnimationEndCallBack
@@ -94,10 +94,10 @@ IRRLICHT_C_API IBoneSceneNode* IAnimatedMeshSceneNode_getJointNode2(IAnimatedMes
 {return pointer->getJointNode(jointID);}
 IRRLICHT_C_API u32 IAnimatedMeshSceneNode_getJointCount(IAnimatedMeshSceneNode* pointer)
 {return pointer->getJointCount();}
-IRRLICHT_C_API ISceneNode* IAnimatedMeshSceneNode_getMS3DJointNode(IAnimatedMeshSceneNode* pointer, const c8* jointName)
-{return pointer->getMS3DJointNode(jointName);}
-IRRLICHT_C_API ISceneNode* IAnimatedMeshSceneNode_getXJointNode(IAnimatedMeshSceneNode* pointer, const c8* jointName)
-{return pointer->getXJointNode(jointName);}
+// IRRLICHT_C_API ISceneNode* IAnimatedMeshSceneNode_getMS3DJointNode(IAnimatedMeshSceneNode* pointer, const c8* jointName)
+//{return pointer->getMS3DJointNode(jointName);}
+// IRRLICHT_C_API ISceneNode* IAnimatedMeshSceneNode_getXJointNode(IAnimatedMeshSceneNode* pointer, const c8* jointName)
+//{return pointer->getXJointNode(jointName);}
 IRRLICHT_C_API bool IAnimatedMeshSceneNode_setMD2Animation1(IAnimatedMeshSceneNode* pointer, EMD2_ANIMATION_TYPE anim)
 {return pointer->setMD2Animation(anim);}
 IRRLICHT_C_API bool IAnimatedMeshSceneNode_setMD2Animation2(IAnimatedMeshSceneNode* pointer, const c8* animationName)

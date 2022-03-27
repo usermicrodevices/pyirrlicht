@@ -1,5 +1,5 @@
-// Copyright(c) Maxim Kolosov 2010-2012 pyirrlicht@gmail.com
-// http://pir.sourceforge.net
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 // for __stdcall Irrlicht.lib must be builded with _STDCALL_SUPPORTED flag
