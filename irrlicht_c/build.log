@@ -1,5 +1,0 @@
-In file included from irrlicht_c.cpp:4:
-irrlicht_c.h:36:10: fatal error: irrlicht.h: No such file or directory
-   36 | #include "irrlicht.h"
-      |          ^~~~~~~~~~~~
-compilation terminated.

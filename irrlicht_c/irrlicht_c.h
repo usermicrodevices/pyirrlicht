@@ -45,6 +45,30 @@ using namespace quake3;
 //using namespace unicode;
 //#endif
 
+#ifndef _MSC_VER
+int _wtoi(const wchar_t* token)
+{
+	char* dest;
+	if(wcstombs(dest, token, sizeof(token)))
+		return atoi(dest);
+	return 0;
+}
+double _wtof(wchar_t* token)
+{
+	char* dest;
+	if(wcstombs(dest, token, sizeof(token)))
+		return atof(dest);
+	return 0;
+}
+double _wtof(const wchar_t* token)
+{
+	char* dest;
+	if(wcstombs(dest, token, sizeof(token)))
+		return atof(dest);
+	return 0;
+}
+#endif
+
 #include "exception.h"
 
 #include "_aabbox3d.h"
@@ -189,12 +213,13 @@ inline core::array<double> string_split_d(const wchar_t* str, u32 size = 8, cons
 {
 	core::array<double> container(size);
 	wchar_t* next_token = 0;
-	wchar_t* token = wcstok_s(const_cast<wchar_t*>(str), delimiter, &next_token);
+	//wchar_t* token = wcstok_s(const_cast<wchar_t*>(str), delimiter, &next_token);
+	wchar_t *token = wcstok(const_cast<wchar_t*>(str), delimiter, &next_token);
 	int i = 0;
 	while (token != NULL)
 	{
 		container[i] = _wtof(token);
-		token = wcstok_s(NULL, delimiter, &next_token);
+		token = wcstok(NULL, delimiter, &next_token);
 		i++;
 	}
 	return container;
