@@ -36,17 +36,19 @@ else:
 	type_str = str
 	type_unicode = unicode
 
-from os import environ
+from os import environ, getcwd
 c_module_name = 'irrlicht_c'
 if 'IRRLICHT_C_LIBRARY' in environ:
 	c_module_name = environ['IRRLICHT_C_LIBRARY']
 	del environ
 
-c_module = ctypes.CDLL(f'{c_module_name}.so')
+c_module = None
 func_type = ctypes.CFUNCTYPE
 if platform in ('windows', 'win32'):
 	c_module = ctypes.WinDLL(c_module_name)
 	func_type = ctypes.WINFUNCTYPE
+else:
+	c_module = ctypes.CDLL(f'{getcwd()}/{c_module_name}.so')
 
 IRRLICHT_VERSION_MAJOR = ctypes.c_ubyte.in_dll(c_module, '_IRRLICHT_VERSION_MAJOR').value
 IRRLICHT_VERSION_MINOR = ctypes.c_ubyte.in_dll(c_module, '_IRRLICHT_VERSION_MINOR').value
