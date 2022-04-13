@@ -1,9 +1,9 @@
-# Copyright(c) Maxim Kolosov 2010 - 2012 pyirrlicht@gmail.com
-# http://pir.sourceforge.net
+# Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+# github.com/usermicrodevices
 # BSD license
 
-__version__ = pyirrlicht_version = '1.1.2'
-__versionTime__ = '2012-09-20'
+__version__ = pyirrlicht_version = '1.2.0'
+__versionTime__ = '2022-03-29'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -29,43 +29,24 @@ if hexversion < 0x02060000:
 
 class FILE(ctypes.Structure):
 	pass
-#~ FILE_ptr = ctypes.POINTER(FILE)
 if hexversion >= 0x03000000:
-	#~ PyFile_FromFile = ctypes.pythonapi.PyFile_FromFd
-	#~ PyFile_AsFile = ctypes.pythonapi.PyObject_AsFileDescriptor
 	type_str = bytes
 	type_unicode = str
-	#~ import collections
-	#~ type_callable = collections.Callable
-	#~ del collections
-	#~ def callable(x):
-		#~ return isinstance(x, type_callable)
 else:
-	#~ PyFile_FromFile = ctypes.pythonapi.PyFile_FromFile
-	#~ PyFile_AsFile = ctypes.pythonapi.PyFile_AsFile
 	type_str = str
 	type_unicode = unicode
-#~ PyFile_FromFile.restype = ctypes.py_object
-#~ PyFile_FromFile.argtypes = [FILE_ptr, ctypes.c_char_p, ctypes.c_char_p, ctypes.CFUNCTYPE(ctypes.c_int, FILE_ptr)]
-#~ PyFile_AsFile.restype = FILE_ptr
-#~ PyFile_AsFile.argtypes = [ctypes.py_object]
 
-#~ c_module = ctypes.CDLL('irrlicht_c_173')
 from os import environ
 c_module_name = 'irrlicht_c'
 if 'IRRLICHT_C_LIBRARY' in environ:
 	c_module_name = environ['IRRLICHT_C_LIBRARY']
 	del environ
-c_module = ctypes.CDLL(c_module_name)
 
+c_module = ctypes.CDLL(f'{c_module_name}.so')
 func_type = ctypes.CFUNCTYPE
-#~ if platform.system().lower() == 'windows':
-#~ if platform in ('windows', 'win32'):
-	#~ c_module = ctypes.WinDLL('irrlicht_c')
-	#~ func_type = ctypes.WINFUNCTYPE
-#~ else:
-	#~ c_module = ctypes.CDLL('irrlicht_c')
-	#~ func_type = ctypes.CFUNCTYPE
+if platform in ('windows', 'win32'):
+	c_module = ctypes.WinDLL(c_module_name)
+	func_type = ctypes.WINFUNCTYPE
 
 IRRLICHT_VERSION_MAJOR = ctypes.c_ubyte.in_dll(c_module, '_IRRLICHT_VERSION_MAJOR').value
 IRRLICHT_VERSION_MINOR = ctypes.c_ubyte.in_dll(c_module, '_IRRLICHT_VERSION_MINOR').value
