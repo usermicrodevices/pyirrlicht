@@ -10,12 +10,12 @@
 #else
 #pragma comment(lib, "freetype2312MT.lib")
 #endif//_DEBUG
-#else//LINUX
-#ifdef _DEBUG
-#pragma comment(lib, "freetype2312MT_D.a")
-#else
-#pragma comment(lib, "freetype2312MT.a")
-#endif//_DEBUG
+//#else//LINUX not support PRAGMA COMMENT, use -lfreetype2312MT
+//#ifdef _DEBUG
+//#pragma comment(lib, "freetype2312MT_D.a")
+//#else
+//#pragma comment(lib, "freetype2312MT.a")
+//#endif//_DEBUG
 #endif//_IRR_WINDOWS_
 #endif//_COMPILE_WITH_2DTTFONT_
 

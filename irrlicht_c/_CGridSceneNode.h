@@ -29,17 +29,17 @@ IRRLICHT_C_API u32 CGridSceneNode_GetSpacing(CGridSceneNode* pointer)
 {return pointer->GetSpacing();}
 IRRLICHT_C_API u32 CGridSceneNode_GetSize(CGridSceneNode* pointer)
 {return pointer->GetSize();}
-IRRLICHT_C_API const video::SColor& CGridSceneNode_GetGridColor(CGridSceneNode* pointer)
+IRRLICHT_C_API const video::SColor CGridSceneNode_GetGridColor(CGridSceneNode* pointer)
 {return pointer->GetGridColor();}
 IRRLICHT_C_API u32 CGridSceneNode_GetAccentlineOffset(CGridSceneNode* pointer)
 {return pointer->GetAccentlineOffset();}
-IRRLICHT_C_API const video::SColor& CGridSceneNode_GetAccentlineColor(CGridSceneNode* pointer)
+IRRLICHT_C_API const video::SColor CGridSceneNode_GetAccentlineColor(CGridSceneNode* pointer)
 {return pointer->GetAccentlineColor();}
 IRRLICHT_C_API bool CGridSceneNode_AreAxisLineActive(CGridSceneNode* pointer)
 {return pointer->AreAxisLineActive();}
-IRRLICHT_C_API const video::SColor& CGridSceneNode_GetAxisLineXColor(CGridSceneNode* pointer)
+IRRLICHT_C_API const video::SColor CGridSceneNode_GetAxisLineXColor(CGridSceneNode* pointer)
 {return pointer->GetAxisLineXColor();}
-IRRLICHT_C_API const video::SColor& CGridSceneNode_GetAxisLineZColor(CGridSceneNode* pointer)
+IRRLICHT_C_API const video::SColor CGridSceneNode_GetAxisLineZColor(CGridSceneNode* pointer)
 {return pointer->GetAxisLineZColor();}
 IRRLICHT_C_API void CGridSceneNode_SetSpacing(CGridSceneNode* pointer, u32 newspacing)
 {pointer->SetSpacing(newspacing);}

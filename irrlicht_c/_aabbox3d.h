@@ -19,14 +19,14 @@ IRRLICHT_C_API void aabbox3df_reset3(aabbox3df* pointer, const vector3df& initVa
 IRRLICHT_C_API void aabbox3df_addInternalBox(aabbox3df* pointer, const aabbox3df& b){pointer->addInternalBox(b);}
 IRRLICHT_C_API void aabbox3df_addInternalPoint1(aabbox3df* pointer, const vector3df& p){pointer->addInternalPoint(p);}
 IRRLICHT_C_API void aabbox3df_addInternalPoint2(aabbox3df* pointer, f32 x, f32 y, f32 z){pointer->addInternalPoint(x, y, z);}
-IRRLICHT_C_API const vector3df& aabbox3df_getCenter(aabbox3df* pointer){return pointer->getCenter();}
-IRRLICHT_C_API const vector3df& aabbox3df_getExtent(aabbox3df* pointer){return pointer->getExtent();}
+IRRLICHT_C_API const vector3df aabbox3df_getCenter(aabbox3df* pointer){return pointer->getCenter();}
+IRRLICHT_C_API const vector3df aabbox3df_getExtent(aabbox3df* pointer){return pointer->getExtent();}
 IRRLICHT_C_API bool aabbox3df_isEmpty(aabbox3df* pointer){return pointer->isEmpty();}
 IRRLICHT_C_API f32 aabbox3df_getVolume(aabbox3df* pointer){return pointer->getVolume();}
 IRRLICHT_C_API f32 aabbox3df_getArea(aabbox3df* pointer){return pointer->getArea();}
 IRRLICHT_C_API void aabbox3df_getEdges(aabbox3df* pointer, vector3df* edges){pointer->getEdges(edges);}
 IRRLICHT_C_API void aabbox3df_repair(aabbox3df* pointer){pointer->repair();}
-IRRLICHT_C_API const aabbox3df& aabbox3df_getInterpolated(aabbox3df* pointer, const aabbox3df& other, f32 d){return pointer->getInterpolated(other, d);}
+IRRLICHT_C_API const aabbox3df aabbox3df_getInterpolated(aabbox3df* pointer, const aabbox3df& other, f32 d){return pointer->getInterpolated(other, d);}
 IRRLICHT_C_API bool aabbox3df_isPointInside(aabbox3df* pointer, const vector3df& p){return pointer->isPointInside(p);}
 IRRLICHT_C_API bool aabbox3df_isPointTotalInside(aabbox3df* pointer, const vector3df& p){return pointer->isPointTotalInside(p);}
 IRRLICHT_C_API bool aabbox3df_isFullInside(aabbox3df* pointer, const aabbox3df& other){return pointer->isFullInside(other);}
@@ -52,14 +52,14 @@ IRRLICHT_C_API void aabbox3di_reset3(aabbox3di* pointer, const vector3di& initVa
 IRRLICHT_C_API void aabbox3di_addInternalBox(aabbox3di* pointer, const aabbox3di& b){pointer->addInternalBox(b);}
 IRRLICHT_C_API void aabbox3di_addInternalPoint1(aabbox3di* pointer, const vector3di& p){pointer->addInternalPoint(p);}
 IRRLICHT_C_API void aabbox3di_addInternalPoint2(aabbox3di* pointer, s32 x, s32 y, s32 z){pointer->addInternalPoint(x, y, z);}
-IRRLICHT_C_API const vector3di& aabbox3di_getCenter(aabbox3di* pointer){return pointer->getCenter();}
-IRRLICHT_C_API const vector3di& aabbox3di_getExtent(aabbox3di* pointer){return pointer->getExtent();}
+IRRLICHT_C_API const vector3di aabbox3di_getCenter(aabbox3di* pointer){return pointer->getCenter();}
+IRRLICHT_C_API const vector3di aabbox3di_getExtent(aabbox3di* pointer){return pointer->getExtent();}
 IRRLICHT_C_API bool aabbox3di_isEmpty(aabbox3di* pointer){return pointer->isEmpty();}
 IRRLICHT_C_API s32 aabbox3di_getVolume(aabbox3di* pointer){return pointer->getVolume();}
 IRRLICHT_C_API s32 aabbox3di_getArea(aabbox3di* pointer){return pointer->getArea();}
 IRRLICHT_C_API void aabbox3di_getEdges(aabbox3di* pointer, vector3di* edges){pointer->getEdges(edges);}
 IRRLICHT_C_API void aabbox3di_repair(aabbox3di* pointer){pointer->repair();}
-IRRLICHT_C_API const aabbox3di& aabbox3di_getInterpolated(aabbox3di* pointer, const aabbox3di& other, f32 d){return pointer->getInterpolated(other, d);}
+IRRLICHT_C_API const aabbox3di aabbox3di_getInterpolated(aabbox3di* pointer, const aabbox3di& other, f32 d){return pointer->getInterpolated(other, d);}
 IRRLICHT_C_API bool aabbox3di_isPointInside(aabbox3di* pointer, const vector3di& p){return pointer->isPointInside(p);}
 IRRLICHT_C_API bool aabbox3di_isPointTotalInside(aabbox3di* pointer, const vector3di& p){return pointer->isPointTotalInside(p);}
 IRRLICHT_C_API bool aabbox3di_isFullInside(aabbox3di* pointer, const aabbox3di& other){return pointer->isFullInside(other);}
