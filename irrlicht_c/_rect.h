@@ -11,9 +11,9 @@ IRRLICHT_C_API rectf* rectf_ctor1(){return new rectf();}
 IRRLICHT_C_API rectf* rectf_ctor2(f32 x=0.0f, f32 y=0.0f, f32 x2=0.0f, f32 y2=0.0f){return new rectf(x, y, x2, y2);}
 IRRLICHT_C_API rectf* rectf_ctor3(const position2df& upperLeft, const position2df& lowerRight){return new rectf(upperLeft, lowerRight);}
 IRRLICHT_C_API rectf* rectf_ctor4(const position2df& pos, const dimension2df& size){return new rectf(pos, size);}
-IRRLICHT_C_API const rectf& rectf_add(rectf* pointer, const position2df& pos){return pointer->operator+(pos);}
+IRRLICHT_C_API const rectf rectf_add(rectf* pointer, const position2df& pos){return pointer->operator+(pos);}
 IRRLICHT_C_API const rectf& rectf_add_set(rectf* pointer, const position2df& pos){return pointer->operator+=(pos);}
-IRRLICHT_C_API const rectf& rectf_sub(rectf* pointer, const position2df& pos){return pointer->operator-(pos);}
+IRRLICHT_C_API const rectf rectf_sub(rectf* pointer, const position2df& pos){return pointer->operator-(pos);}
 IRRLICHT_C_API const rectf& rectf_sub_set(rectf* pointer, const position2df& pos){return pointer->operator-=(pos);}
 IRRLICHT_C_API bool rectf_eq(rectf* pointer, const rectf& other){return pointer->operator==(other);}
 IRRLICHT_C_API bool rectf_ne(rectf* pointer, const rectf& other){return pointer->operator!=(other);}
@@ -27,8 +27,8 @@ IRRLICHT_C_API f32 rectf_getWidth(rectf* pointer){return pointer->getWidth();}
 IRRLICHT_C_API f32 rectf_getHeight(rectf* pointer){return pointer->getHeight();}
 IRRLICHT_C_API void rectf_repair(rectf* pointer){pointer->repair();}
 IRRLICHT_C_API bool rectf_isValid(rectf* pointer){return pointer->isValid();}
-IRRLICHT_C_API const position2df& rectf_getCenter(rectf* pointer){return pointer->getCenter();}
-IRRLICHT_C_API const dimension2df& rectf_getSize(rectf* pointer){return pointer->getSize();}
+IRRLICHT_C_API const position2df rectf_getCenter(rectf* pointer){return pointer->getCenter();}
+IRRLICHT_C_API const dimension2df rectf_getSize(rectf* pointer){return pointer->getSize();}
 IRRLICHT_C_API void rectf_addInternalPoint1(rectf* pointer, const position2df& p){pointer->addInternalPoint(p);}
 IRRLICHT_C_API void rectf_addInternalPoint2(rectf* pointer, f32 x, f32 y){pointer->addInternalPoint(x, y);}
 IRRLICHT_C_API const position2df& rectf_get_UpperLeftCorner(rectf* pointer){return pointer->UpperLeftCorner;}
@@ -41,9 +41,9 @@ IRRLICHT_C_API recti* recti_ctor1(){return new recti();}
 IRRLICHT_C_API recti* recti_ctor2(s32 x=0, s32 y=0, s32 x2=0, s32 y2=0){return new recti(x, y, x2, y2);}
 IRRLICHT_C_API recti* recti_ctor3(const position2di& upperLeft, const position2di& lowerRight){return new recti(upperLeft, lowerRight);}
 IRRLICHT_C_API recti* recti_ctor4(const position2di& pos, const dimension2di& size){return new recti(pos, size);}
-IRRLICHT_C_API const recti& recti_add(recti* pointer, const position2di& pos){return pointer->operator+(pos);}
+IRRLICHT_C_API const recti recti_add(recti* pointer, const position2di& pos){return pointer->operator+(pos);}
 IRRLICHT_C_API const recti& recti_add_set(recti* pointer, const position2di& pos){return pointer->operator+=(pos);}
-IRRLICHT_C_API const recti& recti_sub(recti* pointer, const position2di& pos){return pointer->operator-(pos);}
+IRRLICHT_C_API const recti recti_sub(recti* pointer, const position2di& pos){return pointer->operator-(pos);}
 IRRLICHT_C_API const recti& recti_sub_set(recti* pointer, const position2di& pos){return pointer->operator-=(pos);}
 IRRLICHT_C_API bool recti_eq(recti* pointer, const recti& other){return pointer->operator==(other);}
 IRRLICHT_C_API bool recti_ne(recti* pointer, const recti& other){return pointer->operator!=(other);}
@@ -57,8 +57,8 @@ IRRLICHT_C_API s32 recti_getWidth(recti* pointer){return pointer->getWidth();}
 IRRLICHT_C_API s32 recti_getHeight(recti* pointer){return pointer->getHeight();}
 IRRLICHT_C_API void recti_repair(recti* pointer){pointer->repair();}
 IRRLICHT_C_API bool recti_isValid(recti* pointer){return pointer->isValid();}
-IRRLICHT_C_API const position2di& recti_getCenter(recti* pointer){return pointer->getCenter();}
-IRRLICHT_C_API const dimension2di& recti_getSize(recti* pointer){return pointer->getSize();}
+IRRLICHT_C_API const position2di recti_getCenter(recti* pointer){return pointer->getCenter();}
+IRRLICHT_C_API const dimension2di recti_getSize(recti* pointer){return pointer->getSize();}
 IRRLICHT_C_API void recti_addInternalPoint1(recti* pointer, const position2di& p){pointer->addInternalPoint(p);}
 IRRLICHT_C_API void recti_addInternalPoint2(recti* pointer, s32 x, s32 y){pointer->addInternalPoint(x, y);}
 IRRLICHT_C_API const position2di& recti_get_UpperLeftCorner(recti* pointer){return pointer->UpperLeftCorner;}

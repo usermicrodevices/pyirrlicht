@@ -23,7 +23,7 @@ IRRLICHT_C_API f32 plane3df_getKnownIntersectionWithLine(plane3df* pointer, cons
 IRRLICHT_C_API bool plane3df_getIntersectionWithLimitedLine(plane3df* pointer, const vector3df& linePoint1, const vector3df& linePoint2, vector3df& outIntersection){return pointer->getIntersectionWithLimitedLine(linePoint1, linePoint2, outIntersection);}
 IRRLICHT_C_API EIntersectionRelation3D plane3df_classifyPointRelation(plane3df* pointer, const vector3df& point){return pointer->classifyPointRelation(point);}
 IRRLICHT_C_API void plane3df_recalculateD(plane3df* pointer, const vector3df& MPoint){pointer->recalculateD(MPoint);}
-IRRLICHT_C_API const vector3df& plane3df_getMemberPoint(plane3df* pointer){return pointer->getMemberPoint();}
+IRRLICHT_C_API const vector3df plane3df_getMemberPoint(plane3df* pointer){return pointer->getMemberPoint();}
 IRRLICHT_C_API bool plane3df_existsIntersection(plane3df* pointer, const plane3df& other){return pointer->existsIntersection(other);}
 IRRLICHT_C_API bool plane3df_getIntersectionWithPlane(plane3df* pointer, const plane3df& other, vector3df& outLinePoint, vector3df& outLineVect){return pointer->getIntersectionWithPlane(other, outLinePoint, outLineVect);}
 IRRLICHT_C_API bool plane3df_getIntersectionWithPlanes(plane3df* pointer, const plane3df& o1, const plane3df& o2, vector3df& outPoint){return pointer->getIntersectionWithPlanes(o1, o2, outPoint);}
@@ -50,7 +50,7 @@ IRRLICHT_C_API s32 plane3di_getKnownIntersectionWithLine(plane3di* pointer, cons
 IRRLICHT_C_API bool plane3di_getIntersectionWithLimitedLine(plane3di* pointer, const vector3di& linePoint1, const vector3di& linePoint2, vector3di& outIntersection){return pointer->getIntersectionWithLimitedLine(linePoint1, linePoint2, outIntersection);}
 IRRLICHT_C_API EIntersectionRelation3D plane3di_classifyPointRelation(plane3di* pointer, const vector3di& point){return pointer->classifyPointRelation(point);}
 IRRLICHT_C_API void plane3di_recalculateD(plane3di* pointer, const vector3di& MPoint){pointer->recalculateD(MPoint);}
-IRRLICHT_C_API const vector3di& plane3di_getMemberPoint(plane3di* pointer){return pointer->getMemberPoint();}
+IRRLICHT_C_API const vector3di plane3di_getMemberPoint(plane3di* pointer){return pointer->getMemberPoint();}
 IRRLICHT_C_API bool plane3di_existsIntersection(plane3di* pointer, const plane3di& other){return pointer->existsIntersection(other);}
 IRRLICHT_C_API bool plane3di_getIntersectionWithPlane(plane3di* pointer, const plane3di& other, vector3di& outLinePoint, vector3di& outLineVect){return pointer->getIntersectionWithPlane(other, outLinePoint, outLineVect);}
 IRRLICHT_C_API bool plane3di_getIntersectionWithPlanes(plane3di* pointer, const plane3di& o1, const plane3di& o2, vector3di& outPoint){return pointer->getIntersectionWithPlanes(o1, o2, outPoint);}

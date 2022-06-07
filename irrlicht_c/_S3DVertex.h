@@ -40,7 +40,7 @@ IRRLICHT_C_API bool S3DVertex_ne(S3DVertex* pointer, const S3DVertex* other, int
 IRRLICHT_C_API bool S3DVertex_less(S3DVertex* pointer, const S3DVertex* other, int index){return pointer[index].operator<(*other);}
 IRRLICHT_C_API E_VERTEX_TYPE S3DVertex_getType(S3DVertex* pointer, int index){return pointer[index].getType();}
 #if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR > 7)
-IRRLICHT_C_API const S3DVertex& S3DVertex_getInterpolated(S3DVertex* pointer, const S3DVertex* other, f32 d, int index){return pointer[index].getInterpolated(*other, d);}
+IRRLICHT_C_API const S3DVertex S3DVertex_getInterpolated(S3DVertex* pointer, const S3DVertex* other, f32 d, int index){return pointer[index].getInterpolated(*other, d);}
 #endif
 
 //struct S3DVertex2TCoords : public S3DVertex

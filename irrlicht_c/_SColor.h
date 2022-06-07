@@ -27,10 +27,10 @@ IRRLICHT_C_API void SColor_set2(SColor* pointer, u32 col){pointer->set(col);}
 IRRLICHT_C_API bool SColor_operator_equal(SColor* pointer, const SColor& other){return pointer->operator==(other);}
 IRRLICHT_C_API bool SColor_operator_notequal(SColor* pointer, const SColor& other){return pointer->operator!=(other);}
 IRRLICHT_C_API bool SColor_operator_less(SColor* pointer, const SColor& other){return pointer->operator<(other);}
-IRRLICHT_C_API const SColor& SColor_operator_add(SColor* pointer, const SColor& other){return pointer->operator+(other);}
-IRRLICHT_C_API const SColor& SColor_getInterpolated(SColor* pointer, const SColor& other, f32 d)
+IRRLICHT_C_API const SColor SColor_operator_add(SColor* pointer, const SColor& other){return pointer->operator+(other);}
+IRRLICHT_C_API const SColor SColor_getInterpolated(SColor* pointer, const SColor& other, f32 d)
 {return pointer->getInterpolated(other, d);}
-IRRLICHT_C_API const SColor& SColor_getInterpolated_quadratic(SColor* pointer, const SColor& c1, const SColor& c2, f32 d)
+IRRLICHT_C_API const SColor SColor_getInterpolated_quadratic(SColor* pointer, const SColor& c1, const SColor& c2, f32 d)
 {return pointer->getInterpolated_quadratic(c1, c2, d);}
 IRRLICHT_C_API u32 SColor_color(SColor* pointer){return pointer->color;}
 
@@ -38,11 +38,11 @@ IRRLICHT_C_API u32 SColor_color(SColor* pointer){return pointer->color;}
 IRRLICHT_C_API SColorf* SColorf_ctor1(){return new SColorf();}
 IRRLICHT_C_API SColorf* SColorf_ctor2(f32 r, f32 g, f32 b, f32 a = 1.0f){return new SColorf(r, g, b, a);}
 IRRLICHT_C_API SColorf* SColorf_ctor3(SColor& c){return new SColorf(*&c);}
-IRRLICHT_C_API const SColor& SColorf_toSColor(SColorf* pointer){return pointer->toSColor();}
+IRRLICHT_C_API const SColor SColorf_toSColor(SColorf* pointer){return pointer->toSColor();}
 IRRLICHT_C_API void SColorf_set1(SColorf* pointer, f32 rr, f32 gg, f32 bb){pointer->set(rr, gg, bb);}
 IRRLICHT_C_API void SColorf_set2(SColorf* pointer, f32 aa, f32 rr, f32 gg, f32 bb){pointer->set(aa, rr, gg, bb);}
-IRRLICHT_C_API const SColorf& SColorf_getInterpolated(SColorf* pointer, const SColorf& other, f32 d){return pointer->getInterpolated(other, d);}
-IRRLICHT_C_API const SColorf& SColorf_getInterpolated_quadratic(SColorf* pointer, const SColorf& c1, const SColorf& c2, f32 d){return pointer->getInterpolated_quadratic(c1, c2, d);}
+IRRLICHT_C_API const SColorf SColorf_getInterpolated(SColorf* pointer, const SColorf& other, f32 d){return pointer->getInterpolated(other, d);}
+IRRLICHT_C_API const SColorf SColorf_getInterpolated_quadratic(SColorf* pointer, const SColorf& c1, const SColorf& c2, f32 d){return pointer->getInterpolated_quadratic(c1, c2, d);}
 IRRLICHT_C_API void SColorf_setColorComponentValue(SColorf* pointer, s32 index, f32 value){pointer->setColorComponentValue(index, value);}
 IRRLICHT_C_API f32 SColorf_getAlpha(SColorf* pointer){return pointer->getAlpha();}
 IRRLICHT_C_API f32 SColorf_getRed(SColorf* pointer){return pointer->getRed();}

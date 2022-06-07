@@ -9,16 +9,17 @@ extern "C" {
 //class IVolumeLightSceneNode : public ISceneNode
 IRRLICHT_C_API IVolumeLightSceneNode* IVolumeLightSceneNode_ctor(ISceneNode* parent, ISceneManager* mgr, s32 id, const core::vector3df& position, const core::vector3df& rotation, const core::vector3df& scale)
 {
+	vector3df* p_null = NULL;
 	IVolumeLightSceneNode* temp = 0;
 	IVolumeLightSceneNode* node = (IVolumeLightSceneNode*)temp->clone(parent, mgr);
 	temp->drop();
 	if(id > -1)
 		node->setID(id);
-	if(&position)
+	if(&position != p_null)
 		node->setPosition(position);
-	if(&rotation)
+	if(&rotation != p_null)
 		node->setRotation(rotation);
-	if(&scale)
+	if(&scale != p_null)
 		node->setScale(scale);
 	return node;
 }
@@ -44,10 +45,10 @@ IRRLICHT_C_API void IVolumeLightSceneNode_setFootColor(IVolumeLightSceneNode* po
 IRRLICHT_C_API void IVolumeLightSceneNode_setTailColor(IVolumeLightSceneNode* pointer, const video::SColor* inColour)
 {pointer->setTailColor(*inColour);}
 
-IRRLICHT_C_API const video::SColor& IVolumeLightSceneNode_getFootColor(IVolumeLightSceneNode* pointer)
+IRRLICHT_C_API const video::SColor IVolumeLightSceneNode_getFootColor(IVolumeLightSceneNode* pointer)
 {return pointer->getFootColor();}
 
-IRRLICHT_C_API const video::SColor& IVolumeLightSceneNode_getTailColor(IVolumeLightSceneNode* pointer)
+IRRLICHT_C_API const video::SColor IVolumeLightSceneNode_getTailColor(IVolumeLightSceneNode* pointer)
 {return pointer->getTailColor();}
 
 #ifdef __cplusplus

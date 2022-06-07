@@ -64,7 +64,7 @@ public:
 		{
 			EXML_NODE node_type = EXN_NONE;
 			//bool flag_start_linear_gradient = false;
-			u32 gradients_count = 0;
+			//u32 gradients_count = 0;
 			unsigned int attr_count = 0;
 			core::array<core::stringw> list_attr;
 			//core::array<gradient> gradients;
@@ -187,8 +187,8 @@ public:
 							{
 								double x = _wtof(xml_reader->getAttributeValue(L"x"));
 								double y = _wtof(xml_reader->getAttributeValue(L"y"));
-								if(w < 0.0) printf("ERROR rect %s: Invalid width: %f\n", xml_reader->getAttributeValue(L"id"), w);
-								if(h < 0.0) printf("ERROR rect %s: Invalid height: %f\n", xml_reader->getAttributeValue(L"id"), h);
+								if(w < 0.0) wprintf(L"ERROR rect %s: Invalid width: %f\n", xml_reader->getAttributeValue(L"id"), w);
+								if(h < 0.0) wprintf(L"ERROR rect %s: Invalid height: %f\n", xml_reader->getAttributeValue(L"id"), h);
 								_path_renderer_.begin_path();
 								parse_style(xml_reader->getAttributeValue(L"style"));
 								parse_attributes(xml_reader);
@@ -252,7 +252,7 @@ public:
 									parse_attributes(xml_reader);
 									parse_transform(xml_reader->getAttributeValue(L"transform"));
 									_path_renderer_.move_to(_wtof(list_attr[0].c_str()), _wtof(list_attr[1].c_str()));
-									for (int i = 2; i < points_count; i += 2)
+									for (u32 i = 2; i < points_count; i += 2)
 										_path_renderer_.line_to(_wtof(list_attr[i].c_str()), _wtof(list_attr[i+1].c_str()));
 									_path_renderer_.close_subpath();
 									_path_renderer_.end_path();
@@ -273,7 +273,7 @@ public:
 									parse_attributes(xml_reader);
 									parse_transform(xml_reader->getAttributeValue(L"transform"));
 									_path_renderer_.move_to(_wtof(list_attr[0].c_str()), _wtof(list_attr[1].c_str()));
-									for (int i = 2; i < points_count; i += 2)
+									for (u32 i = 2; i < points_count; i += 2)
 										_path_renderer_.line_to(_wtof(list_attr[i].c_str()), _wtof(list_attr[i+1].c_str()));
 									_path_renderer_.end_path();
 								}
@@ -466,7 +466,7 @@ public:
 	{
 		core::array<core::stringw> list_attr;
 		core::stringw(value).trim().split(list_attr, L";");
-		for (int i = 0; i < list_attr.size(); i++)
+		for (u32 i = 0; i < list_attr.size(); i++)
 		{
 			if (list_attr[i].equalsn(L"fill:", 5))
 			{
