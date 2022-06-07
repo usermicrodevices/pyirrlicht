@@ -48,21 +48,21 @@ using namespace quake3;
 #ifndef _MSC_VER
 int _wtoi(const wchar_t* token)
 {
-	char* dest;
+	char* dest = 0;
 	if(wcstombs(dest, token, sizeof(token)))
 		return atoi(dest);
 	return 0;
 }
 double _wtof(wchar_t* token)
 {
-	char* dest;
+	char* dest = 0;
 	if(wcstombs(dest, token, sizeof(token)))
 		return atof(dest);
 	return 0;
 }
 double _wtof(const wchar_t* token)
 {
-	char* dest;
+	char* dest = 0;
 	if(wcstombs(dest, token, sizeof(token)))
 		return atof(dest);
 	return 0;
@@ -400,17 +400,8 @@ IRRLICHT_C_API bool set_virtual_method(void* obj_pointer, bool(IRRCALLCONV* new_
 #endif
 }
 
-IRRLICHT_C_API void delete_pointer(void* pointer)
-{
-	if (pointer)
-		delete pointer;
-}
-
-IRRLICHT_C_API void delete_struct_pointer(void* pointer)
-{
-	if (pointer)
-		delete[] pointer;
-}
+//IRRLICHT_C_API void delete_pointer(void* pointer){if(pointer) delete pointer;}
+//IRRLICHT_C_API void delete_struct_pointer(void* pointer){if(pointer) delete[] pointer;}
 
 int randrange(int rnd_min = 0, int rnd_max = RAND_MAX)
 {
@@ -422,7 +413,7 @@ IRRLICHT_C_API int tool_randrange(int rnd_min = 0, int rnd_max = RAND_MAX)
 	return randrange(rnd_min, rnd_max);
 }
 
-IRRLICHT_C_API ITexture* tool_texture_generator(IVideoDriver* driver, video::ECOLOR_FORMAT image_format = ECF_R8G8B8, const dimension2d<u32>& image_size = dimension2d<u32>(2, 2), char* texture_name = "texture_01", u32 alpha_value = 128, u32 red1 = 0, u32 red2 = 255, u32 green1 = 0, u32 green2 = 255, u32 blue1 = 0, u32 blue2 = 255)
+IRRLICHT_C_API ITexture* tool_texture_generator(IVideoDriver* driver, video::ECOLOR_FORMAT image_format = ECF_R8G8B8, const dimension2d<u32>& image_size = dimension2d<u32>(2, 2), const char* texture_name = "texture_01", u32 alpha_value = 128, u32 red1 = 0, u32 red2 = 255, u32 green1 = 0, u32 green2 = 255, u32 blue1 = 0, u32 blue2 = 255)
 {
 	u32 row, column;
 	IImage* image = driver->createImage(image_format, image_size);
