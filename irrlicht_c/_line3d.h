@@ -15,9 +15,9 @@ IRRLICHT_C_API const vector3d<f32>& line3df_get_end(line3df* pointer){return poi
 IRRLICHT_C_API void line3df_set_start(line3df* pointer, const vector3d<f32>& value){pointer->start = value;}
 IRRLICHT_C_API void line3df_set_end(line3df* pointer, const vector3d<f32>& value){pointer->end = value;}
 // operators
-IRRLICHT_C_API const line3df& line3df_add(line3df* pointer, const vector3df& point){return pointer->operator+(point);}
+IRRLICHT_C_API const line3df line3df_add(line3df* pointer, const vector3df& point){return pointer->operator+(point);}
 IRRLICHT_C_API line3df& line3df_add_set(line3df* pointer, const vector3df& point){return pointer->operator+=(point);}
-IRRLICHT_C_API const line3df& line3df_sub(line3df* pointer, const vector3df& point){return pointer->operator-(point);}
+IRRLICHT_C_API const line3df line3df_sub(line3df* pointer, const vector3df& point){return pointer->operator-(point);}
 IRRLICHT_C_API line3df& line3df_sub_set(line3df* pointer, const vector3df& point){return pointer->operator-=(point);}
 IRRLICHT_C_API bool line3df_eq(line3df* pointer, const line3df& other){return pointer->operator==(other);}
 IRRLICHT_C_API bool line3df_ne(line3df* pointer, const line3df& other){return pointer->operator!=(other);}
@@ -30,7 +30,7 @@ IRRLICHT_C_API f32 line3df_getLengthSQ(line3df* pointer){return pointer->getLeng
 IRRLICHT_C_API vector3df* line3df_getMiddle(line3df* pointer){return new core::vector3df(pointer->getMiddle());}
 IRRLICHT_C_API vector3df* line3df_getVector(line3df* pointer){return new core::vector3df(pointer->getVector());}
 IRRLICHT_C_API bool line3df_isPointBetweenStartAndEnd(line3df* pointer, const vector3df& point){return pointer->isPointBetweenStartAndEnd(point);}
-IRRLICHT_C_API const vector3df& line3df_getClosestPoint(line3df* pointer, const vector3df& point){return pointer->getClosestPoint(point);}
+IRRLICHT_C_API const vector3df line3df_getClosestPoint(line3df* pointer, const vector3df& point){return pointer->getClosestPoint(point);}
 IRRLICHT_C_API bool line3df_getIntersectionWithSphere(line3df* pointer, const vector3df& sorigin, f32 sradius, f64& outdistance){return pointer->getIntersectionWithSphere(sorigin, sradius, outdistance);}
 
 //================= line3di
@@ -42,9 +42,9 @@ IRRLICHT_C_API const vector3d<s32>& line3di_get_end(line3di* pointer){return poi
 IRRLICHT_C_API void line3di_set_start(line3di* pointer, const vector3d<s32>& value){pointer->start = value;}
 IRRLICHT_C_API void line3di_set_end(line3di* pointer, const vector3d<s32>& value){pointer->end = value;}
 // operators
-IRRLICHT_C_API const line3di& line3di_add(line3di* pointer, const vector3di& point){return pointer->operator+(point);}
+IRRLICHT_C_API const line3di line3di_add(line3di* pointer, const vector3di& point){return pointer->operator+(point);}
 IRRLICHT_C_API line3di& line3di_add_set(line3di* pointer, const vector3di& point){return pointer->operator+=(point);}
-IRRLICHT_C_API const line3di& line3di_sub(line3di* pointer, const vector3di& point){return pointer->operator-(point);}
+IRRLICHT_C_API const line3di line3di_sub(line3di* pointer, const vector3di& point){return pointer->operator-(point);}
 IRRLICHT_C_API line3di& line3di_sub_set(line3di* pointer, const vector3di& point){return pointer->operator-=(point);}
 IRRLICHT_C_API bool line3di_eq(line3di* pointer, const line3di& other){return pointer->operator==(other);}
 IRRLICHT_C_API bool line3di_ne(line3di* pointer, const line3di& other){return pointer->operator!=(other);}
@@ -57,7 +57,7 @@ IRRLICHT_C_API s32 line3di_getLengthSQ(line3di* pointer){return pointer->getLeng
 IRRLICHT_C_API vector3di* line3di_getMiddle(line3di* pointer){return new vector3di(pointer->getMiddle());}
 IRRLICHT_C_API vector3di* line3di_getVector(line3di* pointer){return new vector3di(pointer->getVector());}
 IRRLICHT_C_API bool line3di_isPointBetweenStartAndEnd(line3di* pointer, const vector3di& point){return pointer->isPointBetweenStartAndEnd(point);}
-IRRLICHT_C_API const vector3di& line3di_getClosestPoint(line3di* pointer, const vector3di& point){return pointer->getClosestPoint(point);}
+IRRLICHT_C_API const vector3di line3di_getClosestPoint(line3di* pointer, const vector3di& point){return pointer->getClosestPoint(point);}
 IRRLICHT_C_API bool line3di_getIntersectionWithSphere(line3di* pointer, const vector3di& sorigin, s32 sradius, f64& outdistance){return pointer->getIntersectionWithSphere(sorigin, sradius, outdistance);}
 
 #ifdef __cplusplus

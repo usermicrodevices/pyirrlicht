@@ -19,7 +19,7 @@ IRRLICHT_C_API void IGUIWindow_setDrawBackground(IGUIWindow* pointer, bool draw)
 IRRLICHT_C_API bool IGUIWindow_getDrawBackground(IGUIWindow* pointer){return pointer->getDrawBackground();}
 IRRLICHT_C_API void IGUIWindow_setDrawTitlebar(IGUIWindow* pointer, bool draw){pointer->setDrawTitlebar(draw);}
 IRRLICHT_C_API bool IGUIWindow_getDrawTitlebar(IGUIWindow* pointer){return pointer->getDrawTitlebar();}
-IRRLICHT_C_API const core::rect<s32>& IGUIWindow_getClientRect(IGUIWindow* pointer){return pointer->getClientRect();}
+IRRLICHT_C_API const core::rect<s32> IGUIWindow_getClientRect(IGUIWindow* pointer){return pointer->getClientRect();}
 
 #ifdef __cplusplus
 }

@@ -11,7 +11,7 @@ IRRLICHT_C_API void IGUIImageList_draw(IGUIImageList* pointer, s32 index, const 
 {pointer->draw(index, destPos, clip);}
 IRRLICHT_C_API s32 IGUIImageList_getImageCount(IGUIImageList* pointer)
 {return pointer->getImageCount();}
-IRRLICHT_C_API const core::dimension2d<s32>& IGUIImageList_getImageSize(IGUIImageList* pointer)
+IRRLICHT_C_API const core::dimension2d<s32> IGUIImageList_getImageSize(IGUIImageList* pointer)
 {return pointer->getImageSize();}
 
 #ifdef __cplusplus

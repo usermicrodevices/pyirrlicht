@@ -8,13 +8,13 @@ extern "C" {
 
 IRRLICHT_C_API IBillboardSceneNode* IBillboardSceneNode_ctor(ISceneNode* parent, ISceneManager* mgr, s32 id, const core::vector3df& position = core::vector3df(0,0,0))
 {
-	//return new IBillboardSceneNode(parent, mgr, id, position);
+	vector3df* p_null = NULL;
 	IBillboardSceneNode* temp = 0;
 	IBillboardSceneNode* node = (IBillboardSceneNode*)temp->clone(parent, mgr);
 	temp->drop();
 	if(id > -1)
 		node->setID(id);
-	if(&position)
+	if(&position != p_null)
 		node->setPosition(position);
 	return node;
 }

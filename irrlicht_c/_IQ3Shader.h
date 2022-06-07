@@ -235,7 +235,7 @@ IRRLICHT_C_API void tQ3EntityList_set_sorted(tQ3EntityList* pointer, bool _is_so
 IRRLICHT_C_API void tQ3EntityList_swap(tQ3EntityList* pointer, tQ3EntityList* other){pointer->swap(*other);}
 
 //tools
-IRRLICHT_C_API const core::vector3df& tool_getAsVector3df(const c8* string, u32& pos){return getAsVector3df(core::stringc(string), pos);}
+IRRLICHT_C_API const core::vector3df tool_getAsVector3df(const c8* string, u32& pos){return getAsVector3df(core::stringc(string), pos);}
 IRRLICHT_C_API f32 tool_getAsFloat(const c8* string, u32& pos){return getAsFloat(core::stringc(string), pos);}
 IRRLICHT_C_API void tool_getTextures(tTexArray* textures, const c8* name, u32& startPos, io::IFileSystem* fileSystem, video::IVideoDriver* driver){getTextures(*textures, core::stringc(name), startPos, fileSystem, driver);}
 

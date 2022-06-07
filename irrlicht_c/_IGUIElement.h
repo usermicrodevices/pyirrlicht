@@ -13,8 +13,8 @@ IRRLICHT_C_API const list<IGUIElement>::Iterator& listIGUIElementIterator_operat
 IRRLICHT_C_API bool listIGUIElementIterator_operator_eq(list<IGUIElement>::Iterator* pointer, const list<IGUIElement>::Iterator& other){return pointer->operator==(other);}
 IRRLICHT_C_API bool listIGUIElementIterator_operator_ne(list<IGUIElement>::Iterator* pointer, const list<IGUIElement>::Iterator& other){return pointer->operator!=(other);}
 IRRLICHT_C_API const list<IGUIElement>::Iterator& listIGUIElementIterator_operator_add_set(list<IGUIElement>::Iterator* pointer, s32 num){return pointer->operator+=(num);}
-IRRLICHT_C_API const list<IGUIElement>::Iterator& listIGUIElementIterator_operator_add(list<IGUIElement>::Iterator* pointer, s32 num){return pointer->operator+(num);}
-IRRLICHT_C_API const list<IGUIElement>::Iterator& listIGUIElementIterator_operator_sub(list<IGUIElement>::Iterator* pointer, s32 num){return pointer->operator-(num);}
+IRRLICHT_C_API const list<IGUIElement>::Iterator listIGUIElementIterator_operator_add(list<IGUIElement>::Iterator* pointer, s32 num){return pointer->operator+(num);}
+IRRLICHT_C_API const list<IGUIElement>::Iterator listIGUIElementIterator_operator_sub(list<IGUIElement>::Iterator* pointer, s32 num){return pointer->operator-(num);}
 
 //================= listIGUIElement
 IRRLICHT_C_API list<IGUIElement>* listIGUIElement_ctor1(){return new list<IGUIElement>();}
@@ -26,23 +26,23 @@ IRRLICHT_C_API void listIGUIElement_clear(list<IGUIElement>* pointer){pointer->c
 IRRLICHT_C_API bool listIGUIElement_empty(list<IGUIElement>* pointer){return pointer->empty();}
 IRRLICHT_C_API void listIGUIElement_push_back(list<IGUIElement>* pointer, const IGUIElement& element){pointer->push_back(element);}
 IRRLICHT_C_API void listIGUIElement_push_front(list<IGUIElement>* pointer, const IGUIElement& element){pointer->push_front(element);}
-IRRLICHT_C_API const list<IGUIElement>::Iterator& listIGUIElement_begin(list<IGUIElement>* pointer){return pointer->begin();}
-IRRLICHT_C_API const list<IGUIElement>::Iterator& listIGUIElement_end(list<IGUIElement>* pointer){return pointer->end();}
-IRRLICHT_C_API const list<IGUIElement>::Iterator& listIGUIElement_getLast(list<IGUIElement>* pointer){return pointer->getLast();}
+IRRLICHT_C_API const list<IGUIElement>::Iterator listIGUIElement_begin(list<IGUIElement>* pointer){return pointer->begin();}
+IRRLICHT_C_API const list<IGUIElement>::Iterator listIGUIElement_end(list<IGUIElement>* pointer){return pointer->end();}
+IRRLICHT_C_API const list<IGUIElement>::Iterator listIGUIElement_getLast(list<IGUIElement>* pointer){return pointer->getLast();}
 IRRLICHT_C_API void listIGUIElement_insert_after(list<IGUIElement>* pointer, const list<IGUIElement>::Iterator& it, const IGUIElement& element){pointer->insert_after(it, element);}
 IRRLICHT_C_API void listIGUIElement_insert_before(list<IGUIElement>* pointer, const list<IGUIElement>::Iterator& it, const IGUIElement& element){pointer->insert_before(it, element);}
-IRRLICHT_C_API const list<IGUIElement>::Iterator& listIGUIElement_erase(list<IGUIElement>* pointer, list<IGUIElement>::Iterator& it){return pointer->erase(it);}
+IRRLICHT_C_API const list<IGUIElement>::Iterator listIGUIElement_erase(list<IGUIElement>* pointer, list<IGUIElement>::Iterator& it){return pointer->erase(it);}
 IRRLICHT_C_API void listIGUIElement_swap(list<IGUIElement>* pointer, list<IGUIElement>* other){pointer->swap(*other);}
 
 //================= IGUIElement
 IRRLICHT_C_API IGUIElement* IGUIElement_ctor(EGUI_ELEMENT_TYPE type, IGUIEnvironment* environment, IGUIElement* parent, s32 id, const core::rect<s32>& rectangle){return new IGUIElement(type, environment, parent, id, rectangle);}
 IRRLICHT_C_API IGUIElement* IGUIElement_getParent(IGUIElement* pointer){return pointer->getParent();}
-IRRLICHT_C_API const core::rect<s32>& IGUIElement_getRelativePosition(IGUIElement* pointer){return pointer->getRelativePosition();}
+IRRLICHT_C_API const core::rect<s32> IGUIElement_getRelativePosition(IGUIElement* pointer){return pointer->getRelativePosition();}
 IRRLICHT_C_API void IGUIElement_setRelativePosition1(IGUIElement* pointer, const core::rect<s32>& r){pointer->setRelativePosition(r);}
 IRRLICHT_C_API void IGUIElement_setRelativePosition2(IGUIElement* pointer, const core::position2di & position){pointer->setRelativePosition(position);}
 IRRLICHT_C_API void IGUIElement_setRelativePositionProportional(IGUIElement* pointer, const core::rect<f32>& r){pointer->setRelativePositionProportional(r);}
-IRRLICHT_C_API const core::rect<s32>& IGUIElement_getAbsolutePosition(IGUIElement* pointer){return pointer->getAbsolutePosition();}
-IRRLICHT_C_API const core::rect<s32>& IGUIElement_getAbsoluteClippingRect(IGUIElement* pointer){return pointer->getAbsoluteClippingRect();}
+IRRLICHT_C_API const core::rect<s32> IGUIElement_getAbsolutePosition(IGUIElement* pointer){return pointer->getAbsolutePosition();}
+IRRLICHT_C_API const core::rect<s32> IGUIElement_getAbsoluteClippingRect(IGUIElement* pointer){return pointer->getAbsoluteClippingRect();}
 IRRLICHT_C_API void IGUIElement_setNotClipped(IGUIElement* pointer, bool noClip){pointer->setNotClipped(noClip);}
 IRRLICHT_C_API bool IGUIElement_isNotClipped(IGUIElement* pointer){return pointer->isNotClipped();}
 IRRLICHT_C_API void IGUIElement_setMaxSize(IGUIElement* pointer, core::dimension2du* size){pointer->setMaxSize(*size);}

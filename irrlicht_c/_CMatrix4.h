@@ -32,16 +32,16 @@ IRRLICHT_C_API bool matrix4_isIdentity(matrix4* pointer){return pointer->isIdent
 IRRLICHT_C_API bool matrix4_isOrthogonal(matrix4* pointer){return pointer->isOrthogonal();}
 IRRLICHT_C_API bool matrix4_isIdentity_integer_base(matrix4* pointer){return pointer->isIdentity_integer_base();}
 IRRLICHT_C_API matrix4* matrix4_setTranslation(matrix4* pointer, const vector3df* translation){return &pointer->setTranslation(*translation);}
-IRRLICHT_C_API const vector3df& matrix4_getTranslation(matrix4* pointer){return pointer->getTranslation();}
+IRRLICHT_C_API const vector3df matrix4_getTranslation(matrix4* pointer){return pointer->getTranslation();}
 IRRLICHT_C_API const matrix4& matrix4_setInverseTranslation(matrix4* pointer, const vector3df* translation){return pointer->setInverseTranslation(*translation);}
 IRRLICHT_C_API const matrix4& matrix4_setRotationRadians(matrix4* pointer, const vector3df* rotation){return pointer->setRotationRadians(*rotation);}
 IRRLICHT_C_API const matrix4& matrix4_setRotationDegrees(matrix4* pointer, const vector3df* rotation){return pointer->setRotationDegrees(*rotation);}
-IRRLICHT_C_API const vector3df& matrix4_getRotationDegrees(matrix4* pointer){return pointer->getRotationDegrees();}
+IRRLICHT_C_API const vector3df matrix4_getRotationDegrees(matrix4* pointer){return pointer->getRotationDegrees();}
 IRRLICHT_C_API const matrix4& matrix4_setInverseRotationRadians(matrix4* pointer, const vector3df* rotation){return pointer->setInverseRotationRadians(*rotation);}
 IRRLICHT_C_API const matrix4& matrix4_setInverseRotationDegrees(matrix4* pointer, const vector3df* rotation){return pointer->setInverseRotationDegrees(*rotation);}
 IRRLICHT_C_API const matrix4& matrix4_setScale1(matrix4* pointer, const vector3df* scale){return pointer->setScale(*scale);}
 IRRLICHT_C_API const matrix4& matrix4_setScale2(matrix4* pointer, f32 scale){return pointer->setScale(scale);}
-IRRLICHT_C_API const vector3df& matrix4_getScale(matrix4* pointer){return pointer->getScale();}
+IRRLICHT_C_API const vector3df matrix4_getScale(matrix4* pointer){return pointer->getScale();}
 IRRLICHT_C_API void matrix4_inverseTranslateVect(matrix4* pointer, vector3df* vect){pointer->inverseTranslateVect(*vect);}
 IRRLICHT_C_API void matrix4_inverseRotateVect(matrix4* pointer, vector3df* vect){pointer->inverseRotateVect(*vect);}
 IRRLICHT_C_API void matrix4_rotateVect1(matrix4* pointer, vector3df* vect){pointer->rotateVect(*vect);}
@@ -53,7 +53,7 @@ IRRLICHT_C_API void matrix4_transformVect3(matrix4* pointer, f32* out, const vec
 IRRLICHT_C_API void matrix4_translateVect(matrix4* pointer, vector3df* vect){pointer->translateVect(*vect);}
 IRRLICHT_C_API void matrix4_transformPlane1(matrix4* pointer, plane3df* plane){pointer->transformPlane(*plane);}
 IRRLICHT_C_API void matrix4_transformPlane2(matrix4* pointer, const plane3df* in, plane3df* out){pointer->transformPlane(*in, *out);}
-IRRLICHT_C_API void matrix4_transformBox(matrix4* pointer, aabbox3df* box){pointer->transformBox(*box);}
+//IRRLICHT_C_API void matrix4_transformBox(matrix4* pointer, aabbox3df* box){pointer->transformBox(*box);}
 IRRLICHT_C_API void matrix4_transformBoxEx(matrix4* pointer, aabbox3df* box){pointer->transformBoxEx(*box);}
 IRRLICHT_C_API void matrix4_multiplyWith1x4Matrix(matrix4* pointer, f32* matrix){pointer->multiplyWith1x4Matrix(matrix);}
 IRRLICHT_C_API bool matrix4_makeInverse(matrix4* pointer){return pointer->makeInverse();}
@@ -70,7 +70,7 @@ IRRLICHT_C_API const matrix4& matrix4_buildCameraLookAtMatrixRH(matrix4* pointer
 IRRLICHT_C_API const matrix4& matrix4_buildShadowMatrix(matrix4* pointer, const vector3df* light, const plane3df* plane, f32 point = 1.0f){return pointer->buildShadowMatrix(*light, *plane, point);}
 IRRLICHT_C_API const matrix4& matrix4_buildNDCToDCMatrix(matrix4* pointer, const recti* area, f32 zScale){return pointer->buildNDCToDCMatrix(*area, zScale);}
 IRRLICHT_C_API void matrix4_interpolate(matrix4* pointer, const matrix4* b, f32 time){pointer->interpolate(*b, time);}
-IRRLICHT_C_API const matrix4& matrix4_getTransposed1(matrix4* pointer){return pointer->getTransposed();}
+IRRLICHT_C_API const matrix4 matrix4_getTransposed1(matrix4* pointer){return pointer->getTransposed();}
 IRRLICHT_C_API void matrix4_getTransposed2(matrix4* pointer, matrix4* dest){pointer->getTransposed(*dest);}
 IRRLICHT_C_API const matrix4& matrix4_buildRotateFromTo(matrix4* pointer, const vector3df* from, const vector3df* to){return pointer->buildRotateFromTo(*from, *to);}
 IRRLICHT_C_API void matrix4_setRotationCenter(matrix4* pointer, const vector3df* center, const vector3df* translate){pointer->setRotationCenter(*center, *translate);}

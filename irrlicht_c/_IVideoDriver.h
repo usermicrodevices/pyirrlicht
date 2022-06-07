@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -270,10 +270,8 @@ IRRLICHT_C_API IImage* IVideoDriver_createImageFromData(IVideoDriver* pointer, E
 
 IRRLICHT_C_API IImage* IVideoDriver_createImage1(IVideoDriver* pointer, ECOLOR_FORMAT format, const core::dimension2d<u32>* size)
 {return pointer->createImage(format, *size);}
-IRRLICHT_C_API IImage* IVideoDriver_createImage2(IVideoDriver* pointer, ECOLOR_FORMAT format, IImage *imageToCopy)
-{return pointer->createImage(format, imageToCopy);}
-IRRLICHT_C_API IImage* IVideoDriver_createImage3(IVideoDriver* pointer, IImage* imageToCopy, const core::position2d<s32>* pos, const core::dimension2d<u32>* size)
-{return pointer->createImage(imageToCopy, *pos, *size);}
+//IRRLICHT_C_API IImage* IVideoDriver_createImage2(IVideoDriver* pointer, ECOLOR_FORMAT format, IImage *imageToCopy){return pointer->createImage(format, imageToCopy);}
+//IRRLICHT_C_API IImage* IVideoDriver_createImage3(IVideoDriver* pointer, IImage* imageToCopy, const core::position2d<s32>* pos, const core::dimension2d<u32>* size){return pointer->createImage(imageToCopy, *pos, *size);}
 IRRLICHT_C_API IImage* IVideoDriver_createImage4(IVideoDriver* pointer, ITexture* texture, const core::position2d<s32>* pos, const core::dimension2d<u32>* size)
 {return pointer->createImage(texture, *pos, *size);}
 
@@ -325,7 +323,7 @@ IRRLICHT_C_API void IVideoDriver_setAmbientLight(IVideoDriver* pointer, const SC
 {pointer->setAmbientLight(*color);}
 IRRLICHT_C_API void IVideoDriver_setAllowZWriteOnTransparent(IVideoDriver* pointer, bool flag)
 {pointer->setAllowZWriteOnTransparent(flag);}
-IRRLICHT_C_API const dimension2du& IVideoDriver_getMaxTextureSize(IVideoDriver* pointer)
+IRRLICHT_C_API const dimension2du IVideoDriver_getMaxTextureSize(IVideoDriver* pointer)
 {return pointer->getMaxTextureSize();}
 
 #ifdef _MSC_VER
@@ -347,7 +345,7 @@ IRRLICHT_C_API unsigned long IVideoDriver_GetHandle(IVideoDriver* pointer)
 {
 	switch(pointer->getDriverType())
 	{
-	case EDT_NULL: return NULL;
+	case EDT_NULL: return (unsigned long)NULL;
 	default: return pointer->getExposedVideoData().OpenGLLinux.X11Window;
 	}
 }

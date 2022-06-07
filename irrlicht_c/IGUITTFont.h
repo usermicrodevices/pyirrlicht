@@ -65,7 +65,7 @@ namespace gui
 			//! Updates the texture if dirty.
 			void updateTexture()
 			{
-				static u32 test = 0;
+				//static u32 test = 0;
 				dirty = false;
 
 				// Save our texture creation flags and disable mipmaps.
@@ -322,10 +322,10 @@ void SGUITTGlyph::load(u32 character, FT_Face face, video::IVideoDriver* driver,
 			const u32 image_pitch = image->getPitch() / sizeof(u16);
 			u16* image_data = (u16*)image->lock();
 			u8* glyph_data = glyph->bitmap.buffer;
-			for (s32 y = 0; y < bits.rows; ++y)
+			for (s32 y = 0; y < (s32)bits.rows; ++y)
 			{
 				u16* row = image_data;
-				for (s32 x = 0; x < bits.width; ++x)
+				for (s32 x = 0; x < (s32)bits.width; ++x)
 				{
 					// Monochrome bitmaps store 8 pixels per byte.  The left-most pixel is the bit 0x80.
 					// So, we go through the data each bit at a time.
@@ -351,10 +351,10 @@ void SGUITTGlyph::load(u32 character, FT_Face face, video::IVideoDriver* driver,
 			const u32 image_pitch = image->getPitch() / sizeof(u32);
 			u32* image_data = (u32*)image->lock();
 			u8* glyph_data = glyph->bitmap.buffer;
-			for (s32 y = 0; y < bits.rows; ++y)
+			for (s32 y = 0; y < (s32)bits.rows; ++y)
 			{
 				u8* row = glyph_data;
-				for (s32 x = 0; x < bits.width; ++x)
+				for (s32 x = 0; x < (s32)bits.width; ++x)
 					image_data[y * image_pitch + x] |= static_cast<u32>(255.0f * (static_cast<float>(*row++) / gray_count)) << 24;
 					//data[y * image_pitch + x] |= ((u32)(*bitsdata++) << 24);
 				glyph_data += bits.pitch;
@@ -684,7 +684,7 @@ void CGUITTFont::draw(const core::stringw& text, const core::rect<s32>& position
 
 	// Convert to a unicode string.
 	core::ustring utext(text);
-	u32 utext_size = utext.size();
+	//u32 utext_size = utext.size();
 
 	// Set up our render map.
 	core::map<u32, CGUITTGlyphPage*> Render_Map;
@@ -924,7 +924,7 @@ s32 CGUITTFont::getCharacterFromPos(const wchar_t* text, s32 pixel_x) const
 s32 CGUITTFont::getCharacterFromPos(const core::ustring& text, s32 pixel_x) const
 {
 	s32 x = 0;
-	s32 idx = 0;
+	//s32 idx = 0;
 
 	u32 character = 0;
 	uchar32_t previousChar = 0;

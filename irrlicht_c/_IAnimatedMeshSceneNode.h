@@ -51,33 +51,27 @@ private:
 extern "C" {
 #endif
 
-//class IAnimationEndCallBack : public virtual IReferenceCounted
 IRRLICHT_C_API UserAnimationEndCallBack* IAnimationEndCallBack_ctor1(){return new UserAnimationEndCallBack();}
 IRRLICHT_C_API UserAnimationEndCallBack* IAnimationEndCallBack_ctor2(void(IRRCALLCONV *OnEventMethod)(IAnimatedMeshSceneNode* node)){return new UserAnimationEndCallBack(OnEventMethod);}
-//IRRLICHT_C_API void IAnimationEndCallBack_Destructor(void* pointer){delete pointer;}
 IRRLICHT_C_API void IAnimationEndCallBack_set_func_event(UserAnimationEndCallBack* pointer, void(IRRCALLCONV *OnEventMethod)(IAnimatedMeshSceneNode* node)){pointer->set_func_event(OnEventMethod);}
 IRRLICHT_C_API UserAnimationEndCallBack* IAnimationEndCallBack_UserAnimationEndCallBack(IAnimationEndCallBack* pointer){return (UserAnimationEndCallBack*)pointer;}
 
-//class IAnimatedMeshSceneNode : public ISceneNode
-//IRRLICHT_C_API IAnimatedMeshSceneNode* IAnimatedMeshSceneNode_other_as_this(void* pointer){return (IAnimatedMeshSceneNode*)pointer;}
-
 IRRLICHT_C_API IAnimatedMeshSceneNode* IAnimatedMeshSceneNode_ctor(ISceneNode* parent, ISceneManager* mgr = 0, s32 id = -1, const vector3df& position = vector3df(0,0,0), const vector3df& rotation = vector3df(0,0,0), const vector3df& scale = vector3df(1.0f, 1.0f, 1.0f))
 {
-	//return new IAnimatedMeshSceneNode(parent, mgr, id, position, rotation, scale);
+	vector3df* p_null = NULL;
 	IAnimatedMeshSceneNode* temp = 0;
 	IAnimatedMeshSceneNode* node = (IAnimatedMeshSceneNode*)temp->clone(parent, mgr);
 	temp->drop();
 	if(id > -1)
 		node->setID(id);
-	if(&position)
+	if(&position != p_null)
 		node->setPosition(position);
-	if(&rotation)
+	if(&rotation != p_null)
 		node->setRotation(rotation);
-	if(&scale)
+	if(&scale != p_null)
 		node->setScale(scale);
 	return node;
 }
-//IRRLICHT_C_API void IAnimatedMeshSceneNode_Destructor(IAnimatedMeshSceneNode* pointer){delete pointer;}
 IRRLICHT_C_API void IAnimatedMeshSceneNode_setCurrentFrame(IAnimatedMeshSceneNode* pointer, f32 frame)
 {pointer->setCurrentFrame(frame);}
 IRRLICHT_C_API bool IAnimatedMeshSceneNode_setFrameLoop(IAnimatedMeshSceneNode* pointer, s32 begin, s32 end)
@@ -94,10 +88,6 @@ IRRLICHT_C_API IBoneSceneNode* IAnimatedMeshSceneNode_getJointNode2(IAnimatedMes
 {return pointer->getJointNode(jointID);}
 IRRLICHT_C_API u32 IAnimatedMeshSceneNode_getJointCount(IAnimatedMeshSceneNode* pointer)
 {return pointer->getJointCount();}
-// IRRLICHT_C_API ISceneNode* IAnimatedMeshSceneNode_getMS3DJointNode(IAnimatedMeshSceneNode* pointer, const c8* jointName)
-//{return pointer->getMS3DJointNode(jointName);}
-// IRRLICHT_C_API ISceneNode* IAnimatedMeshSceneNode_getXJointNode(IAnimatedMeshSceneNode* pointer, const c8* jointName)
-//{return pointer->getXJointNode(jointName);}
 IRRLICHT_C_API bool IAnimatedMeshSceneNode_setMD2Animation1(IAnimatedMeshSceneNode* pointer, EMD2_ANIMATION_TYPE anim)
 {return pointer->setMD2Animation(anim);}
 IRRLICHT_C_API bool IAnimatedMeshSceneNode_setMD2Animation2(IAnimatedMeshSceneNode* pointer, const c8* animationName)

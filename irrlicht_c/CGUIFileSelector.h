@@ -210,7 +210,8 @@ const wchar_t* returnMultiByte_FromString(const char* src_buf)
 		size_t NumOfCharConverted;
 		errno_t res = mbstowcs_s(&NumOfCharConverted, dst_buf, src_size, src_buf, _TRUNCATE);
 #else
-		size_t res = mbstowcs(dst_buf, src_buf, MB_CUR_MAX);
+		//size_t res = mbstowcs(dst_buf, src_buf, MB_CUR_MAX);
+		mbstowcs(dst_buf, src_buf, MB_CUR_MAX);
 #endif
 	}
 	return dst_buf;
@@ -378,128 +379,130 @@ const io::path& CGUIFileSelector::getDirectoryName() {
 }
 
 //! called if an event happened.
-bool CGUIFileSelector::OnEvent(const SEvent& event) {
-   switch(event.EventType) {
-	case EET_KEY_INPUT_EVENT:
-		 switch (event.KeyInput.Key) {
-		   case KEY_RETURN:
-			 if (FileSystem) {
-			FileSystem->changeWorkingDirectoryTo(core::stringc(FileNameText->getText()).c_str());
-			fillListBox();
-			FileNameText->setText(core::stringw(FileSystem->getWorkingDirectory()).c_str());
+bool CGUIFileSelector::OnEvent(const SEvent& event)
+{
+	s32 selected = 0;
+	switch((int)event.EventType) {
+		case EET_KEY_INPUT_EVENT:
+			switch (event.KeyInput.Key) {
+				case KEY_RETURN:
+					if (FileSystem) {
+						FileSystem->changeWorkingDirectoryTo(core::stringc(FileNameText->getText()).c_str());
+						fillListBox();
+						FileNameText->setText(core::stringw(FileSystem->getWorkingDirectory()).c_str());
+					}
+					return true;
+				default: return false;
 			}
-			 return true;
-		 }
-		 break;
-   case EET_GUI_EVENT:
-	  switch(event.GUIEvent.EventType) {
-		case EGET_COMBO_BOX_CHANGED:
-		 if (event.GUIEvent.Caller == FilterComboBox) {
-			fillListBox();
-		 } else {  // change drive
-			if (FileSystem) {      
-			   FileSystem->changeWorkingDirectoryTo(core::stringc(DriveBox->getText()).c_str());
-			   fillListBox();
+			break;
+		case EET_GUI_EVENT:
+			switch(event.GUIEvent.EventType) {
+				case EGET_COMBO_BOX_CHANGED:
+					if (event.GUIEvent.Caller == FilterComboBox) {
+						fillListBox();
+					} else {  // change drive
+						if (FileSystem) {      
+							FileSystem->changeWorkingDirectoryTo(core::stringc(DriveBox->getText()).c_str());
+							fillListBox();
+						}
+					}
+					break;
+				default: break;
 			}
-		 }
-		 break;
-	  case EGET_ELEMENT_FOCUS_LOST:
-		 Dragging = false;
-		 break;
-	  case EGET_BUTTON_CLICKED:
-		 if (event.GUIEvent.Caller == CloseButton ||
-			event.GUIEvent.Caller == CancelButton) {
+			break;
+		//case EGET_ELEMENT_FOCUS_LOST:
+			//Dragging = false;
+			//break;
+		case EGET_BUTTON_CLICKED:
+			if (event.GUIEvent.Caller == CloseButton ||
+				event.GUIEvent.Caller == CancelButton) {
+					if (FileSystem) {
+				FileSystem->changeWorkingDirectoryTo(prev_working_dir.c_str());
+				//printf("working directory reset to: %s\n", prev_working_dir.c_str());
+				}
+				sendCancelEvent();
+				remove();
+				return true;
+			}
+			else
+			if (event.GUIEvent.Caller == OKButton && (IsDirectoryChoosable || matchesFileFilter(FileNameText->getText()))) {
 				if (FileSystem) {
-			  FileSystem->changeWorkingDirectoryTo(prev_working_dir.c_str());
-			  //printf("working directory reset to: %s\n", prev_working_dir.c_str());
+				  FileSystem->changeWorkingDirectoryTo(prev_working_dir.c_str());
+				  //printf("working directory reset to: %s\n", prev_working_dir.c_str());
+				}
+				sendSelectedEvent();
+				remove();
+				return true;
 			}
-			sendCancelEvent();
-			remove();
-			return true;
-		 }
-		 else
-		 if (event.GUIEvent.Caller == OKButton && (IsDirectoryChoosable || matchesFileFilter(FileNameText->getText()))) {
-			if (FileSystem) {
-			  FileSystem->changeWorkingDirectoryTo(prev_working_dir.c_str());
-			  //printf("working directory reset to: %s\n", prev_working_dir.c_str());
-			}
-			sendSelectedEvent();
-			remove();
-			return true;
-		 }
-		 break;
-
-	  case EGET_LISTBOX_CHANGED:
-		 {
-			s32 selected = FileBox->getSelected();
+			break;
+		case EGET_LISTBOX_CHANGED:
+			selected = FileBox->getSelected();
 			if (FileList && FileSystem)
 			{
-			   core::stringw strw;
-			   strw = FileSystem->getWorkingDirectory();
-			   if (strw[strw.size()-1] != '\\')
-				 strw += "\\";
-			   strw += FileBox->getListItem(selected);
-			   FileNameText->setText(strw.c_str());
-			}
-		 }
-		 break;
-	  case EGET_LISTBOX_SELECTED_AGAIN:
-		 {         
-			s32 selected = FileBox->getSelected();
-			if (FileList && FileSystem) {
-			   if (FileList->isDirectory(selected)) {
-				  FileSystem->changeWorkingDirectoryTo(FileList->getFileName(selected));
-				  fillListBox();
-				  FileNameText->setText(core::stringw(FileSystem->getWorkingDirectory()).c_str());
-			   }
-			   else
-			   {
-				  core::stringw strw;
-				  strw = FileSystem->getWorkingDirectory();
-				   if (strw[strw.size()-1] != '\\')
+				core::stringw strw;
+				strw = FileSystem->getWorkingDirectory();
+				if (strw[strw.size()-1] != '\\')
 					strw += "\\";
-				  strw += FileBox->getListItem(selected);
-				  FileNameText->setText(strw.c_str());
-				  return true;
-			   }
+				strw += FileBox->getListItem(selected);
+				FileNameText->setText(strw.c_str());
 			}
-		 }
-		 break;
-	  }
-	  break;
-   case EET_MOUSE_INPUT_EVENT:
-	  switch(event.MouseInput.Event) {
-	  case EMIE_LMOUSE_PRESSED_DOWN:
-		 DragStart.X = event.MouseInput.X;
-		 DragStart.Y = event.MouseInput.Y;
-		 Dragging = true;
-		 Environment->setFocus(this);
-		 return true;
-	  case EMIE_LMOUSE_LEFT_UP:
-		 Dragging = false;
-		 Environment->removeFocus(this);
-		 return true;
-	  case EMIE_MOUSE_MOVED:
-		 if (Dragging) {
-			// gui window should not be dragged outside its parent
-			if (Parent)
-			   if (event.MouseInput.X < Parent->getAbsolutePosition().UpperLeftCorner.X +1 ||
-				  event.MouseInput.Y < Parent->getAbsolutePosition().UpperLeftCorner.Y +1 ||
-				  event.MouseInput.X > Parent->getAbsolutePosition().LowerRightCorner.X -1 ||
-				  event.MouseInput.Y > Parent->getAbsolutePosition().LowerRightCorner.Y -1)
-
-				  return true;
-
-			move(core::position2d<s32>(event.MouseInput.X - DragStart.X, event.MouseInput.Y - DragStart.Y));
-			DragStart.X = event.MouseInput.X;
-			DragStart.Y = event.MouseInput.Y;
-			return true;
-		 }
-		 break;
-	  }
-   }
-
-   return Parent ? Parent->OnEvent(event) : false;
+			break;
+		case EGET_LISTBOX_SELECTED_AGAIN:
+			selected = FileBox->getSelected();
+			if (FileList && FileSystem) {
+				if (FileList->isDirectory(selected)) {
+					FileSystem->changeWorkingDirectoryTo(FileList->getFileName(selected));
+					fillListBox();
+					FileNameText->setText(core::stringw(FileSystem->getWorkingDirectory()).c_str());
+				}
+				else
+				{
+					core::stringw strw;
+					strw = FileSystem->getWorkingDirectory();
+					if (strw[strw.size()-1] != '\\')
+						strw += "\\";
+					strw += FileBox->getListItem(selected);
+					FileNameText->setText(strw.c_str());
+					return true;
+				}
+			}
+			break;
+		case EET_MOUSE_INPUT_EVENT:
+			switch(event.MouseInput.Event) {
+				case EMIE_LMOUSE_PRESSED_DOWN:
+					DragStart.X = event.MouseInput.X;
+					DragStart.Y = event.MouseInput.Y;
+					Dragging = true;
+					Environment->setFocus(this);
+					return true;
+				case EMIE_LMOUSE_LEFT_UP:
+					Dragging = false;
+					Environment->removeFocus(this);
+					return true;
+				case EMIE_MOUSE_MOVED:
+					if (Dragging) {
+						// gui window should not be dragged outside its parent
+						if (Parent){
+							if (event.MouseInput.X < Parent->getAbsolutePosition().UpperLeftCorner.X +1 ||
+								event.MouseInput.Y < Parent->getAbsolutePosition().UpperLeftCorner.Y +1 ||
+								event.MouseInput.X > Parent->getAbsolutePosition().LowerRightCorner.X -1 ||
+								event.MouseInput.Y > Parent->getAbsolutePosition().LowerRightCorner.Y -1)
+								return true;
+						}
+						move(core::position2d<s32>(event.MouseInput.X - DragStart.X, event.MouseInput.Y - DragStart.Y));
+						DragStart.X = event.MouseInput.X;
+						DragStart.Y = event.MouseInput.Y;
+						return true;
+					}
+					break;
+				default:
+					break;
+			}
+			break;
+		default:
+			break;
+	}
+	return Parent ? Parent->OnEvent(event) : false;
 }
 
 
@@ -578,8 +581,9 @@ void CGUIFileSelector::fillListBox() {
 	  // We just want a list of directories and those matching the file filter
 	  if (FileList->isDirectory(i))
 		  if (DirectoryIconIdx != -1) FileBox->addItem(s.c_str(), DirectoryIconIdx);
-		  else                        FileBox->addItem(s.c_str());
+		  else FileBox->addItem(s.c_str());
 	  else if (matchesFileFilter(s))
+	  {
 		if (FilterComboBox->getSelected() >= (s32)FileFilters.size())
 			if (FileIconIdx != -1) {
 			  s32 iconIdx = FileIconIdx;
@@ -588,7 +592,8 @@ void CGUIFileSelector::fillListBox() {
 				  iconIdx = FileFilters[i].FileIconIdx;
 			  FileBox->addItem(s.c_str(), iconIdx);
 			} else  FileBox->addItem(s.c_str());
-		else FileBox->addItem(s.c_str(), FileFilters[FilterComboBox->getSelected()].FileIconIdx);       
+		else FileBox->addItem(s.c_str(), FileFilters[FilterComboBox->getSelected()].FileIconIdx);
+	  }
 
    }
 
@@ -674,7 +679,7 @@ u32 CGUIFileSelector::addIcon(video::ITexture* texture) {
    // add this frame
    sprite.Frames.push_back(frame);
    // add the sprite
-   u32 spriteIndex = SpriteBank->getSprites().size();
+   //u32 spriteIndex = SpriteBank->getSprites().size();
    SpriteBank->getSprites().push_back(sprite); 
 
    return textureIndex;

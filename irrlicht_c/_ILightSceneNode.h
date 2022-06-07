@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -9,6 +9,7 @@ extern "C" {
 //================= ILightSceneNode
 IRRLICHT_C_API ILightSceneNode* ILightSceneNode_ctor(ISceneNode* parent = 0, ISceneManager* mgr = 0, s32 id = -1, const core::vector3df& position = core::vector3df(0,0,0))
 {
+	vector3df* p_null = NULL;
 	ILightSceneNode* temp = 0;
 	ILightSceneNode* node = (ILightSceneNode*)temp->clone(parent, mgr);
 	temp->drop();
@@ -18,7 +19,7 @@ IRRLICHT_C_API ILightSceneNode* ILightSceneNode_ctor(ISceneNode* parent = 0, ISc
 		//node->setSceneManager(mgr);
 	if(id > -1)
 		node->setID(id);
-	if(&position)
+	if(&position != p_null)
 		node->setPosition(position);
 	return node;
 }

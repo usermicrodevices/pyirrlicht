@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -9,13 +9,13 @@ extern "C" {
 //================= IBillboardTextSceneNode
 IRRLICHT_C_API IBillboardTextSceneNode* IBillboardTextSceneNode_ctor(ISceneNode* parent, ISceneManager* mgr, s32 id, const core::vector3df& position = core::vector3df(0,0,0))
 {
-	//return new IBillboardTextSceneNode(parent, mgr, id, position);
+	vector3df* p_null = NULL;
 	IBillboardTextSceneNode* temp = 0;
 	IBillboardTextSceneNode* node = (IBillboardTextSceneNode*)temp->clone(parent, mgr);
 	temp->drop();
 	if(id > -1)
 		node->setID(id);
-	if(&position)
+	if(&position != p_null)
 		node->setPosition(position);
 	return node;
 }

@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 
@@ -289,7 +289,7 @@ IRRLICHT_C_API const vector3df& ISceneNode_getRotation(ISceneNode* pointer){retu
 IRRLICHT_C_API void ISceneNode_setRotation(ISceneNode* pointer, const core::vector3df& rotation){pointer->setRotation(rotation);}
 IRRLICHT_C_API const vector3df& ISceneNode_getPosition(ISceneNode* pointer){return pointer->getPosition();}
 IRRLICHT_C_API void ISceneNode_setPosition(ISceneNode* pointer, const vector3df& newpos){pointer->setPosition(newpos);}
-IRRLICHT_C_API const vector3df& ISceneNode_getAbsolutePosition(ISceneNode* pointer){return (const vector3df&)pointer->getAbsolutePosition();}
+IRRLICHT_C_API const vector3df ISceneNode_getAbsolutePosition(ISceneNode* pointer){return (const vector3df&)pointer->getAbsolutePosition();}
 #if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR < 8)
 IRRLICHT_C_API void ISceneNode_setAutomaticCulling(ISceneNode* pointer, E_CULLING_TYPE state){pointer->setAutomaticCulling(state);}
 IRRLICHT_C_API E_CULLING_TYPE ISceneNode_getAutomaticCulling(ISceneNode* pointer){return pointer->getAutomaticCulling();}

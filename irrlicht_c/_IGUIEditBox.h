@@ -34,7 +34,7 @@ IRRLICHT_C_API void IGUIEditBox_setPasswordBox(IGUIEditBox* pointer, bool passwo
 {pointer->setPasswordBox(passwordBox, passwordChar);}
 IRRLICHT_C_API bool IGUIEditBox_isPasswordBox(IGUIEditBox* pointer)
 {return pointer->isPasswordBox();}
-IRRLICHT_C_API const core::dimension2du& IGUIEditBox_getTextDimension(IGUIEditBox* pointer)
+IRRLICHT_C_API const core::dimension2du IGUIEditBox_getTextDimension(IGUIEditBox* pointer)
 {return pointer->getTextDimension();}
 IRRLICHT_C_API void IGUIEditBox_setMax(IGUIEditBox* pointer, u32 max)
 {pointer->setMax(max);}

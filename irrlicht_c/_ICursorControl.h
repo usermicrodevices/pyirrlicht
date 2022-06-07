@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -21,7 +21,7 @@ IRRLICHT_C_API void ICursorControl_setPositionI2(ICursorControl* pointer, s32 x,
 {pointer->setPosition(x, y);}
 IRRLICHT_C_API const position2d<s32>& ICursorControl_getPosition(ICursorControl* pointer)
 {return (const position2d<s32>&)pointer->getPosition();}
-IRRLICHT_C_API const position2d<f32>& ICursorControl_getRelativePosition(ICursorControl* pointer)
+IRRLICHT_C_API const position2d<f32> ICursorControl_getRelativePosition(ICursorControl* pointer)
 {return (const position2d<f32>&)pointer->getRelativePosition();}
 IRRLICHT_C_API void ICursorControl_setReferenceRect(ICursorControl* pointer, core::rect<s32>* rect=0)
 {pointer->setReferenceRect(rect);}

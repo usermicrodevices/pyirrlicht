@@ -17,11 +17,11 @@ IRRLICHT_C_API void IGUITab_setBackgroundColor(IGUITab* pointer, video::SColor* 
 {pointer->setBackgroundColor(*c);}
 IRRLICHT_C_API bool IGUITab_isDrawingBackground(IGUITab* pointer)
 {return pointer->isDrawingBackground();}
-IRRLICHT_C_API const SColor& IGUITab_getBackgroundColor(IGUITab* pointer)
+IRRLICHT_C_API const SColor IGUITab_getBackgroundColor(IGUITab* pointer)
 {return pointer->getBackgroundColor();}
 IRRLICHT_C_API void IGUITab_setTextColor(IGUITab* pointer, video::SColor* c)
 {pointer->setTextColor(*c);}
-IRRLICHT_C_API const SColor& IGUITab_getTextColor(IGUITab* pointer)
+IRRLICHT_C_API const SColor IGUITab_getTextColor(IGUITab* pointer)
 {return pointer->getTextColor();}
 
 //================= IGUITabControl
