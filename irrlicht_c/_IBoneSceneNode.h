@@ -9,8 +9,7 @@ extern "C" {
 //class IBoneSceneNode : public ISceneNode
 IRRLICHT_C_API IBoneSceneNode* IBoneSceneNode_ctor(ISceneNode* parent, ISceneManager* mgr, s32 id = -1)
 {
-	IBoneSceneNode* temp = 0;
-	IBoneSceneNode* node = (IBoneSceneNode*)temp->clone(parent, mgr);
+	IBoneSceneNode* node = (IBoneSceneNode*)mgr->addEmptySceneNode();
 	if(id > -1)
 		node->setID(id);
 	return node;
