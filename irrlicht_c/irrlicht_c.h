@@ -4,19 +4,19 @@
 
 // for __stdcall Irrlicht.lib must be builded with _STDCALL_SUPPORTED flag
 
-#define _IRR_STATIC_LIB_
+//#define _IRR_STATIC_LIB_
 
-#define _COMPILE_WITH_2DTTFONT_
+//#define _COMPILE_WITH_2DTTFONT_
 
-#define _COMPILE_WITH_3D_TEXT_
+//#define _COMPILE_WITH_3D_TEXT_
 
-#define _COMPILE_WITH_GRID_SCENE_NODE_
+//#define _COMPILE_WITH_GRID_SCENE_NODE_
 
-#define _COMPILE_WITH_GUI_FILE_SELECTOR_
+//#define _COMPILE_WITH_GUI_FILE_SELECTOR_
 
 //#define _COMPILE_WITH_AGG_
 
-#define _COMPILE_WITH_IRR_SVG_AGG_
+//#define _COMPILE_WITH_IRR_SVG_AGG_
 
 //#define _COMPILE_WITH_IRR_SVG_CAIRO_
 

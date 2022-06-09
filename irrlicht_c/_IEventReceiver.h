@@ -120,6 +120,8 @@ IRRLICHT_C_API bool SJoystickEvent_IsButtonPressed(const SEvent::SJoystickEvent*
 
 IRRLICHT_C_API core::array<SJoystickInfo>* arraySJoystickInfo_ctor()
 {return new core::array<SJoystickInfo>();}
+IRRLICHT_C_API void arraySJoystickInfo_delete(core::array<SJoystickInfo*>* pointer)
+{delete pointer;}
 IRRLICHT_C_API irr::u32 arraySJoystickInfo_allocated_size(core::array<SJoystickInfo>* pointer)
 {return pointer->allocated_size();}
 IRRLICHT_C_API irr::u32 arraySJoystickInfo_size(core::array<SJoystickInfo>* pointer)

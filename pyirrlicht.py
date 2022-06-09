@@ -1310,8 +1310,8 @@ class SLight(ctypes.Structure):
 				#~ ('frameTime', ctypes.c_uint)
 				#~ ]
 
-delete_pointer = func_type(None, ctypes.c_void_p)(('delete_pointer', c_module))
-delete_struct_pointer = func_type(None, ctypes.c_void_p)(('delete_struct_pointer', c_module))
+#delete_pointer = func_type(None, ctypes.c_void_p)(('delete_pointer', c_module))
+#delete_struct_pointer = func_type(None, ctypes.c_void_p)(('delete_struct_pointer', c_module))
 
 tool_randrange = func_type(ctypes.c_int, ctypes.c_int, ctypes.c_int)(('tool_randrange', c_module))
 tool_texture_generator = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_uint, ctypes.c_uint, ctypes.c_uint, ctypes.c_uint, ctypes.c_uint)(('tool_texture_generator', c_module))
@@ -1401,6 +1401,7 @@ MainLoop_stop = func_type(None, ctypes.c_void_p)(('MainLoop_stop', c_module))
 array_ctor1 = func_type(ctypes.c_void_p)(('array_ctor1', c_module))
 array_ctor2 = func_type(ctypes.c_void_p, ctypes.c_uint)(('array_ctor2', c_module))
 array_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('array_ctor3', c_module))
+array_delete = func_type(None, ctypes.c_void_p)(('array_delete', c_module))
 array_reallocate = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('array_reallocate', c_module))
 array_setAllocStrategy = func_type(None, ctypes.c_void_p, ctypes.c_int)(('array_setAllocStrategy', c_module))
 array_push_back = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('array_push_back', c_module))
@@ -1446,6 +1447,7 @@ SJoystickInfo_get_PovHat = func_type(ctypes.c_int, ctypes.c_void_p)(('SJoystickI
 
 # functions for class arraySJoystickInfo
 arraySJoystickInfo_ctor = func_type(ctypes.c_void_p)(('arraySJoystickInfo_ctor', c_module))
+arraySJoystickInfo_delete = func_type(None, ctypes.c_void_p)(('arraySJoystickInfo_delete', c_module))
 arraySJoystickInfo_allocated_size = func_type(ctypes.c_uint, ctypes.c_void_p)(('arraySJoystickInfo_allocated_size', c_module))
 arraySJoystickInfo_size = func_type(ctypes.c_uint, ctypes.c_void_p)(('arraySJoystickInfo_size', c_module))
 arraySJoystickInfo_set_free_when_destroyed = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('arraySJoystickInfo_set_free_when_destroyed', c_module))
@@ -1695,7 +1697,7 @@ matrix4_transformVect3 = func_type(None, ctypes.c_void_p, ctypes.c_float*4, ctyp
 matrix4_translateVect = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_translateVect', c_module))
 matrix4_transformPlane1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_transformPlane1', c_module))
 matrix4_transformPlane2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_transformPlane2', c_module))
-matrix4_transformBox = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_transformBox', c_module))
+#matrix4_transformBox = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_transformBox', c_module))
 matrix4_transformBoxEx = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_transformBoxEx', c_module))
 matrix4_multiplyWith1x4Matrix = func_type(None, ctypes.c_void_p, ctypes.c_float*4)(('matrix4_multiplyWith1x4Matrix', c_module))
 matrix4_makeInverse = func_type(ctypes.c_bool, ctypes.c_void_p)(('matrix4_makeInverse', c_module))
@@ -4495,7 +4497,7 @@ if IRRLICHT_VERSION >= 180:
 					('Yearday', ctypes.c_uint),
 					('IsDST', ctypes.c_bool)
 					]
-	ITimer_getRealTimeAndDate = func_type(ctypes.POINTER(RealTimeDate), ctypes.c_void_p)(('ITimer_getRealTimeAndDate', c_module))
+	#ITimer_getRealTimeAndDate = func_type(ctypes.POINTER(RealTimeDate), ctypes.c_void_p)(('ITimer_getRealTimeAndDate', c_module))
 ITimer_getTime = func_type(ctypes.c_uint, ctypes.c_void_p)(('ITimer_getTime', c_module))
 ITimer_setTime = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('ITimer_setTime', c_module))
 ITimer_stop = func_type(None, ctypes.c_void_p)(('ITimer_stop', c_module))
@@ -5002,7 +5004,7 @@ class array:
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				array_delete(self.c_pointer)
 			except:
 				pass
 	def __len__(self):
@@ -5176,7 +5178,7 @@ class arraySJoystickInfo:
 	def __del__(self):
 		if self.c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				arraySJoystickInfo_delete(self.c_pointer)
 			except:
 				pass
 	def allocated_size(self):
@@ -8009,8 +8011,8 @@ class matrix4:
 			self.transformPlane1(*args)
 		else:
 			self.transformPlane2(*args)
-	def transformBox(self, box):
-		matrix4_transformBox(self.c_pointer, box.c_pointer)
+	#def transformBox(self, box):
+		#matrix4_transformBox(self.c_pointer, box.c_pointer)
 	def transformBoxEx(self, box):
 		matrix4_transformBoxEx(self.c_pointer, box.c_pointer)
 	def multiplyWith1x4Matrix(self, matrix):
@@ -14613,8 +14615,8 @@ class ITimer(IReferenceCounted):
 	def getRealTime(self):
 		return ITimer_getRealTime(self.c_pointer)
 	if IRRLICHT_VERSION >= 180:
-		def getRealTimeAndDate(self):
-			return ITimer_getRealTimeAndDate(self.c_pointer)[0]
+		#def getRealTimeAndDate(self):
+			#return ITimer_getRealTimeAndDate(self.c_pointer)[0]
 		def getRealTimeAndDateAsTuple(self):
 			rtd = ITimer_getRealTimeAndDate(self.c_pointer)[0]
 			return (rtd.Year, rtd.Month, rtd.Day, rtd.Hour, rtd.Minute, rtd.Second)
