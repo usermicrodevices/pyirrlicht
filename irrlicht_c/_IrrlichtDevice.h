@@ -15,7 +15,7 @@ IRRLICHT_C_API IrrlichtDevice* IrrlichtDevice_createDevice2(E_DRIVER_TYPE device
 {
 	if (create_receiver)
 	{
-		IEventReceiver* r;
+		IEventReceiver* r = 0;
 		return createDevice(deviceType, windowSize, bits, fullscreen, stencilbuffer, vsync, r);
 	}
 	else

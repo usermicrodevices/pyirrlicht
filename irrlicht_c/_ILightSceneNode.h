@@ -8,21 +8,7 @@ extern "C" {
 
 //================= ILightSceneNode
 IRRLICHT_C_API ILightSceneNode* ILightSceneNode_ctor(ISceneNode* parent = 0, ISceneManager* mgr = 0, s32 id = -1, const core::vector3df& position = core::vector3df(0,0,0))
-{
-	vector3df* p_null = NULL;
-	ILightSceneNode* temp = 0;
-	ILightSceneNode* node = (ILightSceneNode*)temp->clone(parent, mgr);
-	temp->drop();
-	//if(parent)
-		//node->setParent(parent);
-	//if(mgr)
-		//node->setSceneManager(mgr);
-	if(id > -1)
-		node->setID(id);
-	if(&position != p_null)
-		node->setPosition(position);
-	return node;
-}
+{return mgr->addLightSceneNode(parent, position, SColorf(1.0f, 1.0f, 1.0f), 100.0f, id);}
 IRRLICHT_C_API void ILightSceneNode_setLightData(ILightSceneNode* pointer, const video::SLight& light){pointer->setLightData(light);}
 IRRLICHT_C_API const video::SLight& ILightSceneNode_getLightData(ILightSceneNode* pointer){return pointer->getLightData();}
 IRRLICHT_C_API void ILightSceneNode_setVisible(ILightSceneNode* pointer, bool isVisible){pointer->setVisible(isVisible);}

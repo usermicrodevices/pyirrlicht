@@ -8,17 +8,7 @@ extern "C" {
 
 //class IParticleSystemSceneNode : public ISceneNode
 IRRLICHT_C_API IParticleSystemSceneNode* IParticleSystemSceneNode_ctor(ISceneNode* parent, ISceneManager* mgr, s32 id, const core::vector3df& position = core::vector3df(0,0,0), const core::vector3df& rotation = core::vector3df(0,0,0), const core::vector3df& scale = core::vector3df(1.0f, 1.0f, 1.0f))
-//{return new IParticleSystemSceneNode(parent, mgr, id, position, rotation, scale);}
-{
-	IParticleSystemSceneNode* node = 0;
-	node->setParent(parent);
-	//node->setSceneManager(mgr);
-	node->setID(id);
-	node->setPosition(position);
-	node->setRotation(rotation);
-	node->setScale(scale);
-	return node;
-}
+{return mgr->addParticleSystemSceneNode(true, parent, id, position, rotation, scale);}
 IRRLICHT_C_API void IParticleSystemSceneNode_setParticleSize(IParticleSystemSceneNode* pointer, const core::dimension2d<f32>& size = core::dimension2d<f32>(5.0f, 5.0f))
 {pointer->setParticleSize(size);}
 IRRLICHT_C_API void IParticleSystemSceneNode_setParticlesAreGlobal(IParticleSystemSceneNode* pointer, bool global = true)
