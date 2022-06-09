@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -8,12 +8,7 @@ extern "C" {
 
 //================= IDummyTransformationSceneNode
 IRRLICHT_C_API IDummyTransformationSceneNode* IDummyTransformationSceneNode_ctor(ISceneNode* parent = 0, ISceneManager* mgr = 0, s32 id = -1)
-{
-	//IDummyTransformationSceneNode* node = (IDummyTransformationSceneNode*)mgr->addDummyTransformationSceneNode();
-	//if(id > -1)
-		//node->setID(id);
-	return mgr->addDummyTransformationSceneNode(parent, id);
-}
+{return mgr->addDummyTransformationSceneNode(parent, id);}
 IRRLICHT_C_API core::matrix4& IDummyTransformationSceneNode_getRelativeTransformationMatrix(IDummyTransformationSceneNode* pointer)
 {return pointer->getRelativeTransformationMatrix();}
 

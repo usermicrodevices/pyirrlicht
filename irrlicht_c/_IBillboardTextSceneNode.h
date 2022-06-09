@@ -8,17 +8,7 @@ extern "C" {
 
 //================= IBillboardTextSceneNode
 IRRLICHT_C_API IBillboardTextSceneNode* IBillboardTextSceneNode_ctor(ISceneNode* parent, ISceneManager* mgr, s32 id, const core::vector3df& position = core::vector3df(0,0,0))
-{
-	vector3df* p_null = NULL;
-	IBillboardTextSceneNode* node = reinterpret_cast<IBillboardTextSceneNode*>(mgr->addBillboardSceneNode());
-	if(id > -1)
-		node->setID(id);
-	if(&position != p_null)
-		node->setPosition(position);
-	if(parent)
-		parent->addChild(node);
-	return node;
-}
+{return mgr->addBillboardTextSceneNode(0, 0, parent, dimension2df(10.0f, 10.0f), position, id);}
 IRRLICHT_C_API void IBillboardTextSceneNode_setSize(IBillboardTextSceneNode* pointer, const core::dimension2d<f32>& size)
 {pointer->setSize(size);}
 IRRLICHT_C_API const core::dimension2d<f32>& IBillboardTextSceneNode_getSize(IBillboardTextSceneNode* pointer)
