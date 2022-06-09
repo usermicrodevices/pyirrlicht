@@ -8,21 +8,7 @@ extern "C" {
 
 //class IVolumeLightSceneNode : public ISceneNode
 IRRLICHT_C_API IVolumeLightSceneNode* IVolumeLightSceneNode_ctor(ISceneNode* parent, ISceneManager* mgr, s32 id, const core::vector3df& position, const core::vector3df& rotation, const core::vector3df& scale)
-{
-	vector3df* p_null = NULL;
-	IVolumeLightSceneNode* temp = 0;
-	IVolumeLightSceneNode* node = (IVolumeLightSceneNode*)temp->clone(parent, mgr);
-	temp->drop();
-	if(id > -1)
-		node->setID(id);
-	if(&position != p_null)
-		node->setPosition(position);
-	if(&rotation != p_null)
-		node->setRotation(rotation);
-	if(&scale != p_null)
-		node->setScale(scale);
-	return node;
-}
+{return mgr->addVolumeLightSceneNode(parent, id, 32, 32, SColor(51, 0, 230, 180), SColor(0, 0, 0, 0), position, rotation, scale);}
 
 IRRLICHT_C_API ESCENE_NODE_TYPE IVolumeLightSceneNode_getType(IVolumeLightSceneNode* pointer)
 {return pointer->getType();}

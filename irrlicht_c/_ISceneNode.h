@@ -49,19 +49,13 @@ public:
 	{
 		func_getMaterialCount = func;
 	}
-	//void set_BoundingBox(core::aabbox3d<f32>* value){Box = *value;}
-	//void set_Vertices(video::S3DVertex* value){Vertices = *value;}
-	//void set_Material(video::SMaterial* value){Material = *value;}
+
 private:
 	void(IRRCALLCONV *func_OnRegisterSceneNode)();
 	void(IRRCALLCONV *func_render)();
 	const core::aabbox3d<f32>*(IRRCALLCONV *func_getBoundingBox)();
 	video::SMaterial* (IRRCALLCONV *func_getMaterial)(u32);
 	const u32 (IRRCALLCONV *func_getMaterialCount)();
-
-	//core::aabbox3d<f32> Box;
-	//video::S3DVertex Vertices;
-	//video::SMaterial Material;
 };
 
 #ifdef __cplusplus
@@ -235,23 +229,16 @@ IRRLICHT_C_API ISceneNode* ISceneNodeList_get_item(ISceneNodeListExt* pointer, u
 //================= ISceneNode
 IRRLICHT_C_API ISceneNode* ISceneNode_ctor(ISceneNode* parent, ISceneManager* mgr, s32 id=-1, const vector3df& position = vector3df(0,0,0), const vector3df& rotation = vector3df(0,0,0), const vector3df& scale = vector3df(1.0f, 1.0f, 1.0f))
 {
-	ISceneNode* node = 0;
-	node->setParent(parent);
-	//node->setSceneManager(mgr);
-	node->setID(id);
+	ISceneNode* node = mgr->addEmptySceneNode(parent, id);
 	node->setPosition(position);
 	node->setRotation(rotation);
 	node->setScale(scale);
 	return node;
 }
-//{return new ISceneNode(parent, mgr, id, position, rotation, scale);}
-//IRRLICHT_C_API void ISceneNode_Destructor(ISceneNode* pointer){delete pointer;}
+IRRLICHT_C_API void ISceneNode_Destructor(ISceneNode* pointer){delete pointer;}
 IRRLICHT_C_API void ISceneNode_OnRegisterSceneNode(ISceneNode* pointer){pointer->OnRegisterSceneNode();}
 IRRLICHT_C_API void ISceneNode_OnAnimate(ISceneNode* pointer, u32 timeMs){pointer->OnAnimate(timeMs);}
-IRRLICHT_C_API void ISceneNode_render(ISceneNode* pointer, void(IRRCALLCONV *func)())
-//{&reinterpret_cast<void>(pointer->render) = func;}
-{pointer->render();}
-//{size_t* vptr =  *(size_t**)pointer; vptr[4] = (size_t)*func;}
+IRRLICHT_C_API void ISceneNode_render(ISceneNode* pointer, void(IRRCALLCONV *func)()){pointer->render();}
 IRRLICHT_C_API const c8* ISceneNode_getName(ISceneNode* pointer){return pointer->getName();}
 IRRLICHT_C_API void ISceneNode_setName(ISceneNode* pointer, const c8* name){pointer->setName(name);}
 IRRLICHT_C_API const aabbox3d<f32>* ISceneNode_getBoundingBox(ISceneNode* pointer){return &pointer->getBoundingBox();}
