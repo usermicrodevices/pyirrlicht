@@ -10,7 +10,7 @@ extern "C" {
 IRRLICHT_C_API IBillboardTextSceneNode* IBillboardTextSceneNode_ctor(ISceneNode* parent, ISceneManager* mgr, s32 id, const core::vector3df& position = core::vector3df(0,0,0))
 {
 	vector3df* p_null = NULL;
-	IBillboardSceneNode* node = reinterpret_cast<IBillboardSceneNode*>(mgr->addBillboardSceneNode());
+	IBillboardTextSceneNode* node = reinterpret_cast<IBillboardTextSceneNode*>(mgr->addBillboardSceneNode());
 	if(id > -1)
 		node->setID(id);
 	if(&position != p_null)
