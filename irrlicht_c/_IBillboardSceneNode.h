@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -9,13 +9,13 @@ extern "C" {
 IRRLICHT_C_API IBillboardSceneNode* IBillboardSceneNode_ctor(ISceneNode* parent, ISceneManager* mgr, s32 id, const core::vector3df& position = core::vector3df(0,0,0))
 {
 	vector3df* p_null = NULL;
-	IBillboardSceneNode* temp = 0;
-	IBillboardSceneNode* node = (IBillboardSceneNode*)temp->clone(parent, mgr);
-	temp->drop();
+	IBillboardSceneNode* node = mgr->addBillboardSceneNode();
 	if(id > -1)
 		node->setID(id);
 	if(&position != p_null)
 		node->setPosition(position);
+	if(parent)
+		parent->addChild(node);
 	return node;
 }
 IRRLICHT_C_API void IBillboardSceneNode_setSize(IBillboardSceneNode* pointer, const core::dimension2d<f32>& size){pointer->setSize(size);}

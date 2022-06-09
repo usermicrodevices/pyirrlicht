@@ -59,9 +59,7 @@ IRRLICHT_C_API UserAnimationEndCallBack* IAnimationEndCallBack_UserAnimationEndC
 IRRLICHT_C_API IAnimatedMeshSceneNode* IAnimatedMeshSceneNode_ctor(ISceneNode* parent, ISceneManager* mgr = 0, s32 id = -1, const vector3df& position = vector3df(0,0,0), const vector3df& rotation = vector3df(0,0,0), const vector3df& scale = vector3df(1.0f, 1.0f, 1.0f))
 {
 	vector3df* p_null = NULL;
-	IAnimatedMeshSceneNode* temp = mgr->addAnimatedMeshSceneNode(mgr->getMesh(0));
-	IAnimatedMeshSceneNode* node = (IAnimatedMeshSceneNode*)temp->clone(parent, mgr);
-	temp->drop();
+	IAnimatedMeshSceneNode* node = mgr->addAnimatedMeshSceneNode(mgr->getMesh(0));
 	if(id > -1)
 		node->setID(id);
 	if(&position != p_null)
@@ -70,6 +68,8 @@ IRRLICHT_C_API IAnimatedMeshSceneNode* IAnimatedMeshSceneNode_ctor(ISceneNode* p
 		node->setRotation(rotation);
 	if(&scale != p_null)
 		node->setScale(scale);
+	if(parent)
+		parent->addChild(node);
 	return node;
 }
 IRRLICHT_C_API void IAnimatedMeshSceneNode_delete(IAnimatedMeshSceneNode* ptr){if(ptr) delete ptr;}
