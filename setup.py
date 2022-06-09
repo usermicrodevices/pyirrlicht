@@ -18,7 +18,7 @@ setup(
 			#define_macros=[('_IRR_STATIC_LIB_', None)],
 			undef_macros=['Wall'],
 			library_dirs=['../irrlicht/lib/Linux'],
-			libraries=['Irrlicht']
+			libraries=['Irrlicht', 'GL', 'X11', 'Xxf86vm', 'Xext']
 		)
 	]
 )
