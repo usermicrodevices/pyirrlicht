@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #include "CGridSceneNode.h"
@@ -11,6 +11,8 @@ extern "C" {
 //================= CGridSceneNode
 IRRLICHT_C_API CGridSceneNode* CGridSceneNode_ctor(ISceneNode* parent, ISceneManager* smgr, s32 id = -1, u32 spacing = 8, u32 size = 1024, const video::SColor& gridcolor = video::SColor(255,128,128,128), u32 accentlineoffset = 8, const video::SColor& accentgridcolor = video::SColor(255,192,192,192), bool axislinestate = false)
 {return new CGridSceneNode(parent, smgr, id, spacing, size, gridcolor, accentlineoffset, accentgridcolor, axislinestate);}
+IRRLICHT_C_API void CGridSceneNode_delete(CGridSceneNode* pointer)
+{delete pointer;}
 IRRLICHT_C_API CGridSceneNode* CGridSceneNode_clone(CGridSceneNode* pointer, ISceneNode* newParent = 0, ISceneManager* newSceneManager = 0)
 {return pointer->clone(newParent, newSceneManager);}
 IRRLICHT_C_API void CGridSceneNode_OnRegisterSceneNode(CGridSceneNode* pointer)

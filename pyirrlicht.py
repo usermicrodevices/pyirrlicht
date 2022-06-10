@@ -2,8 +2,8 @@
 # github.com/usermicrodevices
 # BSD license
 
-__version__ = pyirrlicht_version = '1.2.0'
-__versionTime__ = '2022-03-29'
+__version__ = pyirrlicht_version = '1.2.1'
+__versionTime__ = '2022-06-10'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -2115,6 +2115,7 @@ aabbox3df_ctor1 = func_type(ctypes.c_void_p)(('aabbox3df_ctor1', c_module))
 aabbox3df_ctor2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_ctor2', c_module), ((1, 'min', vector3df_ctor2(-1.0, -1.0, -1.0)), (1, 'max', vector3df_ctor2(1.0, 1.0, 1.0))))
 aabbox3df_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_ctor3', c_module), ((1, 'init', vector3df_ctor2(-1.0, -1.0, -1.0)), ))
 aabbox3df_ctor4 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('aabbox3df_ctor4', c_module), ((1, 'minx', -1.0), (1, 'miny', -1.0), (1, 'minz', -1.0), (1, 'maxx', 1.0), (1, 'maxy', 1.0), (1, 'maxz', 1.0)))
+aabbox3df_delete = func_type(None, ctypes.c_void_p)(('aabbox3df_delete', c_module))
 aabbox3df_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_operator_eq', c_module))
 aabbox3df_operator_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3df_operator_ne', c_module))
 aabbox3df_reset1 = func_type(None, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('aabbox3df_reset1', c_module))
@@ -2178,6 +2179,7 @@ aabbox3di_set_MaxEdge = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('aabb
 
 #class CDynamicMeshBuffer
 CDynamicMeshBuffer_ctor = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('CDynamicMeshBuffer_ctor', c_module))
+CDynamicMeshBuffer_delete = func_type(None, ctypes.c_void_p)(('CDynamicMeshBuffer_delete', c_module))
 CDynamicMeshBuffer_getVertexBuffer = func_type(ctypes.c_void_p, ctypes.c_void_p)(('CDynamicMeshBuffer_getVertexBuffer', c_module))
 CDynamicMeshBuffer_getIndexBuffer = func_type(ctypes.c_void_p, ctypes.c_void_p)(('CDynamicMeshBuffer_getIndexBuffer', c_module))
 CDynamicMeshBuffer_setVertexBuffer = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CDynamicMeshBuffer_setVertexBuffer', c_module))
@@ -6815,9 +6817,6 @@ class vector3di(object):
 	def getAs4Values(self, pointer_array):
 		vector3di_getAs4Values(self.c_pointer, pointer_array)
 
-class aabbox3df:
-	def __init__(self, *args, **kwargs):
-		pass
 class aabbox3df(object):
 	def __init__(self, *args, **kwargs):
 		self.c_pointer = 0
@@ -6842,7 +6841,7 @@ class aabbox3df(object):
 	def __del__(self):
 		if self.c_pointer and self.delete_c_pointer:# and callable(delete_pointer):
 			try:
-				delete_pointer(self.c_pointer)
+				aabbox3df_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -9295,7 +9294,7 @@ class CDynamicMeshBuffer(IDynamicMeshBuffer):
 	def __del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				CDynamicMeshBuffer_delete(self.c_pointer)
 			except:
 				pass
 	def ctor(self, vertexType, indexType):

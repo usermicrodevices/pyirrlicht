@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -9,6 +9,9 @@ extern "C" {
 //class CDynamicMeshBuffer : public IDynamicMeshBuffer
 IRRLICHT_C_API CDynamicMeshBuffer* CDynamicMeshBuffer_ctor(video::E_VERTEX_TYPE vertexType, video::E_INDEX_TYPE indexType)
 {return new CDynamicMeshBuffer(vertexType, indexType);}
+
+IRRLICHT_C_API void CDynamicMeshBuffer_delete(CDynamicMeshBuffer* pointer)
+{delete pointer;}
 
 IRRLICHT_C_API IVertexBuffer* CDynamicMeshBuffer_getVertexBuffer(CDynamicMeshBuffer* pointer)
 {return &pointer->getVertexBuffer();}
