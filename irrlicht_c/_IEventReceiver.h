@@ -150,7 +150,7 @@ IRRLICHT_C_API EINPUT_METHOD_EVENT SInputMethodEvent_GetEvent(const SEvent::SInp
 
 IRRLICHT_C_API UserEventReceiver* IEventReceiver_ctor1(IEventReceiver* pointer){return (UserEventReceiver*)pointer;}
 IRRLICHT_C_API UserEventReceiver* IEventReceiver_ctor2(bool(IRRCALLCONV *OnEventMethod)(const SEvent&)){return new UserEventReceiver(OnEventMethod);}
-IRRLICHT_C_API void IEventReceiver_delete(void* pointer){delete pointer;}
+IRRLICHT_C_API void IEventReceiver_delete(UserEventReceiver* pointer){delete pointer;}
 IRRLICHT_C_API void IEventReceiver_set_func_event(UserEventReceiver* pointer, bool(IRRCALLCONV *OnEventMethod)(const SEvent&)){pointer->set_func_event(OnEventMethod);}
 
 #ifdef __cplusplus

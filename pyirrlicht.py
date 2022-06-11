@@ -3,12 +3,12 @@
 # BSD license
 
 __version__ = pyirrlicht_version = '1.2.2'
-__versionTime__ = '2022-06-11'
+__version_date__ = '2022-06-11'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
 pyirrlicht.py - is ctypes python module for
-Irrlicht Engine SDK(http://irrlicht.sourceforge.net).
+Irrlicht Engine SDK (https://irrlicht.sourceforge.io).
 '''
 
 IRR_ENCODING = 'cp1251'
@@ -3542,13 +3542,12 @@ IAnimatedMeshMD3_getOriginalMesh = func_type(ctypes.c_void_p, ctypes.c_void_p)((
 OnAnimationEndFunc = func_type(None, ctypes.c_void_p)
 IAnimationEndCallBack_ctor1 = func_type(ctypes.c_void_p)(('IAnimationEndCallBack_ctor1', c_module))
 IAnimationEndCallBack_ctor2 = func_type(ctypes.c_void_p, OnAnimationEndFunc)(('IAnimationEndCallBack_ctor2', c_module))
-#~ IAnimationEndCallBack_Destructor = func_type(None, ctypes.c_void_p)(('IAnimationEndCallBack_Destructor', c_module))
+IAnimationEndCallBack_delete = func_type(None, ctypes.c_void_p)(('IAnimationEndCallBack_delete', c_module))
 IAnimationEndCallBack_set_func_event = func_type(None, ctypes.c_void_p, OnAnimationEndFunc)(('IAnimationEndCallBack_set_func_event', c_module))
 IAnimationEndCallBack_UserAnimationEndCallBack = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IAnimationEndCallBack_UserAnimationEndCallBack', c_module))
 
 # functions for class IAnimatedMeshSceneNode
-#~ IAnimatedMeshSceneNode_other_as_this = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IAnimatedMeshSceneNode_other_as_this', c_module))
-#~ IAnimatedMeshSceneNode_Destructor = func_type(None, ctypes.c_void_p)(('IAnimatedMeshSceneNode_Destructor', c_module))
+IAnimatedMeshSceneNode_delete = func_type(None, ctypes.c_void_p)(('IAnimatedMeshSceneNode_delete', c_module))
 IAnimatedMeshSceneNode_setCurrentFrame = func_type(None, ctypes.c_void_p, ctypes.c_float)(('IAnimatedMeshSceneNode_setCurrentFrame', c_module))
 IAnimatedMeshSceneNode_setFrameLoop = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('IAnimatedMeshSceneNode_setFrameLoop', c_module))
 IAnimatedMeshSceneNode_setAnimationSpeed = func_type(None, ctypes.c_void_p, ctypes.c_float)(('IAnimatedMeshSceneNode_setAnimationSpeed', c_module))
@@ -13525,6 +13524,12 @@ class IAnimationEndCallBack(IReferenceCounted):
 				self.c_pointer = IAnimationEndCallBack_ctor1()
 		else:
 			self.c_pointer = IAnimationEndCallBack_ctor2(self.callback)
+	def __del__(self):
+		if self.c_pointer:
+			try:
+				IAnimationEndCallBack_delete(self.c_pointer)
+			except:
+				pass
 	def set_func_event(self, event_func):
 		IAnimationEndCallBack_set_func_event(self.c_pointer, event_func)
 	def OnAnimationEnd(self, node):
@@ -13540,8 +13545,12 @@ class IAnimatedMeshSceneNode(ISceneNode):
 				self.c_pointer = args[0].c_pointer
 			else:
 				self.c_pointer = args[0]
-		#~ elif 'other' in kwargs:
-			#~ self.c_pointer = IAnimatedMeshSceneNode_other_as_this(kwargs['other'].c_pointer)
+	def __del__(self):
+		if self.c_pointer:
+			try:
+				IAnimatedMeshSceneNode_delete(self.c_pointer)
+			except:
+				pass
 	def setCurrentFrame(self, frame):
 		IAnimatedMeshSceneNode_setCurrentFrame(self.c_pointer, frame)
 	def setFrameLoop(self, begin, end):
@@ -13563,10 +13572,6 @@ class IAnimatedMeshSceneNode(ISceneNode):
 			return self.getJointNode1(arg)
 	def getJointCount(self):
 		return IAnimatedMeshSceneNode_getJointCount(self.c_pointer)
-	# def getMS3DJointNode(self, jointName):
-		# return ISceneNode(IAnimatedMeshSceneNode_getMS3DJointNode(self.c_pointer, jointName))
-	# def getXJointNode(self, jointName):
-		# return ISceneNode(IAnimatedMeshSceneNode_getXJointNode(self.c_pointer, jointName))
 	def setMD2Animation1(self, emd2_anim_type):
 		return IAnimatedMeshSceneNode_setMD2Animation1(self.c_pointer, emd2_anim_type)
 	def setMD2Animation2(self, animationName):
