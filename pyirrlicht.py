@@ -1436,6 +1436,7 @@ array_swap = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('array_swap', c_
 
 #================= SJoystickInfo
 SJoystickInfo_ctor = func_type(ctypes.c_void_p, ctypes.c_int)(('SJoystickInfo_ctor', c_module))
+SJoystickInfo_delete = func_type(None, ctypes.c_void_p)(('SJoystickInfo_delete', c_module))
 SJoystickInfo_get_Joystick = func_type(ctypes.c_ubyte, ctypes.c_void_p)(('SJoystickInfo_get_Joystick', c_module))
 SJoystickInfo_set_Joystick = func_type(None, ctypes.c_void_p, ctypes.c_ubyte)(('SJoystickInfo_set_Joystick', c_module))
 SJoystickInfo_get_Name = func_type(ctypes.c_char_p, ctypes.c_void_p)(('SJoystickInfo_get_Name', c_module))
@@ -1460,6 +1461,7 @@ arraySJoystickInfo_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes
 BUILD_WITH_GRID_SCENE_NODE = ctypes.c_bool.in_dll(c_module, 'BUILD_WITH_GRID_SCENE_NODE').value
 if BUILD_WITH_GRID_SCENE_NODE:
 	CGridSceneNode_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p, ctypes.c_bool)(('CGridSceneNode_ctor', c_module))
+	CGridSceneNode_delete = func_type(None, ctypes.c_void_p)(('CGridSceneNode_delete', c_module))
 	CGridSceneNode_clone = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('CGridSceneNode_clone', c_module))
 	CGridSceneNode_OnRegisterSceneNode = func_type(None, ctypes.c_void_p)(('CGridSceneNode_OnRegisterSceneNode', c_module))
 	CGridSceneNode_render = func_type(None, ctypes.c_void_p)(('CGridSceneNode_render', c_module))
@@ -5148,7 +5150,7 @@ class SJoystickInfo(object):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_struct_pointer(self.c_pointer)
+				SJoystickInfo_delete(self.c_pointer)
 			except:
 				pass
 	def ctor(self, length = 1):
@@ -12199,6 +12201,12 @@ if BUILD_WITH_GRID_SCENE_NODE:
 				self.c_pointer = args[0]
 			elif len(args) > 1 or len(kwargs) > 1:
 				self.c_pointer = self.Constructor(*args, **kwargs)
+		def __del__(self):
+			if self.c_pointer:
+				try:
+					CGridSceneNode_delete(self.c_pointer)
+				except:
+					pass
 		def Constructor(self, parent, smgr, id = -1, spacing = 8, size = 1024, gridcolor = SColor(255,128,128,128), accentlineoffset = 8, accentgridcolor = SColor(255,192,192,192), axislinestate = False):
 			return CGridSceneNode_ctor(parent.c_pointer, smgr.c_pointer, id, spacing, size, gridcolor.c_pointer, accentlineoffset, accentgridcolor.c_pointer, axislinestate)
 		def clone(self, newParent = 0, newSceneManager = 0):
