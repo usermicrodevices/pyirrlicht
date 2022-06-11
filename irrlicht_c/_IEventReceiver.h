@@ -59,12 +59,11 @@ extern "C" {
 //================= SJoystickInfo
 IRRLICHT_C_API SJoystickInfo* SJoystickInfo_ctor(int length = 1)
 {SJoystickInfo* result; result = new SJoystickInfo[length]; return result;}
+IRRLICHT_C_API void SJoystickInfo_delete(SJoystickInfo* pointer){delete[] pointer;}
 IRRLICHT_C_API u8 SJoystickInfo_get_Joystick(SJoystickInfo* pointer)
 {return pointer->Joystick;}
 IRRLICHT_C_API void SJoystickInfo_set_Joystick(SJoystickInfo* pointer, u8 value)
 {pointer->Joystick = value;}
-//IRRLICHT_C_API const char* SJoystickInfo_get_Name(SJoystickInfo* pointer)
-//{return reinterpret_cast<const char*>(&pointer->Name);}
 IRRLICHT_C_API const c8* SJoystickInfo_get_Name(SJoystickInfo* pointer)
 {return pointer->Name.c_str();}
 IRRLICHT_C_API void SJoystickInfo_set_Name(SJoystickInfo* pointer, const c8* value)
@@ -79,12 +78,8 @@ IRRLICHT_C_API void SJoystickInfo_set_Axes(SJoystickInfo* pointer, u32 value)
 {pointer->Axes = value;}
 IRRLICHT_C_API int SJoystickInfo_get_PovHat(SJoystickInfo* pointer)
 {return pointer->PovHat;}
-//IRRLICHT_C_API void SJoystickInfo_set_PovHat(SJoystickInfo* pointer, irr::SJoystickInfo::PovHat value)
-//{pointer->PovHat = value;}
 
 //================= IEventReceiver
-//IRRLICHT_C_API SEvent* SEvent_SEvent(){return new SEvent();}
-//IRRLICHT_C_API SEvent* SEvent_void_to_SEvent(void* ptr){return (SEvent*)ptr;}
 IRRLICHT_C_API EEVENT_TYPE SEvent_GetEventType(SEvent* pointer){return pointer->EventType;}
 
 IRRLICHT_C_API const SEvent::SGUIEvent* SEvent_GetSGUIEvent(SEvent* pointer){return &pointer->GUIEvent;}
@@ -155,30 +150,8 @@ IRRLICHT_C_API EINPUT_METHOD_EVENT SInputMethodEvent_GetEvent(const SEvent::SInp
 
 IRRLICHT_C_API UserEventReceiver* IEventReceiver_ctor1(IEventReceiver* pointer){return (UserEventReceiver*)pointer;}
 IRRLICHT_C_API UserEventReceiver* IEventReceiver_ctor2(bool(IRRCALLCONV *OnEventMethod)(const SEvent&)){return new UserEventReceiver(OnEventMethod);}
-//IRRLICHT_C_API void IEventReceiver_Destructor(void* pointer){delete pointer;}
+IRRLICHT_C_API void IEventReceiver_delete(void* pointer){delete pointer;}
 IRRLICHT_C_API void IEventReceiver_set_func_event(UserEventReceiver* pointer, bool(IRRCALLCONV *OnEventMethod)(const SEvent&)){pointer->set_func_event(OnEventMethod);}
-
-/*
-IRRLICHT_C_API IEventReceiver* IEventReceiverV_virt_ctor(){return new IEventReceiver();}
-IRRLICHT_C_API bool IEventReceiverV_set_func_event(IEventReceiver* pointer, void* OnEventMethod)
-{
-#ifdef _MSC_VER
-#ifndef DEBUG
-	//size_t* vptr =  *(size_t**)pointer;
-	//__asm{mov ecx, pointer}
-	//( (bool (IRRCALLCONV*)(const SEvent&)) (*(size_t**)pointer)[3] ) = OnEventMethod;
-	(*(size_t**)pointer)[3] = (size_t)OnEventMethod;
-	return true;
-#else
-	printf("ISceneNodeAnimator_set_func_event only for RELEASE mode, current is DEBUG!");
-	return false;
-#endif
-#else
-	pointer->_vptr[3] = OnEventMethod;
-	return true;
-#endif
-}
-*/
 
 #ifdef __cplusplus
 }

@@ -1614,7 +1614,7 @@ OnEventFunc = func_type(ctypes.c_bool, ctypes.c_void_p)
 #~ OnEventFunc = func_type(ctypes.c_bool, SEvent)
 IEventReceiver_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IEventReceiver_ctor1', c_module))
 IEventReceiver_ctor2 = func_type(ctypes.c_void_p, OnEventFunc)(('IEventReceiver_ctor2', c_module))
-#IEventReceiver_Destructor = func_type(None, ctypes.c_void_p)(('IEventReceiver_Destructor', c_module))
+IEventReceiver_delete = func_type(None, ctypes.c_void_p)(('IEventReceiver_delete', c_module))
 IEventReceiver_set_func_event = func_type(None, ctypes.c_void_p, OnEventFunc)(('IEventReceiver_set_func_event', c_module))
 
 # functions for class IFileSystem
@@ -5390,27 +5390,12 @@ class SEvent(object):
 			return SInputMethodEvent(SEvent_GetSInputMethodEvent(self.c_pointer))
 		InputMethodEvent = property(GetInputMethodEvent)
 
-#~ try:
-	#~ from threading import Thread as class_thread
-#~ except:
-	#~ print ('Threading not accessible, IEventReceiver maybe not correctly!')
-	#~ class class_thread:
-		#~ def __init__(self): pass
-		#~ def setDaemon(self, daemon): pass
-		#~ def start(self): pass
 
-#~ class IEventReceiver(class_thread):
 class IEventReceiver:
 	set_virtual_method = func_type(ctypes.c_bool, ctypes.c_void_p, OnEventFunc, ctypes.c_int)(('set_virtual_method', c_module))
 	def __init__(self, *args, **kwargs):
-		#~ class_thread.__init__(self)
-		#~ self.setDaemon(True)
-		#~ self.start()
 		self.c_pointer = None
 		self.delete_c_pointer = True
-		#~ self._SEvent = SEvent()
-		#~ self.POINTER_SEvent = ctypes.POINTER(type(self._SEvent))
-		#~ self.OnEventFunc = func_type(ctypes.c_bool, self.POINTER_SEvent)
 		self.callback = OnEventFunc(self.OnEvent)
 		if len(args) > 0:
 			self.c_pointer = IEventReceiver_ctor1(args[0])
@@ -5418,9 +5403,9 @@ class IEventReceiver:
 		else:
 			self.c_pointer = IEventReceiver_ctor2(self.callback)
 	def __del__(self):
-		if self.c_pointer and self.delete_c_pointer:# and callable(delete_pointer):
+		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				IEventReceiver_delete(self.c_pointer)
 			except:
 				pass
 	def set_virt_method(self, new_method, method_index = 0):
