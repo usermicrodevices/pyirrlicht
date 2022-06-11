@@ -8,6 +8,7 @@ extern "C" {
 
 //struct SMD3AnimationInfo
 IRRLICHT_C_API SMD3AnimationInfo* SMD3AnimationInfo_ctor(){return new SMD3AnimationInfo();}
+IRRLICHT_C_API void SMD3AnimationInfo_delete(SMD3AnimationInfo* pointer){delete[] pointer;}
 IRRLICHT_C_API s32 SMD3AnimationInfo_get_first(SMD3AnimationInfo* pointer){return pointer->first;}
 IRRLICHT_C_API void SMD3AnimationInfo_set_first(SMD3AnimationInfo* pointer, s32 value){pointer->first = value;}
 IRRLICHT_C_API s32 SMD3AnimationInfo_get_num(SMD3AnimationInfo* pointer){return pointer->num;}
@@ -19,6 +20,7 @@ IRRLICHT_C_API void SMD3AnimationInfo_set_fps(SMD3AnimationInfo* pointer, s32 va
 
 //struct SMD3Header
 IRRLICHT_C_API SMD3Header* SMD3Header_ctor(){return new SMD3Header();}
+IRRLICHT_C_API void SMD3Header_delete(SMD3Header* pointer){delete[] pointer;}
 IRRLICHT_C_API c8* SMD3Header_get_headerID(SMD3Header* pointer){return &pointer->headerID[0];}//headerID[4]
 IRRLICHT_C_API void SMD3Header_set_headerID(SMD3Header* pointer, c8* value){pointer->headerID[0] = *value;}
 IRRLICHT_C_API s32 SMD3Header_get_Version(SMD3Header* pointer){return pointer->Version;}
@@ -44,6 +46,7 @@ IRRLICHT_C_API void SMD3Header_set_fileSize(SMD3Header* pointer, s32 value){poin
 
 //struct SMD3MeshHeader
 IRRLICHT_C_API SMD3MeshHeader* SMD3MeshHeader_ctor(){return new SMD3MeshHeader();}
+IRRLICHT_C_API void SMD3MeshHeader_delete(SMD3MeshHeader* pointer){delete[] pointer;}
 IRRLICHT_C_API c8* SMD3MeshHeader_get_meshID(SMD3MeshHeader* pointer){return &pointer->meshID[0];}//meshID[4]
 IRRLICHT_C_API void SMD3MeshHeader_set_meshID(SMD3MeshHeader* pointer, c8* value){pointer->meshID[0] = *value;}
 IRRLICHT_C_API c8* SMD3MeshHeader_get_meshName(SMD3MeshHeader* pointer){return &pointer->meshName[0];}//meshName[68]
@@ -69,6 +72,7 @@ IRRLICHT_C_API void SMD3MeshHeader_set_offset_end(SMD3MeshHeader* pointer, s32 v
 
 //struct SMD3Vertex
 IRRLICHT_C_API SMD3Vertex* SMD3Vertex_ctor(){return new SMD3Vertex();}
+IRRLICHT_C_API void SMD3Vertex_delete(SMD3Vertex* pointer){delete[] pointer;}
 IRRLICHT_C_API s16* SMD3Vertex_get_position(SMD3Vertex* pointer){return &pointer->position[0];}//position[3]
 IRRLICHT_C_API void SMD3Vertex_set_position(SMD3Vertex* pointer, s16* value){pointer->position[0] = *value;}
 IRRLICHT_C_API u8* SMD3Vertex_get_normal(SMD3Vertex* pointer){return &pointer->normal[0];}//normal[2]
@@ -76,6 +80,7 @@ IRRLICHT_C_API void SMD3Vertex_set_normal(SMD3Vertex* pointer, u8* value){pointe
 
 //struct SMD3TexCoord
 IRRLICHT_C_API SMD3TexCoord* SMD3TexCoord_ctor(){return new SMD3TexCoord();}
+IRRLICHT_C_API void SMD3TexCoord_delete(SMD3TexCoord* pointer){delete[] pointer;}
 IRRLICHT_C_API f32 SMD3TexCoord_get_u(SMD3TexCoord* pointer){return pointer->u;}
 IRRLICHT_C_API void SMD3TexCoord_set_u(SMD3TexCoord* pointer, f32 value){pointer->u = value;}
 IRRLICHT_C_API f32 SMD3TexCoord_get_v(SMD3TexCoord* pointer){return pointer->v;}
@@ -83,11 +88,13 @@ IRRLICHT_C_API void SMD3TexCoord_set_v(SMD3TexCoord* pointer, f32 value){pointer
 
 //struct SMD3Face
 IRRLICHT_C_API SMD3Face* SMD3Face_ctor(){return new SMD3Face();}
+IRRLICHT_C_API void SMD3Face_delete(SMD3Face* pointer){delete[] pointer;}
 IRRLICHT_C_API s32* SMD3Face_get_Index(SMD3Face* pointer){return &pointer->Index[0];}//Index[3]
 IRRLICHT_C_API void SMD3Face_set_Index(SMD3Face* pointer, s32* value){pointer->Index[0] = *value;}
 
 //struct SMD3MeshBuffer : public IReferenceCounted
 IRRLICHT_C_API SMD3MeshBuffer* SMD3MeshBuffer_ctor(){return new SMD3MeshBuffer();}
+IRRLICHT_C_API void SMD3MeshBuffer_delete(SMD3MeshBuffer* pointer){delete[] pointer;}
 IRRLICHT_C_API SMD3MeshHeader* SMD3MeshBuffer_get_MeshHeader(SMD3MeshBuffer* pointer){return &pointer->MeshHeader;}
 IRRLICHT_C_API void SMD3MeshBuffer_set_MeshHeader(SMD3MeshBuffer* pointer, SMD3MeshHeader* value){pointer->MeshHeader = *value;}
 IRRLICHT_C_API const c8* SMD3MeshBuffer_get_Shader(SMD3MeshBuffer* pointer){return pointer->Shader.c_str();}
@@ -104,6 +111,7 @@ IRRLICHT_C_API SMD3QuaternionTag* SMD3QuaternionTag_ctor1(const c8* name){return
 IRRLICHT_C_API SMD3QuaternionTag* SMD3QuaternionTag_ctor2(const c8* name, core::matrix4& m){SMD3QuaternionTag* tag = new SMD3QuaternionTag(core::stringc(name)); tag->setto(m); return tag;}
 IRRLICHT_C_API SMD3QuaternionTag* SMD3QuaternionTag_ctor3(const core::vector3df* pos, const core::vector3df* angle){return new SMD3QuaternionTag(*pos, *angle);}
 IRRLICHT_C_API SMD3QuaternionTag* SMD3QuaternionTag_ctor4(const SMD3QuaternionTag* copyMe){return new SMD3QuaternionTag(*copyMe);}
+IRRLICHT_C_API void SMD3QuaternionTag_delete(SMD3QuaternionTag* pointer){delete[] pointer;}
 IRRLICHT_C_API void SMD3QuaternionTag_setto(SMD3QuaternionTag* pointer, core::matrix4* m){pointer->setto(*m);}
 IRRLICHT_C_API const bool SMD3QuaternionTag_operator_eq(SMD3QuaternionTag* pointer, const SMD3QuaternionTag* other){return pointer->operator==(*other);}
 IRRLICHT_C_API SMD3QuaternionTag* SMD3QuaternionTag_operator_set(SMD3QuaternionTag* pointer, const SMD3QuaternionTag* copyMe){return &pointer->operator=(*copyMe);}
@@ -117,6 +125,7 @@ IRRLICHT_C_API void SMD3QuaternionTag_set_rotation(SMD3QuaternionTag* pointer, c
 //struct SMD3QuaternionTagList
 IRRLICHT_C_API SMD3QuaternionTagList* SMD3QuaternionTagList_ctor1(){return new SMD3QuaternionTagList();}
 IRRLICHT_C_API SMD3QuaternionTagList* SMD3QuaternionTagList_ctor2(const SMD3QuaternionTagList* copyMe){return new SMD3QuaternionTagList(*copyMe);}
+IRRLICHT_C_API void SMD3QuaternionTagList_delete(SMD3QuaternionTagList* pointer){delete[] pointer;}
 IRRLICHT_C_API SMD3QuaternionTag* SMD3QuaternionTagList_get(SMD3QuaternionTagList* pointer, const c8* name){return pointer->get(core::stringc(name));}
 IRRLICHT_C_API const u32 SMD3QuaternionTagList_size(SMD3QuaternionTagList* pointer){return pointer->size();}
 IRRLICHT_C_API void SMD3QuaternionTagList_set_used(SMD3QuaternionTagList* pointer, u32 new_size){pointer->set_used(new_size);}
@@ -128,6 +137,7 @@ IRRLICHT_C_API void SMD3QuaternionTagList_set_tag_item(SMD3QuaternionTagList* po
 
 //struct SMD3Mesh: public IReferenceCounted
 IRRLICHT_C_API SMD3Mesh* SMD3Mesh_ctor(){return new SMD3Mesh();}
+IRRLICHT_C_API void SMD3Mesh_delete(SMD3Mesh* pointer){delete[] pointer;}
 IRRLICHT_C_API const c8* SMD3Mesh_get_Name(SMD3Mesh* pointer){return pointer->Name.c_str();}
 IRRLICHT_C_API void SMD3Mesh_set_Name(SMD3Mesh* pointer, c8* value){pointer->Name = core::stringc(value);}
 IRRLICHT_C_API core::array<SMD3MeshBuffer*>* SMD3Mesh_get_Buffer(SMD3Mesh* pointer){return &pointer->Buffer;}

@@ -11,6 +11,7 @@ IRRLICHT_C_API dimension2df* dimension2df_ctor1(){return new dimension2df();}
 IRRLICHT_C_API dimension2df* dimension2df_ctor2(f32 w=0.0f, f32 h=0.0f){return new dimension2df(w, h);}
 IRRLICHT_C_API dimension2df* dimension2df_ctor3(const dimension2df& other){return new dimension2df(other);}
 IRRLICHT_C_API dimension2df* dimension2df_ctor4(const vector2df& other){return new dimension2df(other);}
+IRRLICHT_C_API void dimension2df_delete(dimension2df* pointer){delete pointer;}
 
 IRRLICHT_C_API const dimension2df& dimension2df_operator_set_other(dimension2df* pointer, const dimension2df& other){return pointer->operator=(other);}
 IRRLICHT_C_API bool dimension2df_operator_eq_other(dimension2df* pointer, const dimension2df& other){return pointer->operator==(other);}

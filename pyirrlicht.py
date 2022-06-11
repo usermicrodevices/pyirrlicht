@@ -2,8 +2,8 @@
 # github.com/usermicrodevices
 # BSD license
 
-__version__ = pyirrlicht_version = '1.2.1'
-__versionTime__ = '2022-06-10'
+__version__ = pyirrlicht_version = '1.2.2'
+__versionTime__ = '2022-06-11'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -1074,7 +1074,7 @@ DEBUG_NORMAL_COLOR = "DEBUG_Normal_Color"
 #================= SKeyMap
 # extended methods for SKeyMap
 SKeyMap_ctor = func_type(ctypes.c_void_p, ctypes.c_int)(('SKeyMap_ctor', c_module))
-#~ SKeyMap_Destructor = func_type(None, ctypes.c_void_p)(('SKeyMap_Destructor', c_module))
+SKeyMap_delete = func_type(None, ctypes.c_void_p)(('SKeyMap_delete', c_module))
 SKeyMap_set = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('SKeyMap_set', c_module))
 class SKeyMap:
 	def __init__(self, *args, **kwargs):
@@ -1085,9 +1085,10 @@ class SKeyMap:
 			self.c_pointer = SKeyMap_ctor(self.length)
 	def __del__(self):
 		if self.c_pointer:
-			delete_struct_pointer(self.c_pointer)
-	#~ def Destructor(self):
-		#~ SKeyMap_Destructor(self.c_pointer)
+			try:
+				SKeyMap_delete(self.c_pointer)
+			except:
+				pass
 	def set(self, index, action, key_code):
 		SKeyMap_set(self.c_pointer, index, action, key_code)
 
@@ -1493,6 +1494,7 @@ if BUILD_WITH_GUI_FILE_SELECTOR:
 	EFST_NUM_TYPES = 2#<! Not used, just specifies how many possible types there are
 	CGUIFileSelector_ctor = func_type(ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('CGUIFileSelector_ctor', c_module))
 	CGUIFileSelector_getFileName = func_type(ctypes.c_wchar_p, ctypes.c_void_p)(('CGUIFileSelector_getFileName', c_module))
+	CGUIFileSelector_delete = func_type(None, ctypes.c_void_p)(('CGUIFileSelector_delete', c_module))
 	CGUIFileSelector_getDirectoryName = func_type(ctypes.c_void_p, ctypes.c_void_p)(('CGUIFileSelector_getDirectoryName', c_module))
 	CGUIFileSelector_getFileFilter = func_type(ctypes.c_wchar_p, ctypes.c_void_p)(('CGUIFileSelector_getFileFilter', c_module))
 	CGUIFileSelector_getDialogType = func_type(ctypes.c_int, ctypes.c_void_p)(('CGUIFileSelector_getDialogType', c_module))
@@ -1653,6 +1655,7 @@ IFileSystem_createEmptyAttributes = func_type(ctypes.c_void_p, ctypes.c_void_p, 
 # matrix4
 matrix4_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('matrix4_ctor1', c_module))
 matrix4_ctor2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_ctor2', c_module))
+matrix4_delete = func_type(None, ctypes.c_void_p)(('matrix4_delete', c_module))
 matrix4_operator_directly = func_type(ctypes.c_float, ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('matrix4_operator_directly', c_module))
 matrix4_operator_linearly = func_type(ctypes.c_float, ctypes.c_void_p, ctypes.c_uint)(('matrix4_operator_linearly', c_module))
 matrix4_set1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('matrix4_set1', c_module))
@@ -1859,6 +1862,7 @@ dimension2df_ctor1 = func_type(ctypes.c_void_p)(('dimension2df_ctor1', c_module)
 dimension2df_ctor2 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float)(('dimension2df_ctor2', c_module))
 dimension2df_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('dimension2df_ctor3', c_module))
 dimension2df_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('dimension2df_ctor4', c_module))
+dimension2df_delete = func_type(None, ctypes.c_void_p)(('dimension2df_delete', c_module))
 dimension2df_operator_set_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('dimension2df_operator_set_other', c_module))
 dimension2df_operator_eq_other = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('dimension2df_operator_eq_other', c_module))
 dimension2df_operator_ne_other = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('dimension2df_operator_ne_other', c_module))
@@ -6022,9 +6026,9 @@ class dimension2df(object):
 		elif 'pointer' in kwargs:
 			self.c_pointer = kwargs.pop('pointer')
 	def __del__(self):
-		if self.c_pointer and self.delete_c_pointer:# and callable(delete_pointer):
+		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				dimension2df_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -7881,7 +7885,7 @@ class matrix4:
 	def __del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				matrix4_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -10419,6 +10423,11 @@ if BUILD_WITH_GUI_FILE_SELECTOR:
 					self.c_pointer = args[0].c_pointer
 				else:
 					self.c_pointer = self.ctor(*args, **kwargs)
+		def __del__(self):
+			try:
+				CGUIFileSelector_delete(self.c_pointer)
+			except:
+				pass
 		def ctor(self, title, gui_environment, parent = IGUIElement(), id = -1, type = EFST_OPEN_DIALOG):
 			if not isinstance(parent, IGUIElement):
 				parent = gui_environment.getRootGUIElement()
