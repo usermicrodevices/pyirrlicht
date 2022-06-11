@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -8,6 +8,8 @@ extern "C" {
 
 //================= ITexture
 //IRRLICHT_C_API ITexture* ITexture_ctor(const io::path& name){return new ITexture(name);}
+IRRLICHT_C_API void ITexture_delete(ITexture* pointer){delete pointer;}
+
 #if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR < 8)
 IRRLICHT_C_API void* ITexture_lock(ITexture* pointer, bool readOnly = false, u32 mipmapLevel = 0){return pointer->lock(readOnly, mipmapLevel);}
 #else

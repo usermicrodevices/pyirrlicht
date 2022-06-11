@@ -44,13 +44,13 @@ if run_app:
 		scene_manager = device.getSceneManager()
 		guienv = device.getGUIEnvironment()
 		static_text = guienv.addStaticText('Hello World! This is the Irrlicht Software renderer!', pyirrlicht.recti(10,10,300,22), True)
-		i_animated_mesh = scene_manager.getMesh('media//sydney.md2')
+		i_animated_mesh = scene_manager.getMesh('..//irrlicht//media//sydney.md2')
 		if i_animated_mesh:
 			node = scene_manager.addAnimatedMeshSceneNode(i_animated_mesh)
 			if node:
 				node.setMaterialFlag(pyirrlicht.EMF_LIGHTING, False)
 				node.setMD2Animation(pyirrlicht.EMAT_STAND)
-				node.setMaterialTexture(0, driver.getTexture('media//sydney.bmp'))
+				node.setMaterialTexture(0, driver.getTexture('..//irrlicht//media//sydney.bmp'))
 			else:
 				print('ERROR result method addAnimatedMeshSceneNode, scene_manager')
 			position = pyirrlicht.vector3df(0.0, 30.0, -40.0)
@@ -64,7 +64,7 @@ if run_app:
 						scene_manager.drawAll()
 						guienv.drawAll()
 						driver.endScene()
-					#device.sleep(1)
+					#device.sleep(.1)
 
 					fps = driver.getFPS()
 					if lastFPS != fps:
@@ -76,6 +76,9 @@ if run_app:
 					device._yield()
 		else:
 			print('ERROR getMesh')
-		device.closeDevice()
+		try:
+			device.closeDevice()
+		except Exception as e:
+			print(e)
 	else:
 		print('ERROR createDevice')

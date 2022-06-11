@@ -1067,10 +1067,6 @@ IRR_SCENE_MANAGER_IS_EDITOR = "IRR_Editor"
 DEBUG_NORMAL_LENGTH = "DEBUG_Normal_Length"
 DEBUG_NORMAL_COLOR = "DEBUG_Normal_Color"
 
-#~ class SKeyMap(ctypes.Structure):
-	#~ _fields_ = [('Action', ctypes.c_int),
-				#~ ('KeyCode', ctypes.c_int)
-				#~ ]
 #================= SKeyMap
 # extended methods for SKeyMap
 SKeyMap_ctor = func_type(ctypes.c_void_p, ctypes.c_int)(('SKeyMap_ctor', c_module))
@@ -1097,91 +1093,6 @@ class SAttributeReadWriteOptions(ctypes.Structure):
 				('Filename', ctypes.c_char_p)
 				]
 
-#~ class SIrrlichtCreationParameters(ctypes.Structure):
-	#~ _fields_ = [('DeviceType', ctypes.c_int),
-				#~ ('DriverType', ctypes.c_int),
-				#~ ('WindowSize', ctypes.c_void_p),
-				#~ ('Bits', ctypes.c_int),
-				#~ ('ZBufferBits', ctypes.c_int),
-				#~ ('Fullscreen', ctypes.c_bool),
-				#~ ('Stencilbuffer', ctypes.c_bool),
-				#~ ('Vsync', ctypes.c_bool),
-				#~ ('AntiAlias', ctypes.c_ubyte),
-				#~ ('WithAlphaChannel', ctypes.c_bool),
-				#~ ('Doublebuffer', ctypes.c_bool),
-				#~ ('IgnoreInput', ctypes.c_bool),
-				#~ ('Stereobuffer', ctypes.c_bool),
-				#~ ('HighPrecisionFPU', ctypes.c_bool),
-				#~ ('EventReceiver', ctypes.c_void_p),
-				#~ ('WindowId', ctypes.c_void_p),
-				#~ ('SDK_version_do_not_use', ctypes.c_char_p)
-				#~ ]
-	#~ def __init__(self, *args, **kwargs):
-		#~ self._window_size_ = self.WindowSize = 0
-		#~ self._full_screen_ = self.Fullscreen = False
-		#~ self._event_receiver_ = IEventReceiver()
-	#~ def __getattribute__(self, name):
-		#~ if name == 'WindowSize':
-			#~ return dimension2du(self._window_size_)
-		#~ elif name == 'EventReceiver':
-			#~ return self._event_receiver_
-	#~ def __setattr__(self, name, value):
-		#~ if name == 'EventReceiver':
-			#~ self._event_receiver_.c_pointer = self.EventReceiver = value
-
-#~ class SJoystickInfo(ctypes.Structure):
-	#~ _fields_ = [('Joystick', ctypes.c_ubyte),
-				#~ ('Name', ctypes.c_char_p),
-				#~ ('Buttons', ctypes.c_uint),
-				#~ ('Axes', ctypes.c_uint),
-				#~ ('PovHat', ctypes.c_int)
-				#~ ]
-
-#~ SOverrideMaterial_apply = func_type(None, ctypes.c_void_p)
-#~ class SOverrideMaterial(ctypes.Structure):
-	#~ _fields_ = [('Material', ctypes.c_void_p),
-				#~ ('EnableFlags', ctypes.c_uint),
-				#~ ('EnablePasses', ctypes.c_ubyte),
-				#~ ('Enabled', ctypes.c_bool),
-				#~ ('apply', SOverrideMaterial_apply)
-				#~ ]
-
-#~ S3DVertex_getType = func_type(ctypes.c_int)
-#~ class S3DVertex(ctypes.Structure):
-	#~ _fields_ = [('Pos', ctypes.c_void_p),
-				#~ ('Normal', ctypes.c_void_p),
-				#~ ('Color', ctypes.c_void_p),
-				#~ ('TCoords', ctypes.c_void_p),
-				#~ ('getType', S3DVertex_getType)
-				#~ ]
-
-#~ class SGUIEvent(ctypes.Structure):
-	#~ _fields_ = [('Caller', ctypes.c_void_p),
-				#~ ('Element', ctypes.c_void_p),
-				#~ ('EventType', ctypes.c_int)
-				#~ ]
-
-#~ class SMouseInput(ctypes.Structure):
-	#~ _fields_ = [('X', ctypes.c_int),
-				#~ ('Y', ctypes.c_int),
-				#~ ('Wheel', ctypes.c_float),
-				#~ ('Shift', ctypes.c_bool),
-				#~ ('Control', ctypes.c_bool),
-				#~ ('ButtonStates', ctypes.c_uint),
-				#~ ('isLeftPressed', func_type(ctypes.c_bool)),
-				#~ ('isRightPressed', func_type(ctypes.c_bool)),
-				#~ ('isMiddlePressed', func_type(ctypes.c_bool)),
-				#~ ('Event', ctypes.c_int)
-				#~ ]
-
-#~ class SKeyInput(ctypes.Structure):
-	#~ _fields_ = [('Char', ctypes.c_wchar_p),
-				#~ ('Key', ctypes.c_int),
-				#~ ('PressedDown', ctypes.c_bool),
-				#~ ('Shift', ctypes.c_bool),
-				#~ ('Control', ctypes.c_bool)
-				#~ ]
-
 NUMBER_OF_BUTTONS = 32
 AXIS_X = 0
 AXIS_Y = 1
@@ -1190,92 +1101,6 @@ AXIS_R = 3
 AXIS_U = 4
 AXIS_V = 5
 NUMBER_OF_AXES = 6
-
-#~ class SJoystickEvent(ctypes.Structure):
-	#~ _fields_ = [('ButtonStates', ctypes.c_uint),
-				#~ ('Axis', ctypes.c_short * NUMBER_OF_AXES),
-				#~ ('POV', ctypes.c_ushort),
-				#~ ('Joystick', ctypes.c_ubyte),
-				#~ ('IsButtonPressed', func_type(ctypes.c_bool, ctypes.c_uint))
-				#~ ]
-
-#~ class SLogEvent(ctypes.Structure):
-	#~ _fields_ = [('Text', ctypes.c_char_p),
-				#~ ('Level', ctypes.c_int)
-				#~ ]
-
-#~ class SUserEvent(ctypes.Structure):
-	#~ _fields_ = [('UserData1', ctypes.c_int),
-				#~ ('UserData2', ctypes.c_int)
-				#~ ]
-
-#~ if IRR_USE_INPUT_METHOD:
-	#~ class SInputMethodEvent(ctypes.Structure):
-		#~ _fields_ = [('Handle', ctypes.c_void_p),
-					#~ ('Char', ctypes.c_wchar),
-					#~ ('Event', ctypes.c_int)
-					#~ ]
-
-#~ class UNION_EVENTS(ctypes.Union):
-	#~ _fields_ = [('GUIEvent', ctypes.POINTER(SGUIEvent)),
-				#~ ('MouseInput', ctypes.POINTER(SMouseInput)),
-				#~ ('KeyInput', ctypes.POINTER(SKeyInput)),
-				#~ ('JoystickEvent', ctypes.POINTER(SJoystickEvent)),
-				#~ ('LogEvent', ctypes.POINTER(SLogEvent)),
-				#~ ('UserEvent', ctypes.POINTER(SUserEvent))
-				#~ ]
-	#~ if IRR_USE_INPUT_METHOD:
-		#~ _fields_.append(('InputMethodEvent', ctypes.POINTER(SInputMethodEvent)))
-
-#~ class SEvent(ctypes.Structure):
-	#~ _fields_ = [('SGUIEvent', ctypes.POINTER(SGUIEvent)),
-				#~ ('SMouseInput', ctypes.POINTER(SMouseInput)),
-				#~ ('SKeyInput', ctypes.POINTER(SKeyInput)),
-				#~ ('SJoystickEvent', ctypes.POINTER(SJoystickEvent)),
-				#~ ('SLogEvent', ctypes.POINTER(SLogEvent)),
-				#~ ('SUserEvent', ctypes.POINTER(SUserEvent)),
-				#~ ('EventType', ctypes.c_int),
-				#~ ('_', UNION_EVENTS)
-				#~ ]
-	#~ if IRR_USE_INPUT_METHOD:
-		#~ _fields_.append(('SInputMethodEvent', ctypes.POINTER(SInputMethodEvent)))
-	#~ _anonymous_ = ['_']
-
-#~ class D3D8(ctypes.Structure):
-	#~ _fields_ = [('D3D8', ctypes.c_void_p),
-				#~ ('D3DDev8', ctypes.c_void_p),
-				#~ ('HWnd', ctypes.c_void_p)
-				#~ ]
-
-#~ class D3D9(ctypes.Structure):
-	#~ _fields_ = [('D3D9', ctypes.c_void_p),
-				#~ ('D3DDev9', ctypes.c_void_p),
-				#~ ('HWnd', ctypes.c_void_p)
-				#~ ]
-
-#~ class OpenGLWin32(ctypes.Structure):
-	#~ _fields_ = [('HDc', ctypes.c_void_p),
-				#~ ('HRc', ctypes.c_void_p),
-				#~ ('HWnd', ctypes.c_void_p)
-				#~ ]
-
-#~ class OpenGLLinux(ctypes.Structure):
-	#~ _fields_ = [('X11Display', ctypes.c_void_p),
-				#~ ('X11Context', ctypes.c_void_p),
-				#~ ('X11Window', ctypes.c_ulong)
-				#~ ]
-
-#~ class union_IVideoDriver_handles(ctypes.Union):
-	#~ _fields_ = [('D3D8', ctypes.POINTER(D3D8)),
-				#~ ('D3D9', ctypes.POINTER(D3D9)),
-				#~ ('OpenGLWin32', ctypes.POINTER(OpenGLWin32)),
-				#~ ('OpenGLLinux', ctypes.POINTER(OpenGLLinux))
-				#~ ]
-
-#~ class SExposedVideoData(ctypes.Structure):
-	#~ _fields_ = [('u', union_IVideoDriver_handles)]
-	#~ _anonymous_ = ('u', )
-	#~ c_pointer = None
 
 class SLight(ctypes.Structure):
 	_fields_ = [('AmbientColor', ctypes.c_void_p),# SColorf
@@ -1291,25 +1116,6 @@ class SLight(ctypes.Structure):
 				('Type', ctypes.c_int),
 				('CastShadows', ctypes.c_bool)
 				]
-
-#~ class IRenderTarget(ctypes.Structure):
-	#~ _fields_ = [('RenderTexture', ctypes.c_void_p),# ITexture
-				#~ ('TargetType', ctypes.c_int),# E_RENDER_TARGET
-				#~ ('ColorMask', ctypes.c_int),# E_COLOR_PLANE
-				#~ ('BlendFuncSrc', ctypes.c_int),# E_BLEND_FACTOR
-				#~ ('BlendFuncDst', ctypes.c_int),# E_BLEND_FACTOR
-				#~ ('BlendEnable', ctypes.c_bool)
-				#~ ]
-
-#~ class SGUISpriteFrame(ctypes.Structure):
-	#~ _fields_ = [('textureNumber', ctypes.c_uint),
-				#~ ('rectNumber', ctypes.c_uint)
-				#~ ]
-
-#~ class SGUISprite(ctypes.Structure):
-	#~ _fields_ = [('Frames', ctypes.c_void_p),#array<SGUISpriteFrame>
-				#~ ('frameTime', ctypes.c_uint)
-				#~ ]
 
 #delete_pointer = func_type(None, ctypes.c_void_p)(('delete_pointer', c_module))
 #delete_struct_pointer = func_type(None, ctypes.c_void_p)(('delete_struct_pointer', c_module))
@@ -1740,6 +1546,7 @@ vector2df_ctor1 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float)(('v
 vector2df_ctor2 = func_type(ctypes.c_void_p, ctypes.c_float)(('vector2df_ctor2', c_module))
 vector2df_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('vector2df_ctor3', c_module))
 vector2df_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('vector2df_ctor4', c_module))
+vector2df_delete = func_type(None, ctypes.c_void_p)(('vector2df_delete', c_module))
 vector2df_operator_sub = func_type(ctypes.c_void_p, ctypes.c_void_p)(('vector2df_operator_sub', c_module))
 vector2df_operator_set_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector2df_operator_set_other', c_module))
 vector2df_operator_set_dimension2d = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector2df_operator_set_dimension2d', c_module))
@@ -1796,6 +1603,7 @@ vector2di_ctor1 = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('vecto
 vector2di_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int)(('vector2di_ctor2', c_module))
 vector2di_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('vector2di_ctor3', c_module))
 vector2di_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('vector2di_ctor4', c_module))
+vector2di_delete = func_type(None, ctypes.c_void_p)(('vector2di_delete', c_module))
 vector2di_operator_sub = func_type(ctypes.c_void_p, ctypes.c_void_p)(('vector2di_operator_sub', c_module))
 vector2di_operator_set_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector2di_operator_set_other', c_module))
 vector2di_operator_set_dimension2d = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('vector2di_operator_set_dimension2d', c_module))
@@ -3471,6 +3279,7 @@ ISceneNodeAnimator_hasFinished = func_type(ctypes.c_bool, ctypes.c_void_p)(('ISc
 ISceneNodeAnimator_set_func_event = func_type(ctypes.c_bool, ctypes.c_void_p, OnEventFunc)(('ISceneNodeAnimator_set_func_event', c_module))
 
 # functions for class ITexture
+ITexture_delete = func_type(None, ctypes.c_void_p)(('ITexture_delete', c_module))
 if IRRLICHT_VERSION < 180:
 	ITexture_lock = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_uint)(('ITexture_lock', c_module))
 else:
@@ -4521,6 +4330,7 @@ if IRRLICHT_VERSION < 180:
 else:
 	IRenderTarget_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('IRenderTarget_ctor1', c_module))
 	IRenderTarget_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('IRenderTarget_ctor2', c_module))
+IRenderTarget_delete = func_type(None, ctypes.c_void_p)(('IRenderTarget_delete', c_module))
 IRenderTarget_get_RenderTexture = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IRenderTarget_get_RenderTexture', c_module))
 IRenderTarget_set_RenderTexture = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IRenderTarget_set_RenderTexture', c_module))
 IRenderTarget_get_TargetType = func_type(ctypes.c_int, ctypes.c_void_p)(('IRenderTarget_get_TargetType', c_module))
@@ -4580,6 +4390,7 @@ IrrlichtDevice_isDriverSupported = func_type(ctypes.c_bool, ctypes.c_void_p, cty
 
 #struct SOverrideMaterial
 SOverrideMaterial_ctor = func_type(ctypes.c_void_p)(('SOverrideMaterial_ctor', c_module))
+SOverrideMaterial_delete = func_type(None, ctypes.c_void_p)(('SOverrideMaterial_delete', c_module))
 SOverrideMaterial_apply = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SOverrideMaterial_apply', c_module))
 SOverrideMaterial_get_Material = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SOverrideMaterial_get_Material', c_module))
 SOverrideMaterial_set_Material = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SOverrideMaterial_set_Material', c_module))
@@ -5645,7 +5456,7 @@ class vector2df(object):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				vector2df_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -5801,7 +5612,7 @@ class vector2di(object):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				vector2di_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -8428,7 +8239,7 @@ class SOverrideMaterial(object):
 	def __del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				SOverrideMaterial_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -8475,7 +8286,7 @@ class IRenderTarget(object):
 	def __del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				IRenderTarget_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -9718,6 +9529,12 @@ class ITexture(IReferenceCounted):
 		self.c_pointer = None
 		if len(args) > 0:
 			self.c_pointer = args[0]
+	def __del__(self):
+		if self.c_pointer:
+			try:
+				ITexture_delete(self.c_pointer)
+			except:
+				pass
 	if IRRLICHT_VERSION < 180:
 		def lock(self, readOnly = False, mipmapLevel = 0):
 			return ITexture_lock(self.c_pointer, readOnly, mipmapLevel)

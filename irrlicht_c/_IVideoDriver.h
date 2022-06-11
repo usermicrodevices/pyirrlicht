@@ -8,6 +8,7 @@ extern "C" {
 
 //struct SOverrideMaterial
 IRRLICHT_C_API SOverrideMaterial* SOverrideMaterial_ctor(){return new SOverrideMaterial();}
+IRRLICHT_C_API void SOverrideMaterial_delete(SOverrideMaterial* pointer){delete pointer;}
 IRRLICHT_C_API void SOverrideMaterial_apply(SOverrideMaterial* pointer, SMaterial* material){pointer->apply(*material);}
 IRRLICHT_C_API SMaterial* SOverrideMaterial_get_Material(SOverrideMaterial* pointer){return &pointer->Material;}
 IRRLICHT_C_API void SOverrideMaterial_set_Material(SOverrideMaterial* pointer, SMaterial* value){pointer->Material = *value;}
@@ -34,6 +35,8 @@ IRRLICHT_C_API IRenderTarget* IRenderTarget_ctor2(E_RENDER_TARGET target, E_COLO
 IRRLICHT_C_API IRenderTarget* IRenderTarget_ctor2(E_RENDER_TARGET target, E_COLOR_PLANE colorMask = ECP_ALL, E_BLEND_FACTOR blendFuncSrc = EBF_ONE, E_BLEND_FACTOR blendFuncDst = EBF_ONE_MINUS_SRC_ALPHA, E_BLEND_OPERATION blendOp = EBO_NONE)
 {return new IRenderTarget(target, colorMask, blendFuncSrc, blendFuncDst, blendOp);}
 #endif
+
+IRRLICHT_C_API void IRenderTarget_delete(IRenderTarget* pointer){delete pointer;}
 
 IRRLICHT_C_API ITexture* IRenderTarget_get_RenderTexture(IRenderTarget* pointer){return pointer->RenderTexture;}
 IRRLICHT_C_API void IRenderTarget_set_RenderTexture(IRenderTarget* pointer, ITexture* value){pointer->RenderTexture = value;}
@@ -137,8 +140,19 @@ IRRLICHT_C_API u32 IVideoDriver_getOcclusionQueryResult(IVideoDriver* pointer, s
 
 IRRLICHT_C_API void IVideoDriver_makeColorKeyTexture1(IVideoDriver* pointer, video::ITexture* texture, const SColor& color, bool zeroTexels = false)
 {pointer->makeColorKeyTexture(texture, color, zeroTexels);}
-IRRLICHT_C_API void IVideoDriver_makeColorKeyTexture2(IVideoDriver* pointer, video::ITexture* texture, core::position2d<s32>* colorKeyPixelPos, bool zeroTexels = false)
-{pointer->makeColorKeyTexture(texture, *colorKeyPixelPos, zeroTexels);}
+IRRLICHT_C_API void IVideoDriver_makeColorKeyTexture2(IVideoDriver* pointer, video::ITexture* texture, const core::position2d<s32>& colorKeyPixelPos, bool zeroTexels = false)
+{
+	std::cout << colorKeyPixelPos.X << "\n";
+	std::cout << colorKeyPixelPos.Y << "\n";
+	try
+	{
+		pointer->makeColorKeyTexture(texture, colorKeyPixelPos, zeroTexels);
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << "\n";
+	}
+}
 IRRLICHT_C_API void IVideoDriver_makeNormalMapTexture(IVideoDriver* pointer, video::ITexture* texture, f32 amplitude=1.0f)
 {pointer->makeNormalMapTexture(texture, amplitude);}
 IRRLICHT_C_API bool IVideoDriver_setRenderTarget1(IVideoDriver* pointer, video::ITexture* texture, bool clearBackBuffer=true, bool clearZBuffer = true, const SColor& color = SColor(0,0,0,0))

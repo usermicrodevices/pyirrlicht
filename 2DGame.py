@@ -27,7 +27,7 @@ if has_pywingui:
 
 if run_app:
 	import os, sys
-	os.environ['IRRLICHT_C_LIBRARY'] = 'irrlicht_c_173'
+	os.environ['IRRLICHT_C_LIBRARY'] = 'irrlicht_c'
 
 	from random import randint
 	from locale import getdefaultlocale
@@ -65,7 +65,7 @@ if run_app:
 	# simple language translator
 	id_codec = 'cp1251'
 	default_locale = getdefaultlocale()[0]
-	translation_catalog = '2dgame'
+	translation_catalog = '2DGame'
 	if not os.path.isdir(translation_catalog):
 		os.mkdir(translation_catalog)
 	translation_catalog += '//'# only for python 2.4.4 version and isdir function
@@ -131,7 +131,7 @@ if run_app:
 	play_sound = True
 	sound_playing = False
 	sound_volume = 1.0
-	sound_file = '2dgame/jinbels.mod'
+	sound_file = '2DGame/jinbels.mod'
 
 	def sound_play():
 		global sound_playing, bass_handle
@@ -240,28 +240,28 @@ if run_app:
 		i_event_receiver.gui = guienv
 		device.setEventReceiver(i_event_receiver)
 
-		bells = driver.getTexture('2dgame/bells.png')
+		bells = driver.getTexture('2DGame/bells.png')
 		if bells:
 			bells_size = bells.getOriginalSize()
-		santa = driver.getTexture('2dgame/santa.png')
+		santa = driver.getTexture('2DGame/santa.png')
 		if santa:
 			santa_size = santa.getOriginalSize()
-		santa_pipe = driver.getTexture('2dgame/santa_pipe.png')
+		santa_pipe = driver.getTexture('2DGame/santa_pipe.png')
 		if santa_pipe:
 			santa_pipe_size = santa_pipe.getOriginalSize()
-		present_red = driver.getTexture('2dgame/present-red.png')
+		present_red = driver.getTexture('2DGame/present-red.png')
 		if present_red:
 			present_red_size = present_red.getOriginalSize()
-		cur_img = driver.getTexture('2dgame/laurel.png')
+		cur_img = driver.getTexture('2DGame/laurel.png')
 		if cur_img:
 			cur_img_size = cur_img.getOriginalSize()
 
-		#~ snowflake = driver.getTexture('2dgame/snowflake.png')
+		#~ snowflake = driver.getTexture('2DGame/snowflake.png')
 		#~ if snowflake:
 			#~ snowflake_size = snowflake.getOriginalSize()
 		#~ snowflake_scene_node = scene_manager.addBillboardSceneNode()
 		#~ snowflake_scene_node.setMaterialType(EMT_TRANSPARENT_ADD_COLOR)
-		#~ snowflake_scene_node.setMaterialTexture(0, driver.getTexture('2dgame/snowflake.png'))
+		#~ snowflake_scene_node.setMaterialTexture(0, driver.getTexture('2DGame/snowflake.png'))
 		#~ snowflake_scene_node.setMaterialFlag(EMF_LIGHTING, False)
 		#~ snowflake_scene_node.setMaterialFlag(EMF_ZBUFFER, False)
 		#~ snowflake_scene_node.setSize(dimension2df(20.0, 20.0))
@@ -270,9 +270,13 @@ if run_app:
 		cam.setTarget(vector3df(0,0,0))
 		cam.setNearValue(0.01)
 
-		font_ext = '.ttf'
-		font_path = os.environ['SYSTEMROOT']+'/Fonts/'
-		font_file = font_path + 'arial' + font_ext
+		font_file = '2DGame/Quiltpatches-OVoaO.ttf'
+		try:
+			font_path = os.environ['SYSTEMROOT']+'/Fonts/'
+		except Exception as e:
+			print(e)
+		else:
+			font_file = font_path + 'arial.ttf'
 		gui_font = CGUITTFont(guienv, font_file, 12)
 		if not gui_font:
 			gui_font = guienv.getBuiltInFont()
@@ -345,7 +349,7 @@ if run_app:
 		#~ except:
 			#~ print('=== driver_type = %d, cause error with IParticleGravityAffector drop operation' % driver_type)
 		ps.setMaterialFlag(EMF_LIGHTING, False)
-		ps.setMaterialTexture(0, driver.getTexture('2dgame/snowflake.png'))
+		ps.setMaterialTexture(0, driver.getTexture('2DGame/snowflake.png'))
 		ps.setMaterialType(EMT_TRANSPARENT_VERTEX_ALPHA)
 
 

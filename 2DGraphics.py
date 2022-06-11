@@ -1,11 +1,11 @@
 from pyirrlicht import *
 
-#~ driverType = EDT_NULL
+#driverType = EDT_NULL
 driverType = EDT_SOFTWARE
-#~ driverType = EDT_BURNINGSVIDEO
-#~ driverType = EDT_DIRECT3D8
-#~ driverType = EDT_DIRECT3D9
-#~ driverType = EDT_OPENGL
+#driverType = EDT_BURNINGSVIDEO
+#driverType = EDT_DIRECT3D8
+#driverType = EDT_DIRECT3D9
+#driverType = EDT_OPENGL
 
 windowSize = dimension2du(512, 384)
 device = createDevice(driverType, windowSize, 16, False, False, False, 0)
@@ -15,10 +15,12 @@ if device:
 	driver = device.getVideoDriver()
 	scene_manager = device.getSceneManager()
 	guienv = device.getGUIEnvironment()
-	i_texture = driver.getTexture("media//2ddemo.png")
+	i_texture = driver.getTexture("..//irrlicht//media//2ddemo.png")
+
 	driver.makeColorKeyTexture(i_texture, position2di(0,0))
+
 	i_gui_font = guienv.getBuiltInFont()
-	i_gui_font2 = guienv.getFont("media//fonthaettenschweiler.bmp")
+	i_gui_font2 = guienv.getFont("..//irrlicht//media//fonthaettenschweiler.bmp")
 
 	text1pos = recti(130,10,300,50)
 	text1color = SColor(255,255,255,255)

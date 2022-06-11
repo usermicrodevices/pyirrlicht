@@ -11,6 +11,7 @@ IRRLICHT_C_API vector2df* vector2df_ctor1(f32 nx=0.0f, f32 ny=0.0f){return new v
 IRRLICHT_C_API vector2df* vector2df_ctor2(f32 n=0.0f){return new vector2df(n);}
 IRRLICHT_C_API vector2df* vector2df_ctor3(const vector2df& other){return new vector2df(other);}
 IRRLICHT_C_API vector2df* vector2df_ctor4(const dimension2df& other){return new vector2df(other);}
+IRRLICHT_C_API void vector2df_delete(vector2df* pointer){delete pointer;}
 // operators
 IRRLICHT_C_API const vector2df vector2df_operator_sub(vector2df* pointer){return pointer->operator-();}
 IRRLICHT_C_API vector2df& vector2df_operator_set_other(vector2df* pointer, const vector2df& other){return pointer->operator=(other);}
@@ -69,6 +70,7 @@ IRRLICHT_C_API vector2di* vector2di_ctor1(s32 nx=0, s32 ny=0){return new vector2
 IRRLICHT_C_API vector2di* vector2di_ctor2(s32 n=0){return new vector2di(n);}
 IRRLICHT_C_API vector2di* vector2di_ctor3(const vector2di& other){return new vector2di(other);}
 IRRLICHT_C_API vector2di* vector2di_ctor4(const dimension2di& other){return new vector2di(other);}
+IRRLICHT_C_API void vector2di_delete(vector2di* pointer){delete pointer;}
 // operators
 IRRLICHT_C_API const vector2di vector2di_operator_sub(vector2di* pointer){return pointer->operator-();}
 IRRLICHT_C_API vector2di& vector2di_operator_set_other(vector2di* pointer, const vector2di& other){return pointer->operator=(other);}

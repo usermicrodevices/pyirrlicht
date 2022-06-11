@@ -32,6 +32,7 @@
 #endif
 
 #include <ctime>
+#include <iostream>
 
 #include "irrlicht.h"
 using namespace irr;
