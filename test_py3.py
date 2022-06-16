@@ -54,7 +54,6 @@ def test():
 		device.drop()
 	else:
 		print('ERROR createDevice')
-	del device
 
 if __name__ == "__main__":
 	test()
