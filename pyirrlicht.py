@@ -1117,7 +1117,6 @@ class SLight(ctypes.Structure):
 				('CastShadows', ctypes.c_bool)
 				]
 
-#delete_struct_pointer = func_type(None, ctypes.c_void_p)(('delete_struct_pointer', c_module))
 
 tool_randrange = func_type(ctypes.c_int, ctypes.c_int, ctypes.c_int)(('tool_randrange', c_module))
 tool_texture_generator = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_uint, ctypes.c_uint, ctypes.c_uint, ctypes.c_uint, ctypes.c_uint)(('tool_texture_generator', c_module))
@@ -14344,7 +14343,7 @@ class SVarGroupList(IReferenceCounted):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_struct_pointer(self.c_pointer)
+				SVarGroupList_delete(self.c_pointer)
 			except:
 				pass
 	def __len__(self):
@@ -14383,7 +14382,7 @@ class IShader(object):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_struct_pointer(self.c_pointer)
+				IShader_delete(self.c_pointer)
 			except:
 				pass
 	def __len__(self):
