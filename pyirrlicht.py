@@ -1117,7 +1117,6 @@ class SLight(ctypes.Structure):
 				('CastShadows', ctypes.c_bool)
 				]
 
-#delete_pointer = func_type(None, ctypes.c_void_p)(('delete_pointer', c_module))
 #delete_struct_pointer = func_type(None, ctypes.c_void_p)(('delete_struct_pointer', c_module))
 
 tool_randrange = func_type(ctypes.c_int, ctypes.c_int, ctypes.c_int)(('tool_randrange', c_module))
@@ -1165,6 +1164,7 @@ if BUILD_WITH_AGG:
 BUILD_WITH_IRR_SVG_AGG = ctypes.c_bool.in_dll(c_module, 'BUILD_WITH_IRR_SVG_AGG').value
 if BUILD_WITH_IRR_SVG_AGG:
 	svg_agg_image_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_bool, ctypes.c_uint, ctypes.c_int, ctypes.c_int)(('svg_agg_image_ctor1', c_module))
+	svg_agg_image_delete = func_type(None, ctypes.c_void_p)(('svg_agg_image_delete', c_module))
 	svg_agg_image_parse = func_type(None, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_bool, ctypes.c_uint, ctypes.c_int, ctypes.c_int)(('svg_agg_image_parse', c_module))
 	svg_agg_image_scale = func_type(None, ctypes.c_void_p, ctypes.c_double, ctypes.c_double)(('svg_agg_image_scale', c_module))
 	svg_agg_image_scale_rateably = func_type(None, ctypes.c_void_p, ctypes.c_double)(('svg_agg_image_scale_rateably', c_module))
@@ -2120,6 +2120,7 @@ getVertexPitchFromType = func_type(ctypes.c_uint, ctypes.c_int)(('tool_getVertex
 S3DVertex_ctor1 = func_type(ctypes.c_void_p, ctypes.c_int)(('S3DVertex_ctor1', c_module))
 S3DVertex_ctor2 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_float, ctypes.c_float)(('S3DVertex_ctor2', c_module))
 S3DVertex_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('S3DVertex_ctor3', c_module))
+S3DVertex_delete = func_type(None, ctypes.c_int)(('S3DVertex_delete', c_module))
 S3DVertex_get_item = func_type(ctypes.c_void_p, ctypes.c_int)(('S3DVertex_get_item', c_module))
 S3DVertex_set_item = func_type(None, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_set_item', c_module))
 S3DVertex_get_Pos = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_get_Pos', c_module))
@@ -7341,7 +7342,7 @@ class S3DVertex(object):
 	def __del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_struct_pointer(self.c_pointer)
+				S3DVertex_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -14781,7 +14782,7 @@ if BUILD_WITH_IRR_SVG_AGG:
 		def __del__(self):
 			if self.c_pointer:
 				try:
-					delete_pointer(self.c_pointer)
+					svg_agg_image_delete(self.c_pointer)
 				except:
 					pass
 		def parse(self, fs, file_name = 'file.svg', content_unicode = True, alpha_value = 0, color_format = ECF_A8R8G8B8, stride = 4):

@@ -59,7 +59,7 @@ extern "C" {
 //================= SJoystickInfo
 IRRLICHT_C_API SJoystickInfo* SJoystickInfo_ctor(int length = 1)
 {SJoystickInfo* result; result = new SJoystickInfo[length]; return result;}
-IRRLICHT_C_API void SJoystickInfo_delete(SJoystickInfo* pointer){delete[] pointer;}
+IRRLICHT_C_API void SJoystickInfo_delete(SJoystickInfo* pointer){if(pointer)delete[] pointer;}
 IRRLICHT_C_API u8 SJoystickInfo_get_Joystick(SJoystickInfo* pointer)
 {return pointer->Joystick;}
 IRRLICHT_C_API void SJoystickInfo_set_Joystick(SJoystickInfo* pointer, u8 value)

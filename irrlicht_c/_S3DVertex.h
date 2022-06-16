@@ -15,6 +15,7 @@ IRRLICHT_C_API S3DVertex* S3DVertex_ctor2(f32 x, f32 y, f32 z, f32 nx, f32 ny, f
 {return new S3DVertex(x, y, z, nx, ny, nz, *c, tu, tv);}
 IRRLICHT_C_API S3DVertex* S3DVertex_ctor3(const core::vector3df& pos, const core::vector3df& normal, SColor* color, const core::vector2d<f32>& tcoords)
 {return new S3DVertex(pos, normal, *color, tcoords);}
+IRRLICHT_C_API void S3DVertex_delete(S3DVertex* pointer){if(pointer)delete[] pointer;}
 IRRLICHT_C_API S3DVertex* S3DVertex_get_item(S3DVertex* pointer, int index)
 {return &pointer[index];}
 IRRLICHT_C_API void S3DVertex_set_item(S3DVertex* pointer, S3DVertex* value, int index)

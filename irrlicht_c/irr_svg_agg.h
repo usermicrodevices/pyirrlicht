@@ -837,6 +837,7 @@ IRRLICHT_C_API svg_agg_image* svg_agg_image_ctor1(IVideoDriver* video_driver, IF
 {
 	return new svg_agg_image(video_driver, fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, stride);
 }
+IRRLICHT_C_API void svg_agg_image_delete(svg_agg_image* pointer){if(pointer)delete pointer;}
 IRRLICHT_C_API void svg_agg_image_parse(svg_agg_image* pointer, IFileSystem* fs, const fschar_t* file_name = "tiger.svg", bool content_unicode = true, u32 alpha_value = 128, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, int stride = 4)
 {pointer->parse(fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, stride);}
 
