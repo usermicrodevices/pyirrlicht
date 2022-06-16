@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -9,7 +9,9 @@ extern "C" {
 //struct SMesh : public IMesh
 
 IRRLICHT_C_API SMesh* SMesh_ctor1(){return new SMesh();}
-IRRLICHT_C_API SMesh* SMesh_ctor2(int length = 1){SMesh* pointer; pointer = new SMesh[length]; return pointer;}
+//IRRLICHT_C_API SMesh* SMesh_ctor2(int length = 1){SMesh* pointer; pointer = new SMesh[length]; return pointer;}
+IRRLICHT_C_API SMesh* SMesh_ctor2(int length = 1){return new SMesh[length];}
+IRRLICHT_C_API void SMesh_delete(SMesh* pointer){delete[] pointer;}
 
 IRRLICHT_C_API SMesh* SMesh_get_item(SMesh* pointer, int index = 0){return &pointer[index];}
 IRRLICHT_C_API void SMesh_set_item(SMesh* pointer, SMesh* item, int index = 0){pointer[index] = *item;}

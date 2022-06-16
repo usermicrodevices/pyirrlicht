@@ -4649,6 +4649,7 @@ SMD3Mesh_set_MD3Header = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SMD
 # SMesh
 SMesh_ctor1 = func_type(ctypes.c_void_p)(('SMesh_ctor1', c_module))
 SMesh_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int)(('SMesh_ctor2', c_module))
+SMesh_delete = func_type(None, ctypes.c_void_p)(('SMesh_delete', c_module))
 SMesh_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('SMesh_get_item', c_module))
 SMesh_set_item = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('SMesh_set_item', c_module))
 SMesh_getMeshBufferCount = func_type(ctypes.c_uint, ctypes.c_void_p)(('SMesh_getMeshBufferCount', c_module))
@@ -9197,7 +9198,7 @@ class SMesh(IMesh):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_struct_pointer(self.c_pointer)
+				 SMesh_delete(self.c_pointer)
 			except:
 				pass
 	def __len__(self):
