@@ -2499,6 +2499,7 @@ IAttributeExchangingObject_deserializeAttributes = func_type(None, ctypes.c_void
 
 # functions for class listIGUIElementIterator
 listIGUIElementIterator_ctor = func_type(ctypes.c_void_p)(('listIGUIElementIterator_ctor', c_module))
+listIGUIElementIterator_delete = func_type(None, ctypes.c_void_p)(('listIGUIElementIterator_delete', c_module))
 listIGUIElementIterator_operator_next = func_type(ctypes.c_void_p, ctypes.c_void_p)(('listIGUIElementIterator_operator_next', c_module))
 listIGUIElementIterator_operator_prev = func_type(ctypes.c_void_p, ctypes.c_void_p)(('listIGUIElementIterator_operator_prev', c_module))
 listIGUIElementIterator_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('listIGUIElementIterator_operator_eq', c_module))
@@ -2510,7 +2511,7 @@ listIGUIElementIterator_operator_sub = func_type(ctypes.c_void_p, ctypes.c_void_
 # functions for class listIGUIElement
 listIGUIElement_ctor1 = func_type(ctypes.c_void_p)(('listIGUIElement_ctor1', c_module))
 listIGUIElement_ctor2 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('listIGUIElement_ctor2', c_module))
-#~ listIGUIElement_Destructor = func_type(None, ctypes.c_void_p)(('listIGUIElement_Destructor', c_module))
+listIGUIElement_delete = func_type(None, ctypes.c_void_p)(('listIGUIElement_delete', c_module))
 listIGUIElement_operator_set = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('listIGUIElement_operator_set', c_module))
 listIGUIElement_size = func_type(ctypes.c_uint, ctypes.c_void_p)(('listIGUIElement_size', c_module))
 listIGUIElement_getSize = func_type(ctypes.c_uint, ctypes.c_void_p)(('listIGUIElement_getSize', c_module))
@@ -2613,7 +2614,7 @@ IGUIEditBox_getMax = func_type(ctypes.c_uint, ctypes.c_void_p)(('IGUIEditBox_get
 
 # functions for class IGUIElement
 IGUIElement_ctor = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IGUIElement_ctor', c_module))
-#~ IGUIElement_Destructor = func_type(None, ctypes.c_void_p)(('IGUIElement_Destructor', c_module))
+IGUIElement_delete = func_type(None, ctypes.c_void_p)(('IGUIElement_delete', c_module))
 IGUIElement_getParent = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_getParent', c_module))
 IGUIElement_getRelativePosition = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_getRelativePosition', c_module))
 IGUIElement_setRelativePosition1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IGUIElement_setRelativePosition1', c_module))
@@ -9962,6 +9963,12 @@ class listIGUIElementIterator:
 		self.c_pointer = None
 		if len(args) == 1:
 			self.c_pointer = listIGUIElementIterator_ctor()
+	def __del__(self):
+		if self.c_pointer:
+			try:
+				listIGUIElementIterator_delete(self.c_pointer)
+			except:
+				pass
 	def __iter__(self):
 		return self
 	def next(self):
@@ -9992,8 +9999,12 @@ class listIGUIElement:
 			self.c_pointer = listIGUIElement_ctor2(args[0].c_pointer)
 		else:
 			self.c_pointer = listIGUIElement_ctor1()
-	#~ def Destructor(self):
-		#~ listIGUIElement_Destructor(self.c_pointer)
+	def __del__(self):
+		if self.c_pointer:
+			try:
+				listIGUIElement_delete(self.c_pointer)
+			except:
+				pass
 	def set(self, other):
 		listIGUIElement_operator_set(self.c_pointer, other.c_pointer)
 	def size(self):
@@ -10036,8 +10047,13 @@ class IGUIElement(IAttributeExchangingObject, IEventReceiver):
 			else:
 				self.c_pointer = args[0]
 		elif len(args) > 4:
-			# IGUIElement_IGUIElement(EGUI_ELEMENT_TYPE type, IGUIEnvironment* environment, IGUIElement* parent, s32 id, const core::rect<s32>& rectangle)
-			self.c_pointer = IGUIElement_IGUIElement(args[0], args[1].c_pointer, args[2].c_pointer, args[3], args[4].c_pointer)
+			self.c_pointer = IGUIElement_ctor(args[0], args[1].c_pointer, args[2].c_pointer, args[3], args[4].c_pointer)
+	def __del__(self):
+		if self.c_pointer:
+			try:
+				IGUIElement_delete(self.c_pointer)
+			except:
+				pass
 	def getParent(self):
 		return IGUIElement(IGUIElement_getParent(self.c_pointer))
 	def getRelativePosition(self):

@@ -8,6 +8,7 @@ extern "C" {
 
 //================= list<IGUIElement>::Iterator
 IRRLICHT_C_API list<IGUIElement>::Iterator* listIGUIElementIterator_ctor(){return new list<IGUIElement>::Iterator();}
+IRRLICHT_C_API void listIGUIElementIterator_delete(list<IGUIElement>::Iterator* pointer){delete pointer;}
 IRRLICHT_C_API const list<IGUIElement>::Iterator& listIGUIElementIterator_operator_next(list<IGUIElement>::Iterator* pointer){return pointer->operator++();}
 IRRLICHT_C_API const list<IGUIElement>::Iterator& listIGUIElementIterator_operator_prev(list<IGUIElement>::Iterator* pointer){return pointer->operator--();}
 IRRLICHT_C_API bool listIGUIElementIterator_operator_eq(list<IGUIElement>::Iterator* pointer, const list<IGUIElement>::Iterator& other){return pointer->operator==(other);}
@@ -19,6 +20,7 @@ IRRLICHT_C_API const list<IGUIElement>::Iterator listIGUIElementIterator_operato
 //================= listIGUIElement
 IRRLICHT_C_API list<IGUIElement>* listIGUIElement_ctor1(){return new list<IGUIElement>();}
 IRRLICHT_C_API list<IGUIElement>* listIGUIElement_ctor2(const list<IGUIElement>& other){return new list<IGUIElement>(other);}
+IRRLICHT_C_API void listIGUIElement_delete(list<IGUIElement>* pointer){delete pointer;}
 IRRLICHT_C_API void listIGUIElement_operator_set(list<IGUIElement>* pointer, const list<IGUIElement>& other){pointer->operator=(other);}
 IRRLICHT_C_API u32 listIGUIElement_size(list<IGUIElement>* pointer){return pointer->size();}
 IRRLICHT_C_API u32 listIGUIElement_getSize(list<IGUIElement>* pointer){return pointer->getSize();}
@@ -36,6 +38,7 @@ IRRLICHT_C_API void listIGUIElement_swap(list<IGUIElement>* pointer, list<IGUIEl
 
 //================= IGUIElement
 IRRLICHT_C_API IGUIElement* IGUIElement_ctor(EGUI_ELEMENT_TYPE type, IGUIEnvironment* environment, IGUIElement* parent, s32 id, const core::rect<s32>& rectangle){return new IGUIElement(type, environment, parent, id, rectangle);}
+IRRLICHT_C_API void IGUIElement_delete(IGUIElement* pointer){delete pointer;}
 IRRLICHT_C_API IGUIElement* IGUIElement_getParent(IGUIElement* pointer){return pointer->getParent();}
 IRRLICHT_C_API const core::rect<s32> IGUIElement_getRelativePosition(IGUIElement* pointer){return pointer->getRelativePosition();}
 IRRLICHT_C_API void IGUIElement_setRelativePosition1(IGUIElement* pointer, const core::rect<s32>& r){pointer->setRelativePosition(r);}

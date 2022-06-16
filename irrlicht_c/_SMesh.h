@@ -9,7 +9,6 @@ extern "C" {
 //struct SMesh : public IMesh
 
 IRRLICHT_C_API SMesh* SMesh_ctor1(){return new SMesh();}
-//IRRLICHT_C_API SMesh* SMesh_ctor2(int length = 1){SMesh* pointer; pointer = new SMesh[length]; return pointer;}
 IRRLICHT_C_API SMesh* SMesh_ctor2(int length = 1){return new SMesh[length];}
 IRRLICHT_C_API void SMesh_delete(SMesh* pointer){delete[] pointer;}
 
