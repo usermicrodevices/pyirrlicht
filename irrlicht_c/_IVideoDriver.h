@@ -142,8 +142,6 @@ IRRLICHT_C_API void IVideoDriver_makeColorKeyTexture1(IVideoDriver* pointer, vid
 {pointer->makeColorKeyTexture(texture, color, zeroTexels);}
 IRRLICHT_C_API void IVideoDriver_makeColorKeyTexture2(IVideoDriver* pointer, video::ITexture* texture, const core::position2d<s32>& colorKeyPixelPos, bool zeroTexels = false)
 {
-	std::cout << colorKeyPixelPos.X << "\n";
-	std::cout << colorKeyPixelPos.Y << "\n";
 	try
 	{
 		pointer->makeColorKeyTexture(texture, colorKeyPixelPos, zeroTexels);

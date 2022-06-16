@@ -2,8 +2,8 @@
 # github.com/usermicrodevices
 # BSD license
 
-__version__ = pyirrlicht_version = '1.2.2'
-__version_date__ = '2022-06-11'
+__version__ = pyirrlicht_version = '1.2.3'
+__version_date__ = '2022-06-16'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -3620,7 +3620,7 @@ if IRRLICHT_VERSION >= 180:
 	IVideoDriver_updateAllOcclusionQueries = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IVideoDriver_updateAllOcclusionQueries', c_module))
 	IVideoDriver_getOcclusionQueryResult = func_type(ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_getOcclusionQueryResult', c_module))
 IVideoDriver_makeColorKeyTexture1 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('IVideoDriver_makeColorKeyTexture1', c_module))
-IVideoDriver_makeColorKeyTexture2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('IVideoDriver_makeColorKeyTexture2', c_module))
+IVideoDriver_makeColorKeyTexture2 = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('IVideoDriver_makeColorKeyTexture2', c_module))
 IVideoDriver_makeNormalMapTexture = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('IVideoDriver_makeNormalMapTexture', c_module))
 IVideoDriver_setRenderTarget1 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_void_p)(('IVideoDriver_setRenderTarget1', c_module))
 IVideoDriver_setRenderTarget2 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool, ctypes.c_bool, ctypes.c_void_p)(('IVideoDriver_setRenderTarget2', c_module))
