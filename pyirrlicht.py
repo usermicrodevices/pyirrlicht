@@ -4030,6 +4030,7 @@ quaternion_ctor2 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ct
 quaternion_ctor3 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('quaternion_ctor3', c_module))
 quaternion_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('quaternion_ctor4', c_module))
 quaternion_ctor5 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('quaternion_ctor5', c_module))
+quaternion_delete = func_type(None, ctypes.c_void_p)(('quaternion_delete', c_module))
 quaternion_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('quaternion_operator_eq', c_module))
 quaternion_operator_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('quaternion_operator_ne', c_module))
 quaternion_operator_set1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('quaternion_operator_set1', c_module))
@@ -4423,7 +4424,7 @@ SOverrideMaterial_set_Enabled = func_type(None, ctypes.c_void_p, ctypes.c_bool)(
 SMaterial_ctor1 = func_type(ctypes.c_void_p)(('SMaterial_ctor1', c_module))
 SMaterial_ctor2 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMaterial_ctor2', c_module))
 SMaterial_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('SMaterial_set', c_module))
-#~ SMaterial_Destructor = func_type(None, ctypes.c_void_p)(('SMaterial_Destructor', c_module))
+SMaterial_delete = func_type(None, ctypes.c_void_p)(('SMaterial_delete', c_module))
 SMaterial_get_TextureLayer = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('SMaterial_get_TextureLayer', c_module))
 SMaterial_get_MaterialType = func_type(ctypes.c_int, ctypes.c_void_p)(('SMaterial_get_MaterialType', c_module))
 SMaterial_get_AmbientColor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMaterial_get_AmbientColor', c_module))
@@ -4483,7 +4484,7 @@ SMaterial_isTransparent = func_type(ctypes.c_bool, ctypes.c_void_p)(('SMaterial_
 # functions for class SMaterialLayer
 SMaterialLayer_ctor1 = func_type(ctypes.c_void_p)(('SMaterialLayer_ctor1', c_module))
 SMaterialLayer_ctor2 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMaterialLayer_ctor2', c_module))
-#~ SMaterialLayer_Destructor = func_type(None, ctypes.c_void_p)(('SMaterialLayer_Destructor', c_module))
+SMaterialLayer_delete = func_type(None, ctypes.c_void_p)(('SMaterialLayer_delete', c_module))
 SMaterialLayer_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('SMaterialLayer_set', c_module))
 SMaterialLayer_set_Texture = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SMaterialLayer_set_Texture', c_module))
 SMaterialLayer_get_Texture = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMaterialLayer_get_Texture', c_module))
@@ -4506,6 +4507,7 @@ SMaterialLayer_operator_noteq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes
 
 #struct SMD3AnimationInfo
 SMD3AnimationInfo_ctor = func_type(ctypes.c_void_p)(('SMD3AnimationInfo_ctor', c_module))
+SMD3AnimationInfo_delete = func_type(None, ctypes.c_void_p)(('SMD3AnimationInfo_delete', c_module))
 SMD3AnimationInfo_get_first = func_type(ctypes.c_int, ctypes.c_void_p)(('SMD3AnimationInfo_get_first', c_module))
 SMD3AnimationInfo_set_first = func_type(None, ctypes.c_void_p, ctypes.c_int)(('SMD3AnimationInfo_set_first', c_module))
 SMD3AnimationInfo_get_num = func_type(ctypes.c_int, ctypes.c_void_p)(('SMD3AnimationInfo_get_num', c_module))
@@ -4517,6 +4519,7 @@ SMD3AnimationInfo_set_fps = func_type(None, ctypes.c_void_p, ctypes.c_int)(('SMD
 
 #struct SMD3Header
 SMD3Header_ctor = func_type(ctypes.c_void_p)(('SMD3Header_ctor', c_module))
+SMD3Header_delete = func_type(None, ctypes.c_void_p)(('SMD3Header_delete', c_module))
 SMD3Header_get_headerID = func_type(ctypes.c_char_p, ctypes.c_void_p)(('SMD3Header_get_headerID', c_module))
 SMD3Header_set_headerID = func_type(None, ctypes.c_void_p, ctypes.c_char_p)(('SMD3Header_set_headerID', c_module))
 SMD3Header_get_Version = func_type(ctypes.c_int, ctypes.c_void_p)(('SMD3Header_get_Version', c_module))
@@ -4542,6 +4545,7 @@ SMD3Header_set_fileSize = func_type(None, ctypes.c_void_p, ctypes.c_int)(('SMD3H
 
 #struct SMD3MeshHeader
 SMD3MeshHeader_ctor = func_type(ctypes.c_void_p)(('SMD3MeshHeader_ctor', c_module))
+SMD3MeshHeader_delete = func_type(None, ctypes.c_void_p)(('SMD3MeshHeader_delete', c_module))
 SMD3MeshHeader_get_meshID = func_type(ctypes.c_char_p, ctypes.c_void_p)(('SMD3MeshHeader_get_meshID', c_module))
 SMD3MeshHeader_set_meshID = func_type(None, ctypes.c_void_p, ctypes.c_char_p)(('SMD3MeshHeader_set_meshID', c_module))
 SMD3MeshHeader_get_meshName = func_type(ctypes.c_char_p, ctypes.c_void_p)(('SMD3MeshHeader_get_meshName', c_module))
@@ -4567,6 +4571,7 @@ SMD3MeshHeader_set_offset_end = func_type(None, ctypes.c_void_p, ctypes.c_int)((
 
 #struct SMD3Vertex
 SMD3Vertex_ctor = func_type(ctypes.c_void_p)(('SMD3Vertex_ctor', c_module))
+SMD3Vertex_delete = func_type(None, ctypes.c_void_p)(('SMD3Vertex_delete', c_module))
 SMD3Vertex_get_position = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMD3Vertex_get_position', c_module))
 SMD3Vertex_set_position = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SMD3Vertex_set_position', c_module))
 SMD3Vertex_get_normal = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMD3Vertex_get_normal', c_module))
@@ -4574,6 +4579,7 @@ SMD3Vertex_set_normal = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SMD3
 
 #struct SMD3TexCoord
 SMD3TexCoord_ctor = func_type(ctypes.c_void_p)(('SMD3TexCoord_ctor', c_module))
+SMD3TexCoord_delete = func_type(None, ctypes.c_void_p)(('SMD3TexCoord_delete', c_module))
 SMD3TexCoord_get_u = func_type(ctypes.c_float, ctypes.c_void_p)(('SMD3TexCoord_get_u', c_module))
 SMD3TexCoord_set_u = func_type(None, ctypes.c_void_p, ctypes.c_float)(('SMD3TexCoord_set_u', c_module))
 SMD3TexCoord_get_v = func_type(ctypes.c_float, ctypes.c_void_p)(('SMD3TexCoord_get_v', c_module))
@@ -4581,11 +4587,13 @@ SMD3TexCoord_set_v = func_type(None, ctypes.c_void_p, ctypes.c_float)(('SMD3TexC
 
 #struct SMD3Face
 SMD3Face_ctor = func_type(ctypes.c_void_p)(('SMD3Face_ctor', c_module))
+SMD3Face_delete = func_type(None, ctypes.c_void_p)(('SMD3Face_delete', c_module))
 SMD3Face_get_Index = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMD3Face_get_Index', c_module))
 SMD3Face_set_Index = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SMD3Face_set_Index', c_module))
 
 #struct SMD3MeshBuffer : public IReferenceCounted
 SMD3MeshBuffer_ctor = func_type(ctypes.c_void_p)(('SMD3MeshBuffer_ctor', c_module))
+SMD3MeshBuffer_delete = func_type(None, ctypes.c_void_p)(('SMD3MeshBuffer_delete', c_module))
 SMD3MeshBuffer_get_MeshHeader = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMD3MeshBuffer_get_MeshHeader', c_module))
 SMD3MeshBuffer_set_MeshHeader = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SMD3MeshBuffer_set_MeshHeader', c_module))
 SMD3MeshBuffer_get_Shader = func_type(ctypes.c_char_p, ctypes.c_void_p)(('SMD3MeshBuffer_get_Shader', c_module))
@@ -4599,6 +4607,7 @@ SMD3MeshBuffer_set_Tex = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SMD
 
 #struct SMD3QuaternionTag
 SMD3QuaternionTag_ctor1 = func_type(ctypes.c_void_p, ctypes.c_char_p)(('SMD3QuaternionTag_ctor1', c_module))
+SMD3QuaternionTag_delete = func_type(None, ctypes.c_void_p)(('SMD3QuaternionTag_delete', c_module))
 SMD3QuaternionTag_ctor2 = func_type(ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p)(('SMD3QuaternionTag_ctor2', c_module))
 SMD3QuaternionTag_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('SMD3QuaternionTag_ctor3', c_module))
 SMD3QuaternionTag_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMD3QuaternionTag_ctor4', c_module))
@@ -4615,6 +4624,7 @@ SMD3QuaternionTag_set_rotation = func_type(None, ctypes.c_void_p, ctypes.c_void_
 #struct SMD3QuaternionTagList
 SMD3QuaternionTagList_ctor1 = func_type(ctypes.c_void_p)(('SMD3QuaternionTagList_ctor1', c_module))
 SMD3QuaternionTagList_ctor2 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMD3QuaternionTagList_ctor2', c_module))
+SMD3QuaternionTagList_delete = func_type(None, ctypes.c_void_p)(('SMD3QuaternionTagList_delete', c_module))
 SMD3QuaternionTagList_get = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p)(('SMD3QuaternionTagList_get', c_module))
 SMD3QuaternionTagList_size = func_type(ctypes.c_uint, ctypes.c_void_p)(('SMD3QuaternionTagList_size', c_module))
 SMD3QuaternionTagList_set_used = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('SMD3QuaternionTagList_set_used', c_module))
@@ -4626,6 +4636,7 @@ SMD3QuaternionTagList_set_tag_item = func_type(None, ctypes.c_void_p, ctypes.c_u
 
 #struct SMD3Mesh: public IReferenceCounted
 SMD3Mesh_ctor = func_type(ctypes.c_void_p)(('SMD3Mesh_ctor', c_module))
+SMD3Mesh_delete = func_type(None, ctypes.c_void_p)(('SMD3Mesh_delete', c_module))
 SMD3Mesh_get_Name = func_type(ctypes.c_char_p, ctypes.c_void_p)(('SMD3Mesh_get_Name', c_module))
 SMD3Mesh_set_Name = func_type(None, ctypes.c_void_p, ctypes.c_char_p)(('SMD3Mesh_set_Name', c_module))
 SMD3Mesh_get_Buffer = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMD3Mesh_get_Buffer', c_module))
@@ -7918,7 +7929,7 @@ class quaternion(object):
 	def __del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				quaternion_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -8028,7 +8039,7 @@ class SMaterialLayer(object):
 	def __del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				SMaterialLayer_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -8098,9 +8109,9 @@ class SMaterial(object):
 		else:
 			self.c_pointer = SMaterial_ctor1()
 	def __del__(self):
-		if self.c_pointer and self.delete_c_pointer:# and callable(delete_pointer):
+		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				SMaterial_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -8532,7 +8543,7 @@ class SMD3AnimationInfo(object):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				SMD3AnimationInfo_delete(self.c_pointer)
 			except:
 				pass
 	def ctor(self):
@@ -8572,7 +8583,7 @@ class SMD3Header(object):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				SMD3Header_delete(self.c_pointer)
 			except:
 				pass
 	def ctor(self):
@@ -8647,7 +8658,7 @@ class SMD3MeshHeader(object):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				SMD3MeshHeader_delete(self.c_pointer)
 			except:
 				pass
 	def ctor(self):
@@ -8722,7 +8733,7 @@ class SMD3Vertex(object):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				SMD3Vertex_delete(self.c_pointer)
 			except:
 				pass
 	def ctor(self):
@@ -8752,7 +8763,7 @@ class SMD3TexCoord(object):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				SMD3TexCoord_delete(self.c_pointer)
 			except:
 				pass
 	def ctor(self):
@@ -8782,7 +8793,7 @@ class SMD3Face(object):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				SMD3Face_delete(self.c_pointer)
 			except:
 				pass
 	def ctor(self):
@@ -8807,7 +8818,7 @@ class SMD3MeshBuffer(IReferenceCounted):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				SMD3MeshBuffer_delete(self.c_pointer)
 			except:
 				pass
 	def ctor(self):
@@ -8860,7 +8871,7 @@ class SMD3QuaternionTag(object):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				SMD3QuaternionTag_delete(self.c_pointer)
 			except:
 				pass
 	def ctor1(self, name):
@@ -8909,7 +8920,7 @@ class SMD3QuaternionTagList:
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				SMD3QuaternionTagList_delete(self.c_pointer)
 			except:
 				pass
 	def __len__(self):
@@ -8950,7 +8961,7 @@ class SMD3Mesh(IReferenceCounted):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				SMD3Mesh_delete(self.c_pointer)
 			except:
 				pass
 	def get_Name(self):
