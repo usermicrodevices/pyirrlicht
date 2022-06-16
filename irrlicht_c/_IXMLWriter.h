@@ -7,7 +7,6 @@ extern "C" {
 #endif
 
 //================= IXMLWriter
-//IRRLICHT_C_API void IXMLWriter_Destructor(IXMLWriter* pointer){delete pointer;}
 IRRLICHT_C_API void IXMLWriter_writeXMLHeader(IXMLWriter* pointer)
 {pointer->writeXMLHeader();}
 IRRLICHT_C_API void IXMLWriter_writeElement1(IXMLWriter* pointer, const wchar_t* name, bool empty = false, const wchar_t* attr1Name = 0, const wchar_t* attr1Value = 0, const wchar_t* attr2Name = 0, const wchar_t* attr2Value = 0, const wchar_t* attr3Name = 0, const wchar_t* attr3Value = 0, const wchar_t* attr4Name = 0, const wchar_t* attr4Value = 0, const wchar_t* attr5Name = 0, const wchar_t* attr5Value = 0)

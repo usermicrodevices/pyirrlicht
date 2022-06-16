@@ -116,7 +116,7 @@ IRRLICHT_C_API bool SJoystickEvent_IsButtonPressed(const SEvent::SJoystickEvent*
 IRRLICHT_C_API core::array<SJoystickInfo>* arraySJoystickInfo_ctor()
 {return new core::array<SJoystickInfo>();}
 IRRLICHT_C_API void arraySJoystickInfo_delete(core::array<SJoystickInfo*>* pointer)
-{delete pointer;}
+{if(pointer)delete pointer;}
 IRRLICHT_C_API irr::u32 arraySJoystickInfo_allocated_size(core::array<SJoystickInfo>* pointer)
 {return pointer->allocated_size();}
 IRRLICHT_C_API irr::u32 arraySJoystickInfo_size(core::array<SJoystickInfo>* pointer)
@@ -150,7 +150,7 @@ IRRLICHT_C_API EINPUT_METHOD_EVENT SInputMethodEvent_GetEvent(const SEvent::SInp
 
 IRRLICHT_C_API UserEventReceiver* IEventReceiver_ctor1(IEventReceiver* pointer){return (UserEventReceiver*)pointer;}
 IRRLICHT_C_API UserEventReceiver* IEventReceiver_ctor2(bool(IRRCALLCONV *OnEventMethod)(const SEvent&)){return new UserEventReceiver(OnEventMethod);}
-IRRLICHT_C_API void IEventReceiver_delete(UserEventReceiver* pointer){delete pointer;}
+IRRLICHT_C_API void IEventReceiver_delete(UserEventReceiver* pointer){if(pointer)delete pointer;}
 IRRLICHT_C_API void IEventReceiver_set_func_event(UserEventReceiver* pointer, bool(IRRCALLCONV *OnEventMethod)(const SEvent&)){pointer->set_func_event(OnEventMethod);}
 
 #ifdef __cplusplus

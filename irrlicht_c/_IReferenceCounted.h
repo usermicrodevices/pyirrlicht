@@ -9,7 +9,6 @@ extern "C" {
 //================= IReferenceCounted
 IRRLICHT_C_API IReferenceCounted* IReferenceCounted_ctor(void* pointer)
 {return (IReferenceCounted*)pointer;}
-//IRRLICHT_C_API void IReferenceCounted_Destructor(IReferenceCounted* pointer){delete pointer;}
 IRRLICHT_C_API void IReferenceCounted_grab(IReferenceCounted* pointer)
 {pointer->grab();}
 IRRLICHT_C_API bool IReferenceCounted_drop(IReferenceCounted* pointer)

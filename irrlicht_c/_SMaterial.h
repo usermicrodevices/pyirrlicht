@@ -12,7 +12,7 @@ IRRLICHT_C_API u32 _MATERIAL_MAX_TEXTURES = MATERIAL_MAX_TEXTURES;
 IRRLICHT_C_API SMaterial* SMaterial_ctor1(){return new SMaterial();}
 IRRLICHT_C_API SMaterial* SMaterial_ctor2(SMaterial* other){return new SMaterial(*other);}
 IRRLICHT_C_API SMaterial* SMaterial_set(SMaterial* pointer, SMaterial* other){return &pointer->operator=(*other);}
-IRRLICHT_C_API void SMaterial_delete(SMaterial* pointer){delete pointer;}
+IRRLICHT_C_API void SMaterial_delete(SMaterial* pointer){if(pointer)delete pointer;}
 IRRLICHT_C_API SMaterialLayer* SMaterial_get_TextureLayer(SMaterial* pointer, s32 index = 0){return &pointer->TextureLayer[index];}
 IRRLICHT_C_API E_MATERIAL_TYPE SMaterial_get_MaterialType(SMaterial* pointer){return pointer->MaterialType;}
 IRRLICHT_C_API SColor* SMaterial_get_AmbientColor(SMaterial* pointer){return &pointer->AmbientColor;}

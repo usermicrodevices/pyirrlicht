@@ -7,7 +7,6 @@ extern "C" {
 #endif
 
 //================= ILogger
-//IRRLICHT_C_API void ILogger_Destructor(ILogger* pointer){delete pointer;}
 IRRLICHT_C_API ELOG_LEVEL ILogger_getLogLevel(ILogger* pointer){return pointer->getLogLevel();}
 IRRLICHT_C_API void ILogger_setLogLevel(ILogger* pointer, ELOG_LEVEL ll){pointer->setLogLevel(ll);}
 IRRLICHT_C_API void ILogger_log(ILogger* pointer, const c8* text, ELOG_LEVEL ll=ELL_INFORMATION){pointer->log(text, ll);}

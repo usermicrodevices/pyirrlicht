@@ -11,7 +11,7 @@ IRRLICHT_C_API CDynamicMeshBuffer* CDynamicMeshBuffer_ctor(video::E_VERTEX_TYPE 
 {return new CDynamicMeshBuffer(vertexType, indexType);}
 
 IRRLICHT_C_API void CDynamicMeshBuffer_delete(CDynamicMeshBuffer* pointer)
-{delete pointer;}
+{if(pointer)delete pointer;}
 
 IRRLICHT_C_API IVertexBuffer* CDynamicMeshBuffer_getVertexBuffer(CDynamicMeshBuffer* pointer)
 {return &pointer->getVertexBuffer();}

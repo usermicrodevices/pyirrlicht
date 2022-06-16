@@ -9,7 +9,7 @@ extern "C" {
 //================= SMaterialLayer
 IRRLICHT_C_API SMaterialLayer* SMaterialLayer_ctor1(){return new SMaterialLayer();}
 IRRLICHT_C_API SMaterialLayer* SMaterialLayer_ctor2(const SMaterialLayer& other){return new SMaterialLayer(other);}
-IRRLICHT_C_API void SMaterialLayer_delete(SMaterialLayer* pointer){delete pointer;}
+IRRLICHT_C_API void SMaterialLayer_delete(SMaterialLayer* pointer){if(pointer)delete pointer;}
 IRRLICHT_C_API SMaterialLayer* SMaterialLayer_set(SMaterialLayer& pointer, const SMaterialLayer& other){return &pointer.operator=(other);}
 IRRLICHT_C_API void SMaterialLayer_set_Texture(SMaterialLayer& pointer, ITexture* value){pointer.Texture = value;}
 IRRLICHT_C_API ITexture* SMaterialLayer_get_Texture(SMaterialLayer& pointer){return pointer.Texture;}

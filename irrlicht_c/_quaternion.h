@@ -12,7 +12,7 @@ IRRLICHT_C_API quaternion* quaternion_ctor2(f32 x, f32 y, f32 z, f32 w){return n
 IRRLICHT_C_API quaternion* quaternion_ctor3(f32 x, f32 y, f32 z){return new quaternion(x, y, z);}
 IRRLICHT_C_API quaternion* quaternion_ctor4(const vector3df* vec){return new quaternion(*vec);}
 IRRLICHT_C_API quaternion* quaternion_ctor5(const matrix4* mat){return new quaternion(*mat);}
-IRRLICHT_C_API void quaternion_delete(quaternion* pointer){delete pointer;}
+IRRLICHT_C_API void quaternion_delete(quaternion* pointer){if(pointer)delete pointer;}
 IRRLICHT_C_API const bool quaternion_operator_eq(quaternion* pointer, const quaternion* other){return pointer->operator==(*other);}
 IRRLICHT_C_API const bool quaternion_operator_ne(quaternion* pointer, const quaternion* other){return pointer->operator!=(*other);}
 IRRLICHT_C_API const quaternion& quaternion_operator_set1(quaternion* pointer, const quaternion* other){return pointer->operator=(*other);}

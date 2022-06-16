@@ -8,7 +8,7 @@ extern "C" {
 
 //struct SOverrideMaterial
 IRRLICHT_C_API SOverrideMaterial* SOverrideMaterial_ctor(){return new SOverrideMaterial();}
-IRRLICHT_C_API void SOverrideMaterial_delete(SOverrideMaterial* pointer){delete pointer;}
+IRRLICHT_C_API void SOverrideMaterial_delete(SOverrideMaterial* pointer){if(pointer)delete pointer;}
 IRRLICHT_C_API void SOverrideMaterial_apply(SOverrideMaterial* pointer, SMaterial* material){pointer->apply(*material);}
 IRRLICHT_C_API SMaterial* SOverrideMaterial_get_Material(SOverrideMaterial* pointer){return &pointer->Material;}
 IRRLICHT_C_API void SOverrideMaterial_set_Material(SOverrideMaterial* pointer, SMaterial* value){pointer->Material = *value;}
@@ -36,7 +36,7 @@ IRRLICHT_C_API IRenderTarget* IRenderTarget_ctor2(E_RENDER_TARGET target, E_COLO
 {return new IRenderTarget(target, colorMask, blendFuncSrc, blendFuncDst, blendOp);}
 #endif
 
-IRRLICHT_C_API void IRenderTarget_delete(IRenderTarget* pointer){delete pointer;}
+IRRLICHT_C_API void IRenderTarget_delete(IRenderTarget* pointer){if(pointer)delete pointer;}
 
 IRRLICHT_C_API ITexture* IRenderTarget_get_RenderTexture(IRenderTarget* pointer){return pointer->RenderTexture;}
 IRRLICHT_C_API void IRenderTarget_set_RenderTexture(IRenderTarget* pointer, ITexture* value){pointer->RenderTexture = value;}

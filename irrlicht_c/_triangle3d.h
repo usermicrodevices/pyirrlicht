@@ -9,7 +9,7 @@ extern "C" {
 //class triangle3d
 IRRLICHT_C_API triangle3df* triangle3df_ctor1(){return new triangle3df();}
 IRRLICHT_C_API triangle3df* triangle3df_ctor2(vector3d<f32>* v1, vector3d<f32>* v2, vector3d<f32>* v3){return new triangle3df(*v1, *v2, *v3);}
-IRRLICHT_C_API void triangle3df_delete(triangle3df* pointer){delete pointer;}
+IRRLICHT_C_API void triangle3df_delete(triangle3df* pointer){if(pointer)delete pointer;}
 IRRLICHT_C_API const vector3df& triangle3df_get_pointA(triangle3df* pointer){return pointer->pointA;}
 IRRLICHT_C_API const vector3df& triangle3df_get_pointB(triangle3df* pointer){return pointer->pointB;}
 IRRLICHT_C_API const vector3df& triangle3df_get_pointC(triangle3df* pointer){return pointer->pointC;}
@@ -36,7 +36,7 @@ IRRLICHT_C_API void triangle3df_set(triangle3d<f32>* pointer, const core::vector
 
 IRRLICHT_C_API triangle3di* triangle3di_ctor1(){return new triangle3di();}
 IRRLICHT_C_API triangle3di* triangle3di_ctor2(vector3d<s32>* v1, vector3d<s32>* v2, vector3d<s32>* v3){return new triangle3di(*v1, *v2, *v3);}
-IRRLICHT_C_API void triangle3di_delete(triangle3di* pointer){delete pointer;}
+IRRLICHT_C_API void triangle3di_delete(triangle3di* pointer){if(pointer)delete pointer;}
 IRRLICHT_C_API const vector3di& triangle3di_get_pointA(triangle3di* pointer){return pointer->pointA;}
 IRRLICHT_C_API const vector3di& triangle3di_get_pointB(triangle3di* pointer){return pointer->pointB;}
 IRRLICHT_C_API const vector3di& triangle3di_get_pointC(triangle3di* pointer){return pointer->pointC;}

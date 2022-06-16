@@ -8,7 +8,7 @@ extern "C" {
 
 IRRLICHT_C_API SViewFrustum* SViewFrustum_ctor1(const core::matrix4& mat){return new SViewFrustum(mat);}
 IRRLICHT_C_API SViewFrustum* SViewFrustum_ctor2(const SViewFrustum& other){return new SViewFrustum(other);}
-//IRRLICHT_C_API void SViewFrustum_Destructor(SViewFrustum* pointer){delete pointer;}
+IRRLICHT_C_API void SViewFrustum_delete(SViewFrustum* pointer){if(pointer)delete pointer;}
 IRRLICHT_C_API void SViewFrustum_transform(SViewFrustum* pointer, const core::matrix4& mat){pointer->transform(mat);}
 IRRLICHT_C_API const core::vector3df SViewFrustum_getFarLeftUp(SViewFrustum* pointer){return pointer->getFarLeftUp();}
 IRRLICHT_C_API const core::vector3df SViewFrustum_getFarLeftDown(SViewFrustum* pointer){return pointer->getFarLeftDown();}

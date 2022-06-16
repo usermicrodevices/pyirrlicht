@@ -215,6 +215,7 @@ private:
 	u32 iteration;
 };
 IRRLICHT_C_API ISceneNodeListExt* ISceneNodeList_ctor(const list<ISceneNode*>* pointer){return new ISceneNodeListExt(pointer);}
+IRRLICHT_C_API void ISceneNodeList_delete(ISceneNodeListExt* pointer){if(pointer)delete pointer;}
 IRRLICHT_C_API u32 ISceneNodeList_size(ISceneNodeListExt* pointer){return pointer->get_list()->size();}
 IRRLICHT_C_API void ISceneNodeList_clear(ISceneNodeListExt* pointer){const_cast<list<ISceneNode*>*>(pointer->get_list())->clear();}
 IRRLICHT_C_API bool ISceneNodeList_empty(ISceneNodeListExt* pointer){return pointer->get_list()->empty();}
@@ -227,15 +228,14 @@ IRRLICHT_C_API ISceneNode* ISceneNodeList_last(ISceneNodeListExt* pointer){retur
 IRRLICHT_C_API ISceneNode* ISceneNodeList_get_item(ISceneNodeListExt* pointer, u32 index = 0){return pointer->get_item(index);}
 
 //================= ISceneNode
-IRRLICHT_C_API ISceneNode* ISceneNode_ctor(ISceneNode* parent, ISceneManager* mgr, s32 id=-1, const vector3df& position = vector3df(0,0,0), const vector3df& rotation = vector3df(0,0,0), const vector3df& scale = vector3df(1.0f, 1.0f, 1.0f))
-{
-	ISceneNode* node = mgr->addEmptySceneNode(parent, id);
-	node->setPosition(position);
-	node->setRotation(rotation);
-	node->setScale(scale);
-	return node;
-}
-IRRLICHT_C_API void ISceneNode_Destructor(ISceneNode* pointer){delete pointer;}
+//IRRLICHT_C_API ISceneNode* ISceneNode_ctor(ISceneNode* parent, ISceneManager* mgr, s32 id=-1, const vector3df& position = vector3df(0,0,0), const vector3df& rotation = vector3df(0,0,0), const vector3df& scale = vector3df(1.0f, 1.0f, 1.0f))
+//{
+//	ISceneNode* node = mgr->addEmptySceneNode(parent, id);
+//	node->setPosition(position);
+//	node->setRotation(rotation);
+//	node->setScale(scale);
+//	return node;
+//}
 IRRLICHT_C_API void ISceneNode_OnRegisterSceneNode(ISceneNode* pointer){pointer->OnRegisterSceneNode();}
 IRRLICHT_C_API void ISceneNode_OnAnimate(ISceneNode* pointer, u32 timeMs){pointer->OnAnimate(timeMs);}
 IRRLICHT_C_API void ISceneNode_render(ISceneNode* pointer, void(IRRCALLCONV *func)()){pointer->render();}
@@ -302,12 +302,8 @@ IRRLICHT_C_API ISceneNode* ISceneNode_clone(ISceneNode* pointer, ISceneNode* new
 IRRLICHT_C_API ISceneManager* ISceneNode_getSceneManager(ISceneNode* pointer){return pointer->getSceneManager();}
 
 //================= CustomSceneNode
-IRRLICHT_C_API CustomSceneNode* CustomSceneNode_ctor(scene::ISceneNode* parent, scene::ISceneManager* mgr, s32 id)
-{
-	CustomSceneNode* node = new CustomSceneNode(parent, mgr, id);
-	return node;
-}
-//IRRLICHT_C_API CustomSceneNode* CustomSceneNode_ctor2(){return new CustomSceneNode();}
+IRRLICHT_C_API CustomSceneNode* CustomSceneNode_ctor(scene::ISceneNode* parent, scene::ISceneManager* mgr, s32 id){return new CustomSceneNode(parent, mgr, id);}
+IRRLICHT_C_API void CustomSceneNode_delete(CustomSceneNode* pointer){if(pointer)delete pointer;}
 IRRLICHT_C_API void CustomSceneNode_set_OnRegisterSceneNode(CustomSceneNode* pointer, void(IRRCALLCONV *func)()){pointer->set_func_OnRegisterSceneNode(func);}
 IRRLICHT_C_API void CustomSceneNode_set_render(CustomSceneNode* pointer, void(IRRCALLCONV *func)()){pointer->set_func_render(func);}
 IRRLICHT_C_API void CustomSceneNode_set_getBoundingBox(CustomSceneNode* pointer, const core::aabbox3d<f32>*(IRRCALLCONV *func)()){pointer->set_func_getBoundingBox(func);}

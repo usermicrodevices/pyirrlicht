@@ -36,20 +36,19 @@ private:
 //{return pointer->onCollision(animator);}
 IRRLICHT_C_API UserCollisionCallback* ICollisionCallback_ctor1(ICollisionCallback* pointer){return (UserCollisionCallback*)pointer;}
 IRRLICHT_C_API UserCollisionCallback* ICollisionCallback_ctor2(bool(IRRCALLCONV *func)(const ISceneNodeAnimatorCollisionResponse* animator)){return new UserCollisionCallback(func);}
-//IRRLICHT_C_API void ICollisionCallback_Destructor(UserCollisionCallback* pointer){delete pointer;}
+IRRLICHT_C_API void ICollisionCallback_delete(UserCollisionCallback* pointer){if(pointer)delete pointer;}
 IRRLICHT_C_API void ICollisionCallback_set_func_animator(UserCollisionCallback* pointer, bool(IRRCALLCONV *func)(const ISceneNodeAnimatorCollisionResponse* animator)){pointer->set_func_animator(func);}
 
-//IRRLICHT_C_API void ISceneNodeAnimatorCollisionResponse_Destructor(ISceneNodeAnimatorCollisionResponse* pointer){delete pointer;}
 IRRLICHT_C_API bool ISceneNodeAnimatorCollisionResponse_isFalling(ISceneNodeAnimatorCollisionResponse* pointer){return pointer->isFalling();}
 IRRLICHT_C_API void ISceneNodeAnimatorCollisionResponse_setEllipsoidRadius(ISceneNodeAnimatorCollisionResponse* pointer, const core::vector3df& radius){pointer->setEllipsoidRadius(radius);}
-IRRLICHT_C_API const core::vector3df* ISceneNodeAnimatorCollisionResponse_getEllipsoidRadius(ISceneNodeAnimatorCollisionResponse* pointer){return new core::vector3df(pointer->getEllipsoidRadius());}
+IRRLICHT_C_API const core::vector3df ISceneNodeAnimatorCollisionResponse_getEllipsoidRadius(ISceneNodeAnimatorCollisionResponse* pointer){return pointer->getEllipsoidRadius();}
 IRRLICHT_C_API void ISceneNodeAnimatorCollisionResponse_setGravity(ISceneNodeAnimatorCollisionResponse* pointer, const core::vector3df& gravity){pointer->setGravity(gravity);}
-IRRLICHT_C_API const core::vector3df* ISceneNodeAnimatorCollisionResponse_getGravity(ISceneNodeAnimatorCollisionResponse* pointer){return new core::vector3df(pointer->getGravity());}
+IRRLICHT_C_API const core::vector3df ISceneNodeAnimatorCollisionResponse_getGravity(ISceneNodeAnimatorCollisionResponse* pointer){return pointer->getGravity();}
 IRRLICHT_C_API void ISceneNodeAnimatorCollisionResponse_jump(ISceneNodeAnimatorCollisionResponse* pointer, f32 jumpSpeed){pointer->jump(jumpSpeed);}
 IRRLICHT_C_API void ISceneNodeAnimatorCollisionResponse_setAnimateTarget(ISceneNodeAnimatorCollisionResponse* pointer, bool enable){pointer->setAnimateTarget(enable);}
 IRRLICHT_C_API bool ISceneNodeAnimatorCollisionResponse_getAnimateTarget(ISceneNodeAnimatorCollisionResponse* pointer){return pointer->getAnimateTarget();}
 IRRLICHT_C_API void ISceneNodeAnimatorCollisionResponse_setEllipsoidTranslation(ISceneNodeAnimatorCollisionResponse* pointer, const core::vector3df& translation){pointer->setEllipsoidTranslation(translation);}
-IRRLICHT_C_API const core::vector3df* ISceneNodeAnimatorCollisionResponse_getEllipsoidTranslation(ISceneNodeAnimatorCollisionResponse* pointer){return new core::vector3df(pointer->getEllipsoidTranslation());}
+IRRLICHT_C_API const core::vector3df ISceneNodeAnimatorCollisionResponse_getEllipsoidTranslation(ISceneNodeAnimatorCollisionResponse* pointer){return pointer->getEllipsoidTranslation();}
 IRRLICHT_C_API void ISceneNodeAnimatorCollisionResponse_setWorld(ISceneNodeAnimatorCollisionResponse* pointer, ITriangleSelector* newWorld){pointer->setWorld(newWorld);}
 IRRLICHT_C_API ITriangleSelector* ISceneNodeAnimatorCollisionResponse_getWorld(ISceneNodeAnimatorCollisionResponse* pointer){return pointer->getWorld();}
 IRRLICHT_C_API void ISceneNodeAnimatorCollisionResponse_setTargetNode(ISceneNodeAnimatorCollisionResponse* pointer, ISceneNode * node){pointer->setTargetNode(node);}

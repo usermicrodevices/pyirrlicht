@@ -53,7 +53,7 @@ extern "C" {
 
 IRRLICHT_C_API UserAnimationEndCallBack* IAnimationEndCallBack_ctor1(){return new UserAnimationEndCallBack();}
 IRRLICHT_C_API UserAnimationEndCallBack* IAnimationEndCallBack_ctor2(void(IRRCALLCONV *OnEventMethod)(IAnimatedMeshSceneNode* node)){return new UserAnimationEndCallBack(OnEventMethod);}
-IRRLICHT_C_API void IAnimationEndCallBack_delete(UserAnimationEndCallBack* pointer){delete pointer;}
+IRRLICHT_C_API void IAnimationEndCallBack_delete(UserAnimationEndCallBack* pointer){if(pointer)delete pointer;}
 IRRLICHT_C_API void IAnimationEndCallBack_set_func_event(UserAnimationEndCallBack* pointer, void(IRRCALLCONV *OnEventMethod)(IAnimatedMeshSceneNode* node)){pointer->set_func_event(OnEventMethod);}
 IRRLICHT_C_API UserAnimationEndCallBack* IAnimationEndCallBack_UserAnimationEndCallBack(IAnimationEndCallBack* pointer){return (UserAnimationEndCallBack*)pointer;}
 

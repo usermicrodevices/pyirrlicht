@@ -7,7 +7,6 @@ extern "C" {
 #endif
 
 //================= ITimer
-//IRRLICHT_C_API void ITimer_Destructor(ITimer* pointer){delete pointer;}
 IRRLICHT_C_API u32 ITimer_getRealTime(ITimer* pointer)
 {return pointer->getRealTime();}
 IRRLICHT_C_API u32 ITimer_getTime(ITimer* pointer)

@@ -29,7 +29,6 @@ private:
 	bool(IRRCALLCONV *func_event)(const SEvent* event);
 };
 IRRLICHT_C_API UserCameraSceneNode* ICameraSceneNode_ctor(ICameraSceneNode* pointer){return (UserCameraSceneNode*)pointer;}
-//IRRLICHT_C_API void ICameraSceneNode_Destructor(UserCameraSceneNode* pointer){delete pointer;}
 IRRLICHT_C_API void ICameraSceneNode_set_func_event(UserCameraSceneNode* pointer, bool(IRRCALLCONV *OnEventMethod)(const SEvent* event)){pointer->set_func_event(OnEventMethod);}
 
 IRRLICHT_C_API void ICameraSceneNode_setProjectionMatrix(UserCameraSceneNode* pointer, const core::matrix4& projection, bool isOrthogonal=false){pointer->setProjectionMatrix(projection, isOrthogonal);}

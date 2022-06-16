@@ -2549,11 +2549,13 @@ IGUIButton_isScalingImage = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUIButt
 
 # functions for class IGUICheckBox
 IGUICheckBox_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IGUICheckBox_ctor', c_module))
+IGUICheckBox_delete = func_type(None, ctypes.c_void_p)(('IGUICheckBox_delete', c_module))
 IGUICheckBox_setChecked = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IGUICheckBox_setChecked', c_module))
 IGUICheckBox_isChecked = func_type(ctypes.c_bool, ctypes.c_void_p)(('IGUICheckBox_isChecked', c_module))
 
 # functions for class IGUIColorSelectDialog
 IGUIColorSelectDialog_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IGUIColorSelectDialog_ctor', c_module))
+IGUIColorSelectDialog_delete = func_type(None, ctypes.c_void_p)(('IGUIColorSelectDialog_delete', c_module))
 
 # functions for class IGUIComboBox
 IGUIComboBox_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IGUIComboBox_ctor', c_module))
@@ -3199,6 +3201,7 @@ ISceneNodeAnimatorList_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ct
 
 # list<ISceneNode*> (ISceneNodeList)
 ISceneNodeList_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeList_ctor', c_module))
+ISceneNodeList_delete = func_type(None, ctypes.c_void_p)(('ISceneNodeList_delete', c_module))
 ISceneNodeList_size = func_type(ctypes.c_uint, ctypes.c_void_p)(('ISceneNodeList_size', c_module))
 ISceneNodeList_clear = func_type(None, ctypes.c_void_p)(('ISceneNodeList_clear', c_module))
 ISceneNodeList_empty = func_type(ctypes.c_bool, ctypes.c_void_p)(('ISceneNodeList_empty', c_module))
@@ -3210,7 +3213,6 @@ ISceneNodeList_last = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneNodeLi
 ISceneNodeList_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('ISceneNodeList_get_item', c_module))
 
 # functions for class ISceneNode
-#~ ISceneNode_Destructor = func_type(None, ctypes.c_void_p)(('ISceneNode_Destructor', c_module))
 ISceneNode_OnRegisterSceneNode = func_type(None, ctypes.c_void_p)(('ISceneNode_OnRegisterSceneNode', c_module))
 ISceneNode_OnAnimate = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('ISceneNode_OnAnimate', c_module))
 ISceneNode_render = func_type(None, ctypes.c_void_p)(('ISceneNode_render', c_module))
@@ -3275,7 +3277,7 @@ func_getBoundingBox = func_type(ctypes.c_void_p)
 func_getMaterial = func_type(ctypes.c_void_p, ctypes.c_uint)
 func_getMaterialCount = func_type(ctypes.c_uint)
 CustomSceneNode_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('CustomSceneNode_ctor', c_module))
-#~ CustomSceneNode_ctor2 = func_type(ctypes.c_void_p)(('CustomSceneNode_ctor2', c_module))
+CustomSceneNode_delete = func_type(None, ctypes.c_void_p)(('CustomSceneNode_delete', c_module))
 CustomSceneNode_set_OnRegisterSceneNode = func_type(None, ctypes.c_void_p, func_OnRegisterSceneNode)(('CustomSceneNode_set_OnRegisterSceneNode', c_module))
 CustomSceneNode_set_render = func_type(None, ctypes.c_void_p, func_render)(('CustomSceneNode_set_render', c_module))
 CustomSceneNode_set_getBoundingBox = func_type(None, ctypes.c_void_p, func_getBoundingBox)(('CustomSceneNode_set_getBoundingBox', c_module))
@@ -9452,15 +9454,6 @@ class IGeometryCreator(IReferenceCounted):
 class IImage(IReferenceCounted):
 	def __init__(self, *args, **kwargs):
 		self.c_pointer = args[0]
-		#~ self.delete_c_pointer = False
-		#~ if 'delete_c_pointer' in kwargs:
-			#~ self.delete_c_pointer = kwargs.pop('delete_c_pointer')
-	#~ def __del__(self):
-		#~ if self.c_pointer and self.delete_c_pointer:
-			#~ try:
-				#~ delete_pointer(self.c_pointer)
-			#~ except:
-				#~ pass
 	def lock(self):
 		return IImage_lock(self.c_pointer)
 	def unlock(self):
@@ -10175,6 +10168,12 @@ class IGUICheckBox(IGUIElement):
 				self.c_pointer = args[0]
 		elif len(args) > 3:
 			self.c_pointer = IGUICheckBox_ctor(args[0].c_pointer, args[1].c_pointer, args[2], args[3].c_pointer)
+	def __del__(self):
+		if self.c_pointer:
+			try:
+				IGUICheckBox_delete(self.c_pointer)
+			except:
+				pass
 	def setChecked(self, checked):
 		IGUICheckBox_setChecked(self.c_pointer, checked)
 	def isChecked(self):
@@ -10191,6 +10190,12 @@ class IGUIColorSelectDialog(IGUIElement):
 				self.c_pointer = args[0]
 		elif len(args) > 3:
 			self.c_pointer = IGUIColorSelectDialog_ctor(args[0].c_pointer, args[1].c_pointer, args[2], args[3].c_pointer)
+	def __del__(self):
+		if self.c_pointer:
+			try:
+				IGUIColorSelectDialog_delete(self.c_pointer)
+			except:
+				pass
 
 class IGUIEditBox(IGUIElement):
 	def __init__(self, *args, **kwargs):
@@ -10273,10 +10278,11 @@ if BUILD_WITH_GUI_FILE_SELECTOR:
 				else:
 					self.c_pointer = self.ctor(*args, **kwargs)
 		def __del__(self):
-			try:
-				CGUIFileSelector_delete(self.c_pointer)
-			except:
-				pass
+			if self.c_pointer:
+				try:
+					CGUIFileSelector_delete(self.c_pointer)
+				except:
+					pass
 		def ctor(self, title, gui_environment, parent = IGUIElement(), id = -1, type = EFST_OPEN_DIALOG):
 			if not isinstance(parent, IGUIElement):
 				parent = gui_environment.getRootGUIElement()
@@ -10694,6 +10700,12 @@ class IGUIComboBox(IGUIElement):
 				self.c_pointer = args[0]
 		elif len(args) > 3:
 			self.c_pointer = IGUIComboBox_ctor(args[0].c_pointer, args[1].c_pointer, args[2], args[3].c_pointer)
+	def __del__(self):
+		if self.c_pointer:
+			try:
+				CGUIComboBox_delete(self.c_pointer)
+			except:
+				pass
 	def getItemCount(self):
 		return IGUIComboBox_getItemCount(self.c_pointer)
 	def getItem(self, idx):
@@ -11758,7 +11770,7 @@ class ISceneNodeList:
 	def __del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				ISceneNodeList_delete(self.c_pointer)
 			except:
 				pass
 	def __len__(self):
@@ -11999,6 +12011,12 @@ class CustomSceneNode(ISceneNode):
 		CustomSceneNode_set_getMaterialCount(self.c_pointer, self.callback_getMaterialCount)
 	def ctor(self, parent, mgr, id = -1):
 		return CustomSceneNode_ctor(parent.c_pointer, mgr.c_pointer, id)
+	def __del__(self):
+		if self.c_pointer:
+			try:
+				CustomSceneNode_delete(self.c_pointer)
+			except:
+				pass
 	def OnRegisterSceneNode(self):
 		'must be replaced with user class'
 	def render(self):
@@ -15023,12 +15041,6 @@ def getTextures(textures, name, startPos, fileSystem, video_driver):
 	p = ctypes.c_uint()
 	tool_getTextures(textures.c_pointer, name, ctypes.byref(p), fileSystem.c_pointer, video_driver.c_pointer)
 	startPos = p.value
-
-#~ def getTextures(name, startPos, fileSystem, video_driver):
-	#~ p = ctypes.c_uint()
-	#~ result = tool_getTextures(name, ctypes.byref(p), fileSystem.c_pointer, video_driver.c_pointer)
-	#~ startPos = p.value
-	#~ return tTexArray(result)
 
 
 if __name__ == "__main__":

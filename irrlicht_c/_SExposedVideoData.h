@@ -69,7 +69,7 @@ IRRLICHT_C_API void OpenGLLinux_set_X11Window(opengllinux* pointer, unsigned lon
 //================= SExposedVideoData
 IRRLICHT_C_API SExposedVideoData* SExposedVideoData_ctor1(){return new SExposedVideoData();}
 IRRLICHT_C_API SExposedVideoData* SExposedVideoData_ctor2(void* Window){return new SExposedVideoData(Window);}
-//IRRLICHT_C_API void SExposedVideoData_destructor(SExposedVideoData* pointer){delete pointer;}
+IRRLICHT_C_API void SExposedVideoData_delete(SExposedVideoData* pointer){if(pointer)delete pointer;}
 
 IRRLICHT_C_API void* SExposedVideoData_get_D3D8(SExposedVideoData* pointer){return &pointer->D3D8;}
 //IRRLICHT_C_API void SExposedVideoData_set_D3D8(SExposedVideoData* pointer, d3d8* value){&pointer->D3D8 = value;}

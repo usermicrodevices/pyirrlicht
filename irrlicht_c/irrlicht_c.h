@@ -401,9 +401,6 @@ IRRLICHT_C_API bool set_virtual_method(void* obj_pointer, bool(IRRCALLCONV* new_
 #endif
 }
 
-//IRRLICHT_C_API void delete_pointer(void* pointer){if(pointer) delete pointer;}
-//IRRLICHT_C_API void delete_struct_pointer(void* pointer){if(pointer) delete[] pointer;}
-
 int randrange(int rnd_min = 0, int rnd_max = RAND_MAX)
 {
 	return rnd_min+int((rnd_max-rnd_min+1)*rand()/(RAND_MAX + 1.0));

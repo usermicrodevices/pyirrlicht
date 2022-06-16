@@ -17,7 +17,7 @@ IRRLICHT_C_API core::array<void*>* array_ctor3(core::array<void*>* other)
 {return new core::array<void*>(*other);}
 
 IRRLICHT_C_API void array_delete(core::array<void*>* pointer)
-{delete pointer;}
+{if(pointer)delete pointer;}
 
 IRRLICHT_C_API void array_reallocate(core::array<void*>* pointer, u32 new_size)
 {pointer->reallocate(new_size);}

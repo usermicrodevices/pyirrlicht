@@ -9,7 +9,7 @@ extern "C" {
 //================= CMatrix4
 IRRLICHT_C_API matrix4* matrix4_ctor1(matrix4::eConstructor constructor = matrix4::EM4CONST_IDENTITY ){return new matrix4(constructor);}
 IRRLICHT_C_API matrix4* matrix4_ctor2(const matrix4* other, matrix4::eConstructor constructor = matrix4::EM4CONST_COPY){return new matrix4(*other, constructor);}
-IRRLICHT_C_API void matrix4_delete(matrix4* pointer){delete pointer;}
+IRRLICHT_C_API void matrix4_delete(matrix4* pointer){if(pointer)delete pointer;}
 IRRLICHT_C_API f32 matrix4_operator_directly(matrix4* pointer, const s32 row, const s32 col){return pointer->operator()(row, col); }
 IRRLICHT_C_API f32 matrix4_operator_linearly(matrix4* pointer, u32 index){return pointer->operator[](index); }
 IRRLICHT_C_API void matrix4_set1(matrix4* pointer, const matrix4* other){pointer->operator=(*other);}
