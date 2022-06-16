@@ -10,6 +10,7 @@ extern "C" {
 IRRLICHT_C_API line3df* line3df_ctor1(){return new line3df();}
 IRRLICHT_C_API line3df* line3df_ctor2(f32 xa, f32 ya, f32 za, f32 xb, f32 yb, f32 zb){return new line3df(xa, ya, za, xb, yb, zb);}
 IRRLICHT_C_API line3df* line3df_ctor3(const vector3d<f32>& start, const vector3d<f32>& end){return new line3df(start, end);}
+IRRLICHT_C_API void line3df_delete(line3df* pointer){delete pointer;}
 IRRLICHT_C_API const vector3d<f32>& line3df_get_start(line3df* pointer){return pointer->start;}
 IRRLICHT_C_API const vector3d<f32>& line3df_get_end(line3df* pointer){return pointer->end;}
 IRRLICHT_C_API void line3df_set_start(line3df* pointer, const vector3d<f32>& value){pointer->start = value;}
@@ -37,6 +38,7 @@ IRRLICHT_C_API bool line3df_getIntersectionWithSphere(line3df* pointer, const ve
 IRRLICHT_C_API line3di* line3di_ctor1(){return new line3di();}
 IRRLICHT_C_API line3di* line3di_ctor2(s32 xa, s32 ya, s32 za, s32 xb, s32 yb, s32 zb){return new line3di(xa, ya, za, xb, yb, zb);}
 IRRLICHT_C_API line3di* line3di_ctor3(const vector3d<s32>& start, const vector3d<s32>& end){return new line3di(start, end);}
+IRRLICHT_C_API void line3di_delete(line3di* pointer){delete pointer;}
 IRRLICHT_C_API const vector3d<s32>& line3di_get_start(line3di* pointer){return pointer->start;}
 IRRLICHT_C_API const vector3d<s32>& line3di_get_end(line3di* pointer){return pointer->end;}
 IRRLICHT_C_API void line3di_set_start(line3di* pointer, const vector3d<s32>& value){pointer->start = value;}

@@ -39,6 +39,7 @@ IRRLICHT_C_API dimension2du* dimension2du_ctor1(){return new dimension2du();}
 IRRLICHT_C_API dimension2du* dimension2du_ctor2(u32 w=0, u32 h=0){return new dimension2du(w, h);}
 IRRLICHT_C_API dimension2du* dimension2du_ctor3(const dimension2du& other){return new dimension2du(other);}
 IRRLICHT_C_API dimension2du* dimension2du_ctor4(const vector2d<u32>& other){return new dimension2du(other);}
+IRRLICHT_C_API void dimension2du_delete(dimension2du* pointer){delete pointer;}
 
 IRRLICHT_C_API const dimension2du& dimension2du_operator_set_other(dimension2du* pointer, const dimension2du& other){return pointer->operator=(other);}
 IRRLICHT_C_API bool dimension2du_operator_eq_other(dimension2du* pointer, const dimension2du& other){return pointer->operator==(other);}
@@ -66,6 +67,7 @@ IRRLICHT_C_API dimension2di* dimension2di_ctor1(){return new dimension2di();}
 IRRLICHT_C_API dimension2di* dimension2di_ctor2(s32 w=0, s32 h=0){return new dimension2di(w, h);}
 IRRLICHT_C_API dimension2di* dimension2di_ctor3(const dimension2di& other){return new dimension2di(other);}
 IRRLICHT_C_API dimension2di* dimension2di_ctor4(const vector2di& other){return new dimension2di(other);}
+IRRLICHT_C_API void dimension2di_delete(dimension2di* pointer){delete pointer;}
 
 IRRLICHT_C_API const dimension2di& dimension2di_operator_set_other(dimension2di* pointer, const dimension2di& other){return pointer->operator=(other);}
 IRRLICHT_C_API bool dimension2di_operator_eq_other(dimension2di* pointer, const dimension2di& other){return pointer->operator==(other);}

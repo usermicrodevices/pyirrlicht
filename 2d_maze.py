@@ -4,12 +4,12 @@ import os
 from pyirrlicht import *
 from random import randrange as rand
 
-#~ driverType = EDT_NULL
+#driverType = EDT_NULL
 driverType = EDT_SOFTWARE
-#~ driverType = EDT_BURNINGSVIDEO
-#~ driverType = EDT_DIRECT3D8
-#~ driverType = EDT_DIRECT3D9
-#~ driverType = EDT_OPENGL
+#driverType = EDT_BURNINGSVIDEO
+#driverType = EDT_DIRECT3D8
+#driverType = EDT_DIRECT3D9
+#driverType = EDT_OPENGL
 
 def mazeDFS(width,height):
 	stack   = []
@@ -53,9 +53,13 @@ def makeMaze(w, h, fore, back, scale = 0):
 		video_driver.SetIcon(IDI_EXCLAMATION)
 		gui_environment = device.getGUIEnvironment()
 
-		font_ext = '.ttf'
-		font_path = os.environ['SYSTEMROOT']+'/Fonts/'
-		font_file = font_path + 'arial' + font_ext
+		font_file = '2DGame/Quiltpatches-OVoaO.ttf'
+		try:
+			font_path = os.environ['SYSTEMROOT']+'/Fonts/'
+		except Exception as e:
+			print(e)
+		else:
+			font_file = font_path + 'arial.ttf'
 		gui_font = CGUITTFont(gui_environment, font_file, 20)
 		if not gui_font:
 			gui_font = gui_environment.getBuiltInFont()
@@ -105,7 +109,7 @@ def makeMaze(w, h, fore, back, scale = 0):
 			texture = video_driver.addTexture(texture_name, image)
 			video_driver.writeImageToFile(image, stored_file_name)
 		image.drop()
-		#~ print('maze saved in a file %s' % stored_file_name)
+		#print('maze saved in a file %s' % stored_file_name)
 		gui_environment.addMessageBox('Warning', 'maze saved in a file %s' % stored_file_name)
 
 		scolor = SColor(255,120,100,130)
@@ -114,21 +118,22 @@ def makeMaze(w, h, fore, back, scale = 0):
 		texture_position = position2di(3, 3)
 
 		device.setWindowCaption('Irrlicht Engine - 2D Maze generator')
-		#~ _createScreenShot = True
+		#_createScreenShot = True
 		while device.run():
 			if device.isWindowActive():
-				#~ screen_size = video_driver.getScreenSize()
-				#~ x, y = device.getCursorControl().getPosition().get_XY()
-				#~ if x < 0 or y < 0 or x > screen_size.X or y > screen_size.Y:
-					#~ device.getCursorControl().setVisible(True)
-				#~ else:
-					#~ device.getCursorControl().setVisible(False)
+				#screen_size = video_driver.getScreenSize()
+				#x, y = device.getCursorControl().getPosition().get_XY()
+				#if x < 0 or y < 0 or x > screen_size.X or y > screen_size.Y:
+					#device.getCursorControl().setVisible(True)
+				#else:
+					#device.getCursorControl().setVisible(False)
 				if video_driver.beginScene(True, True, scolor):
-					#~ video_driver.draw2DImage(texture, position2di(int(x-image_size.X/2),int(y-image_size.Y/2)), rect, 0, img_color, True)
+					#video_driver.draw2DImage(texture, position2di(int(x-image_size.X/2),int(y-image_size.Y/2)), rect, 0, img_color, True)
 					video_driver.draw2DImage(texture, texture_position, rect, 0, img_color, True)
-					#~ if _createScreenShot:
-						#~ _createScreenShot = False
-						#~ video_driver.writeImageToFile(video_driver.createScreenShot(), '2d_maze_screen_shot.png')
+					#if _createScreenShot:
+						#_createScreenShot = False
+						#video_driver.writeImageToFile(video_driver.createScreenShot(), '2d_maze_screen_shot.png')
+					print(stored_file_name)
 					gui_environment.drawAll()
 					video_driver.endScene()
 				device.sleep(100)

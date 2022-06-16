@@ -1699,6 +1699,7 @@ dimension2du_ctor1 = func_type(ctypes.c_void_p)(('dimension2du_ctor1', c_module)
 dimension2du_ctor2 = func_type(ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint)(('dimension2du_ctor2', c_module))
 dimension2du_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('dimension2du_ctor3', c_module))
 dimension2du_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('dimension2du_ctor4', c_module))
+dimension2du_delete = func_type(None, ctypes.c_void_p)(('dimension2du_delete', c_module))
 dimension2du_operator_set_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('dimension2du_operator_set_other', c_module))
 dimension2du_operator_eq_other = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('dimension2du_operator_eq_other', c_module))
 dimension2du_operator_ne_other = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('dimension2du_operator_ne_other', c_module))
@@ -1725,6 +1726,7 @@ dimension2di_ctor1 = func_type(ctypes.c_void_p)(('dimension2di_ctor1', c_module)
 dimension2di_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_int)(('dimension2di_ctor2', c_module))
 dimension2di_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('dimension2di_ctor3', c_module))
 dimension2di_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('dimension2di_ctor4', c_module))
+dimension2di_delete = func_type(None, ctypes.c_void_p)(('dimension2di_delete', c_module))
 dimension2di_operator_set_other = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('dimension2di_operator_set_other', c_module))
 dimension2di_operator_eq_other = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('dimension2di_operator_eq_other', c_module))
 dimension2di_operator_ne_other = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('dimension2di_operator_ne_other', c_module))
@@ -1751,6 +1753,7 @@ rectf_ctor1 = func_type(ctypes.c_void_p)(('rectf_ctor1', c_module))
 rectf_ctor2 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('rectf_ctor2', c_module))
 rectf_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('rectf_ctor3', c_module))
 rectf_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('rectf_ctor4', c_module))
+rectf_delete = func_type(None, ctypes.c_void_p)(('rectf_delete', c_module))
 rectf_add = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('rectf_add', c_module))
 rectf_add_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('rectf_add_set', c_module))
 rectf_sub = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('rectf_sub', c_module))
@@ -1781,6 +1784,7 @@ recti_ctor1 = func_type(ctypes.c_void_p)(('recti_ctor1', c_module))
 recti_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('recti_ctor2', c_module))
 recti_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('recti_ctor3', c_module))
 recti_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('recti_ctor4', c_module))
+recti_delete = func_type(None, ctypes.c_void_p)(('recti_delete', c_module))
 recti_add = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('recti_add', c_module))
 recti_add_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('recti_add_set', c_module))
 recti_sub = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('recti_sub', c_module))
@@ -1811,6 +1815,7 @@ vector3df_ctor1 = func_type(ctypes.c_void_p)(('vector3df_ctor1', c_module))
 vector3df_ctor2 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('vector3df_ctor2', c_module))
 vector3df_ctor3 = func_type(ctypes.c_void_p, ctypes.c_float)(('vector3df_ctor3', c_module))
 vector3df_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('vector3df_ctor4', c_module))
+vector3df_delete = func_type(None, ctypes.c_float)(('vector3df_delete', c_module))
 vector3df_set_X = func_type(None, ctypes.c_void_p, ctypes.c_float)(('vector3df_set_X', c_module), ((1, 'pointer', 0), (1, 'value', 0.0)))
 vector3df_get_X = func_type(ctypes.c_float, ctypes.c_void_p)(('vector3df_get_X', c_module))
 vector3df_set_Y = func_type(None, ctypes.c_void_p, ctypes.c_float)(('vector3df_set_Y', c_module), ((1, 'pointer', 0), (1, 'value', 0.0)))
@@ -1870,6 +1875,7 @@ vector3di_ctor1 = func_type(ctypes.c_void_p)(('vector3di_ctor1', c_module))
 vector3di_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('vector3di_ctor2', c_module))
 vector3di_ctor3 = func_type(ctypes.c_void_p, ctypes.c_int)(('vector3di_ctor3', c_module))
 vector3di_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('vector3di_ctor4', c_module))
+vector3di_delete = func_type(None, ctypes.c_float)(('vector3di_delete', c_module))
 vector3di_set_X = func_type(None, ctypes.c_void_p, ctypes.c_int)(('vector3di_set_X', c_module), ((1, 'pointer', 0), (1, 'value', 0)))
 vector3di_get_X = func_type(ctypes.c_int, ctypes.c_void_p)(('vector3di_get_X', c_module))
 vector3di_set_Y = func_type(None, ctypes.c_void_p, ctypes.c_int)(('vector3di_set_Y', c_module), ((1, 'pointer', 0), (1, 'value', 0)))
@@ -1963,6 +1969,7 @@ aabbox3di_ctor1 = func_type(ctypes.c_void_p)(('aabbox3di_ctor1', c_module))
 aabbox3di_ctor2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_ctor2', c_module), ((1, 'min', vector3di_ctor2(-1, -1, -1)), (1, 'max', vector3di_ctor2(1, 1, 1))))
 aabbox3di_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_ctor3', c_module), ((1, 'init', vector3di_ctor2(-1, -1, -1)), ))
 aabbox3di_ctor4 = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('aabbox3di_ctor4', c_module), ((1, 'minx', -1), (1, 'miny', -1), (1, 'minz', -1), (1, 'maxx', 1), (1, 'maxy', 1), (1, 'maxz', 1)))
+aabbox3di_delete = func_type(None, ctypes.c_void_p)(('aabbox3di_delete', c_module))
 aabbox3di_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_operator_eq', c_module))
 aabbox3di_operator_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('aabbox3di_operator_ne', c_module))
 aabbox3di_reset1 = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('aabbox3di_reset1', c_module))
@@ -2009,6 +2016,7 @@ CDynamicMeshBuffer_recalculateBoundingBox = func_type(None, ctypes.c_void_p)(('C
 line3df_ctor1 = func_type(ctypes.c_void_p)(('line3df_ctor1', c_module))
 line3df_ctor2 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('line3df_ctor2', c_module))
 line3df_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('line3df_ctor3', c_module))
+line3df_delete = func_type(ctypes.c_void_p)(('line3df_delete', c_module))
 line3df_get_start = func_type(ctypes.c_void_p, ctypes.c_void_p)(('line3df_get_start', c_module))
 line3df_get_end = func_type(ctypes.c_void_p, ctypes.c_void_p)(('line3df_get_end', c_module))
 line3df_set_start = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('line3df_set_start', c_module))
@@ -2034,6 +2042,7 @@ line3df_getIntersectionWithSphere = func_type(ctypes.c_bool, ctypes.c_void_p, ct
 line3di_ctor1 = func_type(ctypes.c_void_p)(('line3di_ctor1', c_module))
 line3di_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('line3di_ctor2', c_module))
 line3di_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('line3di_ctor3', c_module))
+line3di_delete = func_type(ctypes.c_void_p)(('line3di_delete', c_module))
 line3di_get_start = func_type(ctypes.c_void_p, ctypes.c_void_p)(('line3di_get_start', c_module))
 line3di_get_end = func_type(ctypes.c_void_p, ctypes.c_void_p)(('line3di_get_end', c_module))
 line3di_set_start = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('line3di_set_start', c_module))
@@ -2058,6 +2067,7 @@ line3di_getIntersectionWithSphere = func_type(ctypes.c_bool, ctypes.c_void_p, ct
 # triangle3d
 triangle3df_ctor1 = func_type(ctypes.c_void_p)(('triangle3df_ctor1', c_module))
 triangle3df_ctor2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_ctor2', c_module))
+triangle3df_delete = func_type(ctypes.c_void_p)(('triangle3df_delete', c_module))
 triangle3df_get_pointA = func_type(ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_get_pointA', c_module))
 triangle3df_get_pointB = func_type(ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_get_pointB', c_module))
 triangle3df_get_pointC = func_type(ctypes.c_void_p, ctypes.c_void_p)(('triangle3df_get_pointC', c_module))
@@ -2082,6 +2092,7 @@ triangle3df_set = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_voi
 
 triangle3di_ctor1 = func_type(ctypes.c_void_p)(('triangle3di_ctor1', c_module))
 triangle3di_ctor2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_ctor2', c_module))
+triangle3di_delete = func_type(ctypes.c_void_p)(('triangle3di_delete', c_module))
 triangle3di_get_pointA = func_type(ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_get_pointA', c_module))
 triangle3di_get_pointB = func_type(ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_get_pointB', c_module))
 triangle3di_get_pointC = func_type(ctypes.c_void_p, ctypes.c_void_p)(('triangle3di_get_pointC', c_module))
@@ -2152,6 +2163,7 @@ S3DVertexTangents_set_Binormal = func_type(None, ctypes.c_void_p, ctypes.c_void_
 SColor_ctor1 = func_type(ctypes.c_void_p)(('SColor_ctor1', c_module))
 SColor_ctor2 = func_type(ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_uint, ctypes.c_uint)(('SColor_ctor2', c_module))
 SColor_ctor3 = func_type(ctypes.c_void_p, ctypes.c_uint)(('SColor_ctor3', c_module))
+SColor_delete = func_type(None, ctypes.c_void_p)(('SColor_delete', c_module))
 SColor_getAlpha = func_type(ctypes.c_uint, ctypes.c_void_p)(('SColor_getAlpha', c_module))
 SColor_getRed = func_type(ctypes.c_uint, ctypes.c_void_p)(('SColor_getRed', c_module))
 SColor_getGreen = func_type(ctypes.c_uint, ctypes.c_void_p)(('SColor_getGreen', c_module))
@@ -2178,6 +2190,7 @@ SColor_color = func_type(ctypes.c_uint, ctypes.c_void_p)(('SColor_color', c_modu
 SColorf_ctor1 = func_type(ctypes.c_void_p)(('SColorf_ctor1', c_module))
 SColorf_ctor2 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('SColorf_ctor2', c_module))
 SColorf_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SColorf_ctor3', c_module))
+SColorf_delete = func_type(None, ctypes.c_void_p)(('SColorf_delete', c_module))
 SColorf_toSColor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SColorf_toSColor', c_module))
 SColorf_set1 = func_type(None, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('SColorf_set1', c_module))
 SColorf_set2 = func_type(None, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('SColorf_set2', c_module))
@@ -2195,6 +2208,7 @@ SColorf_setBlue = func_type(None, ctypes.c_void_p, ctypes.c_float)(('SColorf_set
 
 #================= SColorHSL
 SColorHSL_ctor = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('SColorHSL_ctor', c_module))
+SColorHSL_delete = func_type(None, ctypes.c_void_p)(('SColorHSL_delete', c_module))
 SColorHSL_fromRGB = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SColorHSL_fromRGB', c_module))
 SColorHSL_toRGB = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SColorHSL_toRGB', c_module))
 SColorHSL_get_Hue = func_type(ctypes.c_float, ctypes.c_void_p)(('SColorHSL_get_Hue', c_module))
@@ -2864,6 +2878,7 @@ IGUISpinBox_getStepSize = func_type(ctypes.c_float, ctypes.c_void_p)(('IGUISpinB
 
 #================= array<rect<s32>> (rects32array)
 rects32array_ctor = func_type(ctypes.c_void_p)(('rects32array_ctor', c_module))
+rects32array_delete = func_type(None, ctypes.c_void_p)(('rects32array_delete', c_module))
 rects32array_reallocate = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('rects32array_reallocate', c_module))
 rects32array_setAllocStrategy = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('rects32array_setAllocStrategy', c_module))
 rects32array_push_back = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('rects32array_push_back', c_module))
@@ -3676,7 +3691,10 @@ IVideoDriver_setTextureCreationFlag = func_type(None, ctypes.c_void_p, ctypes.c_
 IVideoDriver_getTextureCreationFlag = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_int)(('IVideoDriver_getTextureCreationFlag', c_module))
 IVideoDriver_createImageFromFile1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p)(('IVideoDriver_createImageFromFile1', c_module))
 IVideoDriver_createImageFromFile2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_createImageFromFile2', c_module))
-IVideoDriver_writeImageToFile1 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_uint)(('IVideoDriver_writeImageToFile1', c_module))
+if hexversion >= 0x03000000:
+	IVideoDriver_writeImageToFile1 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_uint)(('IVideoDriver_writeImageToFile1', c_module))
+else:
+	IVideoDriver_writeImageToFile1 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_uint)(('IVideoDriver_writeImageToFile1', c_module))
 IVideoDriver_writeImageToFile2 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IVideoDriver_writeImageToFile2', c_module))
 IVideoDriver_createImageFromData = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool)(('IVideoDriver_createImageFromData', c_module))
 IVideoDriver_createImage1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IVideoDriver_createImage1', c_module))
@@ -3956,7 +3974,7 @@ plane3df_ctor2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('
 plane3df_ctor3 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float)(('plane3df_ctor3', c_module))
 plane3df_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_ctor4', c_module))
 plane3df_ctor5 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('plane3df_ctor5', c_module))
-#~ plane3df_destructor = func_type(None, ctypes.c_void_p)(('plane3df_destructor', c_module))
+plane3df_delete = func_type(None, ctypes.c_void_p)(('plane3df_delete', c_module))
 plane3df_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_operator_eq', c_module))
 plane3df_operator_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_operator_ne', c_module))
 plane3df_setPlane = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3df_setPlane', c_module))
@@ -3984,7 +4002,7 @@ plane3di_ctor2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('
 plane3di_ctor3 = func_type(ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('plane3di_ctor3', c_module))
 plane3di_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_ctor4', c_module))
 plane3di_ctor5 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('plane3di_ctor5', c_module))
-#~ plane3di_destructor = func_type(None, ctypes.c_void_p)(('plane3di_destructor', c_module))
+plane3di_delete = func_type(None, ctypes.c_void_p)(('plane3di_delete', c_module))
 plane3di_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_operator_eq', c_module))
 plane3di_operator_ne = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_operator_ne', c_module))
 plane3di_setPlane = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('plane3di_setPlane', c_module))
@@ -5903,9 +5921,9 @@ class dimension2du(object):
 		elif 'pointer' in kwargs:
 			self.c_pointer = kwargs.pop('pointer', None)
 	def __del__(self):
-		if self.c_pointer and self.delete_c_pointer:# and callable(delete_pointer):
+		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				dimension2du_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -5983,9 +6001,9 @@ class dimension2di(object):
 		elif 'pointer' in kwargs:
 			self.c_pointer = kwargs.pop('pointer')
 	def __del__(self):
-		if self.c_pointer and self.delete_c_pointer:# and callable(delete_pointer):
+		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				dimension2di_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -6058,9 +6076,9 @@ class rectf(object):
 			else:
 				self.ctor3(*args, **kwargs)
 	def __del__(self):
-		if self.c_pointer and self.delete_c_pointer:# and callable(delete_pointer):
+		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				rectf_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -6152,9 +6170,9 @@ class recti(object):
 			else:
 				self.ctor3(*args, **kwargs)
 	def __del__(self):
-		if self.c_pointer and self.delete_c_pointer:# and callable(delete_pointer):
+		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				recti_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -6239,9 +6257,9 @@ class rects32array:
 			self.c_pointer = args[0]
 			self.delete_c_pointer = False
 	def __del__(self):
-		if self.c_pointer and self.delete_c_pointer:# and callable(delete_pointer):
+		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				rects32array_delete(self.c_pointer)
 			except:
 				pass
 	def __len__(self):
@@ -6328,9 +6346,9 @@ class vector3df(object):
 		elif 'other' in kwargs:
 			self.c_pointer = vector3df_ctor4(kwargs.pop('other'))
 	def __del__(self):
-		if self.c_pointer and self.delete_c_pointer:# and callable(delete_pointer):
+		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				vector3df_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -6482,9 +6500,9 @@ class vector3di(object):
 		elif 'other' in kwargs:
 			self.c_pointer = vector3di_ctor4(kwargs.pop('other'))
 	def __del__(self):
-		if self.c_pointer and self.delete_c_pointer:# and callable(delete_pointer):
+		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				vector3di_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -6640,7 +6658,7 @@ class aabbox3df(object):
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', 0)
 	def __del__(self):
-		if self.c_pointer and self.delete_c_pointer:# and callable(delete_pointer):
+		if self.c_pointer and self.delete_c_pointer:
 			try:
 				aabbox3df_delete(self.c_pointer)
 			except:
@@ -6753,9 +6771,9 @@ class aabbox3di(object):
 		elif len(args) == 6:
 			self.c_pointer = aabbox3di_ctor4(*args, **kwargs)
 	def __del__(self):
-		if self.c_pointer and self.delete_c_pointer:# and callable(delete_pointer):
+		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				aabbox3di_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -6862,9 +6880,9 @@ class plane3df(object):
 		elif len(args) == 6:
 			self.c_pointer = plane3df_ctor4(*args)
 	def __del__(self):
-		if self.c_pointer and self.delete_c_pointer:# and callable(delete_pointer):
+		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				plane3df_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -6941,9 +6959,9 @@ class plane3di(object):
 		elif len(args) == 6:
 			self.c_pointer = plane3di_ctor4(*args)
 	def __del__(self):
-		if self.c_pointer and self.delete_c_pointer:# and callable(delete_pointer):
+		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				plane3di_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -7013,9 +7031,9 @@ class line3df(object):
 		elif len(args) == 2:
 			self.c_pointer = line3df_ctor3(args[0].c_pointer, args[1].c_pointer)
 	def __del__(self):
-		if self.c_pointer and self.delete_c_pointer:# and callable(delete_pointer):
+		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				line3df_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -7083,9 +7101,9 @@ class line3di(object):
 		elif len(args) == 2:
 			self.c_pointer = line3di_ctor3(args[0].c_pointer, args[1].c_pointer)
 	def __del__(self):
-		if self.c_pointer and self.delete_c_pointer:# and callable(delete_pointer):
+		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				line3di_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -7153,7 +7171,7 @@ class triangle3df(object):
 	def __del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				triangle3df_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -7224,7 +7242,7 @@ class triangle3di(object):
 	def __del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				triangle3di_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -7477,7 +7495,7 @@ class SColor(object):
 	def __del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				SColor_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -7564,7 +7582,7 @@ class SColorf(object):
 	def __del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				SColorf_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -7627,7 +7645,7 @@ class SColorHSL(object):
 	def __del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_pointer(self.c_pointer)
+				SColorHSL_delete(self.c_pointer)
 			except:
 				pass
 	def __nonzero__(self):
@@ -12770,7 +12788,10 @@ class IVideoDriver(IReferenceCounted):
 		else:
 			return self.writeImageToFile2(image, file_or_filename, param)
 	def writeImageToFile1(self, image, filename, param = 0):
-		return IVideoDriver_writeImageToFile1(self.c_pointer, image.c_pointer, filename, param)
+		try:
+			return IVideoDriver_writeImageToFile1(self.c_pointer, image.c_pointer, filename, param)
+		except Exception as e:
+			print(e)
 	def writeImageToFile2(self, image, file, param = 0):
 		return IVideoDriver_writeImageToFile2(self.c_pointer, image.c_pointer, file.c_pointer, param)
 	def createImageFromData(self, format, size, data, ownForeignMemory = False, deleteMemory = True):

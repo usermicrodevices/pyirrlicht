@@ -45,6 +45,7 @@ IRRLICHT_C_API aabbox3di* aabbox3di_ctor1(){return new aabbox3di();}
 IRRLICHT_C_API aabbox3di* aabbox3di_ctor2(const vector3di& min, const vector3di& max){return new aabbox3di(min, max);}
 IRRLICHT_C_API aabbox3di* aabbox3di_ctor3(const vector3di& init){return new aabbox3di(init);}
 IRRLICHT_C_API aabbox3di* aabbox3di_ctor4(s32 minx=0, s32 miny=0, s32 minz=0, s32 maxx=0, s32 maxy=0, s32 maxz=0){return new aabbox3di(minx, miny, minz, maxx, maxy, maxz);}
+IRRLICHT_C_API void aabbox3di_delete(aabbox3di* pointer){delete pointer;}
 IRRLICHT_C_API bool aabbox3di_operator_eq(aabbox3di* pointer, const aabbox3di& other){return pointer->operator==(other);}
 IRRLICHT_C_API bool aabbox3di_operator_ne(aabbox3di* pointer, const aabbox3di& other){return pointer->operator!=(other);}
 IRRLICHT_C_API void aabbox3di_reset1(aabbox3di* pointer, s32 x, s32 y, s32 z){pointer->reset(x, y, z);}

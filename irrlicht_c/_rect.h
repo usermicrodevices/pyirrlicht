@@ -11,6 +11,7 @@ IRRLICHT_C_API rectf* rectf_ctor1(){return new rectf();}
 IRRLICHT_C_API rectf* rectf_ctor2(f32 x=0.0f, f32 y=0.0f, f32 x2=0.0f, f32 y2=0.0f){return new rectf(x, y, x2, y2);}
 IRRLICHT_C_API rectf* rectf_ctor3(const position2df& upperLeft, const position2df& lowerRight){return new rectf(upperLeft, lowerRight);}
 IRRLICHT_C_API rectf* rectf_ctor4(const position2df& pos, const dimension2df& size){return new rectf(pos, size);}
+IRRLICHT_C_API void rectf_delete(rectf* pointer){delete pointer;}
 IRRLICHT_C_API const rectf rectf_add(rectf* pointer, const position2df& pos){return pointer->operator+(pos);}
 IRRLICHT_C_API const rectf& rectf_add_set(rectf* pointer, const position2df& pos){return pointer->operator+=(pos);}
 IRRLICHT_C_API const rectf rectf_sub(rectf* pointer, const position2df& pos){return pointer->operator-(pos);}
@@ -41,6 +42,7 @@ IRRLICHT_C_API recti* recti_ctor1(){return new recti();}
 IRRLICHT_C_API recti* recti_ctor2(s32 x=0, s32 y=0, s32 x2=0, s32 y2=0){return new recti(x, y, x2, y2);}
 IRRLICHT_C_API recti* recti_ctor3(const position2di& upperLeft, const position2di& lowerRight){return new recti(upperLeft, lowerRight);}
 IRRLICHT_C_API recti* recti_ctor4(const position2di& pos, const dimension2di& size){return new recti(pos, size);}
+IRRLICHT_C_API void recti_delete(recti* pointer){delete pointer;}
 IRRLICHT_C_API const recti recti_add(recti* pointer, const position2di& pos){return pointer->operator+(pos);}
 IRRLICHT_C_API const recti& recti_add_set(recti* pointer, const position2di& pos){return pointer->operator+=(pos);}
 IRRLICHT_C_API const recti recti_sub(recti* pointer, const position2di& pos){return pointer->operator-(pos);}
@@ -68,6 +70,7 @@ IRRLICHT_C_API void recti_set_LowerRightCorner(recti* pointer, position2di* valu
 
 //================= array<rect<s32>> (rects32array)
 IRRLICHT_C_API core::array< rect<s32> >* rects32array_ctor(){return new array< rect<s32> >();}
+IRRLICHT_C_API void rects32array_delete(core::array< rect<s32> >* pointer){delete pointer;}
 IRRLICHT_C_API void rects32array_reallocate(core::array< rect<s32> >* pointer, u32 new_size){pointer->reallocate(new_size);}
 IRRLICHT_C_API void rects32array_setAllocStrategy(core::array< rect<s32> >* pointer, eAllocStrategy newStrategy = ALLOC_STRATEGY_DOUBLE){pointer->setAllocStrategy(newStrategy);}
 IRRLICHT_C_API void rects32array_push_back(core::array< rect<s32> >* pointer, rect<s32>* element){pointer->push_back(*element);}

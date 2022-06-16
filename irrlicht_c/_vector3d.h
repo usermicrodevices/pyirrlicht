@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -11,6 +11,7 @@ IRRLICHT_C_API vector3df* vector3df_ctor1(){return new vector3df();}
 IRRLICHT_C_API vector3df* vector3df_ctor2(f32 x = 0.0f, f32 y = 0.0f, f32 z = 0.0f){return new vector3df(x, y, z);}
 IRRLICHT_C_API vector3df* vector3df_ctor3(f32 n){return new vector3df(n);}
 IRRLICHT_C_API vector3df* vector3df_ctor4(const vector3df* other){return new vector3df(*other);}
+IRRLICHT_C_API void vector3df_delete(vector3df* pointer){delete pointer;}
 IRRLICHT_C_API void vector3df_set_X(vector3df* pointer, f32 value){pointer->X = value;}
 IRRLICHT_C_API f32 vector3df_get_X(const vector3df* pointer){return pointer->X;}
 IRRLICHT_C_API void vector3df_set_Y(vector3df* pointer, f32 value){pointer->Y = value;}
@@ -77,6 +78,7 @@ IRRLICHT_C_API vector3di* vector3di_ctor1(){return new vector3di();}
 IRRLICHT_C_API vector3di* vector3di_ctor2(s32 x=0, s32 y=0, s32 z=0){return new vector3di(x, y, z);}
 IRRLICHT_C_API vector3di* vector3di_ctor3(s32 n){return new vector3di(n);}
 IRRLICHT_C_API vector3di* vector3di_ctor4(const vector3di* other){return new vector3di(*other);}
+IRRLICHT_C_API void vector3di_delete(vector3di* pointer){delete pointer;}
 IRRLICHT_C_API void vector3di_set_X(vector3di* pointer, s32 value){pointer->X = value;}
 IRRLICHT_C_API s32 vector3di_get_X(const vector3di* pointer){return pointer->X;}
 IRRLICHT_C_API void vector3di_set_Y(vector3di* pointer, s32 value){pointer->Y = value;}
