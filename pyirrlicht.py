@@ -4136,6 +4136,7 @@ IOSOperator_getSystemMemory = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c
 #struct Q3LevelLoadParameter
 Q3LevelLoadParameter_ctor1 = func_type(ctypes.c_void_p)(('Q3LevelLoadParameter_ctor1', c_module))
 Q3LevelLoadParameter_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int)(('Q3LevelLoadParameter_ctor2', c_module))
+Q3LevelLoadParameter_delete = func_type(None, ctypes.c_void_p)(('Q3LevelLoadParameter_delete', c_module))
 Q3LevelLoadParameter_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('Q3LevelLoadParameter_get_item', c_module))
 Q3LevelLoadParameter_set_item = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('Q3LevelLoadParameter_set_item', c_module))
 Q3LevelLoadParameter_get_defaultLightMapMaterial = func_type(ctypes.c_int, ctypes.c_void_p)(('Q3LevelLoadParameter_get_defaultLightMapMaterial', c_module))
@@ -4177,6 +4178,7 @@ IQ3LevelMesh_getEntityList = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IQ3Le
 
 #struct SBlendFunc
 SBlendFunc_ctor = func_type(ctypes.c_void_p, ctypes.c_int)(('SBlendFunc_ctor', c_module))
+SBlendFunc_delete = func_type(None, ctypes.c_int)(('SBlendFunc_delete', c_module))
 SBlendFunc_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('SBlendFunc_get_item', c_module))
 SBlendFunc_set_item = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('SBlendFunc_set_item', c_module))
 SBlendFunc_get_type = func_type(ctypes.c_int, ctypes.c_void_p)(('SBlendFunc_get_type', c_module))
@@ -4191,6 +4193,7 @@ SBlendFunc_set_isTransparent = func_type(None, ctypes.c_void_p, ctypes.c_uint)((
 #struct Noiser
 Noiser_ctor1 = func_type(ctypes.c_void_p)(('Noiser_ctor1', c_module))
 Noiser_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int)(('Noiser_ctor2', c_module))
+Noiser_delete = func_type(None, ctypes.c_void_p)(('Noiser_delete', c_module))
 Noiser_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('Noiser_get_item', c_module))
 Noiser_set_item = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('Noiser_set_item', c_module))
 Noiser_get = func_type(ctypes.c_float, ctypes.c_void_p)(('Noiser_get', c_module))
@@ -4198,6 +4201,7 @@ Noiser_get = func_type(ctypes.c_float, ctypes.c_void_p)(('Noiser_get', c_module)
 #struct SModifierFunction
 SModifierFunction_ctor1 = func_type(ctypes.c_void_p)(('SModifierFunction_ctor1', c_module))
 SModifierFunction_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int)(('SModifierFunction_ctor2', c_module))
+SModifierFunction_delete = func_type(None, ctypes.c_void_p)(('SModifierFunction_delete', c_module))
 SModifierFunction_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('SModifierFunction_get_item', c_module))
 SModifierFunction_set_item = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('SModifierFunction_set_item', c_module))
 SModifierFunction_get_masterfunc0 = func_type(ctypes.c_int, ctypes.c_void_p)(('SModifierFunction_get_masterfunc0', c_module))
@@ -4242,6 +4246,7 @@ SModifierFunction_evaluate = func_type(ctypes.c_float, ctypes.c_void_p, ctypes.c
 
 #struct SVariable
 SVariable_ctor = func_type(ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p)(('SVariable_ctor', c_module))
+SVariable_delete = func_type(None, ctypes.c_void_p)(('SVariable_delete', c_module))
 SVariable_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('SVariable_get_item', c_module))
 SVariable_set_item = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('SVariable_set_item', c_module))
 SVariable_get_name = func_type(ctypes.c_char_p, ctypes.c_void_p)(('SVariable_get_name', c_module))
@@ -4256,6 +4261,7 @@ SVariable_operator_lt = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_
 #struct SVarGroup
 SVarGroup_ctor1 = func_type(ctypes.c_void_p)(('SVarGroup_ctor1', c_module))
 SVarGroup_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int)(('SVarGroup_ctor2', c_module))
+SVarGroup_delete = func_type(None, ctypes.c_void_p)(('SVarGroup_delete', c_module))
 SVarGroup_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('SVarGroup_get_item', c_module))
 SVarGroup_set_item = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('SVarGroup_set_item', c_module))
 SVarGroup_isDefined = func_type(ctypes.c_uint, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_char_p)(('SVarGroup_isDefined', c_module))
@@ -4267,6 +4273,7 @@ SVarGroup_set_Variable = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SVa
 #struct SVarGroupList: public IReferenceCounted
 SVarGroupList_ctor1 = func_type(ctypes.c_void_p)(('SVarGroupList_ctor1', c_module))
 SVarGroupList_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int)(('SVarGroupList_ctor2', c_module))
+SVarGroupList_delete = func_type(None, ctypes.c_void_p)(('SVarGroupList_delete', c_module))
 SVarGroupList_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('SVarGroupList_get_item', c_module))
 SVarGroupList_set_item = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('SVarGroupList_set_item', c_module))
 SVarGroupList_get_VariableGroup = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SVarGroupList_get_VariableGroup', c_module))
@@ -4275,6 +4282,7 @@ SVarGroupList_set_VariableGroup = func_type(None, ctypes.c_void_p, ctypes.c_void
 #struct IShader
 IShader_ctor1 = func_type(ctypes.c_void_p)(('IShader_ctor1', c_module))
 IShader_ctor2 = func_type(ctypes.c_void_p, ctypes.c_int)(('IShader_ctor2', c_module))
+IShader_delete = func_type(None, ctypes.c_void_p)(('IShader_delete', c_module))
 IShader_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IShader_get_item', c_module))
 IShader_set_item = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IShader_set_item', c_module))
 IShader_operator_set = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IShader_operator_set', c_module))
@@ -4291,6 +4299,7 @@ IShader_set_name = func_type(None, ctypes.c_void_p, ctypes.c_char_p)(('IShader_s
 
 # tQ3EntityList
 tQ3EntityList_ctor = func_type(ctypes.c_void_p)(('tQ3EntityList_ctor', c_module))
+tQ3EntityList_delete = func_type(None, ctypes.c_void_p)(('tQ3EntityList_delete', c_module))
 tQ3EntityList_reallocate = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('tQ3EntityList_reallocate', c_module))
 tQ3EntityList_setAllocStrategy = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('tQ3EntityList_setAllocStrategy', c_module))
 tQ3EntityList_push_back = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('tQ3EntityList_push_back', c_module))
@@ -4336,7 +4345,6 @@ if IRRLICHT_VERSION >= 180:
 					('Yearday', ctypes.c_uint),
 					('IsDST', ctypes.c_bool)
 					]
-	#ITimer_getRealTimeAndDate = func_type(ctypes.POINTER(RealTimeDate), ctypes.c_void_p)(('ITimer_getRealTimeAndDate', c_module))
 ITimer_getTime = func_type(ctypes.c_uint, ctypes.c_void_p)(('ITimer_getTime', c_module))
 ITimer_setTime = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('ITimer_setTime', c_module))
 ITimer_stop = func_type(None, ctypes.c_void_p)(('ITimer_stop', c_module))
@@ -4671,6 +4679,7 @@ SMesh_set_MeshBuffers = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SMes
 
 # SParticle
 SParticle_ctor = func_type(ctypes.c_void_p, ctypes.c_int)(('SParticle_ctor', c_module))
+SParticle_delete = func_type(None, ctypes.c_int)(('SParticle_delete', c_module))
 SParticle_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('SParticle_get_item', c_module))
 SParticle_set_item = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('SParticle_set_item', c_module))
 SParticle_get_pos = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('SParticle_get_pos', c_module))
@@ -11375,7 +11384,7 @@ class SParticle(object):
 	def __del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
-				delete_struct_pointer(self.c_pointer)
+				SParticle_delete(self.c_pointer)
 			except:
 				pass
 	def ctor(self, length = 1):
@@ -13916,7 +13925,7 @@ class Q3LevelLoadParameter(object):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_struct_pointer(self.c_pointer)
+				Q3LevelLoadParameter_delete(self.c_pointer)
 			except:
 				pass
 	def __len__(self):
@@ -14022,7 +14031,7 @@ class SBlendFunc(object):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_struct_pointer(self.c_pointer)
+				SBlendFunc_delete(self.c_pointer)
 			except:
 				pass
 	def __getitem__(self, key):
@@ -14074,7 +14083,7 @@ class Noiser(object):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_struct_pointer(self.c_pointer)
+				Noiser_delete(self.c_pointer)
 			except:
 				pass
 	def __len__(self):
@@ -14110,7 +14119,7 @@ class SModifierFunction(object):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_struct_pointer(self.c_pointer)
+				SModifierFunction_delete(self.c_pointer)
 			except:
 				pass
 	def __len__(self):
@@ -14238,7 +14247,7 @@ class SVariable(object):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_struct_pointer(self.c_pointer)
+				SVariable_delete(self.c_pointer)
 			except:
 				pass
 	def __len__(self):
@@ -14290,7 +14299,7 @@ class SVarGroup(object):
 	def __del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
-				delete_struct_pointer(self.c_pointer)
+				SVarGroup_delete(self.c_pointer)
 			except:
 				pass
 	def __len__(self):

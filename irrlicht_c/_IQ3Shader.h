@@ -8,7 +8,8 @@ extern "C" {
 
 //struct Q3LevelLoadParameter
 IRRLICHT_C_API Q3LevelLoadParameter* Q3LevelLoadParameter_ctor1(){return new Q3LevelLoadParameter();}
-IRRLICHT_C_API Q3LevelLoadParameter* Q3LevelLoadParameter_ctor2(int length = 1){Q3LevelLoadParameter* pointer; pointer = new Q3LevelLoadParameter[length]; return pointer;}
+IRRLICHT_C_API Q3LevelLoadParameter* Q3LevelLoadParameter_ctor2(int length = 1){return new Q3LevelLoadParameter[length];}
+IRRLICHT_C_API void Q3LevelLoadParameter_delete(Q3LevelLoadParameter* pointer){if(pointer)delete pointer;}
 
 IRRLICHT_C_API const Q3LevelLoadParameter& Q3LevelLoadParameter_get_item(Q3LevelLoadParameter* pointer, int index = 0){return pointer[index];}
 IRRLICHT_C_API void Q3LevelLoadParameter_set_item(Q3LevelLoadParameter* pointer, Q3LevelLoadParameter* item, int index = 0){pointer[index] = *item;}
@@ -63,6 +64,7 @@ IRRLICHT_C_API unsigned int Q3LevelLoadParameter_size(Q3LevelLoadParameter* poin
 
 //struct SBlendFunc
 IRRLICHT_C_API SBlendFunc* SBlendFunc_ctor(video::E_MODULATE_FUNC mod){return new SBlendFunc(mod);}
+IRRLICHT_C_API void SBlendFunc_delete(SBlendFunc* pointer){if(pointer)delete pointer;}
 
 IRRLICHT_C_API const SBlendFunc& SBlendFunc_get_item(SBlendFunc* pointer, int index = 0){return pointer[index];}
 IRRLICHT_C_API void SBlendFunc_set_item(SBlendFunc* pointer, SBlendFunc* item, int index = 0){pointer[index] = *item;}
@@ -82,7 +84,8 @@ IRRLICHT_C_API void SBlendFunc_set_isTransparent(SBlendFunc* pointer, u32 value)
 
 //struct Noiser
 IRRLICHT_C_API Noiser* Noiser_ctor1(){return new Noiser();}
-IRRLICHT_C_API Noiser* Noiser_ctor2(int length = 1){Noiser* pointer; pointer = new Noiser[length]; return pointer;}
+IRRLICHT_C_API Noiser* Noiser_ctor2(int length = 1){return new Noiser[length];}
+IRRLICHT_C_API void Noiser_delete(Noiser* pointer){if(pointer)delete pointer;}
 
 IRRLICHT_C_API const Noiser& Noiser_get_item(Noiser* pointer, int index = 0){return pointer[index];}
 IRRLICHT_C_API void Noiser_set_item(Noiser* pointer, Noiser* item, int index = 0){pointer[index] = *item;}
@@ -92,7 +95,8 @@ IRRLICHT_C_API f32 Noiser_get(Noiser* pointer){return pointer->get();}
 
 //struct SModifierFunction
 IRRLICHT_C_API SModifierFunction* SModifierFunction_ctor1(){return new SModifierFunction();}
-IRRLICHT_C_API SModifierFunction* SModifierFunction_ctor2(int length = 1){SModifierFunction* pointer; pointer = new SModifierFunction[length]; return pointer;}
+IRRLICHT_C_API SModifierFunction* SModifierFunction_ctor2(int length = 1){return new SModifierFunction[length];}
+IRRLICHT_C_API void SModifierFunction_delete(SModifierFunction* pointer){if(pointer)delete pointer;}
 
 IRRLICHT_C_API const SModifierFunction& SModifierFunction_get_item(SModifierFunction* pointer, int index = 0){return pointer[index];}
 IRRLICHT_C_API void SModifierFunction_set_item(SModifierFunction* pointer, SModifierFunction* item, int index = 0){pointer[index] = *item;}
@@ -146,7 +150,7 @@ IRRLICHT_C_API const f32 SModifierFunction_evaluate(SModifierFunction* pointer, 
 
 //struct SVariable
 IRRLICHT_C_API SVariable* SVariable_ctor(const c8* n, const c8* c = 0){return new SVariable(n, c);}
-//IRRLICHT_C_API SVariable* SVariable_ctor2(int length = 1){SVariable* pointer; pointer = new SVariable[length]; return pointer;}
+IRRLICHT_C_API void SVariable_delete(SVariable* pointer){if(pointer)delete pointer;}
 
 IRRLICHT_C_API const SVariable& SVariable_get_item(SVariable* pointer, int index = 0){return pointer[index];}
 IRRLICHT_C_API void SVariable_set_item(SVariable* pointer, SVariable* item, int index = 0){pointer[index] = *item;}
@@ -165,7 +169,8 @@ IRRLICHT_C_API const bool SVariable_operator_lt(SVariable* pointer, const SVaria
 
 //struct SVarGroup
 IRRLICHT_C_API SVarGroup* SVarGroup_ctor1(){return new SVarGroup();}
-IRRLICHT_C_API SVarGroup* SVarGroup_ctor2(int length = 1){SVarGroup* pointer; pointer = new SVarGroup[length]; return pointer;}
+IRRLICHT_C_API SVarGroup* SVarGroup_ctor2(int length = 1){return new SVarGroup[length];}
+IRRLICHT_C_API void SVarGroup_delete(SVarGroup* pointer){if(pointer)delete pointer;}
 
 IRRLICHT_C_API const SVarGroup& SVarGroup_get_item(SVarGroup* pointer, int index = 0){return pointer[index];}
 IRRLICHT_C_API void SVarGroup_set_item(SVarGroup* pointer, SVarGroup* item, int index = 0){pointer[index] = *item;}
@@ -181,7 +186,8 @@ IRRLICHT_C_API void SVarGroup_set_Variable(SVarGroup* pointer, core::array<SVari
 
 //struct SVarGroupList: public IReferenceCounted
 IRRLICHT_C_API SVarGroupList* SVarGroupList_ctor1(){return new SVarGroupList();}
-IRRLICHT_C_API SVarGroupList* SVarGroupList_ctor2(int length = 1){SVarGroupList* pointer; pointer = new SVarGroupList[length]; return pointer;}
+IRRLICHT_C_API SVarGroupList* SVarGroupList_ctor2(int length = 1){return new SVarGroupList[length];}
+IRRLICHT_C_API void SVarGroupList_delete(SVarGroupList* pointer){if(pointer)delete pointer;}
 
 IRRLICHT_C_API const SVarGroupList& SVarGroupList_get_item(SVarGroupList* pointer, int index = 0){return pointer[index];}
 IRRLICHT_C_API void SVarGroupList_set_item(SVarGroupList* pointer, SVarGroupList* item, int index = 0){pointer[index] = *item;}
@@ -192,7 +198,8 @@ IRRLICHT_C_API void SVarGroupList_set_VariableGroup(SVarGroupList* pointer, core
 
 //struct IShader
 IRRLICHT_C_API IShader* IShader_ctor1(){return new IShader();}
-IRRLICHT_C_API IShader* IShader_ctor2(int length = 1){IShader* pointer; pointer = new IShader[length]; return pointer;}
+IRRLICHT_C_API IShader* IShader_ctor2(int length = 1){return new IShader[length];}
+IRRLICHT_C_API void IShader_delete(IShader* pointer){if(pointer)delete pointer;}
 
 IRRLICHT_C_API const IShader& IShader_get_item(IShader* pointer, int index = 0){return pointer[index];}
 IRRLICHT_C_API void IShader_set_item(IShader* pointer, IShader* item, int index = 0){pointer[index] = *item;}
@@ -211,6 +218,7 @@ IRRLICHT_C_API void IShader_set_name(IShader* pointer, const c8* value){pointer-
 
 //================= tQ3EntityList
 IRRLICHT_C_API tQ3EntityList* tQ3EntityList_ctor(){return new tQ3EntityList();}
+IRRLICHT_C_API void tQ3EntityList_delete(tQ3EntityList* pointer){if(pointer)delete pointer;}
 IRRLICHT_C_API void tQ3EntityList_reallocate(tQ3EntityList* pointer, u32 new_size){pointer->reallocate(new_size);}
 IRRLICHT_C_API void tQ3EntityList_setAllocStrategy(tQ3EntityList* pointer, eAllocStrategy newStrategy = ALLOC_STRATEGY_DOUBLE){pointer->setAllocStrategy(newStrategy);}
 IRRLICHT_C_API void tQ3EntityList_push_back(tQ3EntityList* pointer, IEntity* element){pointer->push_back(*element);}

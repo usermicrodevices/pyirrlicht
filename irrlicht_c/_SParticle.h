@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// github.com/usermicrodevices
 // BSD license
 
 #ifdef __cplusplus
@@ -7,8 +7,8 @@ extern "C" {
 #endif
 
 // SParticle
-IRRLICHT_C_API SParticle* SParticle_ctor(int length = 1)
-{SParticle* result; result = new SParticle[length]; return result;}
+IRRLICHT_C_API SParticle* SParticle_ctor(int length = 1){return new SParticle[length];}
+IRRLICHT_C_API void SParticle_delete(SParticle* pointer){if(pointer)delete[] pointer;}
 
 IRRLICHT_C_API SParticle* SParticle_get_item(SParticle* pointer, int index = 0)
 {return &pointer[index];}
