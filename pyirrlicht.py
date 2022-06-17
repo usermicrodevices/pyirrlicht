@@ -2,8 +2,8 @@
 # github.com/usermicrodevices
 # BSD license
 
-__version__ = pyirrlicht_version = '1.2.3'
-__version_date__ = '2022-06-16'
+__version__ = pyirrlicht_version = '1.2.4'
+__version_date__ = '2022-06-17'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -21,7 +21,7 @@ IDI_ASTERISK = 32516
 IDI_WINLOGO = 32517
 IDI_SHIELD = 32518
 
-import ctypes
+import ctypes, logging
 from sys import hexversion, platform
 
 if hexversion < 0x02060000:
@@ -1066,6 +1066,46 @@ B3D_TEXTURE_PATH = "B3D_TexturePath"
 IRR_SCENE_MANAGER_IS_EDITOR = "IRR_Editor"
 DEBUG_NORMAL_LENGTH = "DEBUG_Normal_Length"
 DEBUG_NORMAL_COLOR = "DEBUG_Normal_Color"
+
+#================= LOGGING
+def logi(*args):
+	msg = sys._getframe().f_back.f_code.co_name
+	for arg in args:
+		msg += '::{}'.format(arg)
+	logging.info(msg)
+
+def logw(*args):
+	msg = sys._getframe().f_back.f_code.co_name
+	for arg in args:
+		msg += '::{}'.format(arg)
+	logging.warning(msg)
+
+def loge(err, *args):
+	msg = '{}::{}::LINE={}'.format(err.__traceback__.tb_frame.f_code.co_name, err, err.__traceback__.tb_lineno)
+	for arg in args:
+		msg += '::{}'.format(arg)
+	logging.error(msg)
+
+class BaseLog:
+
+	def logi(self, *args):
+		msg = '{}.{}'.format(self.__class__.__name__, sys._getframe().f_back.f_code.co_name)
+		for arg in args:
+			msg += '::{}'.format(arg)
+		logging.info(msg)
+
+	def logw(self, *args):
+		msg = '{}.{}'.format(self.__class__.__name__, sys._getframe().f_back.f_code.co_name)
+		for arg in args:
+			msg += f'::{arg}'
+		logging.warning(msg)
+
+	def loge(self, err, *args):
+		msg = '{}.{}::{}::LINE={}'.format(self.__class__.__name__, err.__traceback__.tb_frame.f_code.co_name, err, err.__traceback__.tb_lineno)
+		for arg in args:
+			msg += f'::{arg}'
+		logging.error(msg)
+
 
 #================= SKeyMap
 # extended methods for SKeyMap
@@ -8393,7 +8433,7 @@ class ISceneUserDataSerializer:
 	def __bool__(self):
 		return bool(self.c_pointer)
 
-class IReferenceCounted:
+class IReferenceCounted(BaseLog):
 	def __init__(self, *args, **kwargs):
 		self.c_pointer = None
 		if len(args) > 0:
@@ -8832,8 +8872,8 @@ class SMD3MeshBuffer(IReferenceCounted):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				SMD3MeshBuffer_delete(self.c_pointer)
-			except:
-				pass
+			except Exception as e:
+				self.loge(e)
 	def ctor(self):
 		return SMD3MeshBuffer_ctor()
 	def get_MeshHeader(self):
@@ -8975,8 +9015,8 @@ class SMD3Mesh(IReferenceCounted):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				SMD3Mesh_delete(self.c_pointer)
-			except:
-				pass
+			except Exception as e:
+				self.loge(e)
 	def get_Name(self):
 		return SMD3Mesh_get_Name(self.c_pointer)
 	def set_Name(self, value):
@@ -9138,8 +9178,8 @@ class CDynamicMeshBuffer(IDynamicMeshBuffer):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				CDynamicMeshBuffer_delete(self.c_pointer)
-			except:
-				pass
+			except Exception as e:
+				self.loge(e)
 	def ctor(self, vertexType, indexType):
 		return CDynamicMeshBuffer_ctor(self.c_pointer, vertexType, indexType)
 	def getVertexBuffer(self):
@@ -9211,8 +9251,8 @@ class SMesh(IMesh):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				 SMesh_delete(self.c_pointer)
-			except:
-				pass
+			except Exception as e:
+				self.loge(e)
 	def __len__(self):
 		return self._size_
 	def __getitem__(self, key):
@@ -9566,8 +9606,8 @@ class ITexture(IReferenceCounted):
 		if self.c_pointer:
 			try:
 				ITexture_delete(self.c_pointer)
-			except:
-				pass
+			except Exception as e:
+				self.loge(e)
 	if IRRLICHT_VERSION < 180:
 		def lock(self, readOnly = False, mipmapLevel = 0):
 			return ITexture_lock(self.c_pointer, readOnly, mipmapLevel)
@@ -9624,7 +9664,7 @@ class ITriangleSelector(IReferenceCounted):
 			elif isinstance(p1, line3df):
 				ITriangleSelector_getTriangles3(self.c_pointer, triangles.c_pointer, arraySize, outTriangleCount, p1.c_pointer, p2.c_pointer)
 			else:
-				print('WARNING: parameter 4 must be aabbox3df or line3df')
+				self.logi('WARNING: parameter 4 must be aabbox3df or line3df')
 	def getTriangles1(self, triangles, arraySize, outTriangleCount, transform = matrix4(0)):
 		ITriangleSelector_getTriangles(self.c_pointer, triangles.c_pointer, arraySize, outTriangleCount, transform.c_pointer)
 	def getTriangles2(self, triangles, arraySize, outTriangleCount, box, transform = matrix4(0)):
@@ -9807,9 +9847,9 @@ class IAttributes(IReferenceCounted):
 			elif isinstance(args[1], bool) and len(args) == 2:
 				IAttributes_setAttribute14(self.c_pointer, args[0], args[1])
 			else:
-				print('ERROR in IAttributes::setAttribute: not supported type args[1]', args[1])
+				self.logw('not supported type args[1]', args[1])
 		else:
-			print('ERROR in IAttributes::setAttribute: not supported type args[0]', args[0])
+			self.logw('not supported type args[0]', args[0])
 	def getAttributeAsInt1(self, attributeName):
 		return IAttributes_getAttributeAsInt1(self.c_pointer, attributeName)
 	def getAttributeAsInt2(self, index):
@@ -9960,7 +10000,7 @@ class IAttributes(IReferenceCounted):
 	def getAttributeAsUserPointer2(self, index):
 		return IAttributes_getAttributeAsUserPointer2(self.c_pointer, index)
 
-class listIGUIElementIterator:
+class listIGUIElementIterator(BaseLog):
 	def __init__(self, *args, **kwargs):
 		self.c_pointer = None
 		if len(args) == 1:
@@ -9969,18 +10009,19 @@ class listIGUIElementIterator:
 		if self.c_pointer:
 			try:
 				listIGUIElementIterator_delete(self.c_pointer)
-			except:
-				pass
+			except Exception as e:
+				self.loge(e)
 	def __iter__(self):
 		return self
 	def next(self):
 		try:
 			return listIGUIElementIterator_operator_next(self.c_pointer)
-		except:
+		except Exception as e:
+			self.loge(e)
 			try:
 				raise StopIteration
-			except:
-				print('ERROR iteration, ERROR raise StopIteration!')
+			except Exception as e:
+				self.loge(e)
 	def previous(self):
 		return listIGUIElementIterator_operator_prev(self.c_pointer)
 	def __eq__(self, other):
@@ -9994,7 +10035,7 @@ class listIGUIElementIterator:
 	def __sub__(self, num):
 		return listIGUIElementIterator(listIGUIElementIterator_operator_sub(self.c_pointer, num))
 
-class listIGUIElement:
+class listIGUIElement(BaseLog):
 	def __init__(self, *args, **kwargs):
 		self.c_pointer = None
 		if len(args) == 1:
@@ -10005,8 +10046,8 @@ class listIGUIElement:
 		if self.c_pointer:
 			try:
 				listIGUIElement_delete(self.c_pointer)
-			except:
-				pass
+			except Exception as e:
+				self.loge(e)
 	def set(self, other):
 		listIGUIElement_operator_set(self.c_pointer, other.c_pointer)
 	def size(self):
@@ -10054,8 +10095,8 @@ class IGUIElement(IAttributeExchangingObject, IEventReceiver):
 		if self.c_pointer:
 			try:
 				IGUIElement_delete(self.c_pointer)
-			except:
-				pass
+			except Exception as e:
+				self.loge(e)
 	def getParent(self):
 		return IGUIElement(IGUIElement_getParent(self.c_pointer))
 	def getRelativePosition(self):
@@ -10066,7 +10107,7 @@ class IGUIElement(IAttributeExchangingObject, IEventReceiver):
 		elif isinstance(value, position2di):
 			self.setRelativePosition2(value)
 		else:
-			print('ERROR: not valid argument with IGUIElement.setRelativePosition method!')
+			self.logw('not valid argument', value)
 	def setRelativePosition1(self, r):
 		IGUIElement_setRelativePosition1(self.c_pointer, r.c_pointer)
 	def setRelativePosition2(self, position):
@@ -10181,8 +10222,8 @@ class IGUICheckBox(IGUIElement):
 		if self.c_pointer:
 			try:
 				IGUICheckBox_delete(self.c_pointer)
-			except:
-				pass
+			except Exception as e:
+				self.loge(e)
 	def setChecked(self, checked):
 		IGUICheckBox_setChecked(self.c_pointer, checked)
 	def isChecked(self):
@@ -10203,8 +10244,8 @@ class IGUIColorSelectDialog(IGUIElement):
 		if self.c_pointer:
 			try:
 				IGUIColorSelectDialog_delete(self.c_pointer)
-			except:
-				pass
+			except Exception as e:
+				self.loge(e)
 
 class IGUIEditBox(IGUIElement):
 	def __init__(self, *args, **kwargs):
@@ -10713,8 +10754,8 @@ class IGUIComboBox(IGUIElement):
 		if self.c_pointer:
 			try:
 				CGUIComboBox_delete(self.c_pointer)
-			except:
-				pass
+			except Exception as e:
+				self.loge(e)
 	def getItemCount(self):
 		return IGUIComboBox_getItemCount(self.c_pointer)
 	def getItem(self, idx):
@@ -11367,6 +11408,9 @@ IGUIElement.as_IGUIWindow = lambda self: IGUIWindow(IGUIElement_as_IGUIWindow(se
 
 class SParticle(object):
 	def __init__(self, *args, **kwargs):
+		self.logi = BaseLog.logi
+		self.logw = BaseLog.logw
+		self.loge = BaseLog.loge
 		self.c_pointer = None
 		self.delete_c_pointer = True
 		if len(args) == 0 and len(kwargs) == 0:
@@ -11384,8 +11428,8 @@ class SParticle(object):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				SParticle_delete(self.c_pointer)
-			except:
-				pass
+			except Exception as e:
+				self.loge(e)
 	def ctor(self, length = 1):
 		self.c_pointer = SParticle_ctor(length)
 	def get_item(self, index = 0):
@@ -11764,7 +11808,7 @@ class ISceneNodeAnimatorCollisionResponse(ISceneNodeAnimator):
 	def setCollisionCallback(self, callback):
 		ISceneNodeAnimatorCollisionResponse_setCollisionCallback(self.c_pointer, callback.c_pointer)
 
-class ISceneNodeList:
+class ISceneNodeList(BaseLog):
 	def __init__(self, *args, **kwargs):
 		self.c_pointer = None
 		self.delete_c_pointer = True
@@ -11780,8 +11824,8 @@ class ISceneNodeList:
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				ISceneNodeList_delete(self.c_pointer)
-			except:
-				pass
+			except Exception as e:
+				self.loge(e)
 	def __len__(self):
 		return int(self.size())
 	def __getitem__(self, key):
@@ -12024,8 +12068,8 @@ class CustomSceneNode(ISceneNode):
 		if self.c_pointer:
 			try:
 				CustomSceneNode_delete(self.c_pointer)
-			except:
-				pass
+			except Exception as e:
+				self.loge(e)
 	def OnRegisterSceneNode(self):
 		'must be replaced with user class'
 	def render(self):
@@ -12095,8 +12139,8 @@ if BUILD_WITH_GRID_SCENE_NODE:
 			if self.c_pointer:
 				try:
 					CGridSceneNode_delete(self.c_pointer)
-				except:
-					pass
+				except Exception as e:
+					self.loge(e)
 		def Constructor(self, parent, smgr, id = -1, spacing = 8, size = 1024, gridcolor = SColor(255,128,128,128), accentlineoffset = 8, accentgridcolor = SColor(255,192,192,192), axislinestate = False):
 			return CGridSceneNode_ctor(parent.c_pointer, smgr.c_pointer, id, spacing, size, gridcolor.c_pointer, accentlineoffset, accentgridcolor.c_pointer, axislinestate)
 		def clone(self, newParent = 0, newSceneManager = 0):
@@ -12592,7 +12636,7 @@ class IVideoDriver(IReferenceCounted):
 			elif len(args) > 2:
 				return ITexture(IVideoDriver_addTexture1(self.c_pointer, args[0].c_pointer, args[1], args[2]))
 			else:
-				print('ERROR: IVideoDriver.addTexture has not valid arguments!')
+				self.logw('not valid arguments', args)
 				return ITexture(0)
 	def addTexture1(self, size, name, format = ECF_A8R8G8B8):
 		return ITexture(IVideoDriver_addTexture1(self.c_pointer, size.c_pointer, name, format))
@@ -12846,7 +12890,7 @@ class IVideoDriver(IReferenceCounted):
 		try:
 			return IVideoDriver_writeImageToFile1(self.c_pointer, image.c_pointer, filename, param)
 		except Exception as e:
-			print(e)
+			self.loge(e)
 	def writeImageToFile2(self, image, file, param = 0):
 		return IVideoDriver_writeImageToFile2(self.c_pointer, image.c_pointer, file.c_pointer, param)
 	def createImageFromData(self, format, size, data, ownForeignMemory = False, deleteMemory = True):
@@ -13100,7 +13144,7 @@ class IFileSystem(IReferenceCounted):
 		elif isinstance(name_or_file, IReadFile):
 			return self.createXMLReader2(name_or_file)
 		else:
-			print('ERROR in IFileSystem::createXMLReader, unsupported type argument', name_or_file)
+			self.logw('unsupported argument type', name_or_file)
 			return None
 	def createXMLReaderUTF8name(self, filename):
 		return IXMLReaderUTF8(IFileSystem_createXMLReaderUTF8(self.c_pointer, fs_conv(filename)))
@@ -13112,7 +13156,7 @@ class IFileSystem(IReferenceCounted):
 		elif isinstance(name_or_file, IReadFile):
 			return self.createXMLReaderUTF8stream(name_or_file)
 		else:
-			print('ERROR in IFileSystem::createXMLReaderUTF8, unsupported argument type', name_or_file)
+			self.logw('unsupported argument type', name_or_file)
 			return None
 	def createXMLWriter1(self, filename):
 		return IXMLWriter(IFileSystem_createXMLWriter1(self.c_pointer, fs_conv(filename)))
@@ -13124,7 +13168,7 @@ class IFileSystem(IReferenceCounted):
 		elif isinstance(name_or_file, IWriteFile):
 			return self.createXMLWriter2(name_or_file)
 		else:
-			print('ERROR in IFileSystem::createXMLWriter, unsupported argument type', name_or_file)
+			self.logw('unsupported argument type', name_or_file)
 			return None
 	def createEmptyAttributes(self, driver = IVideoDriver(0)):
 		return IAttributes(IFileSystem_createEmptyAttributes(self.c_pointer, driver.c_pointer))
@@ -13182,10 +13226,10 @@ class ISceneManager(IReferenceCounted):
 			elif isinstance(mesh, IMesh):
 				return IMeshSceneNode(ISceneManager_addOctTreeSceneNode2(self.c_pointer, mesh.c_pointer, parent.c_pointer, id, minimalPolysPerNode, alsoAddIfMeshPointerZero))
 			else:
-				print('WARNING: mesh is not valid instance')
+				self.logw('mesh is not valid instance')
 				return IMeshSceneNode(0)
 		else:
-			print('WARNING: addOctTreeSceneNode deprecate, use addOctreeSceneNode instead')
+			self.logw('deprecate, use addOctreeSceneNode instead')
 			return self.addOctreeSceneNode(mesh, parent, id, minimalPolysPerNode, alsoAddIfMeshPointerZero)
 	def addOctTreeSceneNode1(self, mesh, parent = ISceneNode(0), id=-1, minimalPolysPerNode=512, alsoAddIfMeshPointerZero=False):
 		if parent in (None, 0):
@@ -13203,7 +13247,7 @@ class ISceneManager(IReferenceCounted):
 		elif isinstance(mesh, IMesh):
 			return IMeshSceneNode(ISceneManager_addOctreeSceneNode2(self.c_pointer, mesh.c_pointer, parent.c_pointer, id, minimalPolysPerNode, alsoAddIfMeshPointerZero))
 		else:
-			print('WARNING: mesh is not valid instance')
+			self.logw('mesh is not valid instance')
 			return IMeshSceneNode(0)
 	def addCameraSceneNode(self, parent = ISceneNode(0), position = vector3df(0,0,0), lookat = vector3df(0,0,100), id = -1):
 		if parent in (None, 0):
@@ -13314,7 +13358,7 @@ class ISceneManager(IReferenceCounted):
 		elif isinstance(args[0], IAnimatedMeshSceneNode):
 			return self.createTriangleSelector2(*args)
 		else:
-			print('ERROR createTriangleSelector : argument 0 must be IMesh or IAnimatedMeshSceneNode. Found %s' % repr(args[0]))
+			self.logw('argument 0 must be IMesh or IAnimatedMeshSceneNode', args[0])
 			return None
 	def createTriangleSelector1(self, mesh, node = None):
 		if hasattr(node, 'c_pointer'):
@@ -13330,7 +13374,7 @@ class ISceneManager(IReferenceCounted):
 		if IRRLICHT_VERSION < 180:
 			return ITriangleSelector(ISceneManager_createOctTreeTriangleSelector(self.c_pointer, mesh.c_pointer, node.c_pointer, minimalPolysPerNode))
 		else:
-			print('WARNING: createOctTreeTriangleSelector deprecate, use createOctreeTriangleSelector instead')
+			self.logw('deprecate, use createOctreeTriangleSelector instead')
 			return self.createOctreeTriangleSelector(mesh, node, minimalPolysPerNode)
 	def createOctreeTriangleSelector(self, mesh, node = ISceneNode(0), minimalPolysPerNode = 32):
 		'mesh as IMesh, node as ISceneNode'
@@ -13429,8 +13473,8 @@ class IAnimationEndCallBack(IReferenceCounted):
 		if self.c_pointer:
 			try:
 				IAnimationEndCallBack_delete(self.c_pointer)
-			except:
-				pass
+			except Exception as e:
+				self.loge(e)
 	def set_func_event(self, event_func):
 		IAnimationEndCallBack_set_func_event(self.c_pointer, event_func)
 	def OnAnimationEnd(self, node):
@@ -13450,8 +13494,8 @@ class IAnimatedMeshSceneNode(ISceneNode):
 		if self.c_pointer:
 			try:
 				IAnimatedMeshSceneNode_delete(self.c_pointer)
-			except:
-				pass
+			except Exception as e:
+				self.loge(e)
 	def setCurrentFrame(self, frame):
 		IAnimatedMeshSceneNode_setCurrentFrame(self.c_pointer, frame)
 	def setFrameLoop(self, begin, end):
