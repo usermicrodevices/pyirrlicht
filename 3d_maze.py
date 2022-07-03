@@ -15,11 +15,11 @@ except:
 		def get_texture(self):
 			return None
 
-#~ driverType = EDT_NULL
-#~ driverType = EDT_SOFTWARE
-#~ driverType = EDT_BURNINGSVIDEO
-#~ driverType = EDT_DIRECT3D8
-#~ driverType = EDT_DIRECT3D9
+#driverType = EDT_NULL
+#driverType = EDT_SOFTWARE
+#driverType = EDT_BURNINGSVIDEO
+#driverType = EDT_DIRECT3D8
+#driverType = EDT_DIRECT3D9
 driverType = EDT_OPENGL
 
 ID_FINISH_NODE = 0
@@ -122,7 +122,7 @@ class Maze(object):
 		self._makeGrid(self.size)
 		try:
 			self._makeMaze()
-		#~ except MazeIsDone:
+		#except MazeIsDone:
 		except:# for Python 3 compatibility
 			del(self.cells)
 			del(self.sets)
@@ -136,11 +136,11 @@ class Maze(object):
 
 		grid = self.grid
 		id = 0
-		for x in xrange(size[0]):
+		for x in range(size[0]):
 			x_ = x + 0.5
-			for y in xrange(size[1]):
+			for y in range(size[1]):
 				y_ = y + 0.5
-				for z in xrange(size[2]):
+				for z in range(size[2]):
 					z_ = z + 0.5
 					if x_ < size[0] - 1:
 						grid.append([x_, y, z, 0])
@@ -174,7 +174,7 @@ class Maze(object):
 		if len(self.sets[set1]) == self.cell_count:
 			self.start_cell = self.sets[set1][0]
 			self.end_cell = self.sets[set1][-1]
-			#~ raise MazeIsDone('No need for future computations')
+			#raise MazeIsDone('No need for future computations')
 
 	def _makeMaze(self):
 		'''
@@ -184,7 +184,7 @@ class Maze(object):
 		'''
 
 		shuffle(self.grid)
-		for i in xrange(len(self.grid)):
+		for i in range(len(self.grid)):
 			pos_set = self.cells[self._cellOffset(self.grid[i], self.grid[i][3], 1)]
 			neg_set = self.cells[self._cellOffset(self.grid[i], self.grid[i][3], -1)]
 			if neg_set != pos_set:
@@ -210,14 +210,14 @@ class Maze(object):
 			if not material:
 				material = box_scene_node.getMaterial(0)
 				material.EmissiveColor = SColor(255, 0, 0, 255)
-				#~ material.BackfaceCulling = False
+				#material.BackfaceCulling = False
 			if randint(0, 1) and self.cell.get_texture():
 				material.setTexture(0, self.cell.get_texture())
 			else:
 				material.setTexture(0, maze2d(self.video_driver, fore = (128,0,0), back = (0,128,0)))
 			box_scene_node.setMaterial(material)
 			selector = self.scene_manager.createOctreeTriangleSelector(box_scene_node.getMesh(), box_scene_node)
-			#~ self.i_meta_triangle_selector.addTriangleSelector(self.scene_manager.createTriangleSelectorFromBoundingBox(box_scene_node))
+			#self.i_meta_triangle_selector.addTriangleSelector(self.scene_manager.createTriangleSelectorFromBoundingBox(box_scene_node))
 			self.i_meta_triangle_selector.addTriangleSelector(selector)
 			self.maze_walls.append((box_scene_node, selector))
 
@@ -225,7 +225,7 @@ class Maze(object):
 		self.camera.removeAnimator(self.camera_animator)
 		for item, selector in self.maze_walls:
 			self.i_meta_triangle_selector.removeTriangleSelector(selector)
-			#~ item.removeAll()
+			#item.removeAll()
 			item.remove()
 		self.maze_walls = []
 		self.init_maze()
@@ -235,7 +235,7 @@ class Maze(object):
 		position_finish = vector3df(*self.end_cell)
 		self.sphere_finish.setPosition(position_finish)
 		self.finish_box = aabbox3df(position_finish-0.5, position_finish+0.5)
-		#~ self.finish_box.reset(*self.end_cell)
+		#self.finish_box.reset(*self.end_cell)
 		self.create_level()
 		self.add_animator_to_camera()
 
@@ -256,11 +256,11 @@ class Maze(object):
 		# CREATE TOP AND BOTTOM WALLS
 
 		material = SMaterial()
-		#~ material.AmbientColor = SColor(255, 255, 0, 0)
-		#~ material.DiffuseColor = SColor(255, 255, 0, 0)
+		#material.AmbientColor = SColor(255, 255, 0, 0)
+		#material.DiffuseColor = SColor(255, 255, 0, 0)
 		material.EmissiveColor = SColor(255, 255, 0, 0)
-		#~ material.SpecularColor = SColor(255, 255, 0, 0)
-		#~ material.BackfaceCulling = False
+		#material.SpecularColor = SColor(255, 255, 0, 0)
+		#material.BackfaceCulling = False
 
 		material.setTexture(0, maze2d(self.video_driver, 100, 100, (255,0,0), (0,0,225)))
 		i_plane_mesh_top = i_geometry_creator.createPlaneMesh(dimension2df(self.size[0], self.size[2]), dimension2du(1, 1), material, dimension2df(1, 1))
@@ -268,7 +268,7 @@ class Maze(object):
 		i_plane_mesh_scene_node_top.setPosition(vector3df(x_outer_wall, self.size[1] - 0.5, z_outer_wall))
 		i_plane_mesh_scene_node_top.setRotation(vector3df(180,0,0))
 		self.i_meta_triangle_selector.addTriangleSelector(self.scene_manager.createOctreeTriangleSelector(i_plane_mesh_scene_node_top.getMesh(), i_plane_mesh_scene_node_top))
-		#~ i_plane_mesh_scene_node_top.setDebugDataVisible(E_DEBUG_SCENE_TYPE+(i_plane_mesh_scene_node_top.isDebugDataVisible()^EDS_BBOX_BUFFERS))
+		#i_plane_mesh_scene_node_top.setDebugDataVisible(E_DEBUG_SCENE_TYPE+(i_plane_mesh_scene_node_top.isDebugDataVisible()^EDS_BBOX_BUFFERS))
 		i_plane_mesh_top.drop()
 
 		material.EmissiveColor = SColor(255, 0, 0, 255)
@@ -277,7 +277,7 @@ class Maze(object):
 		i_plane_mesh_scene_node_bottom = self.scene_manager.addOctreeSceneNode(i_plane_mesh_bottom)
 		i_plane_mesh_scene_node_bottom.setPosition(vector3df(x_outer_wall, -0.5, z_outer_wall))
 		self.i_meta_triangle_selector.addTriangleSelector(self.scene_manager.createOctreeTriangleSelector(i_plane_mesh_scene_node_bottom.getMesh(), i_plane_mesh_scene_node_bottom))
-		#~ i_plane_mesh_scene_node_bottom.setDebugDataVisible(E_DEBUG_SCENE_TYPE+(i_plane_mesh_scene_node_bottom.isDebugDataVisible()^EDS_BBOX_BUFFERS))
+		#i_plane_mesh_scene_node_bottom.setDebugDataVisible(E_DEBUG_SCENE_TYPE+(i_plane_mesh_scene_node_bottom.isDebugDataVisible()^EDS_BBOX_BUFFERS))
 		i_plane_mesh_bottom.drop()
 
 		# CREATE LEFT AND RIGHT AND FORWARD AND BACKWARD WALLS
@@ -321,14 +321,14 @@ class Maze(object):
 	def add_animator_to_camera(self):
 		self.camera_animator = self.scene_manager.createCollisionResponseAnimator(self.i_meta_triangle_selector, self.camera, vector3df(0.1, 0.2, 0.1), vector3df(0.0, -1.0, 0.0))
 		self.camera.addAnimator(self.camera_animator)
-		#~ self.camera_animator.drop()
+		#self.camera_animator.drop()
 
 	def show(self):
 		"""Shows maze using pyirrlicht. Outer walls as optional"""
-		#~ self.device = createDevice(driverType, dimension2du(800, 600))
+		#self.device = createDevice(driverType, dimension2du(800, 600))
 		p = SIrrlichtCreationParameters()
 		p.DriverType = driverType
-		#~ p.Fullscreen = True
+		#p.Fullscreen = True
 		p.WindowSize = dimension2du(800, 600)
 		p.AntiAlias = True
 		p.WithAlphaChannel = True
@@ -339,10 +339,10 @@ class Maze(object):
 			self.scene_manager = self.device.getSceneManager()
 			self.gui_environment = self.device.getGUIEnvironment()
 
-			gui_font = CGUITTFont(self.gui_environment, os.environ['SYSTEMROOT']+'/Fonts/arial.ttf', 20)
-			if gui_font:
-				self.gui_environment.getSkin().setFont(gui_font)
-				gui_font.drop()
+			#gui_font = CGUITTFont(self.gui_environment, os.environ['SYSTEMROOT']+'/Fonts/arial.ttf', 20)
+			#if gui_font:
+				#self.gui_environment.getSkin().setFont(gui_font)
+				#gui_font.drop()
 
 			# meta triangle selector
 			self.i_meta_triangle_selector = self.scene_manager.createMetaTriangleSelector()
@@ -350,7 +350,7 @@ class Maze(object):
 			# cellular texture generator
 			self.cell = Cellular(self.video_driver, 128, 128, 128)
 
-			#~ sky_node = self.scene_manager.addSkyDomeSceneNode(generate_texture(self.video_driver))
+			#sky_node = self.scene_manager.addSkyDomeSceneNode(generate_texture(self.video_driver))
 			m2d = maze2d(self.video_driver, 50, 50, (255,255,255), (100,100,100))
 			sky_node = self.scene_manager.addSkyBoxSceneNode(m2d, m2d, m2d, m2d, m2d, m2d)
 
@@ -395,7 +395,7 @@ class Maze(object):
 				light_radius = 0.1
 			light = self.scene_manager.addLightSceneNode(self.camera, radius = light_radius)
 
-			#~ collision_manager = self.scene_manager.getSceneCollisionManager()
+			#collision_manager = self.scene_manager.getSceneCollisionManager()
 			self.win_dialog = None
 
 			scolor = SColor(255, 100, 100, 140)
@@ -416,15 +416,15 @@ class Maze(object):
 						if self.finish_box.isPointInside(self.camera.getPosition()) and not self.win_dialog:
 							self.camera.setInputReceiverEnabled(False)
 							self.win_dialog = self.gui_environment.addMessageBox('Warning', 'You is Winner!!!')
-							#~ self.finish_box.reset(0.1, 0.1, 0.1)
+							#self.finish_box.reset(0.1, 0.1, 0.1)
 							self.recreate_level()
-						#~ collision_node = collision_manager.getSceneNodeFromCameraBB(self.camera)
-						#~ if collision_node:
-							#~ if collision_node.getID() == ID_FINISH_NODE:
-								#~ self.gui_environment.addMessageBox('Warning', 'You is Winner!!!')
+						#collision_node = collision_manager.getSceneNodeFromCameraBB(self.camera)
+						#if collision_node:
+							#if collision_node.getID() == ID_FINISH_NODE:
+								#self.gui_environment.addMessageBox('Warning', 'You is Winner!!!')
 						self.gui_environment.drawAll()
 						self.video_driver.endScene()
-					#~ self.device.sleep(10)
+					#self.device.sleep(10)
 				else:
 					self.device.yield_self()
 			self.device.drop()

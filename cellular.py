@@ -16,8 +16,8 @@ ID_BUTTON_SAVE = 1001
 class Cellular:
 	def __init__(self, video_driver, width = 64, height = 64, alpha = 255):
 		self.video_driver = video_driver
-		self.width = width
-		self.height = height
+		self.width = int(width)
+		self.height = int(height)
 		self.alpha = alpha
 		# create Irrlicht image
 		self.blend = True
@@ -81,8 +81,8 @@ class Cellular:
 				d  = []
 				pt = (float(x) / float(self.width), float(y) / float(self.height))
 				# cell of this point
-				i1 = (x * cellSize) / self.width
-				j1 = (y * cellSize) / self.height
+				i1 = int((x * cellSize) / self.width)
+				j1 = int((y * cellSize) / self.height)
 				cellList = [(i1, j1)] # create candidate list of cells
 				for i in range(-1, 2): # add every neighbouring cell
 					for j in range(-1, 2):

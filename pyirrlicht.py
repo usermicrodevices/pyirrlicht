@@ -2,8 +2,8 @@
 # github.com/usermicrodevices
 # BSD license
 
-__version__ = pyirrlicht_version = '1.2.4'
-__version_date__ = '2022-06-17'
+__version__ = pyirrlicht_version = '1.2.5'
+__version_date__ = '2022-07-03'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -1119,7 +1119,7 @@ class SKeyMap:
 		if len(args) > 0:
 			self.length = args[0]
 			self.c_pointer = SKeyMap_ctor(self.length)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer:
 			try:
 				SKeyMap_delete(self.c_pointer)
@@ -3816,7 +3816,10 @@ ISceneManager_addOctreeSceneNode2 = func_type(ctypes.c_void_p, ctypes.c_void_p, 
 ISceneManager_addCameraSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_addCameraSceneNode', c_module))
 ISceneManager_addCameraSceneNodeFPS = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool, ctypes.c_float, ctypes.c_bool)(('ISceneManager_addCameraSceneNodeFPS', c_module))
 ISceneManager_addLightSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_int)(('ISceneManager_addLightSceneNode', c_module))
-ISceneManager_addBillboardSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addBillboardSceneNode', c_module))
+ISceneManager_addBillboardSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addBillboardSceneNode', c_module))
+
+ISceneManager_default_addBillboardSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_default_addBillboardSceneNode', c_module))
+
 ISceneManager_addSkyBoxSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_addSkyBoxSceneNode', c_module))
 ISceneManager_addSkyDomeSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_addSkyDomeSceneNode', c_module))
 ISceneManager_addParticleSystemSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addParticleSystemSceneNode', c_module))
@@ -4901,7 +4904,7 @@ class array:
 			type_name = kwargs.pop('_type_', None)
 			if callable(type_name):
 				self._type_ = type_name
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				array_delete(self.c_pointer)
@@ -5040,7 +5043,7 @@ class SJoystickInfo(object):
 			self.delete_c_pointer = False
 	def __len__(self):
 		return self.length
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				SJoystickInfo_delete(self.c_pointer)
@@ -5075,7 +5078,7 @@ class SJoystickInfo(object):
 class arraySJoystickInfo:
 	def __init__(self):
 		self.c_pointer = arraySJoystickInfo_ctor()
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer:
 			try:
 				arraySJoystickInfo_delete(self.c_pointer)
@@ -5296,7 +5299,7 @@ class IEventReceiver:
 			self.delete_c_pointer = False
 		else:
 			self.c_pointer = IEventReceiver_ctor2(self.callback)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				IEventReceiver_delete(self.c_pointer)
@@ -5535,7 +5538,7 @@ class vector2df(object):
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', None)
 			self.delete_c_pointer = False
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				vector2df_delete(self.c_pointer)
@@ -5691,7 +5694,7 @@ class vector2di(object):
 			self.delete_c_pointer = True
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', None)
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				vector2di_delete(self.c_pointer)
@@ -5904,7 +5907,7 @@ class dimension2df(object):
 					self.c_pointer = dimension2df_ctor1()
 		elif 'pointer' in kwargs:
 			self.c_pointer = kwargs.pop('pointer')
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				dimension2df_delete(self.c_pointer)
@@ -5984,7 +5987,7 @@ class dimension2du(object):
 					self.c_pointer = dimension2du_ctor1()
 		elif 'pointer' in kwargs:
 			self.c_pointer = kwargs.pop('pointer', None)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				dimension2du_delete(self.c_pointer)
@@ -6064,7 +6067,7 @@ class dimension2di(object):
 					self.c_pointer = dimension2di_ctor1()
 		elif 'pointer' in kwargs:
 			self.c_pointer = kwargs.pop('pointer')
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				dimension2di_delete(self.c_pointer)
@@ -6139,7 +6142,7 @@ class rectf(object):
 				self.ctor4(*args, **kwargs)
 			else:
 				self.ctor3(*args, **kwargs)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				rectf_delete(self.c_pointer)
@@ -6233,7 +6236,7 @@ class recti(object):
 				self.ctor4(*args, **kwargs)
 			else:
 				self.ctor3(*args, **kwargs)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				recti_delete(self.c_pointer)
@@ -6320,7 +6323,7 @@ class rects32array:
 		elif len(args) > 0:
 			self.c_pointer = args[0]
 			self.delete_c_pointer = False
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				rects32array_delete(self.c_pointer)
@@ -6409,7 +6412,7 @@ class vector3df(object):
 			self.c_pointer = vector3df_ctor3(kwargs.pop('n', 0.0))
 		elif 'other' in kwargs:
 			self.c_pointer = vector3df_ctor4(kwargs.pop('other'))
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				vector3df_delete(self.c_pointer)
@@ -6563,7 +6566,7 @@ class vector3di(object):
 			self.c_pointer = vector3di_ctor3(kwargs.pop('n', 0))
 		elif 'other' in kwargs:
 			self.c_pointer = vector3di_ctor4(kwargs.pop('other'))
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				vector3di_delete(self.c_pointer)
@@ -6721,7 +6724,7 @@ class aabbox3df(object):
 			self.c_pointer = aabbox3df_ctor4(*args, **kwargs)
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', 0)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				aabbox3df_delete(self.c_pointer)
@@ -6834,7 +6837,7 @@ class aabbox3di(object):
 				self.delete_c_pointer = False
 		elif len(args) == 6:
 			self.c_pointer = aabbox3di_ctor4(*args, **kwargs)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				aabbox3di_delete(self.c_pointer)
@@ -6943,7 +6946,7 @@ class plane3df(object):
 			self.c_pointer = plane3df_ctor4(args[0].c_pointer, args[1].c_pointer, args[2].c_pointer)
 		elif len(args) == 6:
 			self.c_pointer = plane3df_ctor4(*args)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				plane3df_delete(self.c_pointer)
@@ -7022,7 +7025,7 @@ class plane3di(object):
 			self.c_pointer = plane3di_ctor4(args[0].c_pointer, args[1].c_pointer, args[2].c_pointer)
 		elif len(args) == 6:
 			self.c_pointer = plane3di_ctor4(*args)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				plane3di_delete(self.c_pointer)
@@ -7094,7 +7097,7 @@ class line3df(object):
 			self.c_pointer = line3df_ctor2(*args)
 		elif len(args) == 2:
 			self.c_pointer = line3df_ctor3(args[0].c_pointer, args[1].c_pointer)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				line3df_delete(self.c_pointer)
@@ -7164,7 +7167,7 @@ class line3di(object):
 			self.c_pointer = line3di_ctor2(*args)
 		elif len(args) == 2:
 			self.c_pointer = line3di_ctor3(args[0].c_pointer, args[1].c_pointer)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				line3di_delete(self.c_pointer)
@@ -7232,7 +7235,7 @@ class triangle3df(object):
 			self.delete_c_pointer = False
 		elif len(args) == 3:
 			self.c_pointer = triangle3df_ctor2(*args)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				triangle3df_delete(self.c_pointer)
@@ -7303,7 +7306,7 @@ class triangle3di(object):
 			self.delete_c_pointer = False
 		elif len(args) == 3:
 			self.c_pointer = triangle3di_ctor2(*args)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				triangle3di_delete(self.c_pointer)
@@ -7387,7 +7390,7 @@ class S3DVertex(object):
 		return S3DVertex_ctor2(x, y, z, nx, ny, nz, c.c_pointer, tu, tv)
 	def ctor3(self, pos, normal, color, tcoords):
 		return S3DVertex_ctor3(pos.c_pointer, normal.c_pointer, color.c_pointer, tcoords.c_pointer)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				S3DVertex_delete(self.c_pointer)
@@ -7556,7 +7559,7 @@ class SColor(object):
 			self.c_pointer = SColor_ctor2(*args)
 		elif 'color' in kwargs:
 			self.c_pointer = SColor_ctor3(kwargs.pop('color', 0))
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				SColor_delete(self.c_pointer)
@@ -7643,7 +7646,7 @@ class SColorf(object):
 			self.c_pointer = SColorf_ctor2(args[0], args[1], args[2], 1.0)
 		elif len(args) == 4:
 			self.c_pointer = SColorf_ctor2(*args)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				SColorf_delete(self.c_pointer)
@@ -7706,7 +7709,7 @@ class SColorHSL(object):
 			self.c_pointer = SColorHSL_ctor(*args)
 	def ctor(self, h = 0.0, s = 0.0, l = 0.0):
 		self.c_pointer = SColorHSL_ctor(h, s, l)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				SColorHSL_delete(self.c_pointer)
@@ -7761,7 +7764,7 @@ class matrix4:
 		return '%s(%f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f)' % (self.__class__.__name__, self[0], self[1], self[2], self[3], self[4], self[5], self[6], self[7], self[8], self[9], self[10], self[11], self[12], self[13], self[14], self[15])
 	def __str__(self):
 		return self.__repr__()
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				matrix4_delete(self.c_pointer)
@@ -7979,7 +7982,7 @@ class quaternion(object):
 			self.c_pointer = self.ctor2(*args)
 		elif len(args) == 3:
 			self.c_pointer = self.ctor3(*args)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				quaternion_delete(self.c_pointer)
@@ -8089,7 +8092,7 @@ class SMaterialLayer(object):
 			self.c_pointer = SMaterialLayer_ctor2(kwargs.pop('other').c_pointer, None)
 		else:
 			self.c_pointer = SMaterialLayer_ctor1()
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				SMaterialLayer_delete(self.c_pointer)
@@ -8161,7 +8164,7 @@ class SMaterial(object):
 			self.c_pointer = SMaterial_ctor2(kwargs.pop('other').c_pointer, None)
 		else:
 			self.c_pointer = SMaterial_ctor1()
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				SMaterial_delete(self.c_pointer)
@@ -8318,7 +8321,7 @@ class SOverrideMaterial(object):
 		else:
 			self.c_pointer = self.ctor()
 			self.delete_c_pointer = True
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				SOverrideMaterial_delete(self.c_pointer)
@@ -8365,7 +8368,7 @@ class IRenderTarget(object):
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', None)
 			self.delete_c_pointer = False
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				IRenderTarget_delete(self.c_pointer)
@@ -8593,7 +8596,7 @@ class SMD3AnimationInfo(object):
 			self.c_pointer = args[0]
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', None)
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				SMD3AnimationInfo_delete(self.c_pointer)
@@ -8633,7 +8636,7 @@ class SMD3Header(object):
 			self.c_pointer = args[0]
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', None)
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				SMD3Header_delete(self.c_pointer)
@@ -8708,7 +8711,7 @@ class SMD3MeshHeader(object):
 			self.c_pointer = args[0]
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', None)
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				SMD3MeshHeader_delete(self.c_pointer)
@@ -8783,7 +8786,7 @@ class SMD3Vertex(object):
 			self.c_pointer = args[0]
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', None)
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				SMD3Vertex_delete(self.c_pointer)
@@ -8813,7 +8816,7 @@ class SMD3TexCoord(object):
 			self.c_pointer = args[0]
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', None)
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				SMD3TexCoord_delete(self.c_pointer)
@@ -8843,7 +8846,7 @@ class SMD3Face(object):
 			self.c_pointer = args[0]
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', None)
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				SMD3Face_delete(self.c_pointer)
@@ -8868,7 +8871,7 @@ class SMD3MeshBuffer(IReferenceCounted):
 			self.c_pointer = args[0]
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', None)
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				SMD3MeshBuffer_delete(self.c_pointer)
@@ -8921,7 +8924,7 @@ class SMD3QuaternionTag(object):
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', None)
 			self.delete_c_pointer = False
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				SMD3QuaternionTag_delete(self.c_pointer)
@@ -8970,7 +8973,7 @@ class SMD3QuaternionTagList:
 			self.delete_c_pointer = False
 	def __len__(self):
 		return self.size()
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				SMD3QuaternionTagList_delete(self.c_pointer)
@@ -9011,7 +9014,7 @@ class SMD3Mesh(IReferenceCounted):
 		else:
 			self.c_pointer = SMD3Mesh_ctor()
 			self.delete_c_pointer = True
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				SMD3Mesh_delete(self.c_pointer)
@@ -9174,7 +9177,7 @@ class CDynamicMeshBuffer(IDynamicMeshBuffer):
 			self.delete_c_pointer = False
 		else:
 			self.c_pointer = self.ctor(*args)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				CDynamicMeshBuffer_delete(self.c_pointer)
@@ -9247,7 +9250,7 @@ class SMesh(IMesh):
 				self.delete_c_pointer = True
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', None)
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				 SMesh_delete(self.c_pointer)
@@ -9602,7 +9605,7 @@ class ITexture(IReferenceCounted):
 		self.c_pointer = None
 		if len(args) > 0:
 			self.c_pointer = args[0]
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer:
 			try:
 				ITexture_delete(self.c_pointer)
@@ -10005,7 +10008,7 @@ class listIGUIElementIterator(BaseLog):
 		self.c_pointer = None
 		if len(args) == 1:
 			self.c_pointer = listIGUIElementIterator_ctor()
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer:
 			try:
 				listIGUIElementIterator_delete(self.c_pointer)
@@ -10042,7 +10045,7 @@ class listIGUIElement(BaseLog):
 			self.c_pointer = listIGUIElement_ctor2(args[0].c_pointer)
 		else:
 			self.c_pointer = listIGUIElement_ctor1()
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer:
 			try:
 				listIGUIElement_delete(self.c_pointer)
@@ -10091,7 +10094,7 @@ class IGUIElement(IAttributeExchangingObject, IEventReceiver):
 				self.c_pointer = args[0]
 		elif len(args) > 4:
 			self.c_pointer = IGUIElement_ctor(args[0], args[1].c_pointer, args[2].c_pointer, args[3], args[4].c_pointer)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer:
 			try:
 				IGUIElement_delete(self.c_pointer)
@@ -10218,7 +10221,7 @@ class IGUICheckBox(IGUIElement):
 				self.c_pointer = args[0]
 		elif len(args) > 3:
 			self.c_pointer = IGUICheckBox_ctor(args[0].c_pointer, args[1].c_pointer, args[2], args[3].c_pointer)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer:
 			try:
 				IGUICheckBox_delete(self.c_pointer)
@@ -10240,7 +10243,7 @@ class IGUIColorSelectDialog(IGUIElement):
 				self.c_pointer = args[0]
 		elif len(args) > 3:
 			self.c_pointer = IGUIColorSelectDialog_ctor(args[0].c_pointer, args[1].c_pointer, args[2], args[3].c_pointer)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer:
 			try:
 				IGUIColorSelectDialog_delete(self.c_pointer)
@@ -10327,7 +10330,7 @@ if BUILD_WITH_GUI_FILE_SELECTOR:
 					self.c_pointer = args[0].c_pointer
 				else:
 					self.c_pointer = self.ctor(*args, **kwargs)
-		def __del__(self):
+		def a__del__(self):
 			if self.c_pointer:
 				try:
 					CGUIFileSelector_delete(self.c_pointer)
@@ -10750,7 +10753,7 @@ class IGUIComboBox(IGUIElement):
 				self.c_pointer = args[0]
 		elif len(args) > 3:
 			self.c_pointer = IGUIComboBox_ctor(args[0].c_pointer, args[1].c_pointer, args[2], args[3].c_pointer)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer:
 			try:
 				CGUIComboBox_delete(self.c_pointer)
@@ -11424,7 +11427,7 @@ class SParticle(object):
 		return bool(self.c_pointer)
 	def __bool__(self):
 		return bool(self.c_pointer)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				SParticle_delete(self.c_pointer)
@@ -11820,7 +11823,7 @@ class ISceneNodeList(BaseLog):
 		return bool(self.c_pointer)
 	def __bool__(self):
 		return bool(self.c_pointer)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
 				ISceneNodeList_delete(self.c_pointer)
@@ -12064,7 +12067,7 @@ class CustomSceneNode(ISceneNode):
 		CustomSceneNode_set_getMaterialCount(self.c_pointer, self.callback_getMaterialCount)
 	def ctor(self, parent, mgr, id = -1):
 		return CustomSceneNode_ctor(parent.c_pointer, mgr.c_pointer, id)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer:
 			try:
 				CustomSceneNode_delete(self.c_pointer)
@@ -12135,7 +12138,7 @@ if BUILD_WITH_GRID_SCENE_NODE:
 				self.c_pointer = args[0]
 			elif len(args) > 1 or len(kwargs) > 1:
 				self.c_pointer = self.Constructor(*args, **kwargs)
-		def __del__(self):
+		def a__del__(self):
 			if self.c_pointer:
 				try:
 					CGridSceneNode_delete(self.c_pointer)
@@ -13270,10 +13273,15 @@ class ISceneManager(IReferenceCounted):
 		if parent in (None, 0):
 			parent = ISceneNode(0)
 		return ILightSceneNode(ISceneManager_addLightSceneNode(self.c_pointer, parent.c_pointer, position.c_pointer, color.c_pointer, radius, id))
-	def addBillboardSceneNode(self, parent = ISceneNode(0), size = dimension2df(10.0, 10.0), position = vector3df(0,0,0), id = -1, colorTop = SColor(color = 0xFFFFFFFF), colorBottom = SColor(color = 0xFFFFFFFF)):
-		if parent in (None, 0):
-			parent = ISceneNode(0)
-		return IBillboardSceneNode(ISceneManager_addBillboardSceneNode(self.c_pointer, parent.c_pointer, size.c_pointer, position.c_pointer, id, colorTop.c_pointer, colorBottom.c_pointer))
+	def default_addBillboardSceneNode(self):
+		return IBillboardSceneNode(ISceneManager_default_addBillboardSceneNode(self.c_pointer))
+	def addBillboardSceneNode(self, parent = None, size = dimension2df(10.0, 10.0), position = vector3df(0,0,0), id = -1, colorTop = SColor(color = 0xFFFFFFFF), colorBottom = SColor(color = 0xFFFFFFFF)):
+		if parent not in (None, 0):
+			try:
+				parent = parent.c_pointer
+			except Exception as e:
+				self.loge(e)
+		return IBillboardSceneNode(ISceneManager_addBillboardSceneNode(self.c_pointer, parent, size.c_pointer, position.c_pointer, id, colorTop.c_pointer, colorBottom.c_pointer))
 	def addSkyBoxSceneNode(self, top, bottom, left, right, front, back, parent = ISceneNode(0), id = -1):
 		return ISceneNode(ISceneManager_addSkyBoxSceneNode(self.c_pointer, top.c_pointer, bottom.c_pointer, left.c_pointer, right.c_pointer, front.c_pointer, back.c_pointer, parent.c_pointer, id))
 	def addSkyDomeSceneNode(self, texture, horiRes = 16, vertRes = 8, texturePercentage = 0.9, spherePercentage = 2.0, radius = 1000.0, parent = ISceneNode(0), id = -1):
@@ -13469,7 +13477,7 @@ class IAnimationEndCallBack(IReferenceCounted):
 				self.c_pointer = IAnimationEndCallBack_ctor1()
 		else:
 			self.c_pointer = IAnimationEndCallBack_ctor2(self.callback)
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer:
 			try:
 				IAnimationEndCallBack_delete(self.c_pointer)
@@ -13490,7 +13498,7 @@ class IAnimatedMeshSceneNode(ISceneNode):
 				self.c_pointer = args[0].c_pointer
 			else:
 				self.c_pointer = args[0]
-	def __del__(self):
+	def a__del__(self):
 		if self.c_pointer:
 			try:
 				IAnimatedMeshSceneNode_delete(self.c_pointer)
@@ -13965,7 +13973,7 @@ class Q3LevelLoadParameter(object):
 				self.delete_c_pointer = True
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', None)
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				Q3LevelLoadParameter_delete(self.c_pointer)
@@ -14071,7 +14079,7 @@ class SBlendFunc(object):
 				self.delete_c_pointer = True
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', None)
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				SBlendFunc_delete(self.c_pointer)
@@ -14123,7 +14131,7 @@ class Noiser(object):
 				self.delete_c_pointer = True
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', None)
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				Noiser_delete(self.c_pointer)
@@ -14159,7 +14167,7 @@ class SModifierFunction(object):
 				self.delete_c_pointer = True
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', None)
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				SModifierFunction_delete(self.c_pointer)
@@ -14287,7 +14295,7 @@ class SVariable(object):
 			self.c_pointer = kwargs.pop('c_pointer', None)
 	def ctor(self, n, c = None):
 		return SVariable_ctor(n, c)
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				SVariable_delete(self.c_pointer)
@@ -14339,7 +14347,7 @@ class SVarGroup(object):
 				self.delete_c_pointer = True
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', None)
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				SVarGroup_delete(self.c_pointer)
@@ -14384,7 +14392,7 @@ class SVarGroupList(IReferenceCounted):
 				self.delete_c_pointer = True
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', None)
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				SVarGroupList_delete(self.c_pointer)
@@ -14423,7 +14431,7 @@ class IShader(object):
 				self.delete_c_pointer = True
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', None)
-	def __del__(self):
+	def a__del__(self):
 		if self.delete_c_pointer and self.c_pointer:
 			try:
 				IShader_delete(self.c_pointer)
@@ -14831,7 +14839,7 @@ if BUILD_WITH_IRR_SVG_AGG:
 				self.c_pointer = kwargs.pop('c_pointer', None)
 			else:
 				self.c_pointer = None
-		def __del__(self):
+		def a__del__(self):
 			if self.c_pointer:
 				try:
 					svg_agg_image_delete(self.c_pointer)

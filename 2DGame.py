@@ -277,13 +277,12 @@ if run_app:
 			print(e)
 		else:
 			font_file = font_path + 'arial.ttf'
-		gui_font = CGUITTFont(guienv, font_file, 12)
-		if not gui_font:
-			gui_font = guienv.getBuiltInFont()
-
+		#gui_font = CGUITTFont(guienv, font_file, 12)
+		#if not gui_font:
+			#gui_font = guienv.getBuiltInFont()
 		skin = guienv.getSkin()
-		skin.setFont(gui_font)
-		gui_font.drop()
+		#skin.setFont(gui_font)
+		#gui_font.drop()
 		menu_height = skin.getSize(EGDS_MENU_HEIGHT)
 
 		if pybass:
@@ -366,14 +365,14 @@ if run_app:
 						driver.draw2DImage(santa, position2di(int((i_event_receiver.screen_size.X-santa_size.X)/2),int((i_event_receiver.screen_size.Y-santa_size.Y)/2)), recti(0,0,int(santa_size.X),int(santa_size.Y)), 0, img_color, True)
 					else:
 						driver.draw2DImage(santa_pipe, position2di(int((i_event_receiver.screen_size.X-santa_pipe_size.X)/2),int((i_event_receiver.screen_size.Y-santa_pipe_size.Y)/2)), recti(0,0,int(santa_pipe_size.X),int(santa_pipe_size.Y)), 0, img_color, True)
-					img_font.draw(text2, recti(int((i_event_receiver.screen_size.X-text2_size.X)/2),int((i_event_receiver.screen_size.Y-text2_size.Y)/2),0,0), SColor(255,time % 155,time % 155,255))
+					#img_font.draw(text2, recti(int((i_event_receiver.screen_size.X-text2_size.X)/2),int((i_event_receiver.screen_size.Y-text2_size.Y)/2),0,0), SColor(255,time % 155,time % 155,255))
 				else:
 					if int(time/1500) % 2:
 						#~ print('=== type', type(i_event_receiver.screen_size.X/2-bells_size.X/2))
 						driver.draw2DImage(bells, position2di(int((i_event_receiver.screen_size.X-bells_size.X)/2),int((i_event_receiver.screen_size.Y-bells_size.Y)/2)), recti(0,0,int(bells_size.X),int(bells_size.Y)), 0, img_color, True)
 					else:
 						driver.draw2DImage(present_red, position2di(int((i_event_receiver.screen_size.X-present_red_size.X)/2),int((i_event_receiver.screen_size.Y-present_red_size.Y)/2)), recti(0,0,int(present_red_size.X),int(present_red_size.Y)), 0, img_color, True)
-					img_font.draw(text1, recti(int((i_event_receiver.screen_size.X-text1_size.X)/2),int((i_event_receiver.screen_size.Y-text1_size.Y)/2),0,0), SColor(255,time % 255,time % 255,255))
+					#img_font.draw(text1, recti(int((i_event_receiver.screen_size.X-text1_size.X)/2),int((i_event_receiver.screen_size.Y-text1_size.Y)/2),0,0), SColor(255,time % 255,time % 255,255))
 				driver.draw2DImage(cur_img, position2di(int(x-cur_img_size.X/2),int(y-cur_img_size.Y/2)), recti(0,0,int(cur_img_size.X),int(cur_img_size.Y)), 0, img_color, True)
 				#~ if x < 0 or y < 0 or x > i_event_receiver.screen_size.X or y > i_event_receiver.screen_size.Y:
 				if x < 0 or y < menu_height or x > i_event_receiver.screen_size.X or y > i_event_receiver.screen_size.Y or i_event_receiver.about_dialog or i_event_receiver.show_cursor:

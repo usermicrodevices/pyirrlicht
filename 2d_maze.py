@@ -60,13 +60,12 @@ def makeMaze(w, h, fore, back, scale = 0):
 			print(e)
 		else:
 			font_file = font_path + 'arial.ttf'
-		gui_font = CGUITTFont(gui_environment, font_file, 20)
-		if not gui_font:
-			gui_font = gui_environment.getBuiltInFont()
-
-		skin = gui_environment.getSkin()
-		skin.setFont(gui_font)
-		gui_font.drop()
+		#gui_font = CGUITTFont(gui_environment, font_file, 20)
+		#if not gui_font:
+			#gui_font = gui_environment.getBuiltInFont()
+		#skin = gui_environment.getSkin()
+		#skin.setFont(gui_font)
+		#gui_font.drop()
 
 		if scale != 0:
 			w, h = int(w/scale), int(h/scale)
@@ -133,8 +132,8 @@ def makeMaze(w, h, fore, back, scale = 0):
 					#if _createScreenShot:
 						#_createScreenShot = False
 						#video_driver.writeImageToFile(video_driver.createScreenShot(), '2d_maze_screen_shot.png')
-					print(stored_file_name)
 					gui_environment.drawAll()
+					#print(stored_file_name)
 					video_driver.endScene()
 				device.sleep(100)
 			else:

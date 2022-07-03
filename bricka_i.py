@@ -6,7 +6,7 @@
 """
 
 import os, sys
-#~ os.environ['IRRLICHT_C_LIBRARY'] = 'irrlicht_c_173'
+#os.environ['IRRLICHT_C_LIBRARY'] = 'irrlicht_c_173'
 
 from pyirrlicht import *
 
@@ -19,17 +19,17 @@ except:
 		def get_texture(self):
 			return None
 
-#~ driverType = EDT_NULL
-#~ driverType = EDT_SOFTWARE
-#~ driverType = EDT_BURNINGSVIDEO
-#~ driverType = EDT_DIRECT3D8
-driverType = EDT_DIRECT3D9
-#~ driverType = EDT_OPENGL
+#driverType = EDT_NULL
+#driverType = EDT_SOFTWARE
+#driverType = EDT_BURNINGSVIDEO
+#driverType = EDT_DIRECT3D8
+#driverType = EDT_DIRECT3D9
+driverType = EDT_OPENGL
 
 # Object dimensions
 BALL_DIAMETER = 16
-BALL_RADIUS = BALL_DIAMETER / 2
-ball_delta = BALL_RADIUS / 2
+BALL_RADIUS = int(BALL_DIAMETER / 2)
+ball_delta = int(BALL_RADIUS / 2)
 
 PADDLE_STEP = 10
 
@@ -126,14 +126,15 @@ class Bricka:
 				if (i + 2) > EGDC_COUNT:
 					break
 			# font
-			self.font = CGUITTFont(self.gui_environment, os.environ['SYSTEMROOT']+'/Fonts/arial.ttf', self.font_height)
-			if self.font:
-				self.skin.setFont(self.font)
+			#self.font = CGUITTFont(self.gui_environment, os.environ['SYSTEMROOT']+'/Fonts/arial.ttf', self.font_height)
+			#if self.font:
+				#self.skin.setFont(self.font)
+			self.font = None#self.gui_environment.getBuiltInFont()
 			# add 3d ball
-			#~ self.ball3d = self.scene_manager.addSphereSceneNode(float(BALL_DIAMETER))
+			#self.ball3d = self.scene_manager.addSphereSceneNode(float(BALL_DIAMETER))
 			# add camera for 3d view
 			self.camera = self.scene_manager.addCameraSceneNode(position = vector3df(0,0,-400))
-			#~ self.camera = self.scene_manager.addCameraSceneNodeMaya(distance = 400)
+			#self.camera = self.scene_manager.addCameraSceneNodeMaya(distance = 400)
 			# initialize first level
 			self.init_game()
 
@@ -167,15 +168,15 @@ class Bricka:
 
 	def init_game(self):
 		screen_size = self.video_driver.getScreenSize()
-		self.brick_width = abs(screen_size.X / 11)
-		self.brick_height = abs(screen_size.X / 32)
+		self.brick_width = int(abs(screen_size.X / 11))
+		self.brick_height = int(abs(screen_size.X / 32))
 		self.paddle_width = 60
 		self.paddle_height = 12
 		self.max_paddle_x = screen_size.X - self.paddle_width
 		self.max_ball_x = screen_size.X - BALL_DIAMETER
 		self.max_ball_y = screen_size.Y - BALL_DIAMETER
 		# Paddle X,Y coordinate
-		self.paddle_x = (screen_size.X - self.paddle_width) / 2
+		self.paddle_x = int((screen_size.X - self.paddle_width) / 2)
 		self.paddle_y = screen_size.Y - self.paddle_height - 10
 		# ball X,Y coordinate
 		self.ball_x = self.paddle_x
@@ -186,7 +187,7 @@ class Bricka:
 		self.paddle = recti(self.paddle_x, self.paddle_y, self.paddle_x + self.paddle_width, self.paddle_y + self.paddle_height)
 		self.ball = recti(self.ball_x, self.ball_y, self.ball_x + BALL_DIAMETER, self.ball_y + BALL_DIAMETER)
 		self.ball_vel = self.ball_vel_default
-		#~ self.ball3d.setPosition(vector3df(self.ball_x, self.ball_y, 0))
+		#self.ball3d.setPosition(vector3df(self.ball_x, self.ball_y, 0))
 		# cellular texture generator
 		self.cell_paddle = Cellular(self.video_driver, self.paddle_width, self.paddle_height, 128)
 		self.cell_brick = Cellular(self.video_driver, self.brick_width, self.brick_height, 128)
@@ -219,9 +220,9 @@ class Bricka:
 	def create_bricks(self):
 		screen_size = self.video_driver.getScreenSize()
 		x_delta = self.brick_width + 10
-		count_rows = abs(screen_size.Y / 68)
-		count_columns = abs(screen_size.X / x_delta - 1)
-		x1 = (screen_size.X - x_delta * count_columns) / 2
+		count_rows = int(abs(screen_size.Y / 68))
+		count_columns = int(abs(screen_size.X / x_delta - 1))
+		x1 = int((screen_size.X - x_delta * count_columns) / 2)
 		y_ofs = 35
 		self.bricks = []
 		for i in range(count_rows):
@@ -319,7 +320,7 @@ class Bricka:
 										destroyed_color3.a = 255
 										destroyed_color4.a = 255
 					elif self.state == STATE_BALL_IN_PADDLE:
-						self.set_ball_x(self.paddle.UpperLeftCorner.X + self.paddle.getWidth() / 2)
+						self.set_ball_x(int(self.paddle.UpperLeftCorner.X + self.paddle.getWidth() / 2))
 						self.set_ball_y(self.paddle.UpperLeftCorner.Y - self.ball.getHeight())
 						self.show_message(('PRESS SPACE', 'TO LAUNCH THE BALL', 'F1 - help, ESC - exit'))
 					elif self.state == STATE_GAME_OVER:
@@ -333,14 +334,14 @@ class Bricka:
 					else:
 						self.video_driver.draw2DRectangle(self.paddle, color_yellow, color_red, color_green, color_blue)
 					# Draw ball
-					#~ self.video_driver.draw2DRectangle(self.white, self.ball)
+					#self.video_driver.draw2DRectangle(self.white, self.ball)
 					x1, y1 = self.ball.UpperLeftCorner.get_XY()
 					x2, y2 = self.ball.LowerRightCorner.get_XY()
 					self.video_driver.draw2DPolygon(recti(x1 + ball_delta, y1 + ball_delta, x2 + ball_delta, y2 + ball_delta), BALL_RADIUS, self.white)
-					#~ ball_draw = self.ball + ball_delta
-					#~ self.video_driver.draw2DPolygon(ball_draw, BALL_RADIUS, self.white)
-					#~ self.ball3d.setPosition(vector3df(x1 + ball_delta, y1 + ball_delta, 0))
-					#~ self.scene_manager.drawAll()
+					#ball_draw = self.ball + ball_delta
+					#self.video_driver.draw2DPolygon(ball_draw, BALL_RADIUS, self.white)
+					#self.ball3d.setPosition(vector3df(x1 + ball_delta, y1 + ball_delta, 0))
+					#self.scene_manager.drawAll()
 					self.show_stats()
 					if self.help_dialog:
 						self.gui_environment.drawAll()

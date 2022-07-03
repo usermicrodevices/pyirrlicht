@@ -1,11 +1,11 @@
 from pyirrlicht import *
 
-#~ driverType = EDT_NULL
-#~ driverType = EDT_SOFTWARE
-#~ driverType = EDT_BURNINGSVIDEO
-#~ driverType = EDT_DIRECT3D8
-driverType = EDT_DIRECT3D9
-#~ driverType = EDT_OPENGL
+#driverType = EDT_NULL
+#driverType = EDT_SOFTWARE
+#driverType = EDT_BURNINGSVIDEO
+#driverType = EDT_DIRECT3D8
+#driverType = EDT_DIRECT3D9
+driverType = EDT_OPENGL
 
 ID_IsNotPickable = 0
 IDFlag_IsPickable = 1
@@ -18,9 +18,9 @@ if device:
 	scene_manager = device.getSceneManager()
 
 	if IRRLICHT_VERSION < 180:
-		device.getFileSystem().addZipFileArchive("media/map-20kdm2.pk3")
+		device.getFileSystem().addZipFileArchive("..//irrlicht//media//map-20kdm2.pk3")
 	else:
-		device.getFileSystem().addFileArchive("media/map-20kdm2.pk3")
+		device.getFileSystem().addFileArchive("..//irrlicht//media//map-20kdm2.pk3")
 
 	q3levelmesh = scene_manager.getMesh("20kdm2.bsp")
 
@@ -43,44 +43,44 @@ if device:
 
 	if selector:
 		anim = scene_manager.createCollisionResponseAnimator(selector, camera, vector3df(30,50,30), vector3df(0,-10,0), vector3df(0,30,0))
-		#~ selector.drop()
+		#selector.drop()
 		camera.addAnimator(anim)
 		anim.drop()
 
 	device.getCursorControl().setVisible(False)
 
-	billboard = scene_manager.addBillboardSceneNode()
+	billboard = scene_manager.default_addBillboardSceneNode()
 	billboard.setMaterialType(EMT_TRANSPARENT_ADD_COLOR)
-	billboard.setMaterialTexture(0, driver.getTexture("media/particle.bmp"))
+	billboard.setMaterialTexture(0, driver.getTexture("..//irrlicht//media//particle.bmp"))
 	billboard.setMaterialFlag(EMF_LIGHTING, False)
 	billboard.setMaterialFlag(EMF_ZBUFFER, False)
 	billboard.setSize(dimension2df(20.0, 20.0))
 	billboard.setID(ID_IsNotPickable)
 
-	node = scene_manager.addAnimatedMeshSceneNode(scene_manager.getMesh("media/faerie.md2"), 0, IDFlag_IsPickable | IDFlag_IsHighlightable)
+	node = scene_manager.addAnimatedMeshSceneNode(scene_manager.getMesh("..//irrlicht//media//faerie.md2"), 0, IDFlag_IsPickable | IDFlag_IsHighlightable)
 	node.setPosition(vector3df(-70,-15,-120))
 	node.setScale(vector3df(2, 2, 2))
 	node.setMD2Animation(EMAT_POINT)
 	node.setAnimationSpeed(20.0)
 	material = node.getMaterial(0)
-	material.setTexture(0, driver.getTexture("media/faerie2.bmp"))
+	material.setTexture(0, driver.getTexture("..//irrlicht//media//faerie2.bmp"))
 	material.Lighting = True
 	material.NormalizeNormals = True
-	#~ node.setMaterial(material)
+	#node.setMaterial(material)
 
 	selector = scene_manager.createTriangleSelector(node)
 	node.setTriangleSelector(selector)
-	#~ selector.drop()
+	#selector.drop()
 
-	node = scene_manager.addAnimatedMeshSceneNode(scene_manager.getMesh("media/dwarf.x"), 0, IDFlag_IsPickable | IDFlag_IsHighlightable)
+	node = scene_manager.addAnimatedMeshSceneNode(scene_manager.getMesh("..//irrlicht//media//dwarf.x"), 0, IDFlag_IsPickable | IDFlag_IsHighlightable)
 	node.setPosition(vector3df(-70,-66,0))
 	node.setRotation(vector3df(0,-90,0))
 	node.setAnimationSpeed(20.0)
 	selector = scene_manager.createTriangleSelector(node)
 	node.setTriangleSelector(selector)
-	#~ selector.drop()
+	#selector.drop()
 
-	node = scene_manager.addAnimatedMeshSceneNode(scene_manager.getMesh("media/ninja.b3d"), 0, IDFlag_IsPickable | IDFlag_IsHighlightable)
+	node = scene_manager.addAnimatedMeshSceneNode(scene_manager.getMesh("..//irrlicht//media//ninja.b3d"), 0, IDFlag_IsPickable | IDFlag_IsHighlightable)
 	node.setScale(vector3df(10, 10, 10))
 	node.setPosition(vector3df(-70,-66,-60))
 	node.setRotation(vector3df(0,90,0))
@@ -88,8 +88,7 @@ if device:
 	node.getMaterial(0).NormalizeNormals = True
 	selector = scene_manager.createTriangleSelector(node)
 	node.setTriangleSelector(selector)
-	#~ selector.drop()
-
+	#selector.drop()
 
 	light = scene_manager.addLightSceneNode(0, vector3df(-60,100,400), SColorf(1.0,1.0,1.0,1.0), 600.0)
 	light.setID(ID_IsNotPickable)
@@ -128,7 +127,8 @@ if device:
 
 			selectedSceneNode = collMan.getSceneNodeAndCollisionPointFromRay(ray, intersection, hitTriangle, IDFlag_IsPickable, collision_root_node)
 			if selectedSceneNode:
-				billboard.setPosition(intersection)
+				if billboard:
+					billboard.setPosition(intersection)
 				driver.setTransform(ETS_WORLD, m)
 				driver.setMaterial(material)
 				driver.draw3DTriangle(hitTriangle, scolor_triangle)
@@ -137,7 +137,7 @@ if device:
 					highlightedSceneNode.setMaterialFlag(EMF_LIGHTING, False)
 
 			driver.endScene()
-			#~ device.sleep(10)
+			#device.sleep(10)
 
 			fps = driver.getFPS()
 			if lastFPS != fps:
