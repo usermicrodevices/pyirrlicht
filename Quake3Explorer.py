@@ -1,5 +1,4 @@
 import os
-#~ from struct import *
 from math import floor
 from pyirrlicht import *
 
@@ -81,242 +80,242 @@ class SItemElement(ctypes.Structure):
 				]
 Quake3ItemElement = {
 	"item_health":SItemElement(
-	("models/powerups/health/medium_cross.md3",
-	"models/powerups/health/medium_sphere.md3"),
-	"sound/items/n_health.wav",
-	"icons/iconh_yellow",
-	"25 Health",
+	(b"models/powerups/health/medium_cross.md3",
+	b"models/powerups/health/medium_sphere.md3"),
+	b"sound/items/n_health.wav",
+	b"icons/iconh_yellow",
+	b"25 Health",
 	25,
 	HEALTH,
 	SUB_NONE,
 	SPECIAL_SFX_BOUNCE | SPECIAL_SFX_ROTATE_1
 ),
 	"item_health_large":SItemElement(
-	("models/powerups/health/large_cross.md3",
-	"models/powerups/health/large_sphere.md3"),
-	"sound/items/l_health.wav",
-	"icons/iconh_red",
-	"50 Health",
+	(b"models/powerups/health/large_cross.md3",
+	b"models/powerups/health/large_sphere.md3"),
+	b"sound/items/l_health.wav",
+	b"icons/iconh_red",
+	b"50 Health",
 	50,
 	HEALTH,
 	SUB_NONE,
 	SPECIAL_SFX_BOUNCE | SPECIAL_SFX_ROTATE_1
 ),
 	"item_health_mega":SItemElement(
-	("models/powerups/health/mega_cross.md3",
-	"models/powerups/health/mega_sphere.md3"),
-	"sound/items/m_health.wav",
-	"icons/iconh_mega",
-	"Mega Health",
+	(b"models/powerups/health/mega_cross.md3",
+	b"models/powerups/health/mega_sphere.md3"),
+	b"sound/items/m_health.wav",
+	b"icons/iconh_mega",
+	b"Mega Health",
 	100,
 	HEALTH,
 	SUB_NONE,
 	SPECIAL_SFX_BOUNCE | SPECIAL_SFX_ROTATE_1
 ),
 	"item_health_small":SItemElement(
-	("models/powerups/health/small_cross.md3",
-	"models/powerups/health/small_sphere.md3"),
-	"sound/items/s_health.wav",
-	"icons/iconh_green",
-	"5 Health",
+	(b"models/powerups/health/small_cross.md3",
+	b"models/powerups/health/small_sphere.md3"),
+	b"sound/items/s_health.wav",
+	b"icons/iconh_green",
+	b"5 Health",
 	5,
 	HEALTH,
 	SUB_NONE,
 	SPECIAL_SFX_BOUNCE | SPECIAL_SFX_ROTATE_1
 ),
 	"ammo_bullets":SItemElement(
-	("models/powerups/ammo/machinegunam.md3",
-	""),
-	"sound/misc/am_pkup.wav",
-	"icons/icona_machinegun",
-	"Bullets",
+	(b"models/powerups/ammo/machinegunam.md3",
+	b""),
+	b"sound/misc/am_pkup.wav",
+	b"icons/icona_machinegun",
+	b"Bullets",
 	50,
 	AMMO,
 	MACHINEGUN,
 	SPECIAL_SFX_BOUNCE,
 ),
 	"ammo_cells":SItemElement(
-	("models/powerups/ammo/plasmaam.md3",
-	""),
-	"sound/misc/am_pkup.wav",
-	"icons/icona_plasma",
-	"Cells",
+	(b"models/powerups/ammo/plasmaam.md3",
+	b""),
+	b"sound/misc/am_pkup.wav",
+	b"icons/icona_plasma",
+	b"Cells",
 	30,
 	AMMO,
 	PLASMAGUN,
 	SPECIAL_SFX_BOUNCE
 ),
 	"ammo_rockets":SItemElement(
-	("models/powerups/ammo/rocketam.md3",
-	""),
-	"",
-	"icons/icona_rocket",
-	"Rockets",
+	(b"models/powerups/ammo/rocketam.md3",
+	b""),
+	b"",
+	b"icons/icona_rocket",
+	b"Rockets",
 	5,
 	AMMO,
 	ROCKET_LAUNCHER,
 	SPECIAL_SFX_ROTATE
 ),
 	"ammo_shells":SItemElement(
-	("models/powerups/ammo/shotgunam.md3",
-	""),
-	"sound/misc/am_pkup.wav",
-	"icons/icona_shotgun",
-	"Shells",
+	(b"models/powerups/ammo/shotgunam.md3",
+	b""),
+	b"sound/misc/am_pkup.wav",
+	b"icons/icona_shotgun",
+	b"Shells",
 	10,
 	AMMO,
 	SHOTGUN,
 	SPECIAL_SFX_ROTATE
 ),
 	"ammo_slugs":SItemElement(
-	("models/powerups/ammo/railgunam.md3",
-	""),
-	"sound/misc/am_pkup.wav",
-	"icons/icona_railgun",
-	"Slugs",
+	(b"models/powerups/ammo/railgunam.md3",
+	b""),
+	b"sound/misc/am_pkup.wav",
+	b"icons/icona_railgun",
+	b"Slugs",
 	10,
 	AMMO,
 	RAILGUN,
 	SPECIAL_SFX_ROTATE
 ),
 	"item_armor_body":SItemElement(
-	("models/powerups/armor/armor_red.md3",
-	""),
-	"sound/misc/ar2_pkup.wav",
-	"icons/iconr_red",
-	"Heavy Armor",
+	(b"models/powerups/armor/armor_red.md3",
+	b""),
+	b"sound/misc/ar2_pkup.wav",
+	b"icons/iconr_red",
+	b"Heavy Armor",
 	100,
 	ARMOR,
 	SUB_NONE,
 	SPECIAL_SFX_ROTATE
 ),
 	"item_armor_combat":SItemElement(
-	("models/powerups/armor/armor_yel.md3",
-	""),
-	"sound/misc/ar2_pkup.wav",
-	"icons/iconr_yellow",
-	"Armor",
+	(b"models/powerups/armor/armor_yel.md3",
+	b""),
+	b"sound/misc/ar2_pkup.wav",
+	b"icons/iconr_yellow",
+	b"Armor",
 	50,
 	ARMOR,
 	SUB_NONE,
 	SPECIAL_SFX_ROTATE
 ),
 	"item_armor_shard":SItemElement(
-	("models/powerups/armor/shard.md3",
-	""),
-	"sound/misc/ar1_pkup.wav",
-	"icons/iconr_shard",
-	"Armor Shared",
+	(b"models/powerups/armor/shard.md3",
+	b""),
+	b"sound/misc/ar1_pkup.wav",
+	b"icons/iconr_shard",
+	b"Armor Shared",
 	5,
 	ARMOR,
 	SUB_NONE,
 	SPECIAL_SFX_ROTATE
 ),
 	"weapon_gauntlet":SItemElement(
-	("models/weapons2/gauntlet/gauntlet.md3",
-	""),
-	"sound/misc/w_pkup.wav",
-	"icons/iconw_gauntlet",
-	"Gauntlet",
+	(b"models/weapons2/gauntlet/gauntlet.md3",
+	b""),
+	b"sound/misc/w_pkup.wav",
+	b"icons/iconw_gauntlet",
+	b"Gauntlet",
 	0,
 	WEAPON,
 	GAUNTLET,
 	SPECIAL_SFX_ROTATE
 ),
 	"weapon_shotgun":SItemElement(
-	("models/weapons2/shotgun/shotgun.md3",
-	""),
-	"sound/misc/w_pkup.wav",
-	"icons/iconw_shotgun",
-	"Shotgun",
+	(b"models/weapons2/shotgun/shotgun.md3",
+	b""),
+	b"sound/misc/w_pkup.wav",
+	b"icons/iconw_shotgun",
+	b"Shotgun",
 	10,
 	WEAPON,
 	SHOTGUN,
 	SPECIAL_SFX_ROTATE
 ),
 	"weapon_machinegun":SItemElement(
-	("models/weapons2/machinegun/machinegun.md3",
-	""),
-	"sound/misc/w_pkup.wav",
-	"icons/iconw_machinegun",
-	"Machinegun",
+	(b"models/weapons2/machinegun/machinegun.md3",
+	b""),
+	b"sound/misc/w_pkup.wav",
+	b"icons/iconw_machinegun",
+	b"Machinegun",
 	40,
 	WEAPON,
 	MACHINEGUN,
 	SPECIAL_SFX_ROTATE
 ),
 	"weapon_grenadelauncher":SItemElement(
-	("models/weapons2/grenadel/grenadel.md3",
-	""),
-	"sound/misc/w_pkup.wav",
-	"icons/iconw_grenade",
-	"Grenade Launcher",
+	(b"models/weapons2/grenadel/grenadel.md3",
+	b""),
+	b"sound/misc/w_pkup.wav",
+	b"icons/iconw_grenade",
+	b"Grenade Launcher",
 	10,
 	WEAPON,
 	GRENADE_LAUNCHER,
 	SPECIAL_SFX_ROTATE
 ),
 	"weapon_rocketlauncher":SItemElement(
-	("models/weapons2/rocketl/rocketl.md3",
-	""),
-	"sound/misc/w_pkup.wav",
-	"icons/iconw_rocket",
-	"Rocket Launcher",
+	(b"models/weapons2/rocketl/rocketl.md3",
+	b""),
+	b"sound/misc/w_pkup.wav",
+	b"icons/iconw_rocket",
+	b"Rocket Launcher",
 	10,
 	WEAPON,
 	ROCKET_LAUNCHER,
 	SPECIAL_SFX_ROTATE
 ),
 	"weapon_lightning":SItemElement(
-	("models/weapons2/lightning/lightning.md3",
-	""),
-	"sound/misc/w_pkup.wav",
-	"icons/iconw_lightning",
-	"Lightning Gun",
+	(b"models/weapons2/lightning/lightning.md3",
+	b""),
+	b"sound/misc/w_pkup.wav",
+	b"icons/iconw_lightning",
+	b"Lightning Gun",
 	100,
 	WEAPON,
 	LIGHTNING,
 	SPECIAL_SFX_ROTATE
 ),
 	"weapon_railgun":SItemElement(
-	("models/weapons2/railgun/railgun.md3",
-	""),
-	"sound/misc/w_pkup.wav",
-	"icons/iconw_railgun",
-	"Railgun",
+	(b"models/weapons2/railgun/railgun.md3",
+	b""),
+	b"sound/misc/w_pkup.wav",
+	b"icons/iconw_railgun",
+	b"Railgun",
 	10,
 	WEAPON,
 	RAILGUN,
 	SPECIAL_SFX_ROTATE
 ),
 	"weapon_plasmagun":SItemElement(
-	("models/weapons2/plasma/plasma.md3",
-	""),
-	"sound/misc/w_pkup.wav",
-	"icons/iconw_plasma",
-	"Plasma Gun",
+	(b"models/weapons2/plasma/plasma.md3",
+	b""),
+	b"sound/misc/w_pkup.wav",
+	b"icons/iconw_plasma",
+	b"Plasma Gun",
 	50,
 	WEAPON,
 	PLASMAGUN,
 	SPECIAL_SFX_ROTATE
 ),
 	"weapon_bfg":SItemElement(
-	("models/weapons2/bfg/bfg.md3",
-	""),
-	"sound/misc/w_pkup.wav",
-	"icons/iconw_bfg",
-	"BFG10K",
+	(b"models/weapons2/bfg/bfg.md3",
+	b""),
+	b"sound/misc/w_pkup.wav",
+	b"icons/iconw_bfg",
+	b"BFG10K",
 	20,
 	WEAPON,
 	BFG,
 	SPECIAL_SFX_ROTATE
 ),
 	"weapon_grapplinghook":SItemElement(
-	("models/weapons2/grapple/grapple.md3",
-	""),
-	"sound/misc/w_pkup.wav",
-	"icons/iconw_grapple",
-	"Grappling Hook",
+	(b"models/weapons2/grapple/grapple.md3",
+	b""),
+	b"sound/misc/w_pkup.wav",
+	b"icons/iconw_grapple",
+	b"Grappling Hook",
 	0,
 	WEAPON,
 	GRAPPLING_HOOK,
@@ -327,9 +326,9 @@ Quake3ItemElement = {
 
 FIRED = 1
 
-#~ DRIVER_TYPE = EDT_SOFTWARE
-#~ DRIVER_TYPE = EDT_BURNINGSVIDEO
-#~ DRIVER_TYPE = EDT_DIRECT3D9
+# DRIVER_TYPE = EDT_SOFTWARE
+# DRIVER_TYPE = EDT_BURNINGSVIDEO
+# DRIVER_TYPE = EDT_DIRECT3D9
 DRIVER_TYPE = EDT_OPENGL
 
 def fract(x = 0.0):
@@ -356,11 +355,9 @@ def setTimeFire(t, delta, flags = 0):
 
 def checkTimeFire(t, listSize, now):
 	i = 0
-	#~ for i in range(listSize):
 	while i < listSize:
 		if now < t[i].next:
 			continue
-		#~ t[i].next = max( now + t[i].delta, t[i].next + t[i].delta)
 		t[i].flags |= FIRED
 		i += 1
 
@@ -376,20 +373,11 @@ def background_music(file = ''):
 	if backMusic:
 		backMusic.setVolume(0.5)
 
-#~ void Q3ShaderFactory (Q3LevelLoadParameter &loadParam,
-					#~ IrrlichtDevice *device,
-					#~ IQ3LevelMesh* mesh,
-					#~ eQ3MeshIndex meshIndex,
-					#~ ISceneNode *parent,
-					#~ IMetaTriangleSelector *meta,
-					#~ bool showShaderName )
 def Q3ShaderFactory(loadParam, device, mesh, meshIndex, parent, meta, showShaderName):
 	if not mesh or not device:
 		return
 	node = None
 	smgr = device.getSceneManager()
-	#~ // the additional mesh can be quite huge and is unoptimized
-	#~ // Save to cast to SMesh
 	additional_mesh = SMesh(mesh.getMesh(meshIndex))
 	if not additional_mesh:
 		return
@@ -403,24 +391,18 @@ def Q3ShaderFactory(loadParam, device, mesh, meshIndex, parent, meta, showShader
 	if showShaderName:
 		font = device.getGUIEnvironment().getFont("fontlucida.png")
 	driver = device.getVideoDriver()
-	#~ // create helper textures
 	if 1:
 		pos = 0
 		tex = tTexArray()
 		getTextures(tex, "$redimage $blueimage $whiteimage $checkerimage", pos, device.getFileSystem(), driver)
-		#~ tex = getTextures("$redimage $blueimage $whiteimage $checkerimage", pos, device.getFileSystem(), driver)
 	sceneNodeID = 0
 	for i in range(additional_mesh.getMeshBufferCount()):
 		meshBuffer = additional_mesh.getMeshBuffer(i)
 		material = meshBuffer.getMaterial()
-		#~ //! The ShaderIndex is stored in the second material parameter
 		shaderIndex = int(material.MaterialTypeParam2)
-		#~ // the meshbuffer can be rendered without additional support, or it has no shader
 		shader = IShader(mesh.getShader(shaderIndex))
-		#~ // no shader, or mapped to existing material
 		if not shader:
 			if 1:
-			#~ // clone mesh
 				m = SMesh()
 				m.addMeshBuffer(meshBuffer)
 				mat = m.getMeshBuffer(0).getMaterial()
@@ -429,44 +411,29 @@ def Q3ShaderFactory(loadParam, device, mesh, meshIndex, parent, meta, showShader
 				if not mat.getTexture(1):
 					mat.setTexture(1, driver.getTexture("$redimage"))
 				store = smgr.getMeshManipulator().createMeshWith2TCoords(m)
-				#~ m.drop()
 				node = smgr.addMeshSceneNode(store, parent, sceneNodeID)
 				node.setAutomaticCulling(EAC_OFF)
-				#~ store.drop()
 				sceneNodeID += 1
 		elif 1:
-			#~ stringc s;
-			#~ dumpShader ( s, shader );
-			#~ printf ( s.c_str () );
-			#~ // create sceneNode
 			node = smgr.addQuake3SceneNode(meshBuffer, shader, parent, sceneNodeID)
 			node.setAutomaticCulling(EAC_FRUSTUM_BOX)
 			sceneNodeID += 1
-		#~ // show Debug Shader Name
 		if showShaderName and node:
 			buf = "%hs:%d" % (node.getName(),node.getID())
 			node2 = smgr.addBillboardTextSceneNode(font, buf, node, dimension2df(80.0, 8.0), vector3df(0, 10, 0), sceneNodeID)
-			#~ snprintf ( buf, 64, "%s:%d", node.getName(),node.getID() );
-			#~ //node2.setName ( buf );
 			sceneNodeID += 1
-		#~ // create Portal Rendertargets
 		if shader:
 			group = shader.getGroup(1)#const SVarGroup
 			if group.isDefined("surfaceparm", "portal"):
 				pass
-		#~ // add collision
-		#~ // find out if shader is marked als nonsolid
 		doCreate = (meta != 0)
 		if shader:
 			group = shader.getGroup(1)#const SVarGroup
 			if group.isDefined("surfaceparm", "trans"):
-					#~ or group.isDefined( "surfaceparm", "sky" )
-					#~ or group.isDefined( "surfaceparm", "nonsolid" ):
 				if not group.isDefined("surfaceparm", "metalsteps"):
 					doCreate = 0
 		if doCreate:
 			m = None
-			#~ //! controls if triangles are modified by the scenenode during runtime
 			takeOriginal = True
 			if takeOriginal:
 				m = SMesh()
@@ -475,26 +442,18 @@ def Q3ShaderFactory(loadParam, device, mesh, meshIndex, parent, meta, showShader
 				m = node.getMesh()
 			if meta:
 				selector = smgr.createOctreeTriangleSelector(m, 0, 128)
-				#~ selector = smgr.createTriangleSelector(m, 0)
 				meta.addTriangleSelector(selector)
-				#~ selector.drop()
 			if takeOriginal:
 				del m
 	if 0:
 		if meta:
 			selector = smgr.createOctreeTriangleSelector(additional_mesh, 0)
 			meta.addTriangleSelector(selector)
-			#~ selector.drop()
 	if loadParam.verbose > 0:
 		loadParam.endTime = device.getTimer().getRealTime()
 		buf = "q3shaderfactory needed %04d ms to create %d shader nodes" % (loadParam.endTime - loadParam.startTime, sceneNodeID)
 		device.getLogger().log(buf, ELL_INFORMATION)
 
-#~ void Q3ModelFactory (Q3LevelLoadParameter &loadParam,
-					#~ IrrlichtDevice *device,
-					#~ IQ3LevelMesh* masterMesh,
-					#~ ISceneNode *parent,
-					#~ bool showShaderName)
 def Q3ModelFactory (loadParam, device, masterMesh, parent, showShaderName):
 	if not masterMesh or not device:
 		return
@@ -503,55 +462,23 @@ def Q3ModelFactory (loadParam, device, masterMesh, parent, showShaderName):
 	smgr = device.getSceneManager()
 
 
-	#~ char buf[128];
-	#~ const SVarGroup *group;
 	search = IEntity()
-	#~ s32 index;
 	lastIndex = 0
 
-#~ /*
-	#~ stringc s;
-	#~ FILE *f = 0;
-	#~ f = fopen ( "entity.txt", "wb" );
-	#~ for ( index = 0; (u32) index < entityList.size (); ++index )
-	#~ {
-		#~ const IEntity *entity = &entityList[ index ];
-		#~ s = entity.name;
-		#~ dumpShader ( s, entity );
-		#~ fwrite ( s.c_str(), 1, s.size(), f );
-	#~ }
-	#~ fclose ( f );
-#~ */
-	#~ IAnimatedMeshMD3* model;
-	#~ SMD3Mesh * mesh;
-	#~ const SMD3MeshBuffer *meshBuffer;
-	#~ IMeshSceneNode* node;
-	#~ ISceneNodeAnimator* anim;
-	#~ const IShader *shader;
-	#~ u32 pos;
-	#~ vector3df p;
 	nodeCount = 0
-	#~ tTexArray textureArray;
 
 	font = device.getGUIEnvironment().getBuiltInFont()
 	if showShaderName:
 		font = device.getGUIEnvironment().getFont("fontlucida.png")
 
-	#~ const SItemElement *itemElement;
-
-	#~ // walk list
 	for index in range(entity.size()):
 		itemElement_key = entity[index].name
-		#~ itemElement = getItemElement(itemElement_key)
-		#~ if not itemElement:
-			#~ continue
 		if itemElement_key in Quake3ItemElement:
 			itemElement = Quake3ItemElement[itemElement_key]
 		else:
 			continue
 
 		pos = 0
-		#~ p = getAsVector3df(entity[index].getGroup(1).get("origin"), pos)
 		p, pos = getAsVector3df(entity[index].getGroup(1).get("origin"))
 
 		nodeCount += 1
@@ -571,42 +498,32 @@ def Q3ModelFactory (loadParam, device, masterMesh, parent, showShaderName):
 				shader = masterMesh.getShader(meshBuffer.Shader, False)
 				final = model.getMesh(0).getMeshBuffer(j)
 				if shader:
-					#~ //!TODO: Hack don't modify the vertexbuffer. make it better;-)
 					final.getMaterial().ColorMask = 0
 					node = smgr.addQuake3SceneNode(final, shader, parent)
 					final.getMaterial().ColorMask = 15
 				else:
-					#~ // clone mesh
 					m = SMesh()
 					m.addMeshBuffer(final)
 					node = smgr.addMeshSceneNode(m,  parent)
-					#~ m.drop()
 
 				if not node:
 					device.getLogger().log("q3ModelFactory shader %s failed" % meshBuffer.Shader)
 					continue
 
-				#~ // node was maybe centered by shaderscenenode
 				node.setPosition(p)
 				node.setName(meshBuffer.Shader)
 				node.setAutomaticCulling(EAC_BOX)
 
-				#~ // add special effects to node
 				if itemElement.special & SPECIAL_SFX_ROTATE or (g == 0 and itemElement.special & SPECIAL_SFX_ROTATE_1):
 					anim = smgr.createRotationAnimator(vector3df(0.0, 2.0, 0.0))
 					node.addAnimator(anim)
-					#~ anim.drop()
 
 				if itemElement.special & SPECIAL_SFX_BOUNCE:
-					#~ anim = smgr.createFlyStraightAnimator(p, p + vector3df(0.0, 60.0, 0.0), 1000, True, True)
 					anim = smgr.createFlyCircleAnimator(p + vector3df(0.0, 20.0, 0.0), 20.0, 0.005, vector3df(1.0, 0.0, 0.0), fract(nodeCount * 0.05), 1.0)
 					node.addAnimator(anim)
-					#~ anim.drop()
-		#~ // show name
 		if showShaderName:
 			node2 = smgr.addBillboardTextSceneNode(font, "%hs" % itemElement_key, parent, dimension2df(80.0, 8.0), p + vector3df(0, 30, 0), 0)
 
-	#~ // music
 	search.name = "worldspawn"
 	index = entity.binary_search_multi(search, lastIndex)
 
@@ -614,7 +531,6 @@ def Q3ModelFactory (loadParam, device, masterMesh, parent, showShaderName):
 		group = entity[index].getGroup(1)
 		background_music(group.get("music"))
 
-	#~ // music
 	search.name = "worldspawn"
 	index = entity.binary_search_multi(search, lastIndex)
 
@@ -638,19 +554,19 @@ class GameData:
 	GammaValue = 0.0
 	retVal = 0
 	sound = 0
-	StartupDir = ''
+	StartupDir = '..//irrlicht//'
 	CurrentMapName = ''
 	CurrentArchiveList = []
 	PlayerPosition = vector3df()
 	PlayerRotation = vector3df()
-	#~ Variable = tQ3EntityList()
 	loadParam = Q3LevelLoadParameter()
 	deviceParam = SIrrlichtCreationParameters()
-	createExDevice = createDeviceEx#funcptr_createDeviceEx
+	createExDevice = createDeviceEx
 	Device = None
 
 	def __init__(self, startupDir = ''):
-		self.StartupDir = startupDir
+		if startupDir:
+			self.StartupDir = startupDir
 		self.setDefault()
 
 	def setDefault(self):
@@ -681,31 +597,21 @@ class GameData:
 		self.loadParam.alpharef = 1
 		self.sound = 0
 		self.CurrentMapName = ''
-		self.CurrentArchiveList = []
-		self.CurrentArchiveList.append(self.StartupDir + 'media/')
-		#~ self.CurrentArchiveList.append('/q/baseq3/')
-		self.CurrentArchiveList.append(self.StartupDir + 'media/map-20kdm2.pk3')
+		self.CurrentArchiveList = ['{}media//'.format(self.StartupDir), '{}media//map-20kdm2.pk3'.format(self.StartupDir)]
 
 	def load(self, filename = ''):
 		if not self.Device:
 			return 0
-		# the quake3 mesh loader can also handle *.shader and *.cfg file
-		#(IQ3LevelMesh*)
 		mesh = self.Device.getSceneManager().getMesh(filename)
 		if not mesh:
 			return 0
-		#tQ3EntityList &
-		#~ entityList = mesh.as_IQ3LevelMesh().getEntityList()
 		entityList = IQ3LevelMesh(mesh).getEntityList()
 		s = ''
 		pos = 0
 		for e in range(len(entityList)):
-			#dumpShader ( s, &entityList[e], False )
 			for g in range(entityList[e].getGroupSize()):
-				#const SVarGroup *
 				group = entityList[e].getGroup(g)
 				for index in range(group.Variable.size()):
-					#const SVariable &
 					v = group.Variable[index]
 					pos = 0
 					if v.name == 'playerposition':
@@ -718,12 +624,9 @@ class GameData:
 	def save(self, filename = ''):
 		if not self.Device:
 			return 0
-		# Store current Archive for restart
-		#~ self.CurrentArchiveList.clear()
 		fs = self.Device.getFileSystem()
 		for i in range(fs.getFileArchiveCount()):
 			self.CurrentArchiveList.append(fs.getFileArchive(i).getFileList().getPath())
-		# Store Player Position and Rotation
 		camera = self.Device.getSceneManager().getActiveCamera()
 		if camera:
 			self.PlayerPosition = camera.getPosition()
@@ -736,7 +639,6 @@ class GameData:
 		for i in range(fs.getFileArchiveCount()):
 			buf = 'archive %s\n' % fs.getFileArchive(i).getFileList().getPath()
 			file.write(buf, len(buf))
-		#~ file.drop()
 		return 1
 
 class Q3Player(IAnimationEndCallBack):
@@ -748,16 +650,6 @@ class Q3Player(IAnimationEndCallBack):
 	Anim = [TimeFire(), TimeFire(), TimeFire(), TimeFire()]
 	animation = ''
 	buf = ''
-	#~ def __init__(self):
-		#~ self.Device = None
-		#~ self.MapParent = None
-		#~ self.Mesh = None
-		#~ self.WeaponNode = None
-		#~ self.StartPositionCurrent = 0
-		#~ self.Anim = [TimeFire(), TimeFire(), TimeFire(), TimeFire()]
-		#~ self.animation = ''
-		#~ self.buf = ''
-		#~ IAnimationEndCallBack.__init__(self)
 
 	def setAnim(self, name):
 		if name:
@@ -771,7 +663,6 @@ class Q3Player(IAnimationEndCallBack):
 				self.WeaponNode.setAnimationEndCallback(IAnimationEndCallBack(0))
 
 	def OnAnimationEnd(self, node):
-		#~ self.Device.getLogger().log('=== OnAnimationEnd %s' % IAnimatedMeshSceneNode(node), ELL_INFORMATION)
 		self.setAnim('')
 
 	def cam(self):
@@ -826,9 +717,7 @@ class Q3Player(IAnimationEndCallBack):
 		keyMap.set(9, EKA_CROUCH, KEY_KEY_C)
 		camera = smgr.addCameraSceneNodeFPS(None, 100.0, 0.6, -1, keyMap, 10, False, 0.6)
 		camera.setName('First Person Camera')
-		#camera.setFOV(100.0 * DEGTORAD)
 		camera.setFarValue(20000.0)
-		#~ weaponMesh = smgr.getMesh('gun.md2').as_IAnimatedMeshMD2()
 		weaponMesh = IAnimatedMeshMD2(smgr.getMesh('gun.md2'))
 		if not weaponMesh:
 			return
@@ -846,9 +735,6 @@ class Q3Player(IAnimationEndCallBack):
 		self.WeaponNode.setName('tommi the gun man')
 		anim = smgr.createCollisionResponseAnimator(meta, camera, vector3df(30,45,30), self.getGravity('earth'), vector3df(0,40,0), 0.0005)
 		camera.addAnimator(anim)
-		#~ anim.drop()
-		#~ if meta:
-			#~ meta.drop()
 		self.respawn()
 		self.setAnim('idle')
 
@@ -881,7 +767,6 @@ class Q3Player(IAnimationEndCallBack):
 		parsepos = 0
 		if self.Device:
 			self.Device.getLogger().log('=== origin %s' % group.get('origin'))
-		#~ pos = getAsVector3df(group.get('origin'), parsepos) + translation
 		pos, parsepos = getAsVector3df(group.get('origin'))
 		pos += translation
 		if self.Device:
@@ -889,7 +774,6 @@ class Q3Player(IAnimationEndCallBack):
 		parsepos = 0
 		if self.Device:
 			self.Device.getLogger().log('=== angle %s' % group.get('angle'))
-		#~ angle = getAsFloat(group.get('angle'), parsepos)
 		angle, parsepos = getAsFloat(group.get('angle'))
 		if self.Device:
 			self.Device.getLogger().log('=== parsepos %d' % parsepos)
@@ -961,7 +845,6 @@ class CQuake3EventHandler(IEventReceiver):
 		when = 0
 		pos = vector3df()
 		outVector = vector3df()
-	#~ array<SParticleImpact> Impacts
 	Impacts = []
 	scolor_scene = SColor(0,0,80,150)
 	gui = GUI()
@@ -976,14 +859,11 @@ class CQuake3EventHandler(IEventReceiver):
 			game.Device.getVideoDriver().setTextureCreationFlag(ETCF_ALWAYS_16_BIT, True)
 		game.Device.getSceneManager().getParameters().setAttribute(ALLOW_ZWRITE_ON_TRANSPARENT, True)
 		self.createTextures()
-		#~ self.sound_init(game.Device)
 		self.Game.Device.setEventReceiver(self)
 
 	def uninit_game(self):
 		self.Player[0].shutdown()
-		#~ self.sound_shutdown()
 		self.Game.save('explorer.cfg')
-		#~ self.Game.Device.drop()
 
 	def GetPlayer(self, index):
 		return self.Player[index]
@@ -994,37 +874,23 @@ class CQuake3EventHandler(IEventReceiver):
 		texture = None
 		for i in range(8):
 			image = driver.createImage(ECF_A8R8G8B8, dim)
-			#~ data = image.lock()
 			for y in range(dim.Height):
 				for x in range(dim.Width):
-					#~ data[x] = 0xFFFFFFFF
-					#~ image.setPixel(x, y, SColor(int(0xFFFF)))
 					image.setPixel(x, y, SColor(255,255,255,255))
-				#~ data = data + image.getPitch()
-			#~ image.unlock()
 			buf = 'smoke_%02d' % i
 			texture = driver.addTexture(buf, image)
-			#~ image.drop()
-		# fog
 		for i in range(1):
 			image = driver.createImage(ECF_A8R8G8B8, dim)
-			#~ data = image.lock()
 			for y in range(dim.Height):
 				for x in range(dim.Width):
-					#~ data[x] = 0xFFFFFFFF
-					#~ image.setPixel(x, y, SColor(int(0xFFFF)))
 					image.setPixel(x, y, SColor(255,255,255,255))
-				#~ data = data + image.getPitch()
-			#~ image.unlock()
 			buf = 'fog_%02d' % i
 			texture = driver.addTexture(buf, image)
-			#~ image.drop()
 
 	def CreateGUI(self):
 		env = self.Game.Device.getGUIEnvironment()
 		driver = self.Game.Device.getVideoDriver()
 		self.gui.drop()
-		# set skin font
 		font = env.getFont('fontlucida.png')
 		if font:
 			env.getSkin().setFont(font)
@@ -1032,13 +898,11 @@ class CQuake3EventHandler(IEventReceiver):
 		env.getSkin().setColor(EGDC_3D_HIGH_LIGHT, SColor(240,int(0x22),int(0x22),int(0x22)))
 		env.getSkin().setColor(EGDC_3D_FACE, SColor(240,int(0x44),int(0x44),int(0x44)))
 		env.getSkin().setColor(EGDC_WINDOW, SColor(240,int(0x66),int(0x66),int(0x66)))
-		# minimal gui size 800x600
 		dim = dimension2du(800, 600)
 		vdim = self.Game.Device.getVideoDriver().getScreenSize()
 		self.gui.Window = env.addWindow(recti(0, 0, dim.Width, dim.Height), False, 'Quake3 Explorer')
 		self.gui.Window.setToolTipText('Quake3Explorer. Loads and show various BSP File Format and Shaders.')
 		self.gui.Window.getCloseButton().setToolTipText('Quit Quake3 Explorer')
-		# add a status line help text
 		self.gui.StatusLine = env.addStaticText('', recti(5, dim.Height - 30, dim.Width - 5, dim.Height - 10), False, False, self.gui.Window, -1, True)
 		env.addStaticText('VideoDriver:', recti(dim.Width - 400, 24, dim.Width - 310, 40 ),False, False, self.gui.Window, -1, False)
 		self.gui.VideoDriver = env.addComboBox(recti(dim.Width - 300, 24, dim.Width - 10, 40 ), self.gui.Window)
@@ -1073,8 +937,6 @@ class CQuake3EventHandler(IEventReceiver):
 				self.buf =  '%d x %d, %s' % (w, h, a)
 				self.gui.VideoMode.addItem(self.buf, val)
 		self.gui.VideoMode.setSelected(self.gui.VideoMode.getIndexForItemData(self.Game.deviceParam.WindowSize.Width << 16 | self.Game.deviceParam.WindowSize.Height))
-		#~ print '===', self.Game.deviceParam.Fullscreen, self.gui.Window, self.gui.Window.c_pointer
-		#~ self.gui.FullScreen = env.addCheckBox(False, recti(dim.Width - 400, 64, dim.Width - 300, 80), self.gui.Window, -1, 'Fullscreen')
 		self.gui.FullScreen = env.addCheckBox(self.Game.deviceParam.Fullscreen, recti(dim.Width - 400, 64, dim.Width - 300, 80), self.gui.Window, -1, 'Fullscreen')
 		self.gui.FullScreen.setToolTipText('Set Fullscreen or Window Mode')
 		self.gui.Bit32 = env.addCheckBox(self.Game.deviceParam.Bits == 32, recti(dim.Width - 300, 64, dim.Width - 240, 80), self.gui.Window, -1, '32Bit')
@@ -1147,7 +1009,6 @@ class CQuake3EventHandler(IEventReceiver):
 		imageList = env.createImageList(driver.getTexture('iconlist.png'), dimension2di(32, 32), True)
 		if imageList:
 			self.gui.SceneTree.setImageList(imageList)
-			#~ imageList.drop()
 		# load the engine logo
 		self.gui.Logo = env.addImage(driver.getTexture('irrlichtlogo3.png'), position2di(5, 16), True)
 		self.gui.Logo.setToolTipText('The great Irrlicht Engine')
@@ -1165,8 +1026,6 @@ class CQuake3EventHandler(IEventReceiver):
 				try:
 					if not fs.addFileArchive(archiveName, True, False):
 						print ('--- ERROR LOAD FILE ARCHIVE', archiveName)
-					#~ else:
-						#~ print ('+++ FILE ARCHIVE LOADED', archiveName)
 				except:
 					print ('--- ERROR LOAD FILE ARCHIVE', archiveName)
 		# store the current archives in game data
@@ -1230,11 +1089,9 @@ class CQuake3EventHandler(IEventReceiver):
 					if image:
 						filter = driver.createImage(ECF_R8G8B8, dim)
 						image.copyToScalingBoxFilter(filter, 0)
-						#~ image.drop()
 						image = filter
 					if image:
 						tex = driver.addTexture(filename, image)
-						#~ image.drop()
 					self.bank.setTexture(g, tex)
 					r.LowerRightCorner.X = dim.Width
 					r.LowerRightCorner.Y = dim.Height
@@ -1249,7 +1106,6 @@ class CQuake3EventHandler(IEventReceiver):
 					self.gui.MapList.addItem(s, g)
 					g = g + 1
 				i = i + 1
-			#~ fileList.drop()
 			self.gui.MapList.setSelected(-1)
 			bar = IGUIScrollBar(self.gui.MapList.getElementFromId(0))
 			if bar:
@@ -1265,14 +1121,11 @@ class CQuake3EventHandler(IEventReceiver):
 		dropElement(self.UnresolvedParent)
 		dropElement(self.FogParent)
 		dropElement(self.BulletParent)
-		#~ self.Impacts.clear()
 		self.Impacts = []
 		if self.Meta:
 			self.Meta = None
 		dropElement(self.MapParent)
 		dropElement(self.SkyNode)
-		# clean out meshes, because textures are invalid
-		# TODO: better texture handling;-)
 		cache = self.Game.Device.getSceneManager().getMeshCache()
 		cache.clear()
 		self.Mesh = None
@@ -1283,13 +1136,8 @@ class CQuake3EventHandler(IEventReceiver):
 		self.dropMap()
 		fs = self.Game.Device.getFileSystem()
 		smgr = self.Game.Device.getSceneManager()
-		#~ file = fs.createMemoryReadFile(ctypes.pointer(self.Game.loadParam), ctypes.sizeof(self.Game.loadParam), 'levelparameter.cfg', False)
-		#~ file = fs.createMemoryReadFile(self.Game.loadParam.pack(), ctypes.sizeof(self.Game.loadParam), 'levelparameter.cfg', False)
 		file = fs.createMemoryReadFile(self.Game.loadParam, self.Game.loadParam.size(), 'levelparameter.cfg', False)
-		# load cfg file
 		cfgMesh = smgr.getMesh(file)
-		#~ file.drop()
-		# load the actual map
 		self.Mesh = IQ3LevelMesh(smgr.getMesh(mapName))#levelshots/20kdm2
 		if not self.Mesh:
 			return
@@ -1308,9 +1156,7 @@ class CQuake3EventHandler(IEventReceiver):
 		self.MapParent.setName(mapName)
 		if self.Meta:
 			selector = smgr.createOctreeTriangleSelector(geometry, self.MapParent, minimalNodes)
-			#~ selector = smgr.createTriangleSelector(geometry, self.MapParent)
 			self.Meta.addTriangleSelector(selector)
-			#~ selector.drop()
 		# logical parent for the items
 		self.ItemParent = smgr.addEmptySceneNode()
 		if self.ItemParent:
@@ -1340,11 +1186,7 @@ class CQuake3EventHandler(IEventReceiver):
 		imageIndex = -1
 		childrens = parent.getChildren()
 		childrens_count = len(childrens)
-		#~ idx_children = 0
 		for children in childrens:
-		#~ while idx_children < childrens_count:
-			#~ children = childrens[idx_children]
-			#~ idx_children = idx_children + 1
 			children_type = children.getType()
 			if children_type == ESNT_Q3SHADER_SCENE_NODE: imageIndex = 0
 			elif children_type == ESNT_CAMERA: imageIndex = 1
@@ -1365,7 +1207,6 @@ class CQuake3EventHandler(IEventReceiver):
 			animators = children.getAnimators()
 			animators_count = len(animators)
 			idx_animator = 0
-			#~ for animator in animators:
 			while idx_animator < animators_count:
 				animator = animators[idx_animator]
 				idx_animator = idx_animator + 1
@@ -1392,7 +1233,6 @@ class CQuake3EventHandler(IEventReceiver):
 
 	# Adds a skydome to the scene
 	def AddSky(self, dome, texture):
-		#~ self.Game.Device.getLogger().log('===' + texture)
 		smgr = self.Game.Device.getSceneManager()
 		driver = self.Game.Device.getVideoDriver()
 		oldMipMapState = driver.getTextureCreationFlag(ETCF_CREATE_MIP_MAPS)
@@ -1457,21 +1297,17 @@ class CQuake3EventHandler(IEventReceiver):
 			gui_event_type = event.GUIEvent.EventType
 			caller = event.GUIEvent.Caller
 			if caller == self.gui.MapList and gui_event_type == EGET_LISTBOX_SELECTED_AGAIN:
-				#~ caller = IGUIListBox(caller)
 				selected = self.gui.MapList.getSelected()
 				if selected >= 0:
 					loadMap = self.gui.MapList.getListItem(selected)
 					if not self.MapParent or loadMap != self.Game.CurrentMapName:
 						self.Game.Device.getLogger().log('=== Loading map %ls' % loadMap, ELL_INFORMATION)
 						self.LoadMap(loadMap, True)
-						#~ self.LoadMap(loadMap, False)
-						#~ print('=== SkyShader', self.Game.loadParam.loadSkyShader)
 						if not self.Game.loadParam.loadSkyShader:
 							self.AddSky(1, 'skydome2')
 						self.CreatePlayers()
 						self.CreateGUI()
 						self.SetGUIActive(0)
-						#~ return True
 						return False
 			elif caller == self.gui.ArchiveRemove and gui_event_type == EGET_BUTTON_CLICKED:
 				self.Game.Device.getFileSystem().removeFileArchive(self.gui.ArchiveList.getSelected())
@@ -1525,21 +1361,17 @@ class CQuake3EventHandler(IEventReceiver):
 				# set fly through active
 				self.Game.flyTroughState ^= 1
 				self.Player[0].cam().setAnimateTarget(Game.flyTroughState == 0)
-				#~ self.Game.Device.getLogger().log('collision %d\n' % bool(Game.flyTroughState == 0), ELL_INFORMATION)
 			elif caller == self.gui.Visible_Map and gui_event_type == EGET_CHECKBOX_CHANGED:
 				v = self.gui.Visible_Map.isChecked()
 				if self.MapParent:
-					#~ self.Game.Device.getLogger().log('static node set visible %d\n' % v, ELL_INFORMATION)
 					self.MapParent.setVisible(v)
 			elif caller == self.gui.Visible_Shader and gui_event_type == EGET_CHECKBOX_CHANGED:
 				v = self.gui.Visible_Shader.isChecked()
 				if self.ShaderParent:
-					#~ self.Game.Device.getLogger().log('shader node set visible %d\n' % v, ELL_INFORMATION)
 					self.ShaderParent.setVisible(v)
 			elif caller == self.gui.Visible_Skydome and gui_event_type == EGET_CHECKBOX_CHANGED:
 				if self.SkyNode:
 					v = not self.SkyNode.isVisible()
-					#~ self.Game.Device.getLogger().log('skynode set visible %d\n' % v, ELL_INFORMATION)
 					self.SkyNode.setVisible(v)
 			elif caller == self.gui.Respawn and gui_event_type == EGET_BUTTON_CLICKED:
 				self.Player[0].respawn()
@@ -1573,9 +1405,7 @@ class CQuake3EventHandler(IEventReceiver):
 						buf = '%s_%ls_%.0f_%.0f_%.0f_%.0f_%.0f_%.0f.jpg' % (dName[self.Game.Device.getVideoDriver().getDriverType()], self.Game.CurrentMapName, pos.X, pos.Y, pos.Z, rot.X, rot.Y, rot.Z)
 						filename = buf
 						filename.replace('/', '_')
-						#~ self.Game.Device.getLogger().log('screenshot : %s\n' % filename, ELL_INFORMATION)
 						self.Game.Device.getVideoDriver().writeImageToFile(image, filename, 100)
-						#~ image.drop()
 				else:
 					if event.KeyInput.Key == KEY_F9:
 						value = EDS_OFF
@@ -1611,7 +1441,6 @@ class CQuake3EventHandler(IEventReceiver):
 							if self.Game.gravityState:
 								gravity_state = 'earth'
 							self.Player[0].cam().setGravity(self.Player[0].getGravity(gravity_state))
-							#~ self.Game.Device.getLogger().log('gravity %s\n' % gravity_state, ELL_INFORMATION)
 						else:
 							if event.KeyInput.Key == KEY_F7:
 								# set fly through active
@@ -1619,7 +1448,6 @@ class CQuake3EventHandler(IEventReceiver):
 								self.Player[0].cam().setAnimateTarget(self.Game.flyTroughState == 0)
 								if self.gui.Collision:
 									self.gui.Collision.setChecked(self.Game.flyTroughState == 0)
-								#~ self.Game.Device.getLogger().log('collision %d\n' % bool(Game.flyTroughState == 0), ELL_INFORMATION)
 							else:
 								if event.KeyInput.Key == KEY_F2:
 									self.Player[0].respawn()
@@ -1627,7 +1455,6 @@ class CQuake3EventHandler(IEventReceiver):
 									if event.KeyInput.Key == KEY_F3:
 										if self.MapParent:
 											v = not self.MapParent.isVisible()
-											#~ self.Game.Device.getLogger().log('static node set visible %d\n' % v, ELL_INFORMATION)
 											self.MapParent.setVisible(v)
 											if self.gui.Visible_Map:
 												self.gui.Visible_Map.setChecked(v)
@@ -1635,7 +1462,6 @@ class CQuake3EventHandler(IEventReceiver):
 										if event.KeyInput.Key == KEY_F4:
 											if self.ShaderParent:
 												v = not self.ShaderParent.isVisible()
-												#~ self.Game.Device.getLogger().log('shader node set visible %d\n' % v, ELL_INFORMATION)
 												self.ShaderParent.setVisible(v)
 												if self.gui.Visible_Shader:
 													self.gui.Visible_Shader.setChecked(v)
@@ -1643,7 +1469,6 @@ class CQuake3EventHandler(IEventReceiver):
 											if event.KeyInput.Key == KEY_F5:
 												if self.FogParent:
 													v = not self.FogParent.isVisible()
-													#~ self.Game.Device.getLogger().log('fog node set visible %d\n' % v, ELL_INFORMATION)
 													self.FogParent.setVisible(v)
 													if self.gui.Visible_Fog:
 														self.gui.Visible_Fog.setChecked(v)
@@ -1651,7 +1476,6 @@ class CQuake3EventHandler(IEventReceiver):
 												if event.KeyInput.Key == KEY_F6:
 													if self.UnresolvedParent:
 														v = not self.UnresolvedParent.isVisible()
-														#~ self.Game.Device.getLogger().log('unresolved node set visible %d\n' % v, ELL_INFORMATION)
 														self.UnresolvedParent.setVisible(v)
 														if self.gui.Visible_Unresolved:
 															self.gui.Visible_Unresolved.setChecked(v)
@@ -1701,10 +1525,6 @@ class CQuake3EventHandler(IEventReceiver):
 			player.Anim[1].next += player.Anim[1].delta
 		else:
 			start = camera.getPosition()
-			#if player.WeaponNode:
-				#start.X += 10.0
-				#start.Y += -5.0
-				#start.Z += 1.0
 			end = camera.getTarget() - start
 			end.normalize()
 			start += end*20.0
@@ -1722,7 +1542,6 @@ class CQuake3EventHandler(IEventReceiver):
 			time = 1
 		anim = smgr.createFlyStraightAnimator(start, end, time)
 		node.addAnimator(anim)
-		#~ anim.drop()
 		bullet = 'nohit'
 		if imp.when:
 			bullet = 'hit'
@@ -1730,7 +1549,6 @@ class CQuake3EventHandler(IEventReceiver):
 		node.setName(buf)
 		anim = smgr.createDeleteAnimator(time)
 		node.addAnimator(anim)
-		#~ anim.drop()
 		if imp.when:
 			imp.when = self.Game.Device.getTimer().getTime() + (time + (1.0 + getNoiser()) * 250.0)
 			self.Impacts.append(imp)
@@ -1758,54 +1576,44 @@ class CQuake3EventHandler(IEventReceiver):
 			smoke[g].maxParticle *= factor
 			smoke[g].lifetime *= factor
 			smoke[g].boxSize *= getNoiser() * 0.5
-		#~ for i in range(len(self.Impacts)):
 		for Impact in self.Impacts:
-			#~ if now < self.Impacts[i].when:
 			if now < Impact.when:
 				continue
 			# create smoke particle system
 			pas = None
 			for g in range(2):
-				#~ pas = sm.addParticleSystemSceneNode(False, self.BulletParent, -1, self.Impacts[i].pos)
 				pas = sm.addParticleSystemSceneNode(False, self.BulletParent, -1, Impact.pos)
-				#~ buf = 'bullet impact smoke at %.1f,%.1f,%1.f' % (self.Impacts[i].pos.X, self.Impacts[i].pos.Y, self.Impacts[i].pos.Z)
 				buf = 'bullet impact smoke at %.1f,%.1f,%1.f' % (Impact.pos.X, Impact.pos.Y, Impact.pos.Z)
 				pas.setName(buf)
 				# create a flat smoke
-				#~ direction = self.Impacts[i].outVector
 				direction = Impact.outVector
 				direction *= smoke[g].scale
 				em = pas.createBoxEmitter(aabbox3df(-4.0, 0.0, -4.0, 20.0, smoke[g].minparticleSize, 20.0), direction, smoke[g].minParticle, smoke[g].maxParticle, SColor(0,0,0,0), SColor(0,128,128,128), 250, 4000, 60)
 				em.setMinStartSize(dimension2df(smoke[g].minparticleSize, smoke[g].minparticleSize))
 				em.setMaxStartSize(dimension2df(smoke[g].maxparticleSize, smoke[g].maxparticleSize))
 				pas.setEmitter(em)
-				#~ em.drop()
 				# particles get invisible
 				paf = pas.createFadeOutParticleAffector(SColor(0, 0, 0, 0), smoke[g].fadeout)
 				pas.addAffector(paf)
-				#~ paf.drop()
 				# particle system life time
 				anim = sm.createDeleteAnimator(smoke[g].lifetime)
 				pas.addAnimator(anim)
-				#~ anim.drop()
 				pas.setMaterialFlag(EMF_LIGHTING, False)
 				pas.setMaterialFlag(EMF_ZWRITE_ENABLE, False)
 				pas.setMaterialType(EMT_TRANSPARENT_VERTEX_ALPHA )
 				pas.setMaterialTexture(0, self.Game.Device.getVideoDriver().getTexture(smoke[g].texture))
 			# play impact sound
 			#ifdef USE_IRRKLANG
-			#~ if irrKlang:
+			#if irrKlang:
 				#audio::ISound* sound = irrKlang.play3D(impactSound, Impacts[i].pos, False, False, True)
-				#~ audio::ISound* sound = irrKlang.play3D(impactSound, Impact.pos, False, False, True)
-				#~ if sound:
-					#~ # adjust max value a bit to make to sound of an impact louder
-					#~ sound.setMinDistance(400)
-					#~ sound.drop()
+				#audio::ISound* sound = irrKlang.play3D(impactSound, Impact.pos, False, False, True)
+				#if sound:
+					## adjust max value a bit to make to sound of an impact louder
+					#sound.setMinDistance(400)
+					#sound.drop()
 			#endif
 			# delete entry
-			#~ self.Impacts.erase(i)
 			self.Impacts.remove(Impact)
-			#~ i -= 1
 
 	def Render(self):
 		driver = self.Game.Device.getVideoDriver()
@@ -1814,7 +1622,6 @@ class CQuake3EventHandler(IEventReceiver):
 		driver.beginScene(True, True, self.scolor_scene)
 		# TODO: This does not work, yet.
 		anaglyph = False
-		#~ anaglyph = True
 		if anaglyph:
 			cameraOld = self.Game.Device.getSceneManager().getActiveCamera()
 			driver.getOverrideMaterial().Material.ColorMask = ECP_NONE
@@ -1891,7 +1698,7 @@ def runGame(game):
 	if game.retVal >= 3:
 		return
 
-	#~ game.Device = game.createExDevice(game.deviceParam)
+	#game.Device = game.createExDevice(game.deviceParam)
 	game.Device = createDevice(DRIVER_TYPE, dimension2du(800, 600), 16)
 	if not game.Device:
 		# could not create selected driver.
@@ -1906,9 +1713,9 @@ def runGame(game):
 	game.load('explorer.cfg')
 
 	# add our media directory and archive to the file system
-	for i in range(len(game.CurrentArchiveList)):
-		eventHandler.AddArchive(game.CurrentArchiveList[i])
-		#~ game.Device.getLogger().log('===' + game.CurrentArchiveList[i])
+	for archive in game.CurrentArchiveList:
+		eventHandler.AddArchive(archive)
+		#game.Device.getLogger().log('===' + game.CurrentArchiveList[i])
 
 	# Load a Map or startup to the GUI
 	if game.CurrentMapName:
@@ -1928,7 +1735,7 @@ def runGame(game):
 		eventHandler.CreatePlayers()
 		eventHandler.CreateGUI()
 		eventHandler.SetGUIActive(1)
-		#~ background_music('IrrlichtTheme.ogg')
+		#background_music('IrrlichtTheme.ogg')
 
 	game.retVal = 3
 	while game.Device.run():
@@ -1940,15 +1747,11 @@ def runGame(game):
 	game.Device.setGammaRamp(1.0, 1.0, 1.0, 0.0, 0.0)
 	eventHandler.uninit_game()
 
-def deletePathFromPath(fullpath, item = 1):
-	paths = list(os.path.split(fullpath))
-	del paths[item]
-	return paths[0]
 
 def main():
 	import sys
 	prgname = sys.argv[0]
-	game = GameData(deletePathFromPath(prgname, 1))
+	game = GameData()
 	# dynamically load irrlicht
 	dllName = 'irrlicht_c.dll'
 	if len(sys.argv) > 1:

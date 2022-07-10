@@ -1,12 +1,12 @@
 from pyirrlicht import *
 
 
-#~ driverType = EDT_NULL
-#~ driverType = EDT_SOFTWARE
-driverType = EDT_BURNINGSVIDEO
-#~ driverType = EDT_DIRECT3D8
-#~ driverType = EDT_DIRECT3D9
-#~ driverType = EDT_OPENGL
+#driverType = EDT_NULL
+#driverType = EDT_SOFTWARE
+#driverType = EDT_BURNINGSVIDEO
+#driverType = EDT_DIRECT3D8
+#driverType = EDT_DIRECT3D9
+driverType = EDT_OPENGL
 
 
 def main():
@@ -16,8 +16,8 @@ def main():
 	smgr = device.getSceneManager()
 	camera = smgr.addCameraSceneNodeFPS()
 	camera.setPosition(vector3df(50,200,50))
-	#~ camera = smgr.addCameraSceneNodeMaya()
-	#~ camera.setTarget(vector3df(50,200,50))
+	#camera = smgr.addCameraSceneNodeMaya()
+	#camera.setTarget(vector3df(50,200,50))
 	m = SMaterial()
 	m.Lighting = False
 	matrix = matrix4()

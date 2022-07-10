@@ -1,6 +1,6 @@
 # Fern Fractal - original was written on Actionscript 3 Version by Jim Bumgardner 2008
 
-import os, math
+import os, math, sys
 from pyirrlicht import *
 
 GUI_ID_RECURSION_LEVELS = 101
@@ -67,7 +67,10 @@ class fern():
 			self.video_driver.SetIcon(IDI_EXCLAMATION)
 			self.gui_environment = self.device.getGUIEnvironment()
 
-			gui_font = CGUITTFont(self.gui_environment, os.environ['SYSTEMROOT']+'/Fonts/arial.ttf', 20)
+			fonts_path = '/usr/local/share/fonts'
+			if 'win' in sys.platform:
+				fonts_path = '{}/Fonts'.format(os.environ['SYSTEMROOT'])
+			gui_font = CGUITTFont(self.gui_environment, '{}/arial.ttf'.format(fonts_path), 20)
 			if not gui_font:
 				gui_font = self.gui_environment.getBuiltInFont()
 			skin = self.gui_environment.getSkin()

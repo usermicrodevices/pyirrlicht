@@ -1,5 +1,5 @@
-# Copyright(c) Max Kolosov 2012 vosolok2008@ya.ru
-# http://vosolok2008.narod.ru
+# Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+# github.com/usermicrodevices
 # BSD license
 
 import os, sys
@@ -188,7 +188,7 @@ class UserIEventReceiver(IEventReceiver):
 			self.KeyIsDown[self.KeyInput_Key(key_event)] = pressed_down
 			current_character = str(self.KeyInput_Char(key_event))
 			if '0123456789 abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.find(current_character) > -1 and pressed_down:
-			#~ if current_character.isalpha() > -1 and pressed_down:
+			#if current_character.isalpha() > -1 and pressed_down:
 				self.answer += current_character
 			elif self.KeyInput_Key(key_event) == KEY_BACK and not pressed_down:
 				try:
@@ -218,7 +218,7 @@ class UserIEventReceiver(IEventReceiver):
 				elif id == GUI_ID_VOICE_PITCH:
 					self.game.set_voice_param('pitch', scroll_bar.getPos())
 			elif gui_event_type == EGET_BUTTON_CLICKED:
-				#~ button = caller.as_IGUIButton()
+				#button = caller.as_IGUIButton()
 				if id == GUI_ID_VOICE_TEST_BUTTON:
 					self.game.say('voice testing')
 			elif gui_event_type == EGET_MENU_ITEM_SELECTED:
@@ -293,9 +293,11 @@ class game:
 				pyespeak.espeak_SetVoiceByName('default')
 				pyespeak.espeak_SetParameter(pyespeak.espeakRATE, self.voice_rate, 0)
 				pyespeak.espeak_SetParameter(pyespeak.espeakPITCH, self.voice_pitch, 0)
+		fonts_path = '/usr/local/share/fonts'
 		default_driver_type = EDT_SOFTWARE
 		if 'win' in sys.platform:
 			default_driver_type = EDT_DIRECT3D9
+			fonts_path = '{}/Fonts'.format(os.environ['SYSTEMROOT'])
 		elif 'linux' in sys.platform:
 			default_driver_type = EDT_OPENGL
 		self.device_parameters = SIrrlichtCreationParameters()
@@ -308,20 +310,18 @@ class game:
 		self.help_dialog = None
 		self.good_results = 0
 		self.bad_results = 0
-		#~ self.button_repeat_voice = None
+		#self.button_repeat_voice = None
 		self.voice_on = self.config.get_bool('voice_on', True)
 		self.font_size = self.config.get_int('font_size', 32)
-		self.font_file = self.replace_env_vars(self.config.get('font_file', '@SYSTEMROOT@/Fonts/arial.ttf'))
+		font_file_path = '{}/arial.ttf'.format(fonts_path)
+		self.font_file = self.config.get('font_file', font_file_path)
 		self.gui_font_size = self.config.get_int('gui_font_size', 24)
-		self.gui_font_file = self.replace_env_vars(self.config.get('gui_font_file', '@SYSTEMROOT@/Fonts/arial.ttf'))
+		self.gui_font_file = self.config.get('gui_font_file', font_file_path)
 		self.svg_image = None
 
 	def __del__(self):
 		if self.device:
 			self.stop()
-
-	def replace_env_vars(self, value):
-		return value.replace('@SYSTEMROOT@', os.environ['SYSTEMROOT'])
 
 	def set_sound_volume(self, value):
 		self.sound_volume = value / 100.0
@@ -403,7 +403,7 @@ class game:
 			self.device.setWindowCaption(_(app_name))
 			self.device.setResizable(True)
 			self.video_driver = self.device.getVideoDriver()
-			#~ self.scene_manager = self.device.getSceneManager()
+			#self.scene_manager = self.device.getSceneManager()
 			self.guienv = self.device.getGUIEnvironment()
 
 			if is_frozen():
@@ -459,10 +459,10 @@ class game:
 			submenu.addItem(_('Help content'), GUI_ID_HELP_CONTENT)
 			submenu.addItem(_('About'), GUI_ID_ABOUT)
 
-			#~ self.button_repeat_voice = self.guienv.addButton(recti(10,50,100,70), 0, GUI_ID_VOICE_REPEAT_BUTTON, _('Repeat'), _('Repeat current voice text'))
+			#self.button_repeat_voice = self.guienv.addButton(recti(10,50,100,70), 0, GUI_ID_VOICE_REPEAT_BUTTON, _('Repeat'), _('Repeat current voice text'))
 
 			self.cursor_control = self.device.getCursorControl()
-			#~ self.cursor_control.setVisible(False)
+			#self.cursor_control.setVisible(False)
 
 			scolor = SColor(255, 100, 100, 140)
 			color_white = SColor(0, 255, 255, 255)
@@ -488,8 +488,8 @@ class game:
 			for obj in recursion_search_files_into_dirs(self.svg_directory, '\.svg$'):
 				if obj[0] == 'FILE':
 					self.svg_file_name_container.append(obj[1])
-			#~ for svg_file_name in self.svg_file_name_container:
-				#~ print('===', svg_file_name)
+			#for svg_file_name in self.svg_file_name_container:
+				#print('===', svg_file_name)
 			tex, tex_size, i_event_receiver.question = self.create_texture_from_svg_file_name_container()
 			flag_say = True
 			flag_drawed = True
@@ -511,8 +511,8 @@ class game:
 							self.video_driver.removeTexture(tex)
 							tex = self.create_texture_from_svg_image(svg_file_name)
 							tex_size = tex.getOriginalSize()
-						#~ self.button_repeat_voice.setRelativePosition(position2di(screen_size.X - 100, self.menu_height))
-						#~ self.scene_manager.drawAll()
+						#self.button_repeat_voice.setRelativePosition(position2di(screen_size.X - 100, self.menu_height))
+						#self.scene_manager.drawAll()
 						if animation_flag and self.device.getTimer().getTime()/animation_time_step%2:
 							svg_file_name = tex.getName()
 							self.video_driver.removeTexture(tex)
@@ -547,7 +547,7 @@ class game:
 									self.good_results += 1
 									self.device.getTimer().setTime(0)
 									animation_flag = True
-							#~ self.font.draw(_('Please enter answer or press "Enter"'), question_pos2, question_color2)
+							#self.font.draw(_('Please enter answer or press "Enter"'), question_pos2, question_color2)
 							self.font.draw(i_event_receiver.answer, recti(10, screen_size.Y - self.font_size, 0, 0), answer_color2)
 							self.video_driver.draw2DRectangle(scolor_2drectangle, recti(screen_size.X / 2, screen_size.Y - self.font_size, screen_size.X / 2 + self.font_size * 3, screen_size.Y))
 							self.font.draw(str(self.good_results), recti(screen_size.X / 2, screen_size.Y - self.font_size, 0, 0), answer_color2)

@@ -489,9 +489,9 @@ def main(driver_type, full_screen, stencil_buffer, vsync):
 	smgr.setAmbientLight(SColorf(0.3,0.3,0.3))
 	# add our media directory as "search path"
 	if IRRLICHT_VERSION < 180:
-		Device.getFileSystem().addFolderFileArchive("media/")
+		Device.getFileSystem().addFolderFileArchive('..//irrlicht//media//')
 	else:
-		Device.getFileSystem().addFileArchive("media/")
+		Device.getFileSystem().addFileArchive('..//irrlicht//media//')
 
 	#~ The next step is to read the configuration file. It is stored in the xml
 	#~ format and looks a little bit like this:

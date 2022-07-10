@@ -1,5 +1,5 @@
-# Copyright(c) Max Kolosov 2010 maxkolosov@inbox.ru
-# http://vosolok2008.narod.ru
+# Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+# github.com/usermicrodevices
 # BSD license
 
 import os, sys
@@ -427,19 +427,20 @@ class game:
 			self.driver.setFog(self.fog_color, self.fog_type, self.fog_start, self.fog_end, self.fog_density, self.fog_pixel, self.fog_range)
 
 			self.font_size = 24
-			font_ext = '.ttf'
-			font_path = os.environ['SYSTEMROOT']+'/Fonts/'
-			self.font_file = font_path + 'arial' + font_ext
-			#~ self.font_file = font_path + 'cour' + font_ext
-			#~ self.font_file = font_path + 'comic' + font_ext
+			fonts_path = '/usr/local/share/fonts'
+			if 'win' in sys.platform:
+				fonts_path = '{}/Fonts'.format(os.environ['SYSTEMROOT'])
+			self.font_file = '{}/arial.ttf'.format(fonts_path)
+			print(self.font_file)
 			self.font = CGUITTFont(self.guienv, self.font_file, self.font_size)
+			print(self.font)
 			self.skin = self.guienv.getSkin()
 			if self.font:
 				self.skin.setFont(self.font)
 				self.font.drop()
 			else:
-				print ('++++ ERROR vect_font not created !!!')
-				#~ self.font = self.guienv.getBuiltInFont()
+				print('++++ ERROR vect_font not created !!!')
+				self.font = self.guienv.getBuiltInFont()
 			menu_height = self.skin.getSize(EGDS_MENU_HEIGHT)
 
 			self.menu = self.guienv.addMenu()
@@ -481,7 +482,7 @@ class game:
 			# texture from file or dynamic generator
 			texture = None
 			seed()
-			file_name = 'media//skydome.jpg'
+			file_name = '..//irrlicht//media//skydome.jpg'
 			if os.path.isfile(file_name) and self.texture_from_file:
 				texture = self.driver.getTexture(file_name)
 			else:
@@ -494,7 +495,7 @@ class game:
 			textureRepeatCount = dimension2df(self.tile_count, self.tile_count)
 			material = SMaterial()
 			material.FogEnable = self.fog_enable
-			file_name = 'media//stones.jpg'
+			file_name = '..//irrlicht//media//stones.jpg'
 			material.EmissiveColor = SColor(0,255,255,255)
 			if os.path.isfile(file_name) and self.texture_from_file:
 				material.setTexture(0, self.driver.getTexture(file_name))
@@ -503,13 +504,13 @@ class game:
 				material.setTexture(0, texture)
 			i_mesh_top = self.i_geometry_creator.createPlaneMesh(tileSize, tileCount, material, textureRepeatCount)
 
-			logo_file_name = 'media//opengllogo.png'
+			logo_file_name = '..//irrlicht//media//opengllogo.png'
 			if self.device_type == EDT_SOFTWARE:
-				logo_file_name = 'media//irrlichtlogo3.png'
+				logo_file_name = '..//irrlicht//media//irrlichtlogo3.png'
 			elif self.device_type == EDT_BURNINGSVIDEO:
-				logo_file_name = 'media//burninglogo.png'
+				logo_file_name = '..//irrlicht//media//burninglogo.png'
 			elif self.device_type in (EDT_DIRECT3D8, EDT_DIRECT3D9):
-				logo_file_name = 'media//directxlogo.png'
+				logo_file_name = '..//irrlicht//media//directxlogo.png'
 			material.MaterialType = EMT_TRANSPARENT_ALPHA_CHANNEL
 			if os.path.isfile(logo_file_name) and self.texture_from_file:
 				material.setTexture(0, self.driver.getTexture(logo_file_name))
@@ -533,7 +534,7 @@ class game:
 			# left, right, front and back plane
 			tileCount = dimension2du(self.tile_count, int(height / self.tile_len))
 			textureRepeatCount = dimension2df(self.tile_count, height / self.tile_len)
-			file_name = 'media//wall.jpg'
+			file_name = '..//irrlicht//media//wall.jpg'
 			if os.path.isfile(file_name) and self.texture_from_file:
 				material.MaterialType = EMT_LIGHTMAP
 				material.setTexture(0, self.driver.getTexture(file_name))
@@ -712,11 +713,11 @@ class game:
 					if self.driver.beginScene(True, True, scolor):
 						self.scene_manager.drawAll()
 						self.window_size = self.driver.getScreenSize()
-						self.font.draw('%d' % self.results, recti(self.window_size.Width - self.font_size * 2, self.window_size.Height - self.font_size, 0, 0), answer_color)
-						if not self.answer_exists:
-							self.font.draw('%d x %d =' % (self.a, self.b), question_pos1, question_color)
-							if i_event_receiver.answer:
-								self.font.draw(i_event_receiver.answer, recti(10, self.window_size.Height - self.font_size, 0, 0), answer_color)
+						#self.font.draw('%d' % self.results, recti(self.window_size.Width - self.font_size * 2, self.window_size.Height - self.font_size, 0, 0), answer_color)
+						#if not self.answer_exists:
+							#self.font.draw('%d x %d =' % (self.a, self.b), question_pos1, question_color)
+							#if i_event_receiver.answer:
+								#self.font.draw(i_event_receiver.answer, recti(10, self.window_size.Height - self.font_size, 0, 0), answer_color)
 
 						selectedSceneNode = self.collision_manager.getSceneNodeFromCameraBB(self.camera[1])
 						if selectedSceneNode:
@@ -726,16 +727,16 @@ class game:
 									get_start_time = False
 								tick_time = self.device.getTimer().getRealTime()
 								if (tick_time - start_time) < self.time_delay * 1000:
-									self.font.draw(i_event_receiver.answer_text, question_pos1, i_event_receiver.answer_color)
+									#self.font.draw(i_event_receiver.answer_text, question_pos1, i_event_receiver.answer_color)
 									self.cube.setVisible(True)
 								else:
 									get_start_time = True
 									self.answer_exists = False
 									self.cube.setVisible(False)
-							else:
-								if selectedSceneNode.getType() == ESNT_SPHERE:
+							#else:
+								#if selectedSceneNode.getType() == ESNT_SPHERE:
 									#~ self.font.draw('%d x %d =' % (self.a, self.b), question_pos1, question_color)
-									self.font.draw(_('Please enter answer and press "Enter"'), question_pos2, question_color)
+									#self.font.draw(_('Please enter answer and press "Enter"'), question_pos2, question_color)
 									#~ if i_event_receiver.answer:
 										#~ self.font.draw(i_event_receiver.answer, recti(10, self.window_size.Height - 40, 0, 0), answer_color)
 

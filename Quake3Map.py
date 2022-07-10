@@ -1,22 +1,22 @@
 import pyirrlicht
 
-#~ driverType = pyirrlicht.EDT_NULL
-#~ driverType = pyirrlicht.EDT_SOFTWARE
-#~ driverType = pyirrlicht.EDT_BURNINGSVIDEO
-#~ driverType = pyirrlicht.EDT_DIRECT3D8
-#~ driverType = pyirrlicht.EDT_DIRECT3D9
+#driverType = pyirrlicht.EDT_NULL
+#driverType = pyirrlicht.EDT_SOFTWARE
+#driverType = pyirrlicht.EDT_BURNINGSVIDEO
+#driverType = pyirrlicht.EDT_DIRECT3D8
+#driverType = pyirrlicht.EDT_DIRECT3D9
 driverType = pyirrlicht.EDT_OPENGL
 
 device = pyirrlicht.createDevice(driverType, pyirrlicht.dimension2du(640, 480))
 if device:
 	window_caption = 'Quake 3 Map! - Irrlicht Engine Demo'
-	#~ device.setWindowCaption(window_caption)
+	#device.setWindowCaption(window_caption)
 	device.setResizable(True)
 	scene_manager = device.getSceneManager()
 	if pyirrlicht.IRRLICHT_VERSION < 180:
-		device.getFileSystem().addZipFileArchive('media//map-20kdm2.pk3')
+		device.getFileSystem().addZipFileArchive('..//irrlicht//media//map-20kdm2.pk3')
 	else:
-		device.getFileSystem().addFileArchive("media//map-20kdm2.pk3")
+		device.getFileSystem().addFileArchive("..//irrlicht//media//map-20kdm2.pk3")
 	i_animated_mesh = scene_manager.getMesh('20kdm2.bsp')
 	if i_animated_mesh:
 		i_mesh = i_animated_mesh.getMesh(0)
@@ -30,7 +30,7 @@ if device:
 			print ('ERROR result method getMesh, IAnimatedMesh')
 		scene_manager.addCameraSceneNodeFPS()
 		device.getCursorControl().setVisible(False)
-		#~ guienv = device.getGUIEnvironment()
+		#guienv = device.getGUIEnvironment()
 		driver = device.getVideoDriver()
 		scolor = pyirrlicht.SColor(255, 200, 200, 200)
 		lastFPS = -1

@@ -9,12 +9,12 @@ except:
 	pybass = None
 	print ('++++ PYBASS module not accessible!!!')
 
-#~ driverType = EDT_NULL
-#~ driverType = EDT_SOFTWARE
-#~ driverType = EDT_BURNINGSVIDEO
-#~ driverType = EDT_DIRECT3D8
-driverType = EDT_DIRECT3D9
-#~ driverType = EDT_OPENGL
+#driverType = EDT_NULL
+#driverType = EDT_SOFTWARE
+#driverType = EDT_BURNINGSVIDEO
+#driverType = EDT_DIRECT3D8
+#driverType = EDT_DIRECT3D9
+driverType = EDT_OPENGL
 
 GUI_ID_QUIT = 0x10000
 GUI_ID_ABOUT = 0x10001
@@ -301,9 +301,13 @@ if device:
 	cam.setTarget(vector3df(0,0,0))
 	cam.setNearValue(0.01)
 
-	font_ext = '.ttf'
-	font_path = os.environ['SYSTEMROOT']+'/Fonts/'
-	font_file = font_path + 'arial' + font_ext
+	font_file = '2DGame/Quiltpatches-OVoaO.ttf'
+	try:
+		font_path = os.environ['SYSTEMROOT']+'/Fonts/'
+	except Exception as e:
+		print(e)
+	else:
+		font_file = font_path + 'arial.ttf'
 	gui_font = CGUITTFont(guienv, font_file, 20)
 	if not gui_font:
 		gui_font = guienv.getBuiltInFont()
@@ -317,7 +321,7 @@ if device:
 		if pybass.BASS_Init(-1, 44100, 0, 0, 0):
 			pybass.BASS_SetVolume(sound_volume)
 			if os.path.isfile(sound_file):
-				#~ bass_handle = pybass.BASS_MusicLoad(False, sound_file, 0, 0, pybass.BASS_MUSIC_PRESCAN | pybass.BASS_SAMPLE_LOOP, 0)
+				#bass_handle = pybass.BASS_MusicLoad(False, sound_file, 0, 0, pybass.BASS_MUSIC_PRESCAN | pybass.BASS_SAMPLE_LOOP, 0)
 				bass_handle = pybass.BASS_StreamCreateFile(False, sound_file, 0, 0, pybass.BASS_MUSIC_PRESCAN | pybass.BASS_SAMPLE_LOOP)
 				if play_sound:
 					sound_play()
@@ -539,13 +543,12 @@ if device:
 				driver.draw2DImage(img_cloud1, position2di(img_path_x3+650, 10), recti(0,0,int(img_cloud1_size.X),int(img_cloud1_size.Y)), 0, img_cloud_color, True)
 				driver.draw2DImage(img_cloud2, position2di(img_path_x3+850, 40), recti(0,0,int(img_cloud2_size.X),int(img_cloud2_size.Y)), 0, img_cloud_color, True)
 
-				img_font.draw(text1, recti(int((i_event_receiver.screen_size.X-text1_size.X)/2),int(text1_size.Y),0,0), SColor(150, 0, 255, 0))
-				# draw question
-				question_font.draw(text_question, recti(int((i_event_receiver.screen_size.X-text_question_size.X)/2-20),100,0,0), question_color)
-				if i_event_receiver.answer:
-					question_font.draw(i_event_receiver.answer, recti(int((i_event_receiver.screen_size.X-text_question_size.X)/2+text_question_size.X), 100, 0, 0), answer_color)
-				if answer_state:
-					img_font.draw(text2, recti(int((i_event_receiver.screen_size.X-text2_size.X)/2),200,0,0), SColor(150, 0, 255, 0))
+				#img_font.draw(text1, recti(int((i_event_receiver.screen_size.X-text1_size.X)/2),int(text1_size.Y),0,0), SColor(150, 0, 255, 0))
+				#question_font.draw(text_question, recti(int((i_event_receiver.screen_size.X-text_question_size.X)/2-20),100,0,0), question_color)
+				#if i_event_receiver.answer:
+				#	question_font.draw(i_event_receiver.answer, recti(int((i_event_receiver.screen_size.X-text_question_size.X)/2+text_question_size.X), 100, 0, 0), answer_color)
+				#if answer_state:
+				#	img_font.draw(text2, recti(int((i_event_receiver.screen_size.X-text2_size.X)/2),200,0,0), SColor(150, 0, 255, 0))
 
 				# draw cursor
 				driver.draw2DImage(cur_img, position2di(int(x-cur_img_size.X/2),int(y-cur_img_size.Y/2)), recti(0,0,int(cur_img_size.X),int(cur_img_size.Y)), 0, img_color, True)

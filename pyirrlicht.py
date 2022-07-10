@@ -2,8 +2,8 @@
 # github.com/usermicrodevices
 # BSD license
 
-__version__ = pyirrlicht_version = '1.2.5'
-__version_date__ = '2022-07-03'
+__version__ = pyirrlicht_version = '1.2.6'
+__version_date__ = '2022-07-10'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -21,15 +21,14 @@ IDI_ASTERISK = 32516
 IDI_WINLOGO = 32517
 IDI_SHIELD = 32518
 
-import ctypes, logging
-from sys import hexversion, platform
+import ctypes, logging, sys
 
-if hexversion < 0x02060000:
+if sys.hexversion < 0x02060000:
 	ctypes.c_bool = ctypes.c_byte
 
 class FILE(ctypes.Structure):
 	pass
-if hexversion >= 0x03000000:
+if sys.hexversion >= 0x03000000:
 	type_str = bytes
 	type_unicode = str
 else:
@@ -44,7 +43,7 @@ if 'IRRLICHT_C_LIBRARY' in environ:
 
 c_module = None
 func_type = ctypes.CFUNCTYPE
-if platform in ('windows', 'win32'):
+if sys.platform in ('windows', 'win32'):
 	c_module = ctypes.WinDLL(c_module_name)
 	func_type = ctypes.WINFUNCTYPE
 else:
@@ -66,7 +65,7 @@ if IRR_WCHAR_FILESYSTEM:
 	fschar_t = ctypes.c_wchar_p
 
 def fs_conv(value, encoding = IRR_ENCODING):
-	if hexversion >= 0x03020000:
+	if sys.hexversion >= 0x03020000:
 		if IRR_WCHAR_FILESYSTEM:
 			return value
 		else:
@@ -75,7 +74,7 @@ def fs_conv(value, encoding = IRR_ENCODING):
 		return value
 
 def as_ansi(value, encoding = IRR_ENCODING):
-	if hexversion >= 0x03020000:
+	if sys.hexversion >= 0x03020000:
 		return bytes(value, encoding)
 	else:
 		return value
@@ -1049,23 +1048,23 @@ ROUNDING_ERROR_S32 = 0
 ROUNDING_ERROR_f32 = 0.000001
 ROUNDING_ERROR_f64 = 0.00000001
 
-ALLOW_ZWRITE_ON_TRANSPARENT = "Allow_ZWrite_On_Transparent"
-CSM_TEXTURE_PATH = "CSM_TexturePath"
-LMTS_TEXTURE_PATH = "LMTS_TexturePath"
-MY3D_TEXTURE_PATH = "MY3D_TexturePath"
-COLLADA_CREATE_SCENE_INSTANCES = "COLLADA_CreateSceneInstances"
-DMF_TEXTURE_PATH = "DMF_TexturePath"
-DMF_IGNORE_MATERIALS_DIRS = "DMF_IgnoreMaterialsDir"
-DMF_ALPHA_CHANNEL_REF = "DMF_AlphaRef"
-DMF_FLIP_ALPHA_TEXTURES = "DMF_FlipAlpha"
-OBJ_TEXTURE_PATH = "OBJ_TexturePath"
-OBJ_LOADER_IGNORE_GROUPS = "OBJ_IgnoreGroups"
-OBJ_LOADER_IGNORE_MATERIAL_FILES = "OBJ_IgnoreMaterialFiles"
-B3D_LOADER_IGNORE_MIPMAP_FLAG = "B3D_IgnoreMipmapFlag"
-B3D_TEXTURE_PATH = "B3D_TexturePath"
-IRR_SCENE_MANAGER_IS_EDITOR = "IRR_Editor"
-DEBUG_NORMAL_LENGTH = "DEBUG_Normal_Length"
-DEBUG_NORMAL_COLOR = "DEBUG_Normal_Color"
+ALLOW_ZWRITE_ON_TRANSPARENT = b"Allow_ZWrite_On_Transparent"
+CSM_TEXTURE_PATH = b"CSM_TexturePath"
+LMTS_TEXTURE_PATH = b"LMTS_TexturePath"
+MY3D_TEXTURE_PATH = b"MY3D_TexturePath"
+COLLADA_CREATE_SCENE_INSTANCES = b"COLLADA_CreateSceneInstances"
+DMF_TEXTURE_PATH = b"DMF_TexturePath"
+DMF_IGNORE_MATERIALS_DIRS = b"DMF_IgnoreMaterialsDir"
+DMF_ALPHA_CHANNEL_REF = b"DMF_AlphaRef"
+DMF_FLIP_ALPHA_TEXTURES = b"DMF_FlipAlpha"
+OBJ_TEXTURE_PATH = b"OBJ_TexturePath"
+OBJ_LOADER_IGNORE_GROUPS = b"OBJ_IgnoreGroups"
+OBJ_LOADER_IGNORE_MATERIAL_FILES = b"OBJ_IgnoreMaterialFiles"
+B3D_LOADER_IGNORE_MIPMAP_FLAG = b"B3D_IgnoreMipmapFlag"
+B3D_TEXTURE_PATH = b"B3D_TexturePath"
+IRR_SCENE_MANAGER_IS_EDITOR = b"IRR_Editor"
+DEBUG_NORMAL_LENGTH = b"DEBUG_Normal_Length"
+DEBUG_NORMAL_COLOR = b"DEBUG_Normal_Color"
 
 #================= LOGGING
 def logi(*args):
@@ -1432,7 +1431,7 @@ SJoystickEvent_IsButtonPressed = func_type(ctypes.c_bool, ctypes.c_void_p, ctype
 	#~ SLogEvent_GetText = func_type(ctypes.c_wchar_p, ctypes.POINTER(SLogEvent))(('SLogEvent_GetText', c_module))
 #~ SLogEvent_GetLevel = func_type(ctypes.c_int, ctypes.POINTER(SLogEvent))(('SLogEvent_GetLevel', c_module))
 SEvent_GetSLogEvent = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SEvent_GetSLogEvent', c_module))
-if IRR_IMPROVE_UNICODE or hexversion >= 0x03000000:# hexversion only if use english text with log
+if IRR_IMPROVE_UNICODE or sys.hexversion >= 0x03000000:# hexversion only if use english text with log
 	SLogEvent_GetText = func_type(ctypes.c_wchar_p, ctypes.c_void_p)(('SLogEvent_GetText', c_module))
 else:
 	SLogEvent_GetText = func_type(ctypes.c_char_p, ctypes.c_void_p)(('SLogEvent_GetText', c_module))
@@ -3734,7 +3733,7 @@ IVideoDriver_setTextureCreationFlag = func_type(None, ctypes.c_void_p, ctypes.c_
 IVideoDriver_getTextureCreationFlag = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_int)(('IVideoDriver_getTextureCreationFlag', c_module))
 IVideoDriver_createImageFromFile1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p)(('IVideoDriver_createImageFromFile1', c_module))
 IVideoDriver_createImageFromFile2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_createImageFromFile2', c_module))
-if hexversion >= 0x03000000:
+if sys.hexversion >= 0x03000000:
 	IVideoDriver_writeImageToFile1 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_uint)(('IVideoDriver_writeImageToFile1', c_module))
 else:
 	IVideoDriver_writeImageToFile1 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p, ctypes.c_uint)(('IVideoDriver_writeImageToFile1', c_module))
@@ -3771,7 +3770,7 @@ IVideoDriver_getVendorInfo = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IVide
 IVideoDriver_setAmbientLight = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_setAmbientLight', c_module))
 IVideoDriver_setAllowZWriteOnTransparent = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('IVideoDriver_setAllowZWriteOnTransparent', c_module))
 IVideoDriver_getMaxTextureSize = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_getMaxTextureSize', c_module))
-if 'win' in platform:
+if 'win' in sys.platform:
 	IVideoDriver_GetHandle = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_GetHandle', c_module))
 else:
 	IVideoDriver_GetHandle = func_type(ctypes.c_ulong, ctypes.c_void_p)(('IVideoDriver_GetHandle', c_module))
@@ -7372,7 +7371,7 @@ class S3DVertex(object):
 		elif len(args) == 0:
 			self.c_pointer = self.ctor1()
 		elif len(args) == 1:
-			if isinstance(args[0], (int, long)):
+			if isinstance(args[0], int):
 				self.c_pointer = self.ctor1(args[0])
 			elif isinstance(args[0], (tuple, list)):
 				idx = 0
@@ -11868,6 +11867,11 @@ class ISceneNodeAnimatorList:
 		return ISceneNodeAnimator(ISceneNodeAnimatorList_get_item(self.c_pointer, key))
 	def __setitem__(self, key, value):
 		self.__getitem__(key).c_pointer = value.c_pointer
+	def __next__(self, from_first = False):
+		result = ISceneNodeAnimatorList_next(self.c_pointer, from_first)
+		if not result:
+			raise StopIteration
+		return ISceneNodeAnimator(result)
 	def __iter__(self):
 		return self
 	def size(self):
@@ -11885,10 +11889,7 @@ class ISceneNodeAnimatorList:
 	def current(self):
 		return ISceneNodeAnimator(ISceneNodeAnimatorList_current(self.c_pointer))
 	def next(self, from_first = False):
-		result = ISceneNodeAnimatorList_next(self.c_pointer, from_first)
-		if not result:
-			raise StopIteration
-		return ISceneNodeAnimator(result)
+		return self.__next__(from_first)
 	def last(self):
 		return ISceneNodeAnimator(ISceneNodeAnimatorList_last(self.c_pointer))
 
@@ -14648,7 +14649,7 @@ class IrrlichtDevice(IReferenceCounted):
 	def closeDevice(self):
 		IrrlichtDevice_closeDevice(self.c_pointer)
 	def getVersion(self):
-		if hexversion >= 0x03000000:
+		if sys.hexversion >= 0x03000000:
 			return type_unicode(IrrlichtDevice_getVersion(self.c_pointer))
 		else:
 			return IrrlichtDevice_getVersion(self.c_pointer)
@@ -14967,7 +14968,7 @@ def createDeviceEx(params):
 	return IrrlichtDevice(parameters = params.c_pointer)
 
 
-if platform in ('windows', 'win32'):
+if sys.platform in ('windows', 'win32'):
 
 	def SetIcon1(drv, icon_id = IDI_APPLICATION, big_icon = False):
 		WM_SETICON = 0x0080
@@ -15105,7 +15106,7 @@ def getTextures(textures, name, startPos, fileSystem, video_driver):
 
 
 if __name__ == "__main__":
-	if hexversion >= 0x03000000:
+	if sys.hexversion >= 0x03000000:
 		from test_py3 import test
 	else:
 		from test_py2 import test
