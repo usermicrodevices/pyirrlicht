@@ -2,8 +2,8 @@
 # github.com/usermicrodevices
 # BSD license
 
-__version__ = pyirrlicht_version = '1.2.6'
-__version_date__ = '2022-07-10'
+__version__ = pyirrlicht_version = '1.2.7'
+__version_date__ = '2022-07-17'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -3815,7 +3815,7 @@ ISceneManager_addOctreeSceneNode2 = func_type(ctypes.c_void_p, ctypes.c_void_p, 
 ISceneManager_addCameraSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_addCameraSceneNode', c_module))
 ISceneManager_addCameraSceneNodeFPS = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool, ctypes.c_float, ctypes.c_bool)(('ISceneManager_addCameraSceneNodeFPS', c_module))
 ISceneManager_addLightSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_int)(('ISceneManager_addLightSceneNode', c_module))
-ISceneManager_addBillboardSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addBillboardSceneNode', c_module))
+ISceneManager_addBillboardSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addBillboardSceneNode', c_module))
 
 ISceneManager_default_addBillboardSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_default_addBillboardSceneNode', c_module))
 

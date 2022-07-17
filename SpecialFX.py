@@ -1,20 +1,21 @@
 import os
-os.environ['IRRLICHT_C_LIBRARY'] = 'irrlicht_c_173'
+#os.environ['IRRLICHT_C_LIBRARY'] = f'irrlicht_c_{last_irrlicht_version}'
 
 from pyirrlicht import *
 
-#~ driverType = EDT_NULL
-#~ driverType = EDT_SOFTWARE
-#~ driverType = EDT_BURNINGSVIDEO
-#~ driverType = EDT_DIRECT3D8
-driverType = EDT_DIRECT3D9
-#~ driverType = EDT_OPENGL
+#driverType = EDT_NULL
+#driverType = EDT_SOFTWARE
+#driverType = EDT_BURNINGSVIDEO
+#driverType = EDT_DIRECT3D8
+#driverType = EDT_DIRECT3D9
+driverType = EDT_OPENGL
 
 
 def main():
-	#~ print("Please press 'y' if you want to use realtime shadows.")
-	#~ shadows = True
+	s = input("Please press 'y' if you want to use realtime shadows.\n")
 	shadows = False
+	if s.lower() == 'y':
+		shadows = True
 
 	if driverType == EDT_COUNT:
 		return 1
@@ -27,50 +28,51 @@ def main():
 	driver = device.getVideoDriver()
 	smgr = device.getSceneManager()
 
-	mesh = smgr.getMesh("media/room.3ds")
+	mesh = smgr.getMesh('..//irrlicht//media//room.3ds')
 
 	if mesh:
 		smgr.getMeshManipulator().makePlanarTextureMapping(mesh.getMesh(0), 0.004)
 		node = smgr.addAnimatedMeshSceneNode(mesh)
 		if node:
-			node.setMaterialTexture(0, driver.getTexture("media/wall.jpg"))
+			node.setMaterialTexture(0, driver.getTexture('..//irrlicht//media//wall.jpg'))
 			node.getMaterial(0).SpecularColor.set(0,0,0,0)
 
-	mesh = smgr.addHillPlaneMesh("myHill", dimension2df(20,20), dimension2du(40,40), textureRepeatCount = dimension2df(10,10))
-	#~ mesh = smgr.addHillPlaneMesh("myHill", dimension2df(20,20), dimension2du(40,40), SMaterial(0), 0.0, dimension2df(0.0, 0.0), dimension2df(10,10))
+	mesh = smgr.addHillPlaneMesh('myHill', dimension2df(20,20), dimension2du(40,40), textureRepeatCount = dimension2df(10,10))
+	#mesh = smgr.addHillPlaneMesh("myHill", dimension2df(20,20), dimension2du(40,40), SMaterial(0), 0.0, dimension2df(0.0, 0.0), dimension2df(10,10))
 	if mesh:
 		node = smgr.addWaterSurfaceSceneNode(mesh.getMesh(0), 3.0, 300.0, 30.0)
 		node.setPosition(vector3df(0,7,0))
-		node.setMaterialTexture(0, driver.getTexture("media/stones.jpg"))
-		node.setMaterialTexture(1, driver.getTexture("media/water.jpg"))
+		node.setMaterialTexture(0, driver.getTexture('..//irrlicht//media//stones.jpg'))
+		node.setMaterialTexture(1, driver.getTexture('..//irrlicht//media//water.jpg'))
 		node.setMaterialType(EMT_REFLECTION_2_LAYER)
 
-	node = smgr.addLightSceneNode(0, vector3df(0,0,0), SColorf(1.0, 0.6, 0.7, 1.0), 800.0)
-	if node:
+	light_node = smgr.addLightSceneNode(0, vector3df(0,0,0), SColorf(1.0, 0.6, 0.7, 1.0), 800.0)
+	if light_node:
 		anim = smgr.createFlyCircleAnimator(vector3df(0,150,0), 250.0)
-		node.addAnimator(anim)
-		anim.drop()
-
-		node = smgr.addBillboardSceneNode(node, dimension2df(50, 50))
-		if node:
-			node.setMaterialFlag(EMF_LIGHTING, False)
-			node.setMaterialType(EMT_TRANSPARENT_ADD_COLOR)
-			node.setMaterialTexture(0, driver.getTexture("media/particlewhite.bmp"))
+		light_node.addAnimator(anim)
+		#anim.drop()
+		billboard_size = dimension2df(50.0, 50.0)
+		#billboard_node = smgr.addBillboardSceneNode(light_node, billboard_size)
+		billboard_node = smgr.default_addBillboardSceneNode()
+		if billboard_node:
+			billboard_node.setMaterialFlag(EMF_LIGHTING, False)
+			billboard_node.setMaterialType(EMT_TRANSPARENT_ADD_COLOR)
+			billboard_node.setMaterialTexture(0, driver.getTexture('..//irrlicht//media//particlewhite.bmp'))
 
 	ps = smgr.addParticleSystemSceneNode(False)
 	em = ps.createBoxEmitter(aabbox3df(-7,0,-7,7,1,7), vector3df(0.0,0.06,0.0), 80, 100, SColor(0,255,255,255), SColor(0,255,255,255), 800, 2000, 0, dimension2df(10.0,10.0), dimension2df(20.0,20.0))
 	ps.setEmitter(em)
-	em.drop()
+	#em.drop()
 
 	paf = ps.createFadeOutParticleAffector()
 	ps.addAffector(paf)
-	paf.drop()
+	#paf.drop()
 
 	ps.setPosition(vector3df(-70,60,40))
 	ps.setScale(vector3df(2,2,2))
 	ps.setMaterialFlag(EMF_LIGHTING, False)
 	ps.setMaterialFlag(EMF_ZWRITE_ENABLE, False)
-	ps.setMaterialTexture(0, driver.getTexture("media/fire.bmp"))
+	ps.setMaterialTexture(0, driver.getTexture('..//irrlicht//media//fire.bmp'))
 	ps.setMaterialType(EMT_TRANSPARENT_VERTEX_ALPHA)
 
 	n = smgr.addVolumeLightSceneNode(0, -1, 32, 32, SColor(0, 255, 255, 255), SColor(0, 0, 0, 0))
@@ -79,16 +81,14 @@ def main():
 		n.setPosition(vector3df(-120,50,40))
 
 		textures = array(ITexture)
-		#~ for g in range(1, 8):
-			#~ textures.push_front(driver.getTexture('media/portal%d.bmp' % g))
 		for g in range(7, 0, -1):
-			textures.push_back(driver.getTexture('media/portal%d.bmp' % g))
+			textures.push_back(driver.getTexture('..//irrlicht//media//portal%d.bmp' % g))
 
 		glow = smgr.createTextureAnimator(textures, 150)
 		n.addAnimator(glow)
-		glow.drop()
+		#glow.drop()
 
-	mesh = smgr.getMesh("media/dwarf.x")
+	mesh = smgr.getMesh('..//irrlicht//media//dwarf.x')
 	if mesh:
 		anode = smgr.addAnimatedMeshSceneNode(mesh)
 		if anode:
@@ -113,12 +113,12 @@ def main():
 			driver.endScene()
 			fps = driver.getFPS()
 			if lastFPS != fps:
-				device.setWindowCaption("Irrlicht Engine - SpecialFX example [%s] FPS:%d" % (driver.getName(), fps))
+				device.setWindowCaption('Irrlicht Engine - SpecialFX example [%s] FPS:%d' % (driver.getName(), fps))
 				lastFPS = fps
 
-	device.drop()
+	#device.drop()
 	return 0
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	main()
