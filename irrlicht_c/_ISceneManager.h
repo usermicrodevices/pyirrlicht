@@ -53,7 +53,7 @@ IRRLICHT_C_API ICameraSceneNode* ISceneManager_addCameraSceneNodeFPS2(ISceneMana
 {return pointer->addCameraSceneNodeFPS();}
 IRRLICHT_C_API ILightSceneNode* ISceneManager_addLightSceneNode(ISceneManager* pointer, ISceneNode* parent = 0, const core::vector3df& position = core::vector3df(0,0,0), const video::SColorf& color = video::SColorf(1.0f, 1.0f, 1.0f), f32 radius=100.0f, s32 id=-1)
 {return pointer->addLightSceneNode(parent, position, *&color, radius, id);}
-IRRLICHT_C_API IBillboardSceneNode* ISceneManager_addBillboardSceneNode(ISceneManager* pointer, ISceneNode* parent = 0, const core::dimension2d<f32>& size = core::dimension2d<f32>(10.0f, 10.0f), const core::vector3df& position = vector3df(0,0,0), s32 id=-1, const SColor& colorTop = 0xFFFFFFFF, const SColor& colorBottom = 0xFFFFFFFF)
+IRRLICHT_C_API IBillboardSceneNode* ISceneManager_addBillboardSceneNode(ISceneManager* pointer, ISceneNode* parent = 0, const core::dimension2d<f32>& size = core::dimension2d<f32>(10.0f, 10.0f), const core::vector3d<f32>& position = vector3df(0,0,0), s32 id=-1, const SColor& colorTop = 0xFFFFFFFF, const SColor& colorBottom = 0xFFFFFFFF)
 {return pointer->addBillboardSceneNode(parent, size, position, id, colorTop, colorBottom);}
 IRRLICHT_C_API IBillboardSceneNode* ISceneManager_default_addBillboardSceneNode(ISceneManager* pointer)
 {return pointer->addBillboardSceneNode();}

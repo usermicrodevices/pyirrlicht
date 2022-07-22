@@ -51,9 +51,8 @@ def main():
 		anim = smgr.createFlyCircleAnimator(vector3df(0,150,0), 250.0)
 		light_node.addAnimator(anim)
 		#anim.drop()
-		billboard_size = dimension2df(50.0, 50.0)
-		#billboard_node = smgr.addBillboardSceneNode(light_node, billboard_size)
-		billboard_node = smgr.default_addBillboardSceneNode()
+		billboard_node = smgr.addBillboardSceneNode(light_node, dimension2df(50.0, 50.0))
+		#billboard_node = smgr.default_addBillboardSceneNode()
 		if billboard_node:
 			billboard_node.setMaterialFlag(EMF_LIGHTING, False)
 			billboard_node.setMaterialType(EMT_TRANSPARENT_ADD_COLOR)

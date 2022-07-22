@@ -2,8 +2,8 @@
 # github.com/usermicrodevices
 # BSD license
 
-__version__ = pyirrlicht_version = '1.2.7'
-__version_date__ = '2022-07-17'
+__version__ = pyirrlicht_version = '1.2.8'
+__version_date__ = '2022-07-22'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -3815,10 +3815,8 @@ ISceneManager_addOctreeSceneNode2 = func_type(ctypes.c_void_p, ctypes.c_void_p, 
 ISceneManager_addCameraSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_addCameraSceneNode', c_module))
 ISceneManager_addCameraSceneNodeFPS = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool, ctypes.c_float, ctypes.c_bool)(('ISceneManager_addCameraSceneNodeFPS', c_module))
 ISceneManager_addLightSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_int)(('ISceneManager_addLightSceneNode', c_module))
-ISceneManager_addBillboardSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addBillboardSceneNode', c_module))
-
+ISceneManager_addBillboardSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addBillboardSceneNode', c_module))
 ISceneManager_default_addBillboardSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_default_addBillboardSceneNode', c_module))
-
 ISceneManager_addSkyBoxSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_addSkyBoxSceneNode', c_module))
 ISceneManager_addSkyDomeSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_addSkyDomeSceneNode', c_module))
 ISceneManager_addParticleSystemSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addParticleSystemSceneNode', c_module))
@@ -6387,13 +6385,6 @@ class rects32array:
 	def swap(self, other):
 		rects32array_swap(self.c_pointer, other.c_pointer)
 
-class vector3df:
-	def __init__(self, *args, **kwargs):
-		pass
-class vector3di:
-	def __init__(self, *args, **kwargs):
-		pass
-
 class vector3df(object):
 	def __init__(self, *args, **kwargs):
 		self.c_pointer = None
@@ -6527,12 +6518,12 @@ class vector3df(object):
 		return vector3df(vector3df_setLength(self.c_pointer, newlength), True)
 	def invert(self):
 		return vector3df(vector3df_invert(self.c_pointer), True)
-	def rotateXZBy(self, degrees, center = vector3df()):
-		vector3df_rotateXZBy(self.c_pointer, degrees, center.c_pointer)
-	def rotateXYBy(self, degrees, center = vector3df()):
-		vector3df_rotateXYBy(self.c_pointer, degrees, center.c_pointer)
-	def rotateYZBy(self, degrees, center = vector3df()):
-		vector3df_rotateYZBy(self.c_pointer, degrees, center.c_pointer)
+	def rotateXZBy(self, degrees, center = vector3df_ctor1()):
+		vector3df_rotateXZBy(self.c_pointer, degrees, center.c_pointer if hasattr(center, 'c_pointer') else center)
+	def rotateXYBy(self, degrees, center = vector3df_ctor1()):
+		vector3df_rotateXYBy(self.c_pointer, degrees, center.c_pointer if hasattr(center, 'c_pointer') else center)
+	def rotateYZBy(self, degrees, center = vector3df_ctor1()):
+		vector3df_rotateYZBy(self.c_pointer, degrees, center.c_pointer if hasattr(center, 'c_pointer') else center)
 	def getInterpolated(self, other, d):
 		return vector3df(vector3df_getInterpolated(self.c_pointer, other.c_pointer, d), True)
 	def getInterpolated_quadratic(self, v2, v3, d):
@@ -6543,7 +6534,7 @@ class vector3df(object):
 		return vector3df(vector3df_getHorizontalAngle(self.c_pointer), True)
 	def getSphericalCoordinateAngles(self):
 		return vector3df(vector3df_getSphericalCoordinateAngles(self.c_pointer), True)
-	def rotationToDirection(self, forwards = vector3df(0, 0, 1)):
+	def rotationToDirection(self, forwards = vector3df_ctor2(.0, .0, 1.)):
 		return vector3df(vector3df_rotationToDirection(self.c_pointer, forwards.c_pointer), True)
 	def getAs4Values(self, pointer_array):
 		vector3df_getAs4Values(self.c_pointer, pointer_array)
@@ -6681,12 +6672,12 @@ class vector3di(object):
 		return vector3di(vector3di_setLength(self.c_pointer, newlength), True)
 	def invert(self):
 		return vector3di(vector3di_invert(self.c_pointer), True)
-	def rotateXZBy(self, degrees, center = vector3di()):
-		vector3di_rotateXZBy(self.c_pointer, degrees, center.c_pointer)
-	def rotateXYBy(self, degrees, center = vector3di()):
-		vector3di_rotateXYBy(self.c_pointer, degrees, center.c_pointer)
-	def rotateYZBy(self, degrees, center = vector3di()):
-		vector3di_rotateYZBy(self.c_pointer, degrees, center.c_pointer)
+	def rotateXZBy(self, degrees, center = vector3di_ctor1()):
+		vector3di_rotateXZBy(self.c_pointer, degrees, center.c_pointer if hasattr(center, 'c_pointer') else center)
+	def rotateXYBy(self, degrees, center = vector3di_ctor1()):
+		vector3di_rotateXYBy(self.c_pointer, degrees, center.c_pointer if hasattr(center, 'c_pointer') else center)
+	def rotateYZBy(self, degrees, center = vector3di_ctor1()):
+		vector3di_rotateYZBy(self.c_pointer, degrees, center.c_pointer if hasattr(center, 'c_pointer') else center)
 	def getInterpolated(self, other, d):
 		return vector3di(vector3di_getInterpolated(self.c_pointer, other.c_pointer, d), True)
 	def getInterpolated_quadratic(self, v2, v3, d):
@@ -6697,7 +6688,7 @@ class vector3di(object):
 		return vector3di(vector3di_getHorizontalAngle(self.c_pointer), True)
 	def getSphericalCoordinateAngles(self):
 		return vector3di(vector3di_getSphericalCoordinateAngles(self.c_pointer), True)
-	def rotationToDirection(self, forwards = vector3di(0, 0, 1)):
+	def rotationToDirection(self, forwards = vector3di_ctor2(0, 0, 1)):
 		return vector3di(vector3di_rotationToDirection(self.c_pointer, forwards.c_pointer), True)
 	def getAs4Values(self, pointer_array):
 		vector3di_getAs4Values(self.c_pointer, pointer_array)
