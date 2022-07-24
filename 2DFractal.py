@@ -20,12 +20,12 @@ IMG_HEIGHT = 160
 CENTER_X = IMG_WIDTH/2
 CENTER_Y = IMG_HEIGHT/2
 
-#~ driverType = EDT_NULL
+#driverType = EDT_NULL
 driverType = EDT_SOFTWARE
-#~ driverType = EDT_BURNINGSVIDEO
-#~ driverType = EDT_DIRECT3D8
-#~ driverType = EDT_DIRECT3D9
-#~ driverType = EDT_OPENGL
+#driverType = EDT_BURNINGSVIDEO
+#driverType = EDT_DIRECT3D8
+#driverType = EDT_DIRECT3D9
+#driverType = EDT_OPENGL
 
 max_iteration = 70
 scale = 3.0/(IMG_HEIGHT*500.0)
@@ -69,7 +69,6 @@ if device:
 	video_driver = device.getVideoDriver()
 
 	video_driver.SetIcon(IDI_EXCLAMATION)
-	#~ SetIcon1(video_driver, IDI_EXCLAMATION)
 
 	j = 0 + 1j
 	blend = True

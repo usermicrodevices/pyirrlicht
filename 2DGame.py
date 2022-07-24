@@ -270,18 +270,19 @@ if run_app:
 		cam.setTarget(vector3df(0,0,0))
 		cam.setNearValue(0.01)
 
-		font_file = '2DGame/Quiltpatches-OVoaO.ttf'
-		try:
-			font_path = os.environ['SYSTEMROOT']+'/Fonts/'
-		except Exception as e:
-			print(e)
-		else:
-			font_file = font_path + 'arial.ttf'
-		#gui_font = CGUITTFont(guienv, font_file, 12)
-		#if not gui_font:
-			#gui_font = guienv.getBuiltInFont()
+		font_file = '2DGame/arial.ttf'
+		if not os.path.isfile(font_file) and sys.platform in ('windows', 'win32'):
+			try:
+				font_path = os.environ['SYSTEMROOT']+'/Fonts/'
+			except Exception as e:
+				print(e)
+			else:
+				font_file = font_path + 'arial.ttf'
+		gui_font = CGUITTFont(guienv, font_file, 20)
+		if not gui_font:
+			gui_font = guienv.getBuiltInFont()
 		skin = guienv.getSkin()
-		#skin.setFont(gui_font)
+		skin.setFont(gui_font)
 		#gui_font.drop()
 		menu_height = skin.getSize(EGDS_MENU_HEIGHT)
 

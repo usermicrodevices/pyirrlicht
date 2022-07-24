@@ -2,8 +2,8 @@
 # github.com/usermicrodevices
 # BSD license
 
-__version__ = pyirrlicht_version = '1.2.8'
-__version_date__ = '2022-07-22'
+__version__ = pyirrlicht_version = '1.2.9'
+__version_date__ = '2022-07-24'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -63,6 +63,7 @@ IRR_WCHAR_FILESYSTEM = ctypes.c_bool.in_dll(c_module, 'IRR_WCHAR_FILESYSTEM').va
 fschar_t = ctypes.c_char_p
 if IRR_WCHAR_FILESYSTEM:
 	fschar_t = ctypes.c_wchar_p
+#print(f'IRR_WCHAR_FILESYSTEM = {IRR_WCHAR_FILESYSTEM} :: fschar_t = {type(fschar_t)}')
 
 def fs_conv(value, encoding = IRR_ENCODING):
 	if sys.hexversion >= 0x03020000:
@@ -15026,8 +15027,8 @@ if sys.platform in ('windows', 'win32'):
 		return RealChildWindowFromPoint(hwndParent, ctypes.pointer(point))
 
 else:
-	# this my functions has not realisations for non windows platform
-	# if you know as, do it and share code
+	# functions has not realisations for non windows platform
+	# perhaps https://github.com/python-xlib/python-xlib will helpful on linux
 	def SetIcon1(drv, icon_id = 0, big_icon = False):
 		pass
 	def SetIcon2(drv, icon_id = 0):

@@ -70,12 +70,15 @@ class fern():
 			fonts_path = '/usr/local/share/fonts'
 			if 'win' in sys.platform:
 				fonts_path = '{}/Fonts'.format(os.environ['SYSTEMROOT'])
-			gui_font = CGUITTFont(self.gui_environment, '{}/arial.ttf'.format(fonts_path), 20)
+			font_file = '{}/arial.ttf'.format(fonts_path)
+			if not os.path.isdir(font_file):
+				font_file = '2DGame/arial.ttf'
+			gui_font = CGUITTFont(self.gui_environment, font_file, 20)
 			if not gui_font:
 				gui_font = self.gui_environment.getBuiltInFont()
 			skin = self.gui_environment.getSkin()
 			skin.setFont(gui_font)
-			gui_font.drop()
+			#gui_font.drop()
 			for i in range(EGDC_COUNT):
 				col = skin.getColor(i)
 				col.setAlpha(100)
@@ -153,7 +156,10 @@ class fern():
 
 	def redraw(self):
 		if self.video_driver.queryFeature(EVDF_RENDER_TO_TARGET):
-			self.texture = self.video_driver.addRenderTargetTexture(dimension2du(512, 512), 'RTT1', ECF_A8R8G8B8)
+			rname = 'RTT1'
+			if not IRR_WCHAR_FILESYSTEM:
+				rname = rname.encode('ascii')
+			self.texture = self.video_driver.addRenderTargetTexture(dimension2du(512, 512), rname, ECF_A8R8G8B8)
 
 		if self.texture:
 			self.video_driver.setRenderTarget(self.texture, True, True, SColor(0,255,255,255))
@@ -167,8 +173,8 @@ class fern():
 		self.lastMaxLevels = self.maxLevels
 		self.antiTrunkRatio = 1 - self.trunkRatio
 		self.startAngle = -math.pi / 2
-		px = w / 2
-		py = h - 5
+		px = int(w / 2)
+		py = int(h - 5)
 
 		self.draw(px, py, self.startAngle, (h - 100) * self.heightScale, self.maxLevels)
 

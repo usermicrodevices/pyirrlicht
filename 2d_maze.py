@@ -1,6 +1,6 @@
 # from http://zenpython.blogspot.com/
 
-import os
+import os, sys
 from pyirrlicht import *
 from random import randrange as rand
 
@@ -53,19 +53,20 @@ def makeMaze(w, h, fore, back, scale = 0):
 		video_driver.SetIcon(IDI_EXCLAMATION)
 		gui_environment = device.getGUIEnvironment()
 
-		font_file = '2DGame/Quiltpatches-OVoaO.ttf'
-		try:
-			font_path = os.environ['SYSTEMROOT']+'/Fonts/'
-		except Exception as e:
-			print(e)
-		else:
-			font_file = font_path + 'arial.ttf'
-		#gui_font = CGUITTFont(gui_environment, font_file, 20)
-		#if not gui_font:
-			#gui_font = gui_environment.getBuiltInFont()
-		#skin = gui_environment.getSkin()
-		#skin.setFont(gui_font)
-		#gui_font.drop()
+		font_file = '2DGame/arial.ttf'
+		if not os.path.isfile(font_file) and sys.platform in ('windows', 'win32'):
+			try:
+				font_path = os.environ['SYSTEMROOT']+'/Fonts/'
+			except Exception as e:
+				print(e)
+			else:
+				font_file = font_path + 'arial.ttf'
+
+		gui_font = CGUITTFont(gui_environment, font_file, 20)
+		if not gui_font:
+			gui_font = gui_environment.getBuiltInFont()
+		skin = gui_environment.getSkin()
+		skin.setFont(gui_font)
 
 		if scale != 0:
 			w, h = int(w/scale), int(h/scale)

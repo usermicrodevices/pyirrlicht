@@ -294,6 +294,8 @@ class game:
 				pyespeak.espeak_SetParameter(pyespeak.espeakRATE, self.voice_rate, 0)
 				pyespeak.espeak_SetParameter(pyespeak.espeakPITCH, self.voice_pitch, 0)
 		fonts_path = '/usr/local/share/fonts'
+		if not os.path.isdir(fonts_path):
+			fonts_path = '2DGame'
 		default_driver_type = EDT_SOFTWARE
 		if 'win' in sys.platform:
 			default_driver_type = EDT_DIRECT3D9
@@ -415,7 +417,7 @@ class game:
 			self.skin = self.guienv.getSkin()
 			if self.gui_font:
 				self.skin.setFont(self.gui_font)
-				self.gui_font.drop()
+				#self.gui_font.drop()
 			else:
 				print ('++++ ERROR vect_font not created !!!')
 			self.menu_height = self.skin.getSize(EGDS_MENU_HEIGHT)

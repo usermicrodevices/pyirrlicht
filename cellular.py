@@ -1,13 +1,13 @@
 'procedural cellular texture generator'
 
-import os, math, random
+import os, math, random, sys
 from pyirrlicht import *
 
-#~ driverType = EDT_NULL
-#~ driverType = EDT_SOFTWARE
-#~ driverType = EDT_BURNINGSVIDEO
-#~ driverType = EDT_DIRECT3D8
-#~ driverType = EDT_DIRECT3D9
+#driverType = EDT_NULL
+#driverType = EDT_SOFTWARE
+#driverType = EDT_BURNINGSVIDEO
+#driverType = EDT_DIRECT3D8
+#driverType = EDT_DIRECT3D9
 driverType = EDT_OPENGL
 
 ID_BUTTON_REGENERATE = 1000
@@ -163,11 +163,20 @@ class application:
 			self.scene_manager = self.device.getSceneManager()
 			self.gui_environment = self.device.getGUIEnvironment()
 
+			font_file = '2DGame/arial.ttf'
+			if not os.path.isfile(font_file) and sys.platform in ('windows', 'win32'):
+				try:
+					font_path = os.environ['SYSTEMROOT']+'/Fonts/'
+				except Exception as e:
+					print(e)
+				else:
+					font_file = font_path + 'arial.ttf'
+
 			font_height = 20
-			gui_font = CGUITTFont(self.gui_environment, os.environ['SYSTEMROOT']+'/Fonts/arial.ttf', font_height)
+			gui_font = CGUITTFont(self.gui_environment, font_file, font_height)
 			if gui_font:
 				self.gui_environment.getSkin().setFont(gui_font)
-				gui_font.drop()
+				#gui_font.drop()
 
 			self.cell = Cellular(self.video_driver, 128, 128)
 			self.anim_cell = Cellular(self.video_driver, 16, 16)
