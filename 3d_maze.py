@@ -416,7 +416,7 @@ class Maze(object):
 						if self.finish_box.isPointInside(self.camera.getPosition()) and not self.win_dialog:
 							self.camera.setInputReceiverEnabled(False)
 							self.win_dialog = self.gui_environment.addMessageBox('Warning', 'You is Winner!!!')
-							#self.finish_box.reset(0.1, 0.1, 0.1)
+							self.finish_box.reset(0.1, 0.1, 0.1)
 							self.recreate_level()
 						#collision_node = collision_manager.getSceneNodeFromCameraBB(self.camera)
 						#if collision_node:
@@ -424,7 +424,7 @@ class Maze(object):
 								#self.gui_environment.addMessageBox('Warning', 'You is Winner!!!')
 						self.gui_environment.drawAll()
 						self.video_driver.endScene()
-					#self.device.sleep(10)
+					self.device.sleep(1)
 				else:
 					self.device.yield_self()
 			self.device.drop()

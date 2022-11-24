@@ -1,10 +1,9 @@
-# Copyright(c) Max Kolosov 2010-2012 maxkolosov@inbox.ru
-# http://pir.sourceforge.net     http://pyirrlicht.googlecode.com
+# Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+# github.com/usermicrodevices
 # BSD license
 'Python 3d Game Editor for create 3d world'
 
 import os
-#~ os.environ['IRRLICHT_C_LIBRARY'] = 'irrlicht_c_173'
 
 import sys
 from math import pow, sqrt, acos, tan, atan, degrees
@@ -329,6 +328,8 @@ class UserIEventReceiver(IEventReceiver):
 		return self.KeyIsDown[keyCode];
 
 class framework:
+	log_file_stream = None
+
 	def __init__(self, *args, **kwargs):
 		self.config_file_name = kwargs.pop('config_file_name', '%s.ini'%app_file_name)
 		self.config = config(file_name = self.config_file_name)
@@ -383,9 +384,9 @@ class framework:
 			#===================Fog=====================
 			self.driver.setFog(start=1.0, end=1000.0)
 			#================SVG IImageLoader=============
-			self.driver.addExternalImageLoader(agg_svg_loader(self.driver))
-			#~ self.driver.addAggSvgImageLoader()
-		self.log_file_stream = None
+			if BUILD_WITH_AGG:
+				self.driver.addExternalImageLoader(agg_svg_loader(self.driver))
+				#self.driver.addAggSvgImageLoader()
 
 	def __del__(self):
 		if self.device:
@@ -432,7 +433,7 @@ class framework:
 			for column in range(image_size.Width):
 				image.setPixel(row, column, SColor(alpha, randint(*red), randint(*green), randint(*blue)), blend)
 		texture = self.driver.addTexture(texture_name, image)
-		image.drop()
+		#image.drop()
 		return texture
 
 	def create_wall_plane_selector(self, pos = None, rotation = None, tile_size = None, tile_count = None, texture_repeat = None, selector_from_bounding_box = False, material = None):
@@ -492,16 +493,19 @@ class framework:
 	def start(self):
 		if self.device:
 			self.font_size = 24
-			font_ext = '.ttf'
-			font_path = os.environ['SYSTEMROOT']+'/Fonts/'
-			self.font_file = font_path + 'arial' + font_ext
-			#~ self.font_file = font_path + 'cour' + font_ext
-			#~ self.font_file = font_path + 'comic' + font_ext
+			self.font_file = 'chess.ttf'
+			if not os.path.isfile(self.font_file) and sys.platform in ('windows', 'win32'):
+				try:
+					font_path = os.environ['SYSTEMROOT']+'/Fonts/'
+				except Exception as e:
+					print(e)
+				else:
+					self.font_file = font_path + 'arial.ttf'
 			self.vect_font = CGUITTFont(self.guienv, self.font_file, self.font_size)
 			self.skin = self.guienv.getSkin()
 			if self.vect_font:
 				self.skin.setFont(self.vect_font)
-				self.vect_font.drop()
+				#self.vect_font.drop()
 			else:
 				print ('ERROR vect_font not created !!!')
 				#~ self.font = self.guienv.getBuiltInFont()
@@ -582,9 +586,9 @@ class framework:
 			# CGridSceneNode
 			self.grid = CGridSceneNode(self.scene_manager.getRootSceneNode(), self.scene_manager, size = int(self.tile_size.X * self.tile_count.X), axislinestate = True)
 			#~ selector_bottom = self.scene_manager.createTriangleSelectorFromBoundingBox(self.grid)
-			selector_bottom = self.scene_manager.createOctreeTriangleSelector(i_mesh_bottom, self.grid)
-			self.grid.setTriangleSelector(selector_bottom)
-			self.grid.drop()
+			#selector_bottom = self.scene_manager.createOctreeTriangleSelector(i_mesh_bottom, self.grid)
+			#self.grid.setTriangleSelector(selector_bottom)
+			#self.grid.drop()
 			#~ self.grid.SetMaterial(self.material)
 			#~ #self.grid.SetGridColor(SColor(255,100,100,100))
 			#~ #self.grid.SetAccentlineColor(SColor(255,200,200,200))
@@ -650,17 +654,17 @@ class framework:
 			#~ self.set_active_camera(self.camera[2])
 			#~ self.scale_camera_top()
 
-			self.i_meta_triangle_selector = self.scene_manager.createMetaTriangleSelector()
-			self.i_meta_triangle_selector.addTriangleSelector(selector_bottom)
-			self.i_meta_triangle_selector.addTriangleSelector(selector_top)
-			self.i_meta_triangle_selector.addTriangleSelector(selector_front)
-			self.i_meta_triangle_selector.addTriangleSelector(selector_back)
-			self.i_meta_triangle_selector.addTriangleSelector(selector_left)
-			self.i_meta_triangle_selector.addTriangleSelector(selector_right)
+			# self.i_meta_triangle_selector = self.scene_manager.createMetaTriangleSelector()
+			# self.i_meta_triangle_selector.addTriangleSelector(selector_bottom)
+			# self.i_meta_triangle_selector.addTriangleSelector(selector_top)
+			# self.i_meta_triangle_selector.addTriangleSelector(selector_front)
+			# self.i_meta_triangle_selector.addTriangleSelector(selector_back)
+			# self.i_meta_triangle_selector.addTriangleSelector(selector_left)
+			# self.i_meta_triangle_selector.addTriangleSelector(selector_right)
 
-			anim = self.scene_manager.createCollisionResponseAnimator(self.i_meta_triangle_selector, self.camera[1])
-			self.camera[1].addAnimator(anim)
-			anim.drop()
+			# anim = self.scene_manager.createCollisionResponseAnimator(self.i_meta_triangle_selector, self.camera[1])
+			# self.camera[1].addAnimator(anim)
+			# anim.drop()
 
 			self.cursor_control = self.device.getCursorControl()
 			#~ self.cursor_control.setVisible(False)
@@ -711,7 +715,7 @@ class framework:
 					self.device.sleep(self.sleep_delay)
 				else:
 					self.device._yield()
-			self.device.drop()
+			#self.device.drop()
 			# framework attribute must be deleted for worked __del__ method
 			i_event_receiver.framework = None
 		else:
