@@ -2,8 +2,8 @@
 # github.com/usermicrodevices
 # BSD license
 
-__version__ = pyirrlicht_version = '1.2.9'
-__version_date__ = '2022-07-24'
+__version__ = pyirrlicht_version = '1.3.0'
+__version_date__ = '2022-11-26'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -6403,6 +6403,8 @@ class vector3df(object):
 			self.c_pointer = vector3df_ctor3(kwargs.pop('n', 0.0))
 		elif 'other' in kwargs:
 			self.c_pointer = vector3df_ctor4(kwargs.pop('other'))
+		elif 'c_pointer' in kwargs:
+			self.c_pointer = kwargs.pop('c_pointer')
 	def a__del__(self):
 		if self.c_pointer and self.delete_c_pointer:
 			try:
@@ -6694,7 +6696,7 @@ class vector3di(object):
 	def getAs4Values(self, pointer_array):
 		vector3di_getAs4Values(self.c_pointer, pointer_array)
 
-class aabbox3df(object):
+class aabbox3df(BaseLog):
 	def __init__(self, *args, **kwargs):
 		self.c_pointer = 0
 		self.delete_c_pointer = True
@@ -6733,7 +6735,9 @@ class aabbox3df(object):
 		if len(args) == 3:
 			aabbox3df_reset1(self.c_pointer, *args)
 		else:
-			if isinstance(args[0], aabbox3df):
+			if not args[0]:
+				self.logw('args', args)
+			elif isinstance(args[0], aabbox3df):
 				aabbox3df_reset2(self.c_pointer, args[0].c_pointer)
 			else:
 				aabbox3df_reset3(self.c_pointer, args[0].c_pointer)
@@ -6749,7 +6753,10 @@ class aabbox3df(object):
 		if len(args) == 3:
 			aabbox3df_addInternalPoint2(self.c_pointer, *args)
 		else:
-			aabbox3df_addInternalPoint1(self.c_pointer, args[0].c_pointer)
+			if not args[0]:
+				self.logw('args', args)
+			else:
+				aabbox3df_addInternalPoint1(self.c_pointer, args[0].c_pointer)
 	def addInternalPoint1(self, p):
 		aabbox3df_addInternalPoint1(self.c_pointer, p.c_pointer)
 	def addInternalPoint2(self, x, y, z):
@@ -7353,6 +7360,12 @@ class triangle3di(object):
 	pointB = property(get_pointB, set_pointB) 
 	pointC = property(get_pointC, set_pointC) 
 
+class c_S3DVertex(ctypes.Structure):
+	_fields_ = [('Pos', ctypes.c_void_p),# vector3df
+				('Normal', ctypes.c_void_p),# vector3df
+				('Color', ctypes.c_void_p),# SColor
+				('TCoords', ctypes.c_void_p)# vector2df
+				]
 class S3DVertex(object):
 	def __init__(self, *args, **kwargs):
 		self.c_pointer = None
@@ -15063,8 +15076,11 @@ else:
 def is_frozen():
 	return globals()['__file__'] == '<frozen>'
 
-def generate_texture(video_driver, image_format = ECF_R8G8B8, image_size = dimension2du(2, 2), texture_name = 'texture_01', alpha_value = 128, red = (0, 255), green = (0, 255), blue = (0, 255)):
-	return ITexture(tool_texture_generator(video_driver.c_pointer, image_format, image_size.c_pointer, texture_name, alpha_value, red[0], red[1], green[0], green[1], blue[0], blue[1]))
+def generate_texture(video_driver, image_format = ECF_R8G8B8, image_size = dimension2du(2, 2), texture_name = 'texture_01', alpha_value = 128, red = (0, 255), green = (0, 255), blue = (0, 255), encoding='utf-8'):
+	if sys.hexversion >= 0x03000000:
+		return ITexture(tool_texture_generator(video_driver.c_pointer, image_format, image_size.c_pointer, texture_name.encode(encoding), alpha_value, red[0], red[1], green[0], green[1], blue[0], blue[1]))
+	else:
+		return ITexture(tool_texture_generator(video_driver.c_pointer, image_format, image_size.c_pointer, texture_name, alpha_value, red[0], red[1], green[0], green[1], blue[0], blue[1]))
 
 def texture_from_svg(video_driver, file_name = 'tiger.svg', image_format = ECF_A8R8G8B8, texture_name = 'texture_01', alpha_value = 0):
 	return ITexture(tool_texture_from_svg(video_driver.c_pointer, file_name, image_format, texture_name, alpha_value))
