@@ -348,7 +348,7 @@ class game:
 			for column in range(image_size.Width):
 				image.setPixel(row, column, SColor(alpha, randint(*red), randint(*green), randint(*blue)), blend)
 		texture = self.driver.addTexture(texture_name, image)
-		image.drop()
+		#image.drop()
 		return texture
 
 	def texture_generator_01(self, image_format = ECF_R8G8B8, image_size = dimension2du(2, 2), texture_name = 'texture_01', alpha_value = 128, red = (0, 255), green = (0, 255), blue = (0, 255)):
@@ -388,7 +388,7 @@ class game:
 		arrow_scene_node.setPosition(vector3df(x, 0, z))
 		arrow_scene_node.setMaterialFlag(EMF_LIGHTING, False)
 		arrow_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
-		arrow_scene_node.drop()
+		#arrow_scene_node.drop()
 		#
 		#~ arrow_mesh = self.scene_manager.addArrowMesh('tree', vtxColorCylinder = SColor(255, 255, 0, 0), vtxColorCone = SColor(255, 0, 255, 0), tesselationCylinder = 4, tesselationCone = 8, height = 200.0, cylinderHeight = 20.0, widthCylinder = 20.0, widthCone = 70.0)
 		#~ arrow_scene_node = self.scene_manager.addMeshSceneNode(arrow_mesh)
@@ -426,19 +426,21 @@ class game:
 
 			self.driver.setFog(self.fog_color, self.fog_type, self.fog_start, self.fog_end, self.fog_density, self.fog_pixel, self.fog_range)
 
+			self.skin = self.guienv.getSkin()
 			self.font_size = 24
 			fonts_path = '/usr/local/share/fonts'
 			if 'win' in sys.platform:
 				fonts_path = '{}/Fonts'.format(os.environ['SYSTEMROOT'])
 			self.font_file = '{}/arial.ttf'.format(fonts_path)
-			print(self.font_file)
-			self.font = CGUITTFont(self.guienv, self.font_file, self.font_size)
-			print(self.font)
-			self.skin = self.guienv.getSkin()
-			if self.font:
-				self.skin.setFont(self.font)
-				self.font.drop()
-			else:
+			if not os.path.isfile(self.font_file):
+				self.font_file = 'chess.ttf'
+			if os.path.isfile(self.font_file):
+				self.font = CGUITTFont(self.guienv, self.font_file, self.font_size)
+				#print(self.font)
+				if self.font:
+					self.skin.setFont(self.font)
+					#self.font.drop()
+			if not self.font:
 				print('++++ ERROR vect_font not created !!!')
 				self.font = self.guienv.getBuiltInFont()
 			menu_height = self.skin.getSize(EGDS_MENU_HEIGHT)
@@ -671,7 +673,7 @@ class game:
 
 			anim = self.scene_manager.createCollisionResponseAnimator(i_meta_triangle_selector, self.camera[1])
 			self.camera[1].addAnimator(anim)
-			anim.drop()
+			#anim.drop()
 
 			self.cursor_control = self.device.getCursorControl()
 			self.cursor_control.setVisible(False)
