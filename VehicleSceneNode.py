@@ -14,44 +14,34 @@ class WheelSceneNode(CustomSceneNode):
 		self.Material.Lighting = False
 		self.Material.BackfaceCulling = False
 
-		self.ver_count = 10
+		self.Vertices = S3DVertex(10)
+		self.ver_count = len(self.Vertices)
 
-		#self.Vertices = S3DVertex(self.ver_count)
+		self.Vertices[0].Pos = vector3df(0.0,0.0,10.0)
+		self.Vertices[0].Normal = vector3df(0.0,1.0,1.0)
+		self.Vertices[0].Color = SColor(255,0,255,255)
+		self.Vertices[0].TCoords = vector2df(0.0, 1.0)
 
-		self.Vertices = (c_S3DVertex*self.ver_count)()
-		self.Vertices.c_pointer = self.Vertices
-
-		# self.Vertices[0] = S3DVertex(vector3df(0.0,0.0,10.0), vector3df(0.0,1.0,1.0), SColor(255,0,255,255), vector2df(0.0, 1.0))
-
-		self.Vertices[0] = self.create_S3DVertex(vector3df(0.0,0.0,10.0), vector3df(0.0,1.0,1.0), SColor(255,0,255,255), vector2df(0.0, 1.0))
-		self.Vertices[1] = self.create_S3DVertex(vector3df(0.0,20.0,0.0), vector3df(1.0,-1.0,0.0), SColor(255,255,0,255), vector2df(1.0, 1.0))
-		self.Vertices[2] = self.create_S3DVertex(vector3df(15.0,15.0,0.0), vector3df(-1.0,1.0,0.0), SColor(255,255,255,0), vector2df(1.0, 0.0))
-		self.Vertices[3] = self.create_S3DVertex(vector3df(20.0,0.0,0.0), vector3df(-1.0,-1.0,0.0), SColor(255,0,255,0), vector2df(0.0, 0.0))
-		self.Vertices[4] = self.create_S3DVertex(vector3df(15.0,-15.0,0.0), vector3df(-1.0,-1.0,0.0), SColor(255,0,0,255), vector2df(0.0, 1.0))
-		self.Vertices[5] = self.create_S3DVertex(vector3df(0.0,-20.0,0.0), vector3df(-1.0,1.0,0.0), SColor(255,255,0,0), vector2df(1.0, 1.0))
-		self.Vertices[6] = self.create_S3DVertex(vector3df(-15.0,-15.0,0.0), vector3df(1.0,1.0,0.0), SColor(255,0,128,128), vector2df(1.0, 0.0))
-		self.Vertices[7] = self.create_S3DVertex(vector3df(-20.0,0.0,0.0), vector3df(1.0,1.0,0.0), SColor(255,128,0,128), vector2df(0.0, 0.0))
-		self.Vertices[8] = self.create_S3DVertex(vector3df(-15.0,15.0,0.0), vector3df(1.0,1.0,0.0), SColor(255,128,128,0), vector2df(0.0, 0.0))
-		self.Vertices[9] = self.create_S3DVertex(vector3df(0.0,0.0,-10.0), vector3df(0.0,0.0,-1.0), SColor(255,0,128,0), vector2df(0.0, 0.0))
+		self.Vertices[1] = S3DVertex(vector3df(0.0,20.0,0.0), vector3df(1.0,-1.0,0.0), SColor(255,255,0,255), vector2df(1.0, 1.0))
+		self.Vertices[2] = S3DVertex(vector3df(15.0,15.0,0.0), vector3df(-1.0,1.0,0.0), SColor(255,255,255,0), vector2df(1.0, 0.0))
+		self.Vertices[3] = S3DVertex(vector3df(20.0,0.0,0.0), vector3df(-1.0,-1.0,0.0), SColor(255,0,255,0), vector2df(0.0, 0.0))
+		self.Vertices[4] = S3DVertex(vector3df(15.0,-15.0,0.0), vector3df(-1.0,-1.0,0.0), SColor(255,0,0,255), vector2df(0.0, 1.0))
+		self.Vertices[5] = S3DVertex(vector3df(0.0,-20.0,0.0), vector3df(-1.0,1.0,0.0), SColor(255,255,0,0), vector2df(1.0, 1.0))
+		self.Vertices[6] = S3DVertex(vector3df(-15.0,-15.0,0.0), vector3df(1.0,1.0,0.0), SColor(255,0,128,128), vector2df(1.0, 0.0))
+		self.Vertices[7] = S3DVertex(vector3df(-20.0,0.0,0.0), vector3df(1.0,1.0,0.0), SColor(255,128,0,128), vector2df(0.0, 0.0))
+		self.Vertices[8] = S3DVertex(vector3df(-15.0,15.0,0.0), vector3df(1.0,1.0,0.0), SColor(255,128,128,0), vector2df(0.0, 0.0))
+		self.Vertices[9] = S3DVertex(vector3df(0.0,0.0,-10.0), vector3df(0.0,0.0,-1.0), SColor(255,0,128,0), vector2df(0.0, 0.0))
 
 		self.Box = aabbox3df()
-		self.Box.reset(vector3df(c_pointer=self.Vertices[0].Pos))
+		self.Box.reset(self.Vertices[0].Pos)
 		for i in range(1, self.ver_count):
-			self.Box.addInternalPoint(vector3df(c_pointer=self.Vertices[i].Pos))
+			self.Box.addInternalPoint(self.Vertices[i].Pos)
 
 		CustomSceneNode.__init__(self, *args, **kwargs)
 
 		self.iType = EIT_32BIT
 		self.scene_manager = self.getSceneManager()
 		self.video_driver = self.scene_manager.getVideoDriver()
-
-	def create_S3DVertex(self, pos, normal, color, tcoords):
-		vrtx = c_S3DVertex()
-		vrtx.Pos = pos.c_pointer
-		vrtx.Normal = normal.c_pointer
-		vrtx.Color = color.c_pointer
-		vrtx.TCoords = tcoords.c_pointer
-		return vrtx
 
 	def getTypeS3DVertex(self):
 		return 0
@@ -81,7 +71,7 @@ class WheelSceneNode(CustomSceneNode):
 		self.video_driver.setMaterial(self.Material)
 		self.video_driver.setTransform(ETS_WORLD, self.getAbsoluteTransformation())
 		self.video_driver.drawVertexPrimitiveList(self.Vertices, self.ver_count, indices, (self.ver_count-2)*2, EVT_STANDARD, EPT_TRIANGLES, self.iType)
-		self.video_driver.draw3DBox(self.Box)
+		#self.video_driver.draw3DBox(self.Box)
 
 	def getBoundingBox(self):
 		return self.Box.c_pointer

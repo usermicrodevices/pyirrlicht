@@ -2,6 +2,8 @@
 // github.com/usermicrodevices
 // BSD license
 
+#include <memory>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -9,16 +11,15 @@ extern "C" {
 IRRLICHT_C_API u32 tool_getVertexPitchFromType(E_VERTEX_TYPE vertexType){return getVertexPitchFromType(vertexType);}
 
 //struct S3DVertex
-IRRLICHT_C_API const S3DVertex& S3DVertex_ctor1(int length = 1)
-//{S3DVertex* pointer; pointer = new S3DVertex[length]; return pointer;}
-{S3DVertex pointer[length]; return *pointer;}
+IRRLICHT_C_API const S3DVertex& S3DVertex_ctor1(size_t length = 1)
+{const S3DVertex* pointer(new S3DVertex[length]); return *pointer;}
 IRRLICHT_C_API S3DVertex* S3DVertex_ctor2(f32 x, f32 y, f32 z, f32 nx, f32 ny, f32 nz, SColor* c, f32 tu, f32 tv)
 {return new S3DVertex(x, y, z, nx, ny, nz, *c, tu, tv);}
 IRRLICHT_C_API S3DVertex* S3DVertex_ctor3(const core::vector3df& pos, const core::vector3df& normal, SColor color, const core::vector2d<f32>& tcoords)
 {return new S3DVertex(pos, normal, color, tcoords);}
 IRRLICHT_C_API void S3DVertex_delete(S3DVertex* pointer){if(pointer)delete[] pointer;}
-IRRLICHT_C_API S3DVertex* S3DVertex_get_item(S3DVertex* pointer, int index)
-{return &pointer[index];}
+IRRLICHT_C_API const S3DVertex& S3DVertex_get_item(const S3DVertex& pointer, int index)
+{return (&pointer)[index];}
 IRRLICHT_C_API void S3DVertex_set_item(S3DVertex& pointer, const S3DVertex& value, int index)
 {(&pointer)[index] = value;}
 IRRLICHT_C_API core::vector3df* S3DVertex_get_Pos(S3DVertex* pointer, int index)

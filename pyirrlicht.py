@@ -2,8 +2,8 @@
 # github.com/usermicrodevices
 # BSD license
 
-__version__ = pyirrlicht_version = '1.3.0'
-__version_date__ = '2022-11-26'
+__version__ = pyirrlicht_version = '1.3.1'
+__version_date__ = '2022-12-04'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -2160,8 +2160,8 @@ S3DVertex_ctor1 = func_type(ctypes.c_void_p, ctypes.c_int)(('S3DVertex_ctor1', c
 S3DVertex_ctor2 = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_float, ctypes.c_float)(('S3DVertex_ctor2', c_module))
 S3DVertex_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('S3DVertex_ctor3', c_module))
 S3DVertex_delete = func_type(None, ctypes.c_int)(('S3DVertex_delete', c_module))
-S3DVertex_get_item = func_type(ctypes.c_void_p, ctypes.c_int)(('S3DVertex_get_item', c_module))
-S3DVertex_set_item = func_type(None, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_set_item', c_module))
+S3DVertex_get_item = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_get_item', c_module))
+S3DVertex_set_item = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_set_item', c_module))
 S3DVertex_get_Pos = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_get_Pos', c_module))
 S3DVertex_set_Pos = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_set_Pos', c_module))
 S3DVertex_get_Normal = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('S3DVertex_get_Normal', c_module))
@@ -7360,13 +7360,10 @@ class triangle3di(object):
 	pointB = property(get_pointB, set_pointB) 
 	pointC = property(get_pointC, set_pointC) 
 
-class c_S3DVertex(ctypes.Structure):
-	_fields_ = [('Pos', ctypes.c_void_p),# vector3df
-				('Normal', ctypes.c_void_p),# vector3df
-				('Color', ctypes.c_void_p),# SColor
-				('TCoords', ctypes.c_void_p)# vector2df
-				]
+#class S3DVertex(ctypes.Structure):
+	#_fields_ = [('Pos', ctypes.c_void_p), ('Normal', ctypes.c_void_p), ('Color', ctypes.c_void_p), ('TCoords', ctypes.c_void_p)]
 class S3DVertex(object):
+	length = 1
 	def __init__(self, *args, **kwargs):
 		self.c_pointer = None
 		self.delete_c_pointer = True
@@ -7389,6 +7386,7 @@ class S3DVertex(object):
 		elif len(args) == 9:
 			self.c_pointer = self.ctor2(*args)
 	def ctor1(self, length = 1):
+		self.length = length
 		return S3DVertex_ctor1(length)
 	def ctor2(self, x, y, z, nx, ny, nz, c, tu, tv):
 		return S3DVertex_ctor2(x, y, z, nx, ny, nz, c.c_pointer, tu, tv)
@@ -7414,6 +7412,8 @@ class S3DVertex(object):
 		return self.ne(other.c_pointer)
 	def __le__(self, other):
 		return self.less(other.c_pointer)
+	def __len__(self):
+		return self.length
 	def __getitem__(self, key):
 		return self.get_item(key)
 	def __setitem__(self, key, item):
