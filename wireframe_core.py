@@ -30,12 +30,12 @@ class Wireframe:
 
     def outputNodes(self):
         for i, node in enumerate(self.nodes):
-            print "Node %d: (%.3f, %.3f, %.3f)" % (i, node.x, node.y, node.z)
+            print("Node %d: (%.3f, %.3f, %.3f)" % (i, node.x, node.y, node.z))
             
     def outputEdges(self):
         for i, edge in enumerate(self.edges):
-            print "Edge %d: (%.3f, %.3f, %.3f)" % (i, edge.start.x, edge.start.y, edge.start.z),
-            print "to (%.3f, %.3f, %.3f)" % (edge.stop.x,  edge.stop.y,  edge.stop.z)
+            print("Edge %d: (%.3f, %.3f, %.3f)" % (i, edge.start.x, edge.start.y, edge.start.z))
+            print("to (%.3f, %.3f, %.3f)" % (edge.stop.x,  edge.stop.y,  edge.stop.z))
 
     def findCentre(self):
         num_nodes = len(self.nodes)

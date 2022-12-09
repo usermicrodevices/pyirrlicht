@@ -715,11 +715,11 @@ class game:
 					if self.driver.beginScene(True, True, scolor):
 						self.scene_manager.drawAll()
 						self.window_size = self.driver.getScreenSize()
-						#self.font.draw('%d' % self.results, recti(self.window_size.Width - self.font_size * 2, self.window_size.Height - self.font_size, 0, 0), answer_color)
-						#if not self.answer_exists:
-							#self.font.draw('%d x %d =' % (self.a, self.b), question_pos1, question_color)
-							#if i_event_receiver.answer:
-								#self.font.draw(i_event_receiver.answer, recti(10, self.window_size.Height - self.font_size, 0, 0), answer_color)
+						self.font.draw('%d' % self.results, recti(self.window_size.Width - self.font_size * 2, self.window_size.Height - self.font_size, 0, 0), answer_color)
+						if not self.answer_exists:
+							self.font.draw('%d x %d =' % (self.a, self.b), question_pos1, question_color)
+							if i_event_receiver.answer:
+								self.font.draw(i_event_receiver.answer, recti(10, self.window_size.Height - self.font_size, 0, 0), answer_color)
 
 						selectedSceneNode = self.collision_manager.getSceneNodeFromCameraBB(self.camera[1])
 						if selectedSceneNode:
