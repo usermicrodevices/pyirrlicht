@@ -103,18 +103,18 @@ class config(object):
 	def get_float(self, key, default = ''):
 		return float(self.get(key, default))
 	def set(self, key, value = ''):
-		#~ if not key in self._items_:
-			#~ self._items_[key] = value
-			#~ open(self.file_name, 'a').write(key + ' = ' + repr(value) + '\n')
-		#~ else:
-			#~ self._items_[key] = value
-			#~ self.save()
+		#if not key in self._items_:
+			#self._items_[key] = value
+			#open(self.file_name, 'a').write(key + ' = ' + repr(value) + '\n')
+		#else:
+			#self._items_[key] = value
+			#self.save()
 		self._items_[key] = value
 	def set_many(self, keys_values):
 		if len(keys_values) > 0:
 			for key, value in keys_values:
 				self._items_[key] = value
-			#~ self.save()
+			#self.save()
 	def keys(self):
 		return self._items_.keys()
 	def values(self):
@@ -189,10 +189,10 @@ class UserIEventReceiver(IEventReceiver):
 			caller = self.GUIEvent_Caller(GUIEvent)
 			id = caller.getID()
 			if gui_event_type == EGET_SCROLL_BAR_CHANGED:
-				#~ self.game.device.getLogger().log('=== EGET_SCROLL_BAR_CHANGED')
+				#self.game.device.getLogger().log('=== EGET_SCROLL_BAR_CHANGED')
 				scroll_bar = caller.as_IGUIScrollBar()
 				if id == GUI_ID_SOUND_VOLUME:
-					#~ self.game.device.getLogger().log('+++ GUI_ID_SOUND_VOLUME ' + str(scroll_bar.getPos()))
+					#self.game.device.getLogger().log('+++ GUI_ID_SOUND_VOLUME ' + str(scroll_bar.getPos()))
 					self.game.set_sound_volume(scroll_bar.getPos())
 			elif gui_event_type == EGET_MENU_ITEM_SELECTED:
 				self.game.help_dialog = None
@@ -227,8 +227,8 @@ class UserIEventReceiver(IEventReceiver):
 					self.game.guienv.addMessageBox(_('About'), _('Magic Room - Randomizer'))
 		elif event_type == EET_LOG_TEXT_EVENT:
 			log_event = self.GetLogEvent(event)
-			#~ if self.LogEvent_Level(log_event) == 0:
-				#~ if 'Resizing window' in self.LogEvent_Text(log_event):
+			#if self.LogEvent_Level(log_event) == 0:
+				#if 'Resizing window' in self.LogEvent_Text(log_event):
 			if self.LogEvent_Level(log_event) == 0 and self.LogEvent_Text(log_event).find('Resizing window') > -1:
 				self.game.window_size = self.game.driver.getScreenSize()
 		return False
@@ -273,31 +273,33 @@ class game:
 		self.tile_len = 100
 		self.results = 0
 
+		self.draw_reverse_answer = False
+
 	def __del__(self):
 		if self.device:
 			self.stop()
-		#~ self.config.close()
+		#self.config.close()
 		
 	def set_sound_volume(self, value):
 		self.sound_volume = value / 100.0
 		if pybass:
 			pybass.BASS_SetVolume(self.sound_volume)
-		#~ print(self.config.get_float('sound_volume', 1.0), self.sound_volume)
-		#~ if self.config.get_float('sound_volume', 1.0) != self.sound_volume:
+		#print(self.config.get_float('sound_volume', 1.0), self.sound_volume)
+		#if self.config.get_float('sound_volume', 1.0) != self.sound_volume:
 		self.config.set('sound_volume', self.sound_volume)
 
 	def create_sound_volume(self):
-		#~ if not self.guienv.getRootGUIElement().getElementFromId(GUI_ID_WINDOW_SOUND_VOLUME, True):
+		#if not self.guienv.getRootGUIElement().getElementFromId(GUI_ID_WINDOW_SOUND_VOLUME, True):
 		e = self.guienv.getRootGUIElement().getElementFromId(GUI_ID_WINDOW_SOUND_VOLUME, True)
 		if e:
 			e.remove()
 		window = self.guienv.addWindow(recti(10,45,400,150), False, _('Sound volume window'), id = GUI_ID_WINDOW_SOUND_VOLUME)
 		self.guienv.addStaticText(_('Select sound volume'), recti(10,30,380,60), True, False, window)
 		scrollbar = self.guienv.addScrollBar(True, recti(10,80,380,100), window, GUI_ID_SOUND_VOLUME)
-		#~ scrollbar.setMin(0)
-		#~ scrollbar.setMax(100)
+		#scrollbar.setMin(0)
+		#scrollbar.setMax(100)
 		scrollbar.setPos(int(self.sound_volume * 100))
-		#~ scrollbar.setSmallStep(1)
+		#scrollbar.setSmallStep(1)
 
 	def set_textures(self):
 		self.texture_from_file = not self.texture_from_file
@@ -332,10 +334,9 @@ class game:
 			self.menu_device_type.setItemChecked(menu_index, (self.device_type == dev_type))
 		self.config.set('device_type', self.device_type)
 		self.show_warning()
-		#~ self.device.drop()
-		#~ self.device.closeDevice()
-		#~ self.device = createDevice(self.device_type, self.window_size)
-		#~ self.start()
+		#self.device.closeDevice()
+		#self.device = createDevice(self.device_type, self.window_size)
+		#self.start()
 
 	def texture_generator(self, image_format = ECF_R8G8B8, image_size = dimension2du(2, 2), texture_name = 'texture_01', alpha_value = 128, red = (0, 255), green = (0, 255), blue = (0, 255)):
 		image = self.driver.createImage(image_format, image_size)
@@ -348,7 +349,6 @@ class game:
 			for column in range(image_size.Width):
 				image.setPixel(row, column, SColor(alpha, randint(*red), randint(*green), randint(*blue)), blend)
 		texture = self.driver.addTexture(texture_name, image)
-		#image.drop()
 		return texture
 
 	def texture_generator_01(self, image_format = ECF_R8G8B8, image_size = dimension2du(2, 2), texture_name = 'texture_01', alpha_value = 128, red = (0, 255), green = (0, 255), blue = (0, 255)):
@@ -362,39 +362,35 @@ class game:
 		if rotation:
 			i_mesh_scene_node.setRotation(rotation)
 		selector = self.scene_manager.createTriangleSelector(i_mesh, i_mesh_scene_node)
-		#~ selector = self.scene_manager.createTriangleSelector(i_mesh_scene_node.getMesh(), i_mesh_scene_node)
 		i_mesh_scene_node.setTriangleSelector(selector)
-		#~ i_mesh.drop()
 		return selector
 
 	def create_tree(self):
 		x, z = randint(self.tile_count * self.tile_len / 2 * -1, self.tile_count * self.tile_len / 2), randint(self.tile_count * self.tile_len / 2 * -1, self.tile_count * self.tile_len / 2)
-		#
-		#~ cylinder_mesh = self.i_geometry_creator.createCylinderMesh(radius = 20, length = 20, tesselation = 4, color = SColor(255,255,0,0), closeTop = True, oblique = 0.0)
-		#~ cylinder_scene_node = self.scene_manager.addMeshSceneNode(cylinder_mesh)
-		#~ cylinder_scene_node.setMaterialFlag(EMF_LIGHTING, False)
-		#~ cylinder_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
-		#~ cylinder_scene_node.setPosition(vector3df(x, 0, z))
-		#~ cylinder_scene_node.drop()
-		#~ cone_mesh = self.i_geometry_creator.createConeMesh(radius = 50, length = 180, tesselation = 8, colorTop = SColor(255,0,255,0), colorBottom = SColor(255,0,255,0), oblique = 0.0)
-		#~ cone_scene_node = self.scene_manager.addMeshSceneNode(cone_mesh)
-		#~ cone_scene_node.setMaterialFlag(EMF_LIGHTING, False)
-		#~ cone_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
-		#~ cone_scene_node.setPosition(vector3df(x, 20, z))
-		#~ cone_scene_node.drop()
-		#
-		arrow_mesh = self.i_geometry_creator.createArrowMesh(tesselationCylinder = 4, tesselationCone = 8, height = 200.0, cylinderHeight = 20.0, widthCylinder = 20.0, widthCone = 70.0, colorCylinder = SColor(255,255,0,0), colorCone = SColor(255,0,255,0))
-		arrow_scene_node = self.scene_manager.addMeshSceneNode(arrow_mesh)
-		arrow_scene_node.setPosition(vector3df(x, 0, z))
-		arrow_scene_node.setMaterialFlag(EMF_LIGHTING, False)
-		arrow_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
-		#arrow_scene_node.drop()
-		#
-		#~ arrow_mesh = self.scene_manager.addArrowMesh('tree', vtxColorCylinder = SColor(255, 255, 0, 0), vtxColorCone = SColor(255, 0, 255, 0), tesselationCylinder = 4, tesselationCone = 8, height = 200.0, cylinderHeight = 20.0, widthCylinder = 20.0, widthCone = 70.0)
-		#~ arrow_scene_node = self.scene_manager.addMeshSceneNode(arrow_mesh)
-		#~ arrow_scene_node.setMaterialFlag(EMF_LIGHTING, False)
-		#~ arrow_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
-		#~ arrow_scene_node.setPosition(vector3df(x, 0, z))
+		if self.draw_reverse_answer:
+			cylinder_mesh = self.i_geometry_creator.createCylinderMesh(radius = 20, length = 20, tesselation = 4, color = SColor(255,255,0,0), closeTop = True, oblique = 0.0)
+			cylinder_scene_node = self.scene_manager.addMeshSceneNode(cylinder_mesh, position=vector3df(x, 0, z))
+			cylinder_scene_node.setMaterialFlag(EMF_LIGHTING, False)
+			cylinder_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
+
+			cone_mesh = self.i_geometry_creator.createConeMesh(radius = 50, length = 180, tesselation = 8, colorTop = SColor(255,0,255,0), colorBottom = SColor(255,0,255,0), oblique = 0.0)
+			cone_scene_node = self.scene_manager.addMeshSceneNode(cone_mesh, position=vector3df(x, 200, z), rotation=vector3df(180,0,0))
+			cone_scene_node.setMaterialFlag(EMF_LIGHTING, False)
+			cone_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
+
+			self.draw_reverse_answer = not self.draw_reverse_answer
+		else:
+			arrow_mesh = self.i_geometry_creator.createArrowMesh(tesselationCylinder = 4, tesselationCone = 8, height = 200.0, cylinderHeight = 20.0, widthCylinder = 20.0, widthCone = 70.0, colorCylinder = SColor(255,255,0,0), colorCone = SColor(255,0,255,0))
+			arrow_scene_node = self.scene_manager.addMeshSceneNode(arrow_mesh, position=vector3df(x, 0, z))
+			arrow_scene_node.setMaterialFlag(EMF_LIGHTING, False)
+			arrow_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
+
+			# arrow_mesh = self.scene_manager.addArrowMesh('tree', vtxColorCylinder = SColor(255, 255, 0, 0), vtxColorCone = SColor(255, 0, 255, 0), tesselationCylinder = 4, tesselationCone = 8, height = 200.0, cylinderHeight = 20.0, widthCylinder = 20.0, widthCone = 70.0)
+			# arrow_scene_node = self.scene_manager.addMeshSceneNode(arrow_mesh, position=vector3df(x, 0, z))
+			# arrow_scene_node.setMaterialFlag(EMF_LIGHTING, False)
+			# arrow_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
+
+			self.draw_reverse_answer = not self.draw_reverse_answer
 
 	def setActiveCamera(self, camera):
 		if self.device and camera:
@@ -405,7 +401,6 @@ class game:
 			self.device.getSceneManager().setActiveCamera(camera)
 
 	def setActiveCameraOff(self):
-		#~ self.answer_exists = False
 		self.cursor_control.setVisible(True)
 		cam = self.scene_manager.getActiveCamera()
 		if cam:
@@ -436,10 +431,8 @@ class game:
 				self.font_file = 'chess.ttf'
 			if os.path.isfile(self.font_file):
 				self.font = CGUITTFont(self.guienv, self.font_file, self.font_size)
-				#print(self.font)
 				if self.font:
 					self.skin.setFont(self.font)
-					#self.font.drop()
 			if not self.font:
 				print('++++ ERROR vect_font not created !!!')
 				self.font = self.guienv.getBuiltInFont()
@@ -520,16 +513,16 @@ class game:
 				texture = self.texture_generator_01(ECF_A8R8G8B8, dimension2du(4, 4), 'top', 196)
 				material.setTexture(0, texture)
 			i_mesh_bottom = self.i_geometry_creator.createPlaneMesh(tileSize, tileCount, material, textureRepeatCount)
-			#~ scene_node_bottom = self.scene_manager.addOctreeSceneNode(i_mesh_bottom)
+			#scene_node_bottom = self.scene_manager.addOctreeSceneNode(i_mesh_bottom)
 			i_mesh_scene_node_top = self.scene_manager.addOctreeSceneNode(i_mesh_top)
 			i_mesh_scene_node_bottom = self.scene_manager.addOctreeSceneNode(i_mesh_bottom)
-			#~ i_mesh_scene_node_bottom = self.scene_manager.addOctreeSceneNode(i_mesh_bottom, i_mesh_scene_node_top)
+			#i_mesh_scene_node_bottom = self.scene_manager.addOctreeSceneNode(i_mesh_bottom, i_mesh_scene_node_top)
 			i_mesh_scene_node_bottom.setPosition(vector3df(0,height,0))
 			i_mesh_scene_node_bottom.setRotation(vector3df(180,0,0))
 			selector_top = self.scene_manager.createOctreeTriangleSelector(i_mesh_top)
 			selector_bottom = self.scene_manager.createOctreeTriangleSelector(i_mesh_bottom)
-			#~ selector_top = self.scene_manager.createOctreeTriangleSelector(i_mesh_scene_node_top.getMesh(), i_mesh_scene_node_top)
-			#~ selector_bottom = self.scene_manager.createOctreeTriangleSelector(i_mesh_scene_node_bottom.getMesh(), i_mesh_scene_node_bottom)
+			#selector_top = self.scene_manager.createOctreeTriangleSelector(i_mesh_scene_node_top.getMesh(), i_mesh_scene_node_top)
+			#selector_bottom = self.scene_manager.createOctreeTriangleSelector(i_mesh_scene_node_bottom.getMesh(), i_mesh_scene_node_bottom)
 			i_mesh_scene_node_top.setTriangleSelector(selector_top)
 			i_mesh_scene_node_bottom.setTriangleSelector(selector_bottom)
 
@@ -588,9 +581,9 @@ class game:
 
 			# ADD MAGIC VOLUME
 			self.magic_i_scene_node = self.scene_manager.addSphereSceneNode(40.0, id = 1, position = vector3df(0,60,0))
-			#~ material.MaterialType = EMT_SPHERE_MAP
+			#material.MaterialType = EMT_SPHERE_MAP
 			if self.magic_i_scene_node:
-				#~ file_name = 'media//wall.jpg'
+				#file_name = 'media//wall.jpg'
 				self.magic_i_scene_node.setMaterialFlag(EMF_FOG_ENABLE, self.fog_enable)
 				self.magic_i_scene_node.setMaterialFlag(EMF_LIGHTING, False)
 				if os.path.isfile(logo_file_name) and self.texture_from_file:
@@ -603,10 +596,10 @@ class game:
 			selector_magic = self.scene_manager.createTriangleSelector(self.magic_i_scene_node.getMesh())#, self.magic_i_scene_node)
 			self.magic_i_scene_node.setTriangleSelector(selector_magic)
 			self.magic_i_scene_node.setName('magic_scene_node')
-			#~ material.MaterialType = EMT_SOLID
+			#material.MaterialType = EMT_SOLID
 
 			# ADD CAPTION
-			#~ self.text_scene_node1 = self.scene_manager.addTextSceneNode(self.font, 'MAGIC RANDOMIZER', SColor(255,255,0,0), self.magic_i_scene_node)
+			#self.text_scene_node1 = self.scene_manager.addTextSceneNode(self.font, 'MAGIC RANDOMIZER', SColor(255,255,0,0), self.magic_i_scene_node)
 			self.text_scene_node1 = self.scene_manager.addBillboardTextSceneNode(self.guienv.getBuiltInFont(), 'MAGIC RANDOMIZER', self.magic_i_scene_node, dimension2df(400.0, 100.0), vector3df(0,70,0), colorTop = SColor(255,255,0,0), colorBottom = SColor(255,0,0,255))
 
 			# ADD SIX SPHERES
@@ -623,7 +616,7 @@ class game:
 			# ADD CUBE VOLUME
 			self.cube = self.scene_manager.addCubeSceneNode(180.0, self.magic_i_scene_node, position = vector3df(0,40,0))
 			if self.cube:
-				#~ file_name = 'media//wall.jpg'
+				#file_name = 'media//wall.jpg'
 				self.cube.setMaterialFlag(EMF_LIGHTING, False)
 				if os.path.isfile(logo_file_name) and self.texture_from_file:
 					self.cube.setMaterialTexture(0, self.driver.getTexture(logo_file_name))
@@ -638,10 +631,10 @@ class game:
 					material.DiffuseColor = SColor(128, 255, 0, 0)
 					material.EmissiveColor = SColor(128, 255, 0, 0)
 					material.SpecularColor = SColor(128, 255, 0, 0)
-					#~ self.cube.setMaterialTexture(0, texture)
+					#self.cube.setMaterialTexture(0, texture)
 			self.cube.setVisible(False)
-			#~ selector_cube = self.scene_manager.createTriangleSelector(self.cube.getMesh())
-			#~ self.cube.setTriangleSelector(selector_cube)
+			#selector_cube = self.scene_manager.createTriangleSelector(self.cube.getMesh())
+			#self.cube.setTriangleSelector(selector_cube)
 
 			keyMap = SKeyMap(10)
 			keyMap.set(0, EKA_MOVE_FORWARD, KEY_UP)
@@ -655,7 +648,7 @@ class game:
 			keyMap.set(8, EKA_JUMP_UP, KEY_KEY_J)
 			keyMap.set(9, EKA_CROUCH, KEY_KEY_C)
 			self.camera = (self.scene_manager.addCameraSceneNodeMaya(), self.scene_manager.addCameraSceneNodeFPS(keyMapArray = keyMap, keyMapSize = keyMap.length, jumpSpeed = 5))
-			#~ self.camera[0].setPosition(vector3df(0,600,0))
+			#self.camera[0].setPosition(vector3df(0,600,0))
 			self.camera[0].setTarget(vector3df(0,600,0))
 			self.camera[1].setPosition(vector3df(200,60,200))
 			self.camera[1].setFarValue(9000.0)
@@ -669,11 +662,10 @@ class game:
 			i_meta_triangle_selector.addTriangleSelector(selector_left)
 			i_meta_triangle_selector.addTriangleSelector(selector_right)
 			i_meta_triangle_selector.addTriangleSelector(selector_magic)
-			#~ i_meta_triangle_selector.addTriangleSelector(selector_cube)
+			#i_meta_triangle_selector.addTriangleSelector(selector_cube)
 
 			anim = self.scene_manager.createCollisionResponseAnimator(i_meta_triangle_selector, self.camera[1])
 			self.camera[1].addAnimator(anim)
-			#anim.drop()
 
 			self.cursor_control = self.device.getCursorControl()
 			self.cursor_control.setVisible(False)
@@ -707,7 +699,7 @@ class game:
 					if i_event_receiver.IsKeyDown(KEY_ESCAPE):
 						break
 					elif i_event_receiver.IsKeyDown(KEY_F2):
-						#~ self.scene_manager.setActiveCamera()
+						#self.scene_manager.setActiveCamera()
 						self.setActiveCameraOff()
 					elif i_event_receiver.IsKeyDown(KEY_F1) and not self.help_dialog:
 						self.setActiveCameraOff()
@@ -737,18 +729,18 @@ class game:
 									self.cube.setVisible(False)
 							#else:
 								#if selectedSceneNode.getType() == ESNT_SPHERE:
-									#~ self.font.draw('%d x %d =' % (self.a, self.b), question_pos1, question_color)
+									#self.font.draw('%d x %d =' % (self.a, self.b), question_pos1, question_color)
 									#self.font.draw(_('Please enter answer and press "Enter"'), question_pos2, question_color)
-									#~ if i_event_receiver.answer:
-										#~ self.font.draw(i_event_receiver.answer, recti(10, self.window_size.Height - 40, 0, 0), answer_color)
+									#if i_event_receiver.answer:
+										#self.font.draw(i_event_receiver.answer, recti(10, self.window_size.Height - 40, 0, 0), answer_color)
 
 						self.guienv.drawAll()
 						self.driver.endScene()
 
 					self.device.sleep(1)
 					self.magic_i_scene_node.setRotation(self.magic_i_scene_node.getRotation() + 1)
-					#~ if not self.texture_from_file:
-						#~ sky_node.setMaterialTexture(0, self.texture_generator_01(ECF_R8G8B8, dimension2du(64, 64), 'skydome', 0, (150, 200), (150, 200), (0, 0)))
+					#if not self.texture_from_file:
+						#sky_node.setMaterialTexture(0, self.texture_generator_01(ECF_R8G8B8, dimension2du(64, 64), 'skydome', 0, (150, 200), (150, 200), (0, 0)))
 				else:
 					self.device._yield()
 			self.stop()
@@ -757,7 +749,6 @@ class game:
 
 	def stop(self):
 		if self.device:
-			#~ self.device.drop()
 			self.device.closeDevice()
 			self.device = None
 			if self.window_size.Width < 320:
