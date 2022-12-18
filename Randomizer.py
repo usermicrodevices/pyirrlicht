@@ -273,7 +273,7 @@ class game:
 		self.tile_len = 100
 		self.results = 0
 
-		self.draw_reverse_answer = False
+		self.draw_reverse_tree = False
 
 	def __del__(self):
 		if self.device:
@@ -367,30 +367,31 @@ class game:
 
 	def create_tree(self):
 		x, z = randint(self.tile_count * self.tile_len / 2 * -1, self.tile_count * self.tile_len / 2), randint(self.tile_count * self.tile_len / 2 * -1, self.tile_count * self.tile_len / 2)
-		if self.draw_reverse_answer:
+		if self.draw_reverse_tree:
 			cylinder_mesh = self.i_geometry_creator.createCylinderMesh(radius = 20, length = 20, tesselation = 4, color = SColor(255,255,0,0), closeTop = True, oblique = 0.0)
 			cylinder_scene_node = self.scene_manager.addMeshSceneNode(cylinder_mesh, position=vector3df(x, 0, z))
 			cylinder_scene_node.setMaterialFlag(EMF_LIGHTING, False)
-			cylinder_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
+			# cylinder_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
 
 			cone_mesh = self.i_geometry_creator.createConeMesh(radius = 50, length = 180, tesselation = 8, colorTop = SColor(255,0,255,0), colorBottom = SColor(255,0,255,0), oblique = 0.0)
 			cone_scene_node = self.scene_manager.addMeshSceneNode(cone_mesh, position=vector3df(x, 200, z), rotation=vector3df(180,0,0))
 			cone_scene_node.setMaterialFlag(EMF_LIGHTING, False)
-			cone_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
-
-			self.draw_reverse_answer = not self.draw_reverse_answer
+			# cone_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
 		else:
 			arrow_mesh = self.i_geometry_creator.createArrowMesh(tesselationCylinder = 4, tesselationCone = 8, height = 200.0, cylinderHeight = 20.0, widthCylinder = 20.0, widthCone = 70.0, colorCylinder = SColor(255,255,0,0), colorCone = SColor(255,0,255,0))
 			arrow_scene_node = self.scene_manager.addMeshSceneNode(arrow_mesh, position=vector3df(x, 0, z))
 			arrow_scene_node.setMaterialFlag(EMF_LIGHTING, False)
-			arrow_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
+			#arrow_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
 
-			# arrow_mesh = self.scene_manager.addArrowMesh('tree', vtxColorCylinder = SColor(255, 255, 0, 0), vtxColorCone = SColor(255, 0, 255, 0), tesselationCylinder = 4, tesselationCone = 8, height = 200.0, cylinderHeight = 20.0, widthCylinder = 20.0, widthCone = 70.0)
-			# arrow_scene_node = self.scene_manager.addMeshSceneNode(arrow_mesh, position=vector3df(x, 0, z))
-			# arrow_scene_node.setMaterialFlag(EMF_LIGHTING, False)
-			# arrow_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
+			#arrow_mesh = self.scene_manager.addArrowMesh('tree', vtxColorCylinder = SColor(255, 255, 0, 0), vtxColorCone = SColor(255, 0, 255, 0), tesselationCylinder = 4, tesselationCone = 8, height = 200.0, cylinderHeight = 20.0, widthCylinder = 20.0, widthCone = 70.0)
+			#arrow_scene_node = self.scene_manager.addMeshSceneNode(arrow_mesh, position=vector3df(x, 0, z))
+			#arrow_scene_node.setMaterialFlag(EMF_LIGHTING, False)
+			#arrow_scene_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
+			##spruce_node = self.scene_manager.spruce(4, 8, 200.0, 20.0, 20.0, 70.0, SColor(255,255,0,0), SColor(255,0,255,0), position=vector3df(x, 0, z))
+			##spruce_node.setMaterialFlag(EMF_LIGHTING, False)#spruce_node.setMaterialType(EMT_TRANSPARENT_ADD_COLOR)
+			#spruce_node.setMaterialTexture(0, self.texture_generator_01(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
 
-			self.draw_reverse_answer = not self.draw_reverse_answer
+		self.draw_reverse_tree = not self.draw_reverse_tree
 
 	def setActiveCamera(self, camera):
 		if self.device and camera:

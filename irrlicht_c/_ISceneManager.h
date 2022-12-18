@@ -187,7 +187,7 @@ IRRLICHT_C_API IMeshWriter* ISceneManager_createMeshWriter(ISceneManager* pointe
 {return pointer->createMeshWriter(type);}
 IRRLICHT_C_API ISkinnedMesh* ISceneManager_createSkinnedMesh(ISceneManager* pointer)
 {return pointer->createSkinnedMesh();}
-IRRLICHT_C_API void ISceneManager_setAmbientLight(ISceneManager* pointer, const video::SColorf &ambientColor)
+IRRLICHT_C_API void ISceneManager_setAmbientLight(ISceneManager* pointer, const video::SColorf& ambientColor)
 {pointer->setAmbientLight(ambientColor);}
 IRRLICHT_C_API const video::SColorf& ISceneManager_getAmbientLight(ISceneManager* pointer)
 {return pointer->getAmbientLight();}
@@ -198,6 +198,10 @@ IRRLICHT_C_API const IGeometryCreator* ISceneManager_getGeometryCreator(ISceneMa
 IRRLICHT_C_API bool ISceneManager_isCulled(ISceneManager* pointer, const ISceneNode* node)
 {return pointer->isCulled(node);}
 
+IRRLICHT_C_API IMeshSceneNode* ISceneManager_spruce(ISceneManager* pointer, int tesselationCylinder, int tesselationCone, float height, float cylinderHeight, float widthCylinder, float widthCone, const video::SColor& colorCylinder, const video::SColor& colorCone, ISceneNode* parent=0, s32 id=-1, const core::vector3df& position = core::vector3df(0,0,0), const core::vector3df& rotation = vector3df(0,0,0), const core::vector3df& scale = core::vector3df(1.0f, 1.0f, 1.0f), bool alsoAddIfMeshPointerZero=false)
+{
+	return pointer->addMeshSceneNode(pointer->getGeometryCreator()->createArrowMesh(tesselationCylinder, tesselationCone, height, cylinderHeight, widthCylinder, widthCone, colorCylinder, colorCone), parent, id, position, rotation, scale, alsoAddIfMeshPointerZero);
+}
 #ifdef __cplusplus
 }
 #endif

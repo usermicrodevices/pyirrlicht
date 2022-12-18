@@ -2,8 +2,8 @@
 # github.com/usermicrodevices
 # BSD license
 
-__version__ = pyirrlicht_version = '1.3.1'
-__version_date__ = '2022-12-04'
+__version__ = pyirrlicht_version = '1.3.2'
+__version_date__ = '2022-12-18'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -3888,6 +3888,7 @@ ISceneManager_getAmbientLight = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IS
 ISceneManager_setLightManager = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_setLightManager', c_module))
 ISceneManager_getGeometryCreator = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_getGeometryCreator', c_module))
 ISceneManager_isCulled = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_isCulled', c_module))
+ISceneManager_spruce = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('ISceneManager_spruce', c_module))
 
 # functions for class IGUIEnvironment
 IGUIEnvironment_drawAll = func_type(None, ctypes.c_void_p)(('IGUIEnvironment_drawAll', c_module))
@@ -13471,6 +13472,8 @@ class ISceneManager(IReferenceCounted):
 		return IGeometryCreator(ISceneManager_getGeometryCreator(self.c_pointer))
 	def isCulled(self, node):
 		return ISceneManager_isCulled(self.c_pointer, node.c_pointer)
+	def spruce(self, tesselationCylinder, tesselationCone, height, cylinderHeight, widthCylinder, widthCone, colorCylinder, colorCone, parent=ISceneNode(0), id=-1, position=vector3df(0,0,0), rotation=vector3df(0,0,0), scale=vector3df(1.0, 1.0, 1.0), alsoAddIfMeshPointerZero=False):
+		return ISceneNode(ISceneManager_spruce(self.c_pointer, tesselationCylinder, tesselationCone, height, cylinderHeight, widthCylinder, widthCone, colorCylinder.c_pointer, colorCone.c_pointer, parent.c_pointer, id, position.c_pointer, rotation.c_pointer, scale.c_pointer, alsoAddIfMeshPointerZero))
 
 class IAnimationEndCallBack(IReferenceCounted):
 	def __init__(self, *args, **kwargs):
