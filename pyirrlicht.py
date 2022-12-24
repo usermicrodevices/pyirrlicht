@@ -2,8 +2,8 @@
 # github.com/usermicrodevices
 # BSD license
 
-__version__ = pyirrlicht_version = '1.3.2'
-__version_date__ = '2022-12-18'
+__version__ = pyirrlicht_version = '1.3.3'
+__version_date__ = '2022-12-24'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -15081,9 +15081,8 @@ def is_frozen():
 
 def generate_texture(video_driver, image_format = ECF_R8G8B8, image_size = dimension2du(2, 2), texture_name = 'texture_01', alpha_value = 128, red = (0, 255), green = (0, 255), blue = (0, 255), encoding='utf-8'):
 	if sys.hexversion >= 0x03000000:
-		return ITexture(tool_texture_generator(video_driver.c_pointer, image_format, image_size.c_pointer, texture_name.encode(encoding), alpha_value, red[0], red[1], green[0], green[1], blue[0], blue[1]))
-	else:
-		return ITexture(tool_texture_generator(video_driver.c_pointer, image_format, image_size.c_pointer, texture_name, alpha_value, red[0], red[1], green[0], green[1], blue[0], blue[1]))
+		texture_name = texture_name.encode(encoding)
+	return ITexture(tool_texture_generator(video_driver.c_pointer, image_format, image_size.c_pointer, texture_name, alpha_value, red[0], red[1], green[0], green[1], blue[0], blue[1]))
 
 def texture_from_svg(video_driver, file_name = 'tiger.svg', image_format = ECF_A8R8G8B8, texture_name = 'texture_01', alpha_value = 0):
 	return ITexture(tool_texture_from_svg(video_driver.c_pointer, file_name, image_format, texture_name, alpha_value))

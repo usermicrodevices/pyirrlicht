@@ -33,6 +33,8 @@
 
 #include <ctime>
 #include <iostream>
+#include <random>
+#include <chrono>
 
 #include "irrlicht.h"
 using namespace irr;
@@ -403,7 +405,10 @@ IRRLICHT_C_API bool set_virtual_method(void* obj_pointer, bool(IRRCALLCONV* new_
 
 int randrange(int rnd_min = 0, int rnd_max = RAND_MAX)
 {
-	return rnd_min+int((rnd_max-rnd_min+1)*rand()/(RAND_MAX + 1.0));
+	//return rnd_min+int((rnd_max-rnd_min+1)*rand()/(RAND_MAX + 1.0));
+	std::uniform_int_distribution<int> distribution(rnd_min, rnd_max);
+	std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
+	return distribution(generator);
 }
 
 IRRLICHT_C_API int tool_randrange(int rnd_min = 0, int rnd_max = RAND_MAX)
