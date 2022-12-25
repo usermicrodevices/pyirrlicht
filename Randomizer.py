@@ -273,7 +273,8 @@ class game:
 		self.tile_len = 100
 		self.results = 0
 
-		self.draw_reverse_tree = False
+		#self.draw_reverse_tree = False
+		self.queue_tree_creator = []
 
 	def __del__(self):
 		if self.device:
@@ -365,33 +366,64 @@ class game:
 		i_mesh_scene_node.setTriangleSelector(selector)
 		return selector
 
+	def create_tree_spruce(self, x=0, y=0, z=0):
+		spruce_mesh = self.i_geometry_creator.createArrowMesh(tesselationCylinder = 4, tesselationCone = 8, height = 200.0, cylinderHeight = 20.0, widthCylinder = 20.0, widthCone = 70.0, colorCylinder = SColor(255,255,0,0), colorCone = SColor(255,0,255,0))
+		spruce_scene_node = self.scene_manager.addMeshSceneNode(spruce_mesh, position=vector3df(x, y, z))
+		spruce_scene_node.setMaterialFlag(EMF_LIGHTING, False)
+		spruce_scene_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'spruce', 255))
+		#spruce_mesh = self.scene_manager.addArrowMesh('spruce', vtxColorCylinder = SColor(255, 255, 0, 0), vtxColorCone = SColor(255, 0, 255, 0), tesselationCylinder = 4, tesselationCone = 8, height = 200.0, cylinderHeight = 20.0, widthCylinder = 20.0, widthCone = 70.0)
+		#spruce_scene_node = self.scene_manager.addMeshSceneNode(spruce_mesh, position=vector3df(x, y, z))
+		#spruce_scene_node.setMaterialFlag(EMF_LIGHTING, False)
+		#spruce_scene_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'spruce', 255))
+		##spruce_node = self.scene_manager.spruce(4, 8, 200.0, 20.0, 20.0, 70.0, SColor(255,255,0,0), SColor(255,0,255,0), position=vector3df(x, y, z))
+		##spruce_node.setMaterialFlag(EMF_LIGHTING, False)#spruce_node.setMaterialType(EMT_TRANSPARENT_ADD_COLOR)
+		##spruce_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'spruce', 255))
+		self.queue_tree_creator.append('spruce')
+
+	def create_tree_thuja(self, x=0, y=0, z=0):
+		trunk_mesh = self.i_geometry_creator.createCylinderMesh(radius = 20, length = 30, tesselation = 4, color = SColor(255,255,0,0), closeTop = True, oblique = 0.0)
+		trunk_scene_node = self.scene_manager.addMeshSceneNode(trunk_mesh, position=vector3df(x, y, z))
+		trunk_scene_node.setMaterialFlag(EMF_LIGHTING, False)
+		trunk_scene_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'trunk_thuja', 255))
+		crown_mesh = self.i_geometry_creator.createConeMesh(radius = 50, length = 220, tesselation = 8, colorTop = SColor(255,0,255,0), colorBottom = SColor(255,0,255,0), oblique = 0.0)
+		crown_scene_node = self.scene_manager.addMeshSceneNode(crown_mesh, position=vector3df(x, y+160, z), rotation=vector3df(180,0,0))
+		crown_scene_node.setMaterialFlag(EMF_LIGHTING, False)
+		crown_scene_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'crown_thuja', 255))
+		self.queue_tree_creator.append('thuja')
+
+	def create_tree_birch(self, x=0, y=0, z=0):
+		trunk_mesh = self.i_geometry_creator.createCylinderMesh(radius = 10, length = 100, tesselation = 4, color = SColor(255,255,255,255), closeTop = True, oblique = 0.0)
+		trunk_scene_node = self.scene_manager.addMeshSceneNode(trunk_mesh, position=vector3df(x, 0, z))
+		trunk_scene_node.setMaterialFlag(EMF_LIGHTING, False)
+		trunk_scene_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'trunk_birch', 255, (200, 255), (200, 255), (200, 255)))
+		crown_mesh = self.i_geometry_creator.createSphereMesh(radius = 50)
+		crown_scene_node = self.scene_manager.addMeshSceneNode(crown_mesh, position=vector3df(x, 150, z))
+		crown_scene_node.setMaterialFlag(EMF_LIGHTING, False)
+		crown_scene_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'crown_birch', 255, (0, 0), (200, 255), (0, 0)))
+		self.queue_tree_creator.append('birch')
+
+	def create_tree_bonsai(self, x=0, y=0, z=0):
+		trunk_mesh = self.i_geometry_creator.createCylinderMesh(radius = 10, length = 30, tesselation = 4, color = SColor(255,255,0,0), closeTop = True, oblique = 0.0)
+		trunk_scene_node = self.scene_manager.addMeshSceneNode(trunk_mesh, position=vector3df(x, 0, z))
+		trunk_scene_node.setMaterialFlag(EMF_LIGHTING, False)
+		trunk_scene_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'trunk_bonsai', 255))
+		crown_mesh = self.i_geometry_creator.createSphereMesh(radius = 30)
+		crown_scene_node = self.scene_manager.addMeshSceneNode(crown_mesh, position=vector3df(x, 50, z))
+		crown_scene_node.setMaterialFlag(EMF_LIGHTING, False)
+		crown_scene_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'crown_bonsai', 255))
+		#self.queue_tree_creator.append('bonsai')
+		self.queue_tree_creator = []
+
 	def create_tree(self):
 		x, z = randint(self.tile_count * self.tile_len / 2 * -1, self.tile_count * self.tile_len / 2), randint(self.tile_count * self.tile_len / 2 * -1, self.tile_count * self.tile_len / 2)
-		if self.draw_reverse_tree:
-			cylinder_mesh = self.i_geometry_creator.createCylinderMesh(radius = 20, length = 30, tesselation = 4, color = SColor(255,255,0,0), closeTop = True, oblique = 0.0)
-			cylinder_scene_node = self.scene_manager.addMeshSceneNode(cylinder_mesh, position=vector3df(x, 0, z))
-			cylinder_scene_node.setMaterialFlag(EMF_LIGHTING, False)
-			cylinder_scene_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
-
-			cone_mesh = self.i_geometry_creator.createConeMesh(radius = 50, length = 220, tesselation = 8, colorTop = SColor(255,0,255,0), colorBottom = SColor(255,0,255,0), oblique = 0.0)
-			cone_scene_node = self.scene_manager.addMeshSceneNode(cone_mesh, position=vector3df(x, 160, z), rotation=vector3df(180,0,0))
-			cone_scene_node.setMaterialFlag(EMF_LIGHTING, False)
-			cone_scene_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
+		if 'spruce' not in self.queue_tree_creator:
+			self.create_tree_spruce(x, 0, z)
+		elif 'thuja' not in self.queue_tree_creator:
+			self.create_tree_thuja(x, 0, z)
+		elif 'birch' not in self.queue_tree_creator:
+			self.create_tree_birch(x, 0, z)
 		else:
-			arrow_mesh = self.i_geometry_creator.createArrowMesh(tesselationCylinder = 4, tesselationCone = 8, height = 200.0, cylinderHeight = 20.0, widthCylinder = 20.0, widthCone = 70.0, colorCylinder = SColor(255,255,0,0), colorCone = SColor(255,0,255,0))
-			arrow_scene_node = self.scene_manager.addMeshSceneNode(arrow_mesh, position=vector3df(x, 0, z))
-			arrow_scene_node.setMaterialFlag(EMF_LIGHTING, False)
-			arrow_scene_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
-
-			# arrow_mesh = self.scene_manager.addArrowMesh('tree', vtxColorCylinder = SColor(255, 255, 0, 0), vtxColorCone = SColor(255, 0, 255, 0), tesselationCylinder = 4, tesselationCone = 8, height = 200.0, cylinderHeight = 20.0, widthCylinder = 20.0, widthCone = 70.0)
-			# arrow_scene_node = self.scene_manager.addMeshSceneNode(arrow_mesh, position=vector3df(x, 0, z))
-			# arrow_scene_node.setMaterialFlag(EMF_LIGHTING, False)
-			# arrow_scene_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
-			##spruce_node = self.scene_manager.spruce(4, 8, 200.0, 20.0, 20.0, 70.0, SColor(255,255,0,0), SColor(255,0,255,0), position=vector3df(x, 0, z))
-			##spruce_node.setMaterialFlag(EMF_LIGHTING, False)#spruce_node.setMaterialType(EMT_TRANSPARENT_ADD_COLOR)
-			##spruce_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'tree', 255))
-
-		self.draw_reverse_tree = not self.draw_reverse_tree
+			self.create_tree_bonsai(x, 0, z)
 
 	def setActiveCamera(self, camera):
 		if self.device and camera:

@@ -1,10 +1,11 @@
 pyirrlicht - is a ctypes Python module for the Irrlicht Engine SDK (https://irrlicht.sourceforge.io).
+<img src="https://github.com/usermicrodevices/pyirrlicht/randomizer_screenshot.png"/>
 See 'HelloWorld.py' for an example of a Python script accessing and controlling Irrlicht. Vector fonts is supported. Partial support SVG image files.
 
 The Irrlicht Engine is intended to be an easy-to-use 3d engine.
-If you have any questions or suggestions, just send a email to the author of the engine, Nikolaus Gebhardt (niko (at) irrlicht3d.org).
+If you have any questions or suggestions, just send a message to the https://irrlicht.sourceforge.io/forum/
 
-If you have any questions or suggestions concerning pyirrlicht, send a email to the lead Developer, Max Kolosov (maxkolosov (at) inbox.ru).	
+If you have any questions or suggestions concerning pyirrlicht, send a email to the pyirrlicht@gmail.com
 
 New Project home pages:
 https://github.com/usermicrodevices/pyirrlicht
