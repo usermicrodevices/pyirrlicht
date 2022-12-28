@@ -2,8 +2,8 @@
 # github.com/usermicrodevices
 # BSD license
 
-__version__ = pyirrlicht_version = '1.3.3'
-__version_date__ = '2022-12-24'
+__version__ = pyirrlicht_version = '1.3.4'
+__version_date__ = '2022-12-28'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -3518,6 +3518,7 @@ IGeometryCreator_createSphereMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, 
 IGeometryCreator_createCylinderMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_uint, ctypes.c_void_p, ctypes.c_bool, ctypes.c_float)(('IGeometryCreator_createCylinderMesh', c_module))
 IGeometryCreator_createConeMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float)(('IGeometryCreator_createConeMesh', c_module))
 IGeometryCreator_createVolumeLightMesh = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p)(('IGeometryCreator_createVolumeLightMesh', c_module))
+tool_createEllipticalMesh = func_type(ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_uint, ctypes.c_uint)(('tool_createEllipticalMesh', c_module))
 
 # functions for class IGUIFont
 IGUIFont_draw = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_void_p)(('IGUIFont_draw', c_module))
@@ -9507,6 +9508,8 @@ class IGeometryCreator(IReferenceCounted):
 		return IMesh(IGeometryCreator_createConeMesh(self.c_pointer, radius, length, tesselation, colorTop.c_pointer, colorBottom.c_pointer, oblique))
 	def createVolumeLightMesh(self, subdivideU = 32, subdivideV = 32, footColor = SColor(255,255,255,255), tailColor = SColor(255,255,255,255), lpDistance = 8.0, lightDim = vector3df(1.0,1.2,1.0)):
 		return IMesh(IGeometryCreator_createVolumeLightMesh(self.c_pointer, subdivideU, subdivideV, footColor.c_pointer, tailColor.c_pointer, lpDistance, lightDim.c_pointer))
+	def createEllipticalMesh(self, radiusH=50, radiusV=100, Ylow=0, Yhigh=100, offset=0, polyCountX=10, polyCountY=10):
+		return IMesh(tool_createEllipticalMesh(radiusH, radiusV, Ylow, Yhigh, offset, polyCountX, polyCountY))
 
 class IImage(IReferenceCounted):
 	def __init__(self, *args, **kwargs):

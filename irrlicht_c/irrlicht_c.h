@@ -212,30 +212,12 @@ double _wtof(const wchar_t* token)
 #include "text3d.h"
 #endif
 
-inline core::array<double> string_split_d(const wchar_t* str, u32 size = 8, const wchar_t* delimiter = L",")
-{
-	core::array<double> container(size);
-	wchar_t* next_token = 0;
-	//wchar_t* token = wcstok_s(const_cast<wchar_t*>(str), delimiter, &next_token);
-	wchar_t *token = wcstok(const_cast<wchar_t*>(str), delimiter, &next_token);
-	int i = 0;
-	while (token != NULL)
-	{
-		container[i] = _wtof(token);
-		token = wcstok(NULL, delimiter, &next_token);
-		i++;
-	}
-	return container;
-}
+inline core::array<double> string_split_d(const wchar_t* str, u32 size = 8, const wchar_t* delimiter = L",");
 
 class gradient
 {
 	stringw _id_;
 	stringw _xlink_href_;
-	//core::array<double> offsets;
-	//core::array<double> stop_opacity;
-	//core::array<agg::rgba8> stop_color;
-	//core::array<stop> stops;
 public:
 	gradient(const wchar_t* id, const wchar_t* xlink_href)
 	{
@@ -341,35 +323,12 @@ IRRLICHT_C_API bool BUILD_WITH_GUI_FILE_SELECTOR = false;
 
 IRRLICHT_C_API IrrXMLReader* createIrrXMLReader1(const char* filename){return createIrrXMLReader(filename);}
 IRRLICHT_C_API IrrXMLReader* createIrrXMLReader2(FILE* file){return createIrrXMLReader(file);}
-/*
-IRRLICHT_C_API bool set_virtual_method(void* obj_pointer, void** new_method, int method_index = 0)
-{
-#ifdef _MSC_VER
-#ifndef DEBUG
-	size_t* vptr =  *(size_t**)obj_pointer;
-	__asm{mov ecx, obj_pointer}
-	vptr[method_index] = (size_t)new_method;
-	//(*(size_t**)obj_pointer)[method_index] = (size_t)new_method;
-	return true;
-#else
-	printf("set_virtual_method only for RELEASE mode, current is DEBUG!");
-	return false;
-#endif
-#else
-	obj_pointer->_vptr[method_index] = new_method;
-	return true;
-#endif
-}
-*/
 
-
-//IRRLICHT_C_API bool set_virtual_method(void* obj_pointer, const void* new_method, int method_index = 0)
 IRRLICHT_C_API bool set_virtual_method(void* obj_pointer, bool(IRRCALLCONV* new_method)(const SEvent&), int method_index = 0)
 {
 #ifdef _MSC_VER
 #include <Windows.h>
 	LPDWORD* lpVPTR = (LPDWORD*)obj_pointer;
-	//lpVPTR = (LPDWORD*)*lpVPTR;
 	MEMORY_BASIC_INFORMATION mbi;
 	if(VirtualQuery((LPVOID)(lpVPTR), &mbi, sizeof(mbi)) != sizeof(mbi))
 		return false;
@@ -383,14 +342,8 @@ IRRLICHT_C_API bool set_virtual_method(void* obj_pointer, bool(IRRCALLCONV* new_
 	void* result = 0;
 	if(VirtualProtect(lpAddress, memory_region_size, PAGE_EXECUTE_READWRITE, lpflOldProtect))
 	{
-		//DWORD dw = reinterpret_cast<DWORD>(new_method);
-		//result = memcpy((LPVOID)(lpVPTR + method_index), (LPVOID)&dw, memory_region_size);
 		result = memcpy((LPVOID)(lpVPTR + method_index), (LPVOID)&new_method, memory_region_size);
-		//result = memmove((LPVOID)(lpVPTR + method_index), (LPVOID)&new_method, memory_region_size);
 		delete lpflOldProtect;
-		//&(((IEventReceiver*)obj_pointer)->OnEvent) = new_method;
-		//printf("++++ lpVPTR IS %d\n", lpVPTR);
-		printf("++++ MEMCPY RESULT IS %d\n", result);
 		if(result)
 			return true;
 		else
@@ -403,39 +356,9 @@ IRRLICHT_C_API bool set_virtual_method(void* obj_pointer, bool(IRRCALLCONV* new_
 #endif
 }
 
-int randrange(int rnd_min = 0, int rnd_max = RAND_MAX)
-{
-	//return rnd_min+int((rnd_max-rnd_min+1)*rand()/(RAND_MAX + 1.0));
-	std::uniform_int_distribution<int> distribution(rnd_min, rnd_max);
-	std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
-	return distribution(generator);
-}
+IRRLICHT_C_API int tool_randrange(int rnd_min = 0, int rnd_max = RAND_MAX);
 
-IRRLICHT_C_API int tool_randrange(int rnd_min = 0, int rnd_max = RAND_MAX)
-{
-	return randrange(rnd_min, rnd_max);
-}
-
-IRRLICHT_C_API ITexture* tool_texture_generator(IVideoDriver* driver, video::ECOLOR_FORMAT image_format = ECF_R8G8B8, const dimension2d<u32>& image_size = dimension2d<u32>(2, 2), const char* texture_name = "texture_01", u32 alpha_value = 128, u32 red1 = 0, u32 red2 = 255, u32 green1 = 0, u32 green2 = 255, u32 blue1 = 0, u32 blue2 = 255)
-{
-	u32 row, column;
-	IImage* image = driver->createImage(image_format, image_size);
-	int alpha = 0;
-	bool blend = false;
-	video::ECOLOR_FORMAT color_format = image->getColorFormat();
-	if (color_format == ECF_A1R5G5B5 || color_format == ECF_A8R8G8B8 || color_format == ECF_A16B16G16R16F || color_format == ECF_A32B32G32R32F)
-	{
-		alpha = alpha_value;
-		blend = true;
-	}
-	srand((unsigned)time(NULL));
-	for (row = 0; row < image_size.Height; row++)
-	{
-		for (column = 0; column < image_size.Width; column++)
-			image->setPixel(row, column, SColor(alpha, randrange(red1, red2), randrange(green1, green2), randrange(blue1, blue2)), blend);
-	}
-	return driver->addTexture(texture_name, image);
-}
+IRRLICHT_C_API ITexture* tool_texture_generator(IVideoDriver* driver, video::ECOLOR_FORMAT image_format = ECF_R8G8B8, const dimension2d<u32>& image_size = dimension2d<u32>(2, 2), const char* texture_name = "texture_01", u32 alpha_value = 128, u32 red1 = 0, u32 red2 = 255, u32 green1 = 0, u32 green2 = 255, u32 blue1 = 0, u32 blue2 = 255);
 
 #ifdef _COMPILE_WITH_CHAR_CONVERSION_FUNCTIONS_
 
@@ -445,13 +368,10 @@ IRRLICHT_C_API const wchar_t* tool_char_to_wchar(const char* src_buf)
 	size_t src_size = strlen(src_buf) + 1;
 	if (src_size > 1)
 	{
-		//size_t dst_size = src_size * sizeof(wchar_t);
-		//dst_buf = new wchar_t[dst_size];
 		dst_buf = new wchar_t[src_size * sizeof(wchar_t)];
 #ifdef _MSC_VER
 		size_t NumOfCharConverted;
 		errno_t res = mbstowcs_s(&NumOfCharConverted, dst_buf, src_size, src_buf, _TRUNCATE);
-		//errno_t res = mbstowcs_s(&NumOfCharConverted, dst_buf, dst_size, src_buf, _TRUNCATE);
 #else
 		size_t res = mbstowcs(dst_buf, src_buf, MB_CUR_MAX);
 #endif
@@ -487,12 +407,6 @@ IRRLICHT_C_API FILE* tool_redirect_stderr_to_file(const char* file_name, const c
 	return result_stream;
 }
 
-//IRRLICHT_C_API void tool_redirect_stderr_to_stdout()
-//{
-//	fclose(stderr);
-//	dup(fileno(stdout));
-//}
-
 IRRLICHT_C_API int tool_close_stream(FILE* stream)
 {
 	if (stream)
@@ -504,6 +418,8 @@ IRRLICHT_C_API int tool_close_stream(FILE* stream)
 IRRLICHT_C_API int tool_close_streams(){return _fcloseall();}
 
 #endif
+
+IRRLICHT_C_API IMesh* tool_createEllipticalMesh(f32 radiusH, f32 radiusV, f32 Ylow, f32 Yhigh, f32 offset, u32 polyCountX, u32 polyCountY);
 
 #ifdef __cplusplus
 }
