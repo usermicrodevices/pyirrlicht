@@ -429,11 +429,11 @@ class game:
 		self.queue_tree_creator = []
 
 	def create_grass(self, x=0, y=0, z=0):
-		angle, RADIUS, count = 0, 10, 10
-		stem_mesh = self.i_geometry_creator.createEllipticalMesh(radiusH=1, radiusV=10, Ylow=0, Yhigh=10, offset=0, polyCountX=5, polyCountY=5)
+		angle, RADIUS, count = 0, 5, 10
+		stem_mesh = self.i_geometry_creator.createEllipticalMesh(radiusH=0.5, radiusV=20, Ylow=0, Yhigh=20, offset=0, polyCountX=2, polyCountY=2)
 		parent = self.scene_manager.addMeshSceneNode(stem_mesh, position=vector3df(x, y, z))
 		parent.setMaterialFlag(EMF_LIGHTING, False)
-		parent.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(32, 32), 'grass', 255, (0, 0), (100, 255), (0, 0)))
+		parent.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(4, 4), 'grass', 255, (0, 0), (100, 255), (0, 0)))
 		step = 360 / count
 		def create_child(angle, y, cloning, prnt=None, radius=RADIUS):
 			cx = int(radius * math.sin(angle))
@@ -446,11 +446,16 @@ class game:
 		for i in range(1, count+1):
 			angle += step
 			create_child(angle, y, ccln, parent)
-		angle = 0
-		cccln = create_child(angle, y, parent, parent, radius=30)
+		angle, radius_new = 0, 20
+		cccln = create_child(angle, y, parent, parent, radius_new)
 		for i in range(1, count+1):
 			angle += step
-			create_child(angle, y, cccln, parent, radius=30)
+			create_child(angle, y, cccln, parent, radius_new)
+		angle, radius_new = 0, 100
+		cccln = create_child(angle, y, parent, parent, radius_new)
+		for i in range(1, count+1):
+			angle += step
+			create_child(angle, y, cccln, parent, radius_new)
 		self.queue_tree_creator.append('grass')
 
 	def create_tree(self):
@@ -571,7 +576,7 @@ class game:
 			if os.path.isfile(file_name) and self.texture_from_file:
 				material.setTexture(0, self.driver.getTexture(file_name))
 			else:
-				texture = self.texture_generator(ECF_R8G8B8, dimension2du(4, 4), 'bottom', 0, (0, 0), (0, 255), (0, 100))
+				texture = self.texture_generator(ECF_R8G8B8, dimension2du(32, 32), 'bottom', 0, (150, 160), (80, 90), (40, 50))
 				material.setTexture(0, texture)
 			i_mesh_top = self.i_geometry_creator.createPlaneMesh(tileSize, tileCount, material, textureRepeatCount)
 
