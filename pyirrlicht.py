@@ -1,9 +1,9 @@
-# Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+# Copyright(c) Max Kolosov 2010-2023 pyirrlicht@gmail.com
 # github.com/usermicrodevices
 # BSD license
 
-__version__ = pyirrlicht_version = '1.3.4'
-__version_date__ = '2022-12-28'
+__version__ = pyirrlicht_version = '1.3.5'
+__version_date__ = '2023-01-05'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -12015,7 +12015,7 @@ class ISceneNode(IAttributeExchangingObject):
 			newParent = ISceneNode(0)
 		if not isinstance(newManager, ISceneManager):
 			newManager = ISceneManager(0)
-		return ISceneNode_clone(self.c_pointer, newParent.c_pointer, newManager.c_pointer)
+		return ISceneNode(ISceneNode_clone(self.c_pointer, newParent.c_pointer, newManager.c_pointer))
 	def getSceneManager(self):
 		return ISceneManager(ISceneNode_getSceneManager(self.c_pointer))
 

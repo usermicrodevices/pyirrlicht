@@ -1,8 +1,8 @@
-# Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+# Copyright(c) Max Kolosov 2010-2023 pyirrlicht@gmail.com
 # github.com/usermicrodevices
 # BSD license
 
-import os, sys
+import math, os, sys
 from pyirrlicht import *
 from random import seed, randint
 from locale import getdefaultlocale
@@ -425,12 +425,39 @@ class game:
 		crown_scene_node = self.scene_manager.addMeshSceneNode(crown_mesh, position=vector3df(x, 50, z))
 		crown_scene_node.setMaterialFlag(EMF_LIGHTING, False)
 		crown_scene_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'crown_bonsai', 255))
-		#self.queue_tree_creator.append('bonsai')
+		self.queue_tree_creator.append('bonsai')
 		self.queue_tree_creator = []
+
+	def create_grass(self, x=0, y=0, z=0):
+		angle, RADIUS, count = 0, 10, 10
+		stem_mesh = self.i_geometry_creator.createEllipticalMesh(radiusH=1, radiusV=10, Ylow=0, Yhigh=10, offset=0, polyCountX=5, polyCountY=5)
+		parent = self.scene_manager.addMeshSceneNode(stem_mesh, position=vector3df(x, y, z))
+		parent.setMaterialFlag(EMF_LIGHTING, False)
+		parent.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(32, 32), 'grass', 255, (0, 0), (100, 255), (0, 0)))
+		step = 360 / count
+		def create_child(angle, y, cloning, prnt=None, radius=RADIUS):
+			cx = int(radius * math.sin(angle))
+			cz = int(radius * math.cos(angle))
+			cln = cloning.clone()
+			if prnt: cln.setParent(prnt)
+			cln.setPosition(vector3df(cx, y, cz))
+			return cln
+		ccln = create_child(angle, y, parent, parent)
+		for i in range(1, count+1):
+			angle += step
+			create_child(angle, y, ccln, parent)
+		angle = 0
+		cccln = create_child(angle, y, parent, parent, radius=30)
+		for i in range(1, count+1):
+			angle += step
+			create_child(angle, y, cccln, parent, radius=30)
+		self.queue_tree_creator.append('grass')
 
 	def create_tree(self):
 		x, z = randint(self.tile_count * self.tile_len / 2 * -1, self.tile_count * self.tile_len / 2), randint(self.tile_count * self.tile_len / 2 * -1, self.tile_count * self.tile_len / 2)
-		if 'birch' not in self.queue_tree_creator:
+		if 'grass' not in self.queue_tree_creator:
+			self.create_grass(x, 0, z)
+		elif 'birch' not in self.queue_tree_creator:
 			self.create_tree_birch(x, 0, z)
 		elif 'spruce' not in self.queue_tree_creator:
 			self.create_tree_spruce(x, 0, z)

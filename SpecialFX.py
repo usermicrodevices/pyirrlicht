@@ -12,7 +12,8 @@ driverType = EDT_OPENGL
 
 
 def main():
-	s = input("Please press 'y' if you want to use realtime shadows.\n")
+	#s = input("Please press 'y' if you want to use realtime shadows.\n")
+	s = 'y'
 	shadows = False
 	if s.lower() == 'y':
 		shadows = True
