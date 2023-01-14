@@ -273,8 +273,11 @@ class game:
 		self.tile_len = 100
 		self.results = 0
 
-		#self.draw_reverse_tree = False
 		self.queue_tree_creator = []
+		tile_mid = self.tile_len / 2
+		tiles_min = self.tile_count*-1
+		tiles_max = self.tile_count
+		self.free_coords = [{'x':x*tile_mid,'z':z*tile_mid} for x in range(tiles_min, tiles_max) for z in range(tiles_min, tiles_max)]
 
 	def __del__(self):
 		if self.device:
@@ -458,20 +461,28 @@ class game:
 			create_child(angle, y, cccln, parent, radius_new)
 		self.queue_tree_creator.append('grass')
 
+	def get_free_coords(self):
+		len_free_coords = len(self.free_coords)
+		if len_free_coords:
+			return self.free_coords.pop(randint(0, len_free_coords))
+		return None
+
 	def create_tree(self):
+		#if 'grass' not in self.queue_tree_creator:
 		x, z = randint(self.tile_count * self.tile_len / 2 * -1, self.tile_count * self.tile_len / 2), randint(self.tile_count * self.tile_len / 2 * -1, self.tile_count * self.tile_len / 2)
-		if 'grass' not in self.queue_tree_creator:
-			self.create_grass(x, 0, z)
-		elif 'birch' not in self.queue_tree_creator:
-			self.create_tree_birch(x, 0, z)
-		elif 'spruce' not in self.queue_tree_creator:
-			self.create_tree_spruce(x, 0, z)
-		elif 'apple' not in self.queue_tree_creator:
-			self.create_tree_apple(x, 0, z)
-		elif 'thuja' not in self.queue_tree_creator:
-			self.create_tree_thuja(x, 0, z)
-		else:
-			self.create_tree_bonsai(x, 0, z)
+		self.create_grass(x, 0, z)
+		coords = self.get_free_coords()
+		if coords:
+			if 'birch' not in self.queue_tree_creator:
+				self.create_tree_birch(coords['x'], 0, coords['z'])
+			elif 'spruce' not in self.queue_tree_creator:
+				self.create_tree_spruce(coords['x'], 0, coords['z'])
+			elif 'apple' not in self.queue_tree_creator:
+				self.create_tree_apple(coords['x'], 0, coords['z'])
+			elif 'thuja' not in self.queue_tree_creator:
+				self.create_tree_thuja(coords['x'], 0, coords['z'])
+			else:
+				self.create_tree_bonsai(coords['x'], 0, coords['z'])
 
 	def setActiveCamera(self, camera):
 		if self.device and camera:
