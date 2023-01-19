@@ -177,7 +177,7 @@ class UserIEventReceiver(IEventReceiver):
 					check_answer = _('Not correctly') + '\n' + _('Correctly answer is') + ' %d' % (self.game.a * self.game.b)
 					self.answer_color = SColor(255, 255, 0, 0)
 				else:
-					self.game.create_tree()
+					self.game.create_entity()
 					self.game.results += 1
 				self.game.answer_exists = True
 				self.answer_text = self.answer + '\n' + check_answer
@@ -273,7 +273,7 @@ class game:
 		self.tile_len = 100
 		self.results = 0
 
-		self.queue_tree_creator = []
+		self.queue_entity_creator = []
 		tile_mid = self.tile_len / 2
 		tiles_min = self.tile_count*-1
 		tiles_max = self.tile_count
@@ -369,6 +369,14 @@ class game:
 		i_mesh_scene_node.setTriangleSelector(selector)
 		return selector
 
+	def create_house(self, x=0, y=0, z=0):
+		csz = 150
+		base_mesh = self.i_geometry_creator.createCubeMesh(vector3df(csz, csz, csz))
+		base_scene_node = self.scene_manager.addMeshSceneNode(base_mesh, position=vector3df(x, csz/2, z))
+		base_scene_node.setMaterialFlag(EMF_LIGHTING, False)
+		base_scene_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(2, 2), 'house_base', 255, (200, 255), (200, 255), (200, 255)))
+		self.queue_entity_creator.append('house')
+
 	def create_tree_birch(self, x=0, y=0, z=0):
 		trunk_mesh = self.i_geometry_creator.createCylinderMesh(radius = 10, length = 50, tesselation = 4, color = SColor(255,255,255,255), closeTop = True, oblique = 0.0)
 		trunk_scene_node = self.scene_manager.addMeshSceneNode(trunk_mesh, position=vector3df(x, 0, z))
@@ -385,7 +393,7 @@ class game:
 		crown_scene_node = self.scene_manager.addMeshSceneNode(crown_mesh, position=vector3df(x, pos_y, z))
 		crown_scene_node.setMaterialFlag(EMF_LIGHTING, False)
 		crown_scene_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'crown_birch', 255, (0, 0), (200, 255), (0, 0)))
-		self.queue_tree_creator.append('birch')
+		self.queue_entity_creator.append('birch')
 
 	def create_tree_spruce(self, x=0, y=0, z=0):
 		spruce_mesh = self.i_geometry_creator.createArrowMesh(tesselationCylinder = 4, tesselationCone = 8, height = 200.0, cylinderHeight = 20.0, widthCylinder = 20.0, widthCone = 70.0, colorCylinder = SColor(255,255,0,0), colorCone = SColor(255,0,255,0))
@@ -395,7 +403,7 @@ class game:
 		##spruce_node = self.scene_manager.spruce(4, 8, 200.0, 20.0, 20.0, 70.0, SColor(255,255,0,0), SColor(255,0,255,0), position=vector3df(x, y, z))
 		##spruce_node.setMaterialFlag(EMF_LIGHTING, False)#spruce_node.setMaterialType(EMT_TRANSPARENT_ADD_COLOR)
 		##spruce_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'spruce', 255))
-		self.queue_tree_creator.append('spruce')
+		self.queue_entity_creator.append('spruce')
 
 	def create_tree_thuja(self, x=0, y=0, z=0):
 		trunk_mesh = self.i_geometry_creator.createCylinderMesh(radius = 20, length = 30, tesselation = 4, color = SColor(255,255,0,0), closeTop = True, oblique = 0.0)
@@ -406,7 +414,7 @@ class game:
 		crown_scene_node = self.scene_manager.addMeshSceneNode(crown_mesh, position=vector3df(x, y+160, z), rotation=vector3df(180,0,0))
 		crown_scene_node.setMaterialFlag(EMF_LIGHTING, False)
 		crown_scene_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'crown_thuja', 255))
-		self.queue_tree_creator.append('thuja')
+		self.queue_entity_creator.append('thuja')
 
 	def create_tree_apple(self, x=0, y=0, z=0):
 		trunk_mesh = self.i_geometry_creator.createCylinderMesh(radius = 10, length = 100, tesselation = 4, color = SColor(255,255,255,255), closeTop = True, oblique = 0.0)
@@ -417,7 +425,7 @@ class game:
 		crown_scene_node = self.scene_manager.addMeshSceneNode(crown_mesh, position=vector3df(x, 150, z))
 		crown_scene_node.setMaterialFlag(EMF_LIGHTING, False)
 		crown_scene_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'crown_apple', 255, (0, 0), (200, 255), (0, 0)))
-		self.queue_tree_creator.append('apple')
+		self.queue_entity_creator.append('apple')
 
 	def create_tree_bonsai(self, x=0, y=0, z=0):
 		trunk_mesh = self.i_geometry_creator.createCylinderMesh(radius = 10, length = 30, tesselation = 4, color = SColor(255,255,0,0), closeTop = True, oblique = 0.0)
@@ -428,8 +436,8 @@ class game:
 		crown_scene_node = self.scene_manager.addMeshSceneNode(crown_mesh, position=vector3df(x, 50, z))
 		crown_scene_node.setMaterialFlag(EMF_LIGHTING, False)
 		crown_scene_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(8, 8), 'crown_bonsai', 255))
-		self.queue_tree_creator.append('bonsai')
-		self.queue_tree_creator = []
+		self.queue_entity_creator.append('bonsai')
+		self.queue_entity_creator = []
 
 	def create_grass(self, x=0, y=0, z=0):
 		angle, RADIUS, count = 0, 5, 10
@@ -459,7 +467,7 @@ class game:
 		for i in range(1, count+1):
 			angle += step
 			create_child(angle, y, cccln, parent, radius_new)
-		self.queue_tree_creator.append('grass')
+		self.queue_entity_creator.append('grass')
 
 	def get_free_coords(self):
 		len_free_coords = len(self.free_coords)
@@ -467,19 +475,20 @@ class game:
 			return self.free_coords.pop(randint(0, len_free_coords))
 		return None
 
-	def create_tree(self):
-		#if 'grass' not in self.queue_tree_creator:
+	def create_entity(self):
 		x, z = randint(self.tile_count * self.tile_len / 2 * -1, self.tile_count * self.tile_len / 2), randint(self.tile_count * self.tile_len / 2 * -1, self.tile_count * self.tile_len / 2)
 		self.create_grass(x, 0, z)
 		coords = self.get_free_coords()
 		if coords:
-			if 'birch' not in self.queue_tree_creator:
+			if 'house' not in self.queue_entity_creator:
+				self.create_house(coords['x'], 0, coords['z'])
+			elif 'birch' not in self.queue_entity_creator:
 				self.create_tree_birch(coords['x'], 0, coords['z'])
-			elif 'spruce' not in self.queue_tree_creator:
+			elif 'spruce' not in self.queue_entity_creator:
 				self.create_tree_spruce(coords['x'], 0, coords['z'])
-			elif 'apple' not in self.queue_tree_creator:
+			elif 'apple' not in self.queue_entity_creator:
 				self.create_tree_apple(coords['x'], 0, coords['z'])
-			elif 'thuja' not in self.queue_tree_creator:
+			elif 'thuja' not in self.queue_entity_creator:
 				self.create_tree_thuja(coords['x'], 0, coords['z'])
 			else:
 				self.create_tree_bonsai(coords['x'], 0, coords['z'])

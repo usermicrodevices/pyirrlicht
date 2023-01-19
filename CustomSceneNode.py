@@ -15,17 +15,6 @@ class CSampleSceneNode(CustomSceneNode):
 		self.Material.Wireframe = False
 		self.Material.Lighting = False
 
-		#func = S3DVertex_getType(self.getTypeS3DVertex)
-		#v = ctypes.POINTER(S3DVertex) * 4
-		#self.Vertices = v(S3DVertex(vector3df(0,0,10).c_pointer, vector3df(1,1,0).c_pointer, SColor(255,0,255,255).c_pointer, vector2df(0, 1).c_pointer, func)]
-		#self.Vertices.append(S3DVertex(vector3df(10,0,-10).c_pointer, vector3df(1,0,0).c_pointer, SColor(255,255,0,255).c_pointer, vector2df(1, 1).c_pointer, func))
-		#self.Vertices.append(S3DVertex(vector3df(0,20,0).c_pointer, vector3df(0,1,1).c_pointer, SColor(255,255,255,0).c_pointer, vector2df(1, 0).c_pointer, func))
-		#self.Vertices.append(S3DVertex(vector3df(-10,0,-10).c_pointer, vector3df(0,0,1).c_pointer, SColor(255,0,255,0).c_pointer, vector2df(0, 0).c_pointer, func))
-
-		#self.Vertices = S3DVertex(S3DVertex(vector3df(0,0,10), vector3df(1,1,0), SColor(255,0,255,255), vector2df(0, 1)),
-			#S3DVertex(vector3df(10,0,-10), vector3df(1,0,0), SColor(255,255,0,255), vector2df(1, 1)),
-			#S3DVertex(vector3df(0,20,0), vector3df(0,1,1), SColor(255,255,255,0), vector2df(1, 0)),
-			#S3DVertex(vector3df(-10,0,-10), vector3df(0,0,1), SColor(255,0,255,0), vector2df(0, 0)))
 		self.Vertices = S3DVertex(4)
 		self.Vertices[0] = S3DVertex(vector3df(0.0,0.0,10.0), vector3df(1.0,1.0,0.0), SColor(255,0,255,255), vector2df(0.0, 1.0))
 		self.Vertices[1] = S3DVertex(vector3df(10.0,0.0,-10.0), vector3df(1.0,0.0,0.0), SColor(255,255,0,255), vector2df(1.0, 1.0))
@@ -38,9 +27,6 @@ class CSampleSceneNode(CustomSceneNode):
 			self.Box.addInternalPoint(self.Vertices[i].Pos)
 
 		CustomSceneNode.__init__(self, *args, **kwargs)
-		#self.set_BoundingBox(self.Box)
-		#self.set_Vertices(self.Vertices)
-		#self.set_Material(self.Material)
 
 	def getTypeS3DVertex(self):
 		return 0
@@ -48,7 +34,6 @@ class CSampleSceneNode(CustomSceneNode):
 	def OnRegisterSceneNode(self):
 		if self.isVisible():
 			self.getSceneManager().registerNodeForRendering(self)
-		#super(CustomSceneNode, self).OnRegisterSceneNode()
 
 	def render(self):
 		indices = (ctypes.c_int * 12)(0,2,3, 2,1,3, 1,0,3, 2,0,1)
@@ -78,9 +63,7 @@ if device:
 	i_scene_node_animator = scene_manager.createRotationAnimator(vector3df(0.8, 0.0, 0.8))
 	if i_scene_node_animator:
 		myNode.addAnimator(i_scene_node_animator)
-		i_scene_node_animator.drop()
 		del i_scene_node_animator
-	myNode.drop()
 	del myNode
 	frames = 0
 	scene_color = SColor(0, 100, 100, 100)
