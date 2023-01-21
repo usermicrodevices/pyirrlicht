@@ -235,6 +235,54 @@ class UserIEventReceiver(IEventReceiver):
 	def IsKeyDown(self, keyCode):
 		return self.KeyIsDown[keyCode]
 
+class PyramidSceneNode(CustomSceneNode): 
+	def __init__(self, *args, **kwargs):
+		self.height = kwargs.pop('height', 10.0)
+		self.hpos = kwargs.pop('hpos', 0.0)
+		self.qsize = kwargs.pop('base_size', 10.0)
+		self.color = kwargs.pop('color', SColor(128,128,128,255))
+		self.Material = SMaterial()
+		self.Material.Wireframe = False
+		self.Material.Lighting = False
+
+		self.Vertices = S3DVertex(5)
+		self.Vertices[0] = S3DVertex(vector3df(self.qsize,self.hpos,self.qsize), vector3df(1.0,0.0,1.0), self.color, vector2df(0.0, 1.0))
+		self.Vertices[1] = S3DVertex(vector3df(self.qsize,self.hpos,-self.qsize), vector3df(1.0,0.0,-1.0), self.color, vector2df(1.0, 1.0))
+		self.Vertices[2] = S3DVertex(vector3df(-self.qsize,self.hpos,-self.qsize), vector3df(-1.0,0.0,-1.0), self.color, vector2df(0.0, 0.0))
+		self.Vertices[3] = S3DVertex(vector3df(-self.qsize,self.hpos,self.qsize), vector3df(-1.0,0.0,1.0), self.color, vector2df(0.0, 0.0))
+		self.Vertices[4] = S3DVertex(vector3df(0.0,self.hpos+self.height,0.0), vector3df(0.0,1.0,0.0), self.color, vector2df(1.0, 0.0))
+
+		self.Box = aabbox3df()
+		self.Box.reset(self.Vertices[0].Pos)
+		for i in range(1, 5):
+			self.Box.addInternalPoint(self.Vertices[i].Pos)
+
+		CustomSceneNode.__init__(self, *args, **kwargs)
+
+	def getTypeS3DVertex(self):
+		return 0
+
+	def OnRegisterSceneNode(self):
+		if self.isVisible():
+			self.getSceneManager().registerNodeForRendering(self)
+
+	def render(self):
+		indices = (ctypes.c_int * 18)(0,4,1, 1,4,2, 2,4,3, 3,4,0, 0,1,2, 1,2,3)
+		driver = self.getSceneManager().getVideoDriver()
+		driver.setMaterial(self.Material)
+		driver.setTransform(ETS_WORLD, self.getAbsoluteTransformation())
+		driver.drawVertexPrimitiveList(self.Vertices, 6, indices, 6, EVT_STANDARD, EPT_TRIANGLES, EIT_32BIT)
+
+	def getBoundingBox(self):
+		return self.Box.c_pointer
+
+	def getMaterialCount(self):
+		return 1
+
+	def getMaterial(self, num):
+		return self.Material.c_pointer
+
+
 class game:
 	def __init__(self, *args, **kwargs):
 		self.config_file_name = kwargs.pop('config_file_name', 'randomiz.ini')
@@ -376,6 +424,7 @@ class game:
 		base_scene_node.setMaterialFlag(EMF_LIGHTING, False)
 		base_scene_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(2, 2), 'house_base', 255, (200, 255), (200, 255), (200, 255)))
 		self.queue_entity_creator.append('house')
+		roof = PyramidSceneNode(base_scene_node, self.scene_manager, height=csz/3, base_size=csz, hpos=csz/2)
 
 	def create_tree_birch(self, x=0, y=0, z=0):
 		trunk_mesh = self.i_geometry_creator.createCylinderMesh(radius = 10, length = 50, tesselation = 4, color = SColor(255,255,255,255), closeTop = True, oblique = 0.0)
