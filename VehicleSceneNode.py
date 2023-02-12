@@ -43,8 +43,8 @@ class WheelSceneNode(CustomSceneNode):
 		self.scene_manager = self.getSceneManager()
 		self.video_driver = self.scene_manager.getVideoDriver()
 
-	def getTypeS3DVertex(self):
-		return 0
+	# def getTypeS3DVertex(self):
+		# return 0
 
 	def OnRegisterSceneNode(self):
 		if self.isVisible():

@@ -2,7 +2,7 @@ from setuptools import setup, Extension
 
 setup(
 	name='pyirrlicht',
-	version='1.2.0',
+	version='1.3.0',
 	ext_modules=[
 		Extension(
 			'irrlicht_c',

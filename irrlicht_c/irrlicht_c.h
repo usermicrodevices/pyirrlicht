@@ -1,4 +1,4 @@
-// Copyright(c) Max Kolosov 2010-2022 pyirrlicht@gmail.com
+// Copyright(c) Max Kolosov 2010-2023 pyirrlicht@gmail.com
 // github.com/usermicrodevices
 // BSD license
 
@@ -87,6 +87,7 @@ double _wtof(const wchar_t* token)
 
 #include "_CDynamicMeshBuffer.h"
 #include "_CMatrix4.h"
+#include "_CPyramidSceneNode.h"
 #include "_dimension2d.h"
 #include "_line3d.h"
 #include "_IAttributeExchangingObject.h"

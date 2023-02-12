@@ -28,8 +28,8 @@ class CSampleSceneNode(CustomSceneNode):
 
 		CustomSceneNode.__init__(self, *args, **kwargs)
 
-	def getTypeS3DVertex(self):
-		return 0
+	# def getTypeS3DVertex(self):
+		# return 0
 
 	def OnRegisterSceneNode(self):
 		if self.isVisible():

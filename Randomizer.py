@@ -259,9 +259,6 @@ class PyramidSceneNode(CustomSceneNode):
 
 		CustomSceneNode.__init__(self, *args, **kwargs)
 
-	def getTypeS3DVertex(self):
-		return 0
-
 	def OnRegisterSceneNode(self):
 		if self.isVisible():
 			self.getSceneManager().registerNodeForRendering(self)
@@ -423,8 +420,9 @@ class game:
 		base_scene_node = self.scene_manager.addMeshSceneNode(base_mesh, position=vector3df(x, csz/2, z))
 		base_scene_node.setMaterialFlag(EMF_LIGHTING, False)
 		base_scene_node.setMaterialTexture(0, self.texture_generator(ECF_A8R8G8B8, dimension2du(2, 2), 'house_base', 255, (200, 255), (200, 255), (200, 255)))
+		#roof = PyramidSceneNode(base_scene_node, self.scene_manager, height=csz/3, hpos=csz/2, base_size=csz)#Python version pyramid scene node only for development
+		roof = CPyramidSceneNode(base_scene_node, self.scene_manager, height=csz/3, hpos=csz/2, base_size=csz)
 		self.queue_entity_creator.append('house')
-		roof = PyramidSceneNode(base_scene_node, self.scene_manager, height=csz/3, base_size=csz, hpos=csz/2)
 
 	def create_tree_birch(self, x=0, y=0, z=0):
 		trunk_mesh = self.i_geometry_creator.createCylinderMesh(radius = 10, length = 50, tesselation = 4, color = SColor(255,255,255,255), closeTop = True, oblique = 0.0)
@@ -521,7 +519,10 @@ class game:
 	def get_free_coords(self):
 		len_free_coords = len(self.free_coords)
 		if len_free_coords:
-			return self.free_coords.pop(randint(0, len_free_coords))
+			try:
+				return self.free_coords.pop(randint(0, len_free_coords))
+			except Exception as e:
+				print(e)
 		return None
 
 	def create_entity(self):

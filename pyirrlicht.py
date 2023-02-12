@@ -2,8 +2,8 @@
 # github.com/usermicrodevices
 # BSD license
 
-__version__ = pyirrlicht_version = '1.3.5'
-__version_date__ = '2023-01-05'
+__version__ = pyirrlicht_version = '1.3.6'
+__version_date__ = '2023-02-12'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -3326,6 +3326,9 @@ CustomSceneNode_set_getMaterialCount = func_type(None, ctypes.c_void_p, func_get
 #~ CustomSceneNode_set_BoundingBox = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CustomSceneNode_set_BoundingBox', c_module))
 #~ CustomSceneNode_set_Vertices = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CustomSceneNode_set_Vertices', c_module))
 #~ CustomSceneNode_set_Material = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('CustomSceneNode_set_Material', c_module))
+
+# functions for class CPyramidSceneNode
+CPyramidSceneNode_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p)(('CPyramidSceneNode_ctor', c_module))
 
 # functions for class ISceneNodeAnimator
 ISceneNodeAnimator_animateNode = func_type(None, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('ISceneNodeAnimator_animateNode', c_module))
@@ -12093,6 +12096,12 @@ class CustomSceneNode(ISceneNode):
 		'must be replaced with user class'
 	def getMaterialCount(self):
 		'must be replaced with user class'
+
+class CPyramidSceneNode(ISceneNode):
+	def __init__(self, *args, **kwargs):
+		self.c_pointer = self.ctor(*args, **kwargs)
+	def ctor(self, parent, mgr, id=-1, height=10.0, hpos=0.0, base_size=10.0, color=SColor(255,128,128,128)):
+		return CPyramidSceneNode_ctor(parent.c_pointer, mgr.c_pointer, id, height, hpos, base_size, color.c_pointer)
 
 class IParticleSystemSceneNode(ISceneNode):
 	def __init__(self, *args, **kwargs):
