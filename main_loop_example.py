@@ -27,13 +27,13 @@ if device:
 	scene_manager = device.getSceneManager()
 	guienv = device.getGUIEnvironment()
 	guienv.addStaticText('Hello World! This is C++ example main loop realisation!', pyirrlicht.recti(10,10,260,22), True)
-	i_animated_mesh = scene_manager.getMesh('media//sydney.md2')
+	i_animated_mesh = scene_manager.getMesh('..//irrlicht//media//sydney.md2')
 	if i_animated_mesh:
 		node = scene_manager.addAnimatedMeshSceneNode2(i_animated_mesh)
 		if node:
 			node.setMaterialFlag(pyirrlicht.EMF_LIGHTING, False)
 			node.setMD2Animation(pyirrlicht.EMAT_STAND)
-			node.setMaterialTexture(0, driver.getTexture('media//sydney.bmp'))
+			node.setMaterialTexture(0, driver.getTexture('..//irrlicht//media//sydney.bmp'))
 		position = pyirrlicht.vector3df(0.0, 30.0, -40.0)
 		lookat = pyirrlicht.vector3df(0.0, 5.0, 0.0)
 		scene_manager.addCameraSceneNode(node, position, lookat)
