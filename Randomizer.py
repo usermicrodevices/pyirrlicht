@@ -5,7 +5,7 @@
 import math, os, sys
 from pyirrlicht import *
 from random import seed, randint
-from locale import getdefaultlocale
+from locale import getlocale
 
 try:
 	import pybass
@@ -35,7 +35,7 @@ GUI_ID_SOUND_VOLUME = 0x10012
 app_name = os.path.basename(sys.argv[0].split('.')[0])
 
 # simple language translator
-default_locale = getdefaultlocale()[0]
+default_locale = getlocale()[0]
 translation_catalog = 'lang'
 if not os.path.isdir(translation_catalog):
 	os.mkdir(translation_catalog)
@@ -526,7 +526,8 @@ class game:
 		return None
 
 	def create_entity(self):
-		x, z = randint(self.tile_count * self.tile_len / 2 * -1, self.tile_count * self.tile_len / 2), randint(self.tile_count * self.tile_len / 2 * -1, self.tile_count * self.tile_len / 2)
+		r1, r2 = int(self.tile_count * self.tile_len / 2 * -1), int(self.tile_count * self.tile_len / 2)
+		x, z = randint(r1, r2), randint(r1, r2)
 		self.create_grass(x, 0, z)
 		coords = self.get_free_coords()
 		if coords:
