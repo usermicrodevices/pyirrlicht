@@ -31,6 +31,7 @@
 #define IRRLICHT_C_API IRRLICHT_API
 #endif
 
+#include <memory>
 #include <ctime>
 #include <iostream>
 #include <random>
