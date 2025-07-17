@@ -29,7 +29,7 @@ setup(
 			],
 			undef_macros=['Wall', '_COMPILE_WITH_3D_TEXT_'],
 			library_dirs=['../irrlicht/lib/Linux'],
-			libraries=['Irrlicht', 'GL', 'X11', 'Xxf86vm', 'Xext', 'freetype']
+			libraries=['GL', 'X11', 'Xxf86vm', 'Xext', 'freetype']#'Irrlicht',
 		)
 	]
 )
